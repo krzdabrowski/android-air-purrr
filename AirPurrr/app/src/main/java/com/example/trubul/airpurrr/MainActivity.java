@@ -1,14 +1,26 @@
 package com.example.trubul.airpurrr;
 
+import android.app.Notification;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Switch;
+import android.widget.TextView;
+
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private static Switch mSwitchAuto;
     private static Switch mSwitchManual;
+
+
+
 
     public static Switch getSwitchAuto() {
         return mSwitchAuto;
@@ -182,6 +194,48 @@ public class MainActivity extends AppCompatActivity {
         mSwitchAuto.setOnCheckedChangeListener(autoListener);
         SwitchListener manualListener = new SwitchListener(MainActivity.this, SwitchListener.WorkingMode.MANUAL);
         mSwitchManual.setOnCheckedChangeListener(manualListener);
+
+        ///////////////////////////////////////////////////////////////
+
+        TextView pm25Data = findViewById(R.id.PM25_data);
+        TextView pm10Data = findViewById(R.id.PM10_data);
+        TextView tempData;
+        int multiplier;
+
+        PMData pmData = new PMData();
+        Double[] pmResult = pmData.getPMData();
+        //Double[] pmResult = {58.3, 192.7};
+
+        pm25Data.setText(String.valueOf(pmResult[0]));
+        pm10Data.setText(String.valueOf(pmResult[1]));
+
+        for(int i=0; i<2; i++) {
+            if (i == 0) {
+                tempData = pm25Data;
+                multiplier = 1;
+            }
+            else {
+                tempData = pm10Data;
+                multiplier = 2;
+            }
+
+            if (pmResult[i] > 0 && pmResult[i] <= 12.5 * multiplier) {
+                tempData.setBackgroundResource(R.drawable.green_color);
+            }
+            else if (pmResult[i] > 12.5 * multiplier && pmResult[i] <= 25 * multiplier) {
+                tempData.setBackgroundResource(R.drawable.lime_color);
+            }
+            else if (pmResult[i] > 25 * multiplier && pmResult[i] <= 50 * multiplier) {
+                tempData.setBackgroundResource(R.drawable.yellow_color);
+            }
+            else if (pmResult[i] > 50 * multiplier && pmResult[i] <= 100 * multiplier) {
+                tempData.setBackgroundResource(R.drawable.red_color);
+            }
+        }
+
+
+
+
     }
 
 }

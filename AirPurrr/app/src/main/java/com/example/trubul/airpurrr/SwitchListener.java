@@ -14,12 +14,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "SwitchListener";
     private static final String WORKSTATE_URL = "http://192.168.0.248/workstate.txt";
-    private static final String PM_DATA_URL = "http://192.168.0.248/pm_data.txt";
     private boolean flagToggle1 = true;  // zawsze musi byc true
     private boolean flagToggle2 = true;
     private HttpGet mRequestOn = new HttpGet();
     private HttpGet mRequestOff = new HttpGet();
-
     private Context mContext;
 
     public enum WorkingMode {
@@ -79,6 +77,15 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         catch (ExecutionException e) {
             e.printStackTrace();
         }
+        catch (NullPointerException e) { // gdy np nie ma internetu
+            Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
+            if (mode.equals(WorkingMode.AUTO)) {
+                MainActivity.getSwitchAuto().setChecked(keepState);
+            }
+            else {
+                MainActivity.getSwitchManual().setChecked(keepState);
+            }
+        }
     }
 
 
@@ -119,5 +126,3 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     }
 }
-
-//}
