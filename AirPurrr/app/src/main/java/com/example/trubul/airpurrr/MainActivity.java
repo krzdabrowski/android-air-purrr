@@ -1,16 +1,9 @@
 package com.example.trubul.airpurrr;
 
-import android.app.Notification;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Switch;
 import android.widget.TextView;
-
-import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,15 +11,33 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static Switch mSwitchAuto;
     private static Switch mSwitchManual;
+    private static TextView pm25DataPerc;
+    private static TextView pm10DataPerc;
+    private static TextView pm25DataUgm3;
+    private static TextView pm10DataUgm3;
 
-
-
+    private static PMData pmData = new PMData();
 
     public static Switch getSwitchAuto() {
         return mSwitchAuto;
     }
     public static Switch getSwitchManual() {
         return mSwitchManual;
+    }
+    public static TextView getPm25DataPerc() {
+        return pm25DataPerc;
+    }
+    public static TextView getPm10DataPerc() {
+        return pm10DataPerc;
+    }
+    public static TextView getPm25DataUgm3() {
+        return pm25DataUgm3;
+    }
+    public static TextView getPm10DataUgm3() {
+        return pm10DataUgm3;
+    }
+    public static PMData getPmData() {
+        return pmData;
     }
 
     @Override
@@ -188,53 +199,26 @@ public class MainActivity extends AppCompatActivity {
 =======
         mSwitchAuto = findViewById(R.id.switch_auto);
         mSwitchManual = findViewById(R.id.switch_manual);
+<<<<<<< HEAD
 >>>>>>> bb5fb91... Encapsulation and functionality separation part 2
+=======
+        pm25DataPerc = findViewById(R.id.PM25_data_perc);
+        pm10DataPerc = findViewById(R.id.PM10_data_perc);
+        pm25DataUgm3 = findViewById(R.id.PM25_data_ugm3);
+        pm10DataUgm3 = findViewById(R.id.PM10_data_ugm3);
+
+        Double[] pmValues = pmData.getPMData();
+        //Double[] pmValues = {58.3, 92.7};
+
+        pmData.showResults(pmValues);
+
+        ///////////////////////////////////////////////////////////////
+>>>>>>> 87fbcba... Add working automatic mode, percentages and some minor fixes
 
         SwitchListener autoListener = new SwitchListener(MainActivity.this, SwitchListener.WorkingMode.AUTO);
         mSwitchAuto.setOnCheckedChangeListener(autoListener);
         SwitchListener manualListener = new SwitchListener(MainActivity.this, SwitchListener.WorkingMode.MANUAL);
         mSwitchManual.setOnCheckedChangeListener(manualListener);
-
-        ///////////////////////////////////////////////////////////////
-
-        TextView pm25Data = findViewById(R.id.PM25_data);
-        TextView pm10Data = findViewById(R.id.PM10_data);
-        TextView tempData;
-        int multiplier;
-
-        PMData pmData = new PMData();
-        Double[] pmResult = pmData.getPMData();
-        //Double[] pmResult = {58.3, 192.7};
-
-        pm25Data.setText(String.valueOf(pmResult[0]));
-        pm10Data.setText(String.valueOf(pmResult[1]));
-
-        for(int i=0; i<2; i++) {
-            if (i == 0) {
-                tempData = pm25Data;
-                multiplier = 1;
-            }
-            else {
-                tempData = pm10Data;
-                multiplier = 2;
-            }
-
-            if (pmResult[i] > 0 && pmResult[i] <= 12.5 * multiplier) {
-                tempData.setBackgroundResource(R.drawable.green_color);
-            }
-            else if (pmResult[i] > 12.5 * multiplier && pmResult[i] <= 25 * multiplier) {
-                tempData.setBackgroundResource(R.drawable.lime_color);
-            }
-            else if (pmResult[i] > 25 * multiplier && pmResult[i] <= 50 * multiplier) {
-                tempData.setBackgroundResource(R.drawable.yellow_color);
-            }
-            else if (pmResult[i] > 50 * multiplier && pmResult[i] <= 100 * multiplier) {
-                tempData.setBackgroundResource(R.drawable.red_color);
-            }
-        }
-
-
-
 
     }
 

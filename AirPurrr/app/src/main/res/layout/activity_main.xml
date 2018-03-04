@@ -78,11 +78,11 @@
                 android:elevation="2dp"
                 android:text="PM2.5"
                 android:textSize="16dp"
-                app:layout_constraintStart_toStartOf="@+id/PM25_data"
-                app:layout_constraintTop_toTopOf="@+id/PM25_data" />
+                app:layout_constraintStart_toStartOf="@+id/PM25_data_perc"
+                app:layout_constraintTop_toTopOf="@+id/PM25_data_perc" />
 
             <TextView
-                android:id="@+id/PM25_data"
+                android:id="@+id/PM25_data_perc"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
@@ -92,14 +92,27 @@
                 android:background="@drawable/default_color"
                 android:elevation="1dp"
                 android:paddingTop="24dp"
-                android:text="10.0"
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.Material.Large"
                 android:textSize="96sp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline_mid_card"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="40%" />
+
+            <TextView
+                android:id="@+id/PM25_data_ugm3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:elevation="2dp"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/PM25_data_perc"
+                app:layout_constraintEnd_toEndOf="@+id/PM25_data_perc"
+                app:layout_constraintStart_toStartOf="@+id/PM25_data_perc"
+                tools:text="(10.0)" />
 
             <TextView
                 android:id="@+id/PM10"
@@ -110,11 +123,11 @@
                 android:elevation="2dp"
                 android:text="PM10"
                 android:textSize="16dp"
-                app:layout_constraintStart_toStartOf="@+id/PM10_data"
-                app:layout_constraintTop_toTopOf="@+id/PM10_data" />
+                app:layout_constraintStart_toStartOf="@+id/PM10_data_perc"
+                app:layout_constraintTop_toTopOf="@+id/PM10_data_perc" />
 
             <TextView
-                android:id="@+id/PM10_data"
+                android:id="@+id/PM10_data_perc"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
@@ -124,16 +137,28 @@
                 android:background="@drawable/default_color"
                 android:elevation="1dp"
                 android:paddingTop="24dp"
-                android:text="15.0"
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.Material.Large"
                 android:textSize="96sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline_mid_card" />
+                app:layout_constraintTop_toTopOf="@+id/guideline_mid_card"
+                tools:text="30%" />
 
 
+            <TextView
+                android:id="@+id/PM10_data_ugm3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:elevation="2dp"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/PM10_data_perc"
+                app:layout_constraintEnd_toEndOf="@+id/PM10_data_perc"
+                app:layout_constraintStart_toStartOf="@+id/PM10_data_perc"
+                tools:text="(15.0)" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_mid_card"

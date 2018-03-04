@@ -1,6 +1,7 @@
 package com.example.trubul.airpurrr;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import org.apache.http.client.methods.HttpGet;
@@ -91,37 +92,48 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        // Poczatkowa konfiguracja flag, umozliwiajaca wielokrotne zmiany switchy
+        // Tryb automatyczny - wlacz wentylator gdy dowolna wartosc PM2.5/10 przekroczy 100% normy
         if (mode.equals(WorkingMode.AUTO)) {
+            // Poczatkowa konfiguracja flag, umozliwiajaca wielokrotne zmiany switchy
             if (!flagToggle1) {
                 mRequestOn = new HttpGet();
                 mRequestOff = new HttpGet();
                 flagToggle1 = true;
             }
+
+            if (MainActivity.getPmData().flagTriStateAuto == 2) // if true
+                if (isChecked) {
+                    controlRequests(false);
+                }
+                else {
+                    mRequestOn.abort();  // zerwij petle while w pracy wentylatora
+                    controlRequests(true);
+                    flagToggle1 = false;
+                }
+            else if (MainActivity.getPmData().flagTriStateAuto == 1) {} // if false
+            else { // if null
+                Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
+                MainActivity.getSwitchAuto().setChecked(false);
+            }
         }
+
+        // Tryb manualny - wlaczaj kiedy chcesz
         else {
             if (!flagToggle2) {
                 mRequestOn = new HttpGet();
                 mRequestOff = new HttpGet();
                 flagToggle2 = true;
             }
-        }
 
-        // Obsluga requestow
-        if (isChecked) {
-            controlRequests(false);
-        }
-        else {
-            mRequestOn.abort();  // zerwij petle while w pracy wentylatora
-            controlRequests(true);
-
-            if (mode.equals(WorkingMode.AUTO)) {
-                flagToggle1 = false;
+            if (isChecked) {
+                controlRequests(false);
             }
             else {
+                mRequestOn.abort();  // zerwij petle while w pracy wentylatora
+                controlRequests(true);
                 flagToggle2 = false;
-            }
 
+            }
         }
 
     }
