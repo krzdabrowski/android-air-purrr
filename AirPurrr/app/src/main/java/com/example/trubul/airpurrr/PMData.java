@@ -15,7 +15,7 @@ public class PMData {
     public int flagTriStateAuto = 0;
 
 
-    public Double[] getPMData() {
+    public Double[] downloadPMData() {
         String pmData;
         try {
             HttpGetRequest getRequest = new HttpGetRequest();

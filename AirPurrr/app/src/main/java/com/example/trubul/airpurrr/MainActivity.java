@@ -1,7 +1,9 @@
 package com.example.trubul.airpurrr;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -15,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private static TextView pm10DataPerc;
     private static TextView pm25DataUgm3;
     private static TextView pm10DataUgm3;
-
     private static PMData pmData = new PMData();
+    private static SwipeRefreshLayout mySwipeRefreshLayout;
 
     public static Switch getSwitchAuto() {
         return mSwitchAuto;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public static PMData getPmData() {
         return pmData;
+    }
+    public static SwipeRefreshLayout getMySwipeRefreshLayout() {
+        return mySwipeRefreshLayout;
     }
 
     @Override
@@ -206,10 +211,10 @@ public class MainActivity extends AppCompatActivity {
         pm10DataPerc = findViewById(R.id.PM10_data_perc);
         pm25DataUgm3 = findViewById(R.id.PM25_data_ugm3);
         pm10DataUgm3 = findViewById(R.id.PM10_data_ugm3);
+        mySwipeRefreshLayout = findViewById(R.id.swipe_refresh);
 
-        Double[] pmValues = pmData.getPMData();
         //Double[] pmValues = {58.3, 92.7};
-
+        Double[] pmValues = pmData.downloadPMData();
         pmData.showResults(pmValues);
 
         ///////////////////////////////////////////////////////////////
@@ -219,6 +224,10 @@ public class MainActivity extends AppCompatActivity {
         mSwitchAuto.setOnCheckedChangeListener(autoListener);
         SwitchListener manualListener = new SwitchListener(MainActivity.this, SwitchListener.WorkingMode.MANUAL);
         mSwitchManual.setOnCheckedChangeListener(manualListener);
+
+        ///////////////////////////////////////////////////////////////
+
+        mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener());
 
     }
 
