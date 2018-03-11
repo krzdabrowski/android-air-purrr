@@ -34,7 +34,28 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         mSwitchManual.setChecked(keepState);
     }
 
+    @Override // 100% = 25ug/m3
+    public void setPM25DataPerc(Double[] pmValues) {
+        pm25DataPerc.setText(getString(R.string.pm25_data_perc, 4 * pmValues[0]));
+    }
 
+    @Override // 100% = 50ug/m3
+    public void setPM10DataPerc(Double[] pmValues) {
+        pm10DataPerc.setText(getString(R.string.pm10_data_perc, 2 * pmValues[1]));
+    }
+
+    @Override
+    public void setPM25DataUgm3(Double[] pmValues) {
+        pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0]));
+    }
+
+    @Override
+    public void setPM10DataUgm3(Double[] pmValues) {
+        pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1]));
+    }
+
+    @Override
+    public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
 
     @Override
     public TextView getPM25DataPerc() {
@@ -46,71 +67,11 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         return pm10DataPerc;
     }
 
-
-
-
-
     @Override
     public PMData getPMDatalala() {
         return pmData;
     }
 
-
-
-
-    @Override
-    public void setPM25DataPerc(Double[] pmValues) {
-        pm25DataPerc.setText(String.valueOf(4 * pmValues[0]) + "%"); // 100% = 25ug/m3
-    }
-
-    @Override
-    public void setPM10DataPerc(Double[] pmValues) {
-        pm10DataPerc.setText(String.valueOf(2 * pmValues[1]) + "%"); // 100% = 50ug/m3
-    }
-
-    @Override
-    public void setPM25DataUgm3(Double[] pmValues) {
-        pm25DataUgm3.setText("(" + String.valueOf(pmValues[0]) + ")");
-    }
-
-    @Override
-    public void setPM10DataUgm3(Double[] pmValues) {
-        pm10DataUgm3.setText("(" + String.valueOf(pmValues[1]) + ")");
-    }
-
-
-    @Override
-    public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
-
-
-//    public PMData getPmData() {
-//
-//    }
-
-
-//    private static SwipeRefreshLayout mySwipeRefreshLayout;
-
-//    public static Switch getSwitchAuto() {
-//        return mSwitchAuto;
-//    }
-//    public static Switch getSwitchManual() {
-//        return mSwitchManual;
-//    }
-//    public static TextView getPm25DataPerc() {
-//        return pm25DataPerc;
-//    }
-//    public static TextView getPm10DataPerc() {
-//        return pm10DataPerc;
-//    }
-//    public static TextView getPm25DataUgm3() {
-//        return pm25DataUgm3;
-//    }
-//    public static TextView getPm10DataUgm3() {
-//        return pm10DataUgm3;
-//    }
-//    public static SwipeRefreshLayout getMySwipeRefreshLayout() {
-//        return mySwipeRefreshLayout;
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+<<<<<<< HEAD
 
 
 <<<<<<< HEAD
@@ -292,6 +254,8 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 //        mySwipeRefreshLayout = findViewById(R.id.swipe_refresh);
 >>>>>>> ca502df... Add butterknife handling & refactor all findViewById static fields
 
+=======
+>>>>>>> abb85a0... Clean up code
         //Double[] pmValues = {58.3, 92.7};
         Double[] pmValues = pmData.downloadPMData();
         pmData.showResults(pmValues);
