@@ -7,49 +7,120 @@ import android.util.Log;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMData.MyCallback{
 
 //    private static final String TAG = "MainActivity";
-    private static Switch mSwitchAuto;
-    private static Switch mSwitchManual;
-    private static TextView pm25DataPerc;
-    private static TextView pm10DataPerc;
-    private static TextView pm25DataUgm3;
-    private static TextView pm10DataUgm3;
-    private static PMData pmData = new PMData();
-    private static SwipeRefreshLayout mySwipeRefreshLayout;
+    @BindView(R.id.switch_auto) Switch mSwitchAuto;
+    @BindView(R.id.switch_manual) Switch mSwitchManual;
+    @BindView(R.id.PM25_data_perc) TextView pm25DataPerc;
+    @BindView(R.id.PM10_data_perc) TextView pm10DataPerc;
+    @BindView(R.id.PM25_data_ugm3) TextView pm25DataUgm3;
+    @BindView(R.id.PM10_data_ugm3) TextView pm10DataUgm3;
+    @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
-    public static Switch getSwitchAuto() {
-        return mSwitchAuto;
+    private PMData pmData = new PMData(this);
+
+    @Override
+    public void setSwitchAuto(boolean keepState) {
+        mSwitchAuto.setChecked(keepState);
     }
-    public static Switch getSwitchManual() {
-        return mSwitchManual;
+
+    @Override
+    public void setSwitchManual(boolean keepState) {
+        mSwitchManual.setChecked(keepState);
     }
-    public static TextView getPm25DataPerc() {
+
+
+
+    @Override
+    public TextView getPM25DataPerc() {
         return pm25DataPerc;
     }
-    public static TextView getPm10DataPerc() {
+
+    @Override
+    public TextView getPM10DataPerc() {
         return pm10DataPerc;
     }
-    public static TextView getPm25DataUgm3() {
-        return pm25DataUgm3;
-    }
-    public static TextView getPm10DataUgm3() {
-        return pm10DataUgm3;
-    }
-    public static PMData getPmData() {
+
+
+
+
+
+    @Override
+    public PMData getPMDatalala() {
         return pmData;
     }
-    public static SwipeRefreshLayout getMySwipeRefreshLayout() {
-        return mySwipeRefreshLayout;
+
+
+
+
+    @Override
+    public void setPM25DataPerc(Double[] pmValues) {
+        pm25DataPerc.setText(String.valueOf(4 * pmValues[0]) + "%"); // 100% = 25ug/m3
     }
+
+    @Override
+    public void setPM10DataPerc(Double[] pmValues) {
+        pm10DataPerc.setText(String.valueOf(2 * pmValues[1]) + "%"); // 100% = 50ug/m3
+    }
+
+    @Override
+    public void setPM25DataUgm3(Double[] pmValues) {
+        pm25DataUgm3.setText("(" + String.valueOf(pmValues[0]) + ")");
+    }
+
+    @Override
+    public void setPM10DataUgm3(Double[] pmValues) {
+        pm10DataUgm3.setText("(" + String.valueOf(pmValues[1]) + ")");
+    }
+
+
+    @Override
+    public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
+
+
+//    public PMData getPmData() {
+//
+//    }
+
+
+//    private static SwipeRefreshLayout mySwipeRefreshLayout;
+
+//    public static Switch getSwitchAuto() {
+//        return mSwitchAuto;
+//    }
+//    public static Switch getSwitchManual() {
+//        return mSwitchManual;
+//    }
+//    public static TextView getPm25DataPerc() {
+//        return pm25DataPerc;
+//    }
+//    public static TextView getPm10DataPerc() {
+//        return pm10DataPerc;
+//    }
+//    public static TextView getPm25DataUgm3() {
+//        return pm25DataUgm3;
+//    }
+//    public static TextView getPm10DataUgm3() {
+//        return pm10DataUgm3;
+//    }
+//    public static SwipeRefreshLayout getMySwipeRefreshLayout() {
+//        return mySwipeRefreshLayout;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
+
+
+<<<<<<< HEAD
 <<<<<<< HEAD
         Switch switch_auto = findViewById(R.id.switch_auto);
         final Switch switch_manual = findViewById(R.id.switch_manual);
@@ -212,6 +283,14 @@ public class MainActivity extends AppCompatActivity {
         pm25DataUgm3 = findViewById(R.id.PM25_data_ugm3);
         pm10DataUgm3 = findViewById(R.id.PM10_data_ugm3);
         mySwipeRefreshLayout = findViewById(R.id.swipe_refresh);
+=======
+//        mSwitchManual = findViewById(R.id.switch_manual);
+//        pm25DataPerc = findViewById(R.id.PM25_data_perc);
+//        pm10DataPerc = findViewById(R.id.PM10_data_perc);
+//        pm25DataUgm3 = findViewById(R.id.PM25_data_ugm3);
+//        pm10DataUgm3 = findViewById(R.id.PM10_data_ugm3);
+//        mySwipeRefreshLayout = findViewById(R.id.swipe_refresh);
+>>>>>>> ca502df... Add butterknife handling & refactor all findViewById static fields
 
         //Double[] pmValues = {58.3, 92.7};
         Double[] pmValues = pmData.downloadPMData();
@@ -220,14 +299,14 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////////////////
 >>>>>>> 87fbcba... Add working automatic mode, percentages and some minor fixes
 
-        SwitchListener autoListener = new SwitchListener(MainActivity.this, SwitchListener.WorkingMode.AUTO);
+        SwitchListener autoListener = new SwitchListener(this, SwitchListener.WorkingMode.AUTO, this);
         mSwitchAuto.setOnCheckedChangeListener(autoListener);
-        SwitchListener manualListener = new SwitchListener(MainActivity.this, SwitchListener.WorkingMode.MANUAL);
+        SwitchListener manualListener = new SwitchListener(this, SwitchListener.WorkingMode.MANUAL, this);
         mSwitchManual.setOnCheckedChangeListener(manualListener);
 
         ///////////////////////////////////////////////////////////////
 
-        mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener());
+        mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
 
     }
 

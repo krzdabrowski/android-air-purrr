@@ -15,6 +15,21 @@ public class PMData {
 //    private static final String PM_DATA_URL_GLOBAL = "http://xxx.xxx.xxx.xxx:xxx/pm_data.txt";
     private static final String PM_DATA_URL = "http://192.168.0.248/pm_data.txt";
     public int flagTriStateAuto = 0;
+    private MyCallback mCallback;
+
+    public interface MyCallback {
+        TextView getPM25DataPerc();
+        TextView getPM10DataPerc();
+
+        void setPM25DataPerc(Double[] pmValues);
+        void setPM10DataPerc(Double[] pmValues);
+        void setPM25DataUgm3(Double[] pmValues);
+        void setPM10DataUgm3(Double[] pmValues);
+    }
+
+    public PMData(MyCallback callback) {
+        this.mCallback = callback;
+    }
 
 
     public Double[] downloadPMData() {
@@ -51,22 +66,23 @@ public class PMData {
     }
 
     public void showResults(Double[] pmValues) {
+//
+//        TextView pm25DataPerc;
+//        TextView pm10DataPerc;
+//        TextView pm25DataUgm3 = MainActivity.getPm25DataUgm3();
+//        TextView pm10DataUgm3 = MainActivity.getPm10DataUgm3();
 
-        TextView pm25DataPerc = MainActivity.getPm25DataPerc();
-        TextView pm10DataPerc = MainActivity.getPm10DataPerc();
-        TextView pm25DataUgm3 = MainActivity.getPm25DataUgm3();
-        TextView pm10DataUgm3 = MainActivity.getPm10DataUgm3();
 
         TextView tempData;
         int multiplier;
 
         for(int i=0; i<2; i++) {
             if (i == 0) {
-                tempData = pm25DataPerc;
+                tempData = mCallback.getPM25DataPerc();
                 multiplier = 1;
             }
             else {
-                tempData = pm10DataPerc;
+                tempData = mCallback.getPM10DataPerc();
                 multiplier = 2;
             }
 
@@ -88,10 +104,16 @@ public class PMData {
             }
         }
 
-        pm25DataPerc.setText(String.valueOf(4 * pmValues[0]) + "%"); // 100% = 25ug/m3
-        pm10DataPerc.setText(String.valueOf(2 * pmValues[1]) + "%"); // 100% = 50ug/m3
-        pm25DataUgm3.setText("(" + String.valueOf(pmValues[0]) + ")");
-        pm10DataUgm3.setText("(" + String.valueOf(pmValues[1]) + ")");
+//        pm25DataPerc.setText(String.valueOf(4 * pmValues[0]) + "%"); // 100% = 25ug/m3
+//        pm10DataPerc.setText(String.valueOf(2 * pmValues[1]) + "%"); // 100% = 50ug/m3
+//        pm25DataUgm3.setText("(" + String.valueOf(pmValues[0]) + ")");
+//        pm10DataUgm3.setText("(" + String.valueOf(pmValues[1]) + ")");
+        mCallback.setPM25DataPerc(pmValues);
+        mCallback.setPM10DataPerc(pmValues);
+        mCallback.setPM25DataUgm3(pmValues);
+        mCallback.setPM10DataUgm3(pmValues);
+
+
 
     }
 

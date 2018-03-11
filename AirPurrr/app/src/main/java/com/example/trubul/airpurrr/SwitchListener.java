@@ -20,19 +20,29 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     private boolean flagToggle2 = true;
     private HttpGet mRequestOn = new HttpGet();
     private HttpGet mRequestOff = new HttpGet();
+
     private Context mContext;
+    private WorkingMode mode;
+    private MyCallback mCallback;
 
     public enum WorkingMode {
         AUTO,
         MANUAL
     }
 
-    private WorkingMode mode;
+
+    public interface MyCallback {
+        void setSwitchAuto(boolean keepState);
+        void setSwitchManual(boolean keepState);
+        PMData getPMDatalala();
+    }
 
 
-    public SwitchListener(Context context, WorkingMode mode) {
+
+    public SwitchListener(Context context, WorkingMode mode, MyCallback callback) {
         mContext = context;
         this.mode = mode;
+        this.mCallback = callback;
     }
 
     private void controlRequests(boolean keepState) {
@@ -56,19 +66,19 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             else if (res.equals("WorkStates.Measuring\n")) {
                 Toast.makeText(mContext, "Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym" , Toast.LENGTH_LONG).show();
                 if (mode.equals(WorkingMode.AUTO)) {
-                    MainActivity.getSwitchAuto().setChecked(keepState);
+                    mCallback.setSwitchAuto(keepState);
                 }
                 else {
-                    MainActivity.getSwitchManual().setChecked(keepState);
+                    mCallback.setSwitchManual(keepState);
                 }
             }
             else {
                 Toast.makeText(mContext, "Coś się popsuło i nie było mnie słychać", Toast.LENGTH_LONG).show();
                 if (mode.equals(WorkingMode.AUTO)) {
-                    MainActivity.getSwitchAuto().setChecked(keepState);
+                    mCallback.setSwitchAuto(keepState);
                 }
                 else {
-                    MainActivity.getSwitchManual().setChecked(keepState);
+                    mCallback.setSwitchManual(keepState);
                 }
             }
 
@@ -82,10 +92,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         catch (NullPointerException e) { // gdy np nie ma internetu
             Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
             if (mode.equals(WorkingMode.AUTO)) {
-                MainActivity.getSwitchAuto().setChecked(keepState);
+                mCallback.setSwitchAuto(keepState);
             }
             else {
-                MainActivity.getSwitchManual().setChecked(keepState);
+                mCallback.setSwitchManual(keepState);
             }
         }
     }
@@ -102,7 +112,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 flagToggle1 = true;
             }
 
-            if (MainActivity.getPmData().flagTriStateAuto == 2) // if true
+            if (mCallback.getPMDatalala().flagTriStateAuto == 2) // if true
                 if (isChecked) {
                     controlRequests(false);
                 }
@@ -111,10 +121,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                     controlRequests(true);
                     flagToggle1 = false;
                 }
-            else if (MainActivity.getPmData().flagTriStateAuto == 1) {} // if false
+            else if (mCallback.getPMDatalala().flagTriStateAuto == 1) {} // if false
             else { // if null
                 Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
-                MainActivity.getSwitchAuto().setChecked(false);
+                mCallback.setSwitchAuto(false);
             }
         }
 
