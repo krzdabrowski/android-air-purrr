@@ -44,33 +44,32 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             HttpGetRequest getRequest = new HttpGetRequest();
             res = getRequest.execute(WORKSTATE_URL).get();
 
-            switch(res) {
-                case "WorkStates.Sleeping\n":
-                    Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
-                    if (!keepState) {  // wyslij zadanie, jesli to byl switch wlaczajacy
-                        switchOn.execute(mode + "=1");
-                    }
-                    else {
-                        switchOff.execute(mode + "=0");
-                    }
-
-                case "WorkStates.Measuring\n":
-                    Toast.makeText(mContext, "Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym" , Toast.LENGTH_LONG).show();
-                    if (mode.equals(WorkingMode.AUTO)) {
-                        MainActivity.getSwitchAuto().setChecked(keepState);
-                    }
-                    else {
-                        MainActivity.getSwitchManual().setChecked(keepState);
-                    }
-
-                default:
-                    Toast.makeText(mContext, "Coś się popsuło i nie było mnie słychać", Toast.LENGTH_LONG).show();
-                    if (mode.equals(WorkingMode.AUTO)) {
-                        MainActivity.getSwitchAuto().setChecked(keepState);
-                    }
-                    else {
-                        MainActivity.getSwitchManual().setChecked(keepState);
-                    }
+            if (res.equals("WorkStates.Sleeping\n")) {
+                Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
+                if (!keepState) {  // wyslij zadanie, jesli to byl switch wlaczajacy
+                    switchOn.execute(mode + "=1");
+                }
+                else {
+                    switchOff.execute(mode + "=0");
+                }
+            }
+            else if (res.equals("WorkStates.Measuring\n")) {
+                Toast.makeText(mContext, "Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym" , Toast.LENGTH_LONG).show();
+                if (mode.equals(WorkingMode.AUTO)) {
+                    MainActivity.getSwitchAuto().setChecked(keepState);
+                }
+                else {
+                    MainActivity.getSwitchManual().setChecked(keepState);
+                }
+            }
+            else {
+                Toast.makeText(mContext, "Coś się popsuło i nie było mnie słychać", Toast.LENGTH_LONG).show();
+                if (mode.equals(WorkingMode.AUTO)) {
+                    MainActivity.getSwitchAuto().setChecked(keepState);
+                }
+                else {
+                    MainActivity.getSwitchManual().setChecked(keepState);
+                }
             }
 
         }
