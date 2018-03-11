@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Air Purrr</string>
+    <string name="tryb_automatyczny">Tryb automatyczny</string>
+    <string name="tryb_manualny">Tryb manualny</string>
+    <string name="pm2_5">PM2.5</string>
+    <string name="pm10">PM10</string>
+    <string name="pm25_textholder">PM25_textholder</string>
+    <string name="pm10_textholder">PM10_textholder</string>
+</resources>

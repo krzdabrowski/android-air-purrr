@@ -5,14 +5,14 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
 /**
- * Created by krzysiek on 3/3/18.
+ * Created by krzysiek
+ * On 3/3/18.
  */
 
 public class HttpGetRequest extends AsyncTask<String, Void, String> {

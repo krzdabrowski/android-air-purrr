@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+//    private static final String TAG = "MainActivity";
     private static Switch mSwitchAuto;
     private static Switch mSwitchManual;
     private static TextView pm25DataPerc;

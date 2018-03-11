@@ -12,7 +12,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Created by krzysiek on 3/3/18.
+ * Created by krzysiek
+ * On 3/3/18.
  */
 
 public class AbortableRequest extends AsyncTask<String, Void, String>{
@@ -24,19 +25,20 @@ public class AbortableRequest extends AsyncTask<String, Void, String>{
             mRequest = newRequest;
         }
 
-    public HttpGet getRequest() {
+    private HttpGet getRequest() {
             return mRequest;
         }
 
-    public void setRequest(HttpGet newRequest) {
-            mRequest = newRequest;
-        }
+//    public void setRequest(HttpGet newRequest) {
+//            mRequest = newRequest;
+//        }
 
     @Override
     protected String doInBackground(String... params) {
         String result;
         try {
             URI url = new URI("http://192.168.0.248/?" + params[0]);
+//            URI url = new URI("http://xxx.xxx.xxx.xxx:xxx/?" + params[0]);
             getRequest().setURI(url);
 
             HttpClient httpclient = new DefaultHttpClient();

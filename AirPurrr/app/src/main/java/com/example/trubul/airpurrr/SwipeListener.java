@@ -4,7 +4,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 /**
- * Created by krzysiek on 3/5/18.
+ * Created by krzysiek
+ * On 3/5/18.
  */
 
 public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {

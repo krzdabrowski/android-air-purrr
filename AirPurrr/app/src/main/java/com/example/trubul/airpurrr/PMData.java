@@ -5,12 +5,14 @@ import android.widget.TextView;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Created by krzysiek on 3/4/18.
+ * Created by krzysiek
+ * On 3/4/18.
  */
 
 public class PMData {
 
-    private static final String TAG = "PMData";
+//    private static final String TAG = "PMData";
+//    private static final String PM_DATA_URL_GLOBAL = "http://xxx.xxx.xxx.xxx:xxx/pm_data.txt";
     private static final String PM_DATA_URL = "http://192.168.0.248/pm_data.txt";
     public int flagTriStateAuto = 0;
 

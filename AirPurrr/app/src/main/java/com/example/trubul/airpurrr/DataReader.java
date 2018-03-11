@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by krzysiek on 3/3/18.
+ * Created by krzysiek
+ * On 3/3/18.
  */
 
 public class DataReader {
