@@ -4,9 +4,26 @@
       xmlns:tools="schemas.android.com/tools"
       tools:context="com.example.trubul.airpurrr.MainActivity" >
 
+
+    <group android:id="@+id/group_control"
+        android:checkableBehavior="single">
+        <item android:id="@+id/control_locally"
+            android:title="@string/steruj_wentylatorem_lokalnie"/>
+        <item
+            android:id="@+id/control_remotely"
+            android:checked="true"
+            android:title="@string/steruj_wentylatorem_zdalnie" />
+    </group>
+
     <item
-        android:id="@+id/menu_refresh"
-        app:showAsAction="never"
-        android:title="Refresh" />
+        android:id="@+id/set_auto_threshold"
+        android:title="@string/ustaw_prog_trybu_automatycznego" />
+
+    <item
+        android:id="@+id/refresh_detector"
+        android:title="@string/odswiez_dane_z_miernika" />
+    <item
+        android:id="@+id/refresh_api"
+        android:title="@string/odswiez_dane_z_api" />
 
 </menu>

@@ -66,12 +66,6 @@ public class PMData {
     }
 
     public void showResults(Double[] pmValues) {
-//
-//        TextView pm25DataPerc;
-//        TextView pm10DataPerc;
-//        TextView pm25DataUgm3 = MainActivity.getPm25DataUgm3();
-//        TextView pm10DataUgm3 = MainActivity.getPm10DataUgm3();
-
 
         TextView tempData;
         int multiplier;
@@ -104,16 +98,10 @@ public class PMData {
             }
         }
 
-//        pm25DataPerc.setText(String.valueOf(4 * pmValues[0]) + "%"); // 100% = 25ug/m3
-//        pm10DataPerc.setText(String.valueOf(2 * pmValues[1]) + "%"); // 100% = 50ug/m3
-//        pm25DataUgm3.setText("(" + String.valueOf(pmValues[0]) + ")");
-//        pm10DataUgm3.setText("(" + String.valueOf(pmValues[1]) + ")");
         mCallback.setPM25DataPerc(pmValues);
         mCallback.setPM10DataPerc(pmValues);
         mCallback.setPM25DataUgm3(pmValues);
         mCallback.setPM10DataUgm3(pmValues);
-
-
 
     }
 

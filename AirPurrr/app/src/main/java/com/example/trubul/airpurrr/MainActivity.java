@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     }
 
     @Override
-    public PMData getPMDatalala() {
+    public PMData getPMData() {
         return pmData;
     }
 
@@ -272,6 +274,36 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
 
+    }
+
+
+    //////////////////////////  MENU  ///////////////////////////////
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.control_locally: // TODO
+                return true;
+            case R.id.control_remotely: // TODO
+                return true;
+            case R.id.set_auto_threshold: // TODO
+                return true;
+            case R.id.refresh_detector:
+                mySwipeRefreshLayout.setRefreshing(true);
+                SwipeListener refreshDetector = new SwipeListener(this);
+                refreshDetector.onRefresh();
+                return true;
+            case R.id.refresh_api: // TODO
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

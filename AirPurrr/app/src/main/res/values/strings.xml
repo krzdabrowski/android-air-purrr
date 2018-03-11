@@ -10,5 +10,10 @@
     <string name="pm10_data_perc">%.1f%%</string>
     <string name="pm25_data_ugm3">(%.1f)</string>
     <string name="pm10_data_ugm3">(%.1f)</string>
+    <string name="odswiez_dane_z_miernika">Odśwież dane z miernika</string>
+    <string name="odswiez_dane_z_api">Odśwież dane z API</string>
+    <string name="steruj_wentylatorem_lokalnie">Steruj wentylatorem lokalnie</string>
+    <string name="steruj_wentylatorem_zdalnie">Steruj wentylatorem zdalnie</string>
+    <string name="ustaw_prog_trybu_automatycznego">Ustaw próg trybu automatycznego</string>
 
 </resources>

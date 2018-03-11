@@ -12,12 +12,11 @@ import android.util.Log;
 public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "SwipeListener";
-//    private PMData pmData = MainActivity.getPmData();
     private MyCallback mCallback;
 
     public interface MyCallback{
         void setSwipeRefreshing(boolean state);
-        PMData getPMDatalala();
+        PMData getPMData();
     }
 
     public SwipeListener(MyCallback callback) {
@@ -28,8 +27,8 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     public void onRefresh() {
         Log.i(TAG, "onRefresh: ");
 
-        Double[] pmValues = mCallback.getPMDatalala().downloadPMData();
-        mCallback.getPMDatalala().showResults(pmValues);
+        Double[] pmValues = mCallback.getPMData().downloadPMData();
+        mCallback.getPMData().showResults(pmValues);
         mCallback.setSwipeRefreshing(false);
     }
 

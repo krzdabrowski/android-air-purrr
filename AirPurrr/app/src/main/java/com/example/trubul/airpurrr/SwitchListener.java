@@ -34,7 +34,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     public interface MyCallback {
         void setSwitchAuto(boolean keepState);
         void setSwitchManual(boolean keepState);
-        PMData getPMDatalala();
+        PMData getPMData();
     }
 
 
@@ -112,7 +112,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 flagToggle1 = true;
             }
 
-            if (mCallback.getPMDatalala().flagTriStateAuto == 2) // if true
+            if (mCallback.getPMData().flagTriStateAuto == 2) // if true
                 if (isChecked) {
                     controlRequests(false);
                 }
@@ -121,7 +121,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                     controlRequests(true);
                     flagToggle1 = false;
                 }
-            else if (mCallback.getPMDatalala().flagTriStateAuto == 1) {} // if false
+            else if (mCallback.getPMData().flagTriStateAuto == 1) {} // if false
             else { // if null
                 Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
                 mCallback.setSwitchAuto(false);
