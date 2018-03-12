@@ -15,5 +15,7 @@
     <string name="steruj_wentylatorem_lokalnie">Steruj wentylatorem lokalnie</string>
     <string name="steruj_wentylatorem_zdalnie">Steruj wentylatorem zdalnie</string>
     <string name="ustaw_prog_trybu_automatycznego">Ustaw próg trybu automatycznego</string>
-
+    <string name="podaj_wartosc_w_procentach">Podaj wartość w procentach (%)</string>
+    <string name="OK">OK</string>
+    <string name="anuluj">Anuluj</string>
 </resources>

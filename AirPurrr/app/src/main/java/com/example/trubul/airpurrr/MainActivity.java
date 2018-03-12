@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -13,9 +14,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMData.MyCallback{
+public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMData.MyCallback, AlertDialogForAuto.MyCallback {
 
-//    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
     @BindView(R.id.switch_auto) Switch mSwitchAuto;
     @BindView(R.id.switch_manual) Switch mSwitchManual;
     @BindView(R.id.PM25_data_perc) TextView pm25DataPerc;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
     private PMData pmData = new PMData(this);
+    private Double[] pmValues;
 
     @Override
     public void setSwitchAuto(boolean keepState) {
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     public PMData getPMData() {
         return pmData;
     }
+
+    public Double[] getPMValues() { return pmValues; }
 
 
     @Override
@@ -259,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 =======
 >>>>>>> abb85a0... Clean up code
         //Double[] pmValues = {58.3, 92.7};
-        Double[] pmValues = pmData.downloadPMData();
+        pmValues = pmData.downloadPMData();
         pmData.showResults(pmValues);
 
         ///////////////////////////////////////////////////////////////
@@ -288,18 +292,19 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.control_locally: // TODO
+            case R.id.control_locally: // TODO po 16)
                 return true;
-            case R.id.control_remotely: // TODO
+            case R.id.control_remotely: // TODO po 16)
                 return true;
-            case R.id.set_auto_threshold: // TODO
+            case R.id.set_auto_threshold:
+                new AlertDialogForAuto(this, this);
                 return true;
             case R.id.refresh_detector:
                 mySwipeRefreshLayout.setRefreshing(true);
                 SwipeListener refreshDetector = new SwipeListener(this);
                 refreshDetector.onRefresh();
                 return true;
-            case R.id.refresh_api: // TODO
+            case R.id.refresh_api: // TODO po 15)
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
