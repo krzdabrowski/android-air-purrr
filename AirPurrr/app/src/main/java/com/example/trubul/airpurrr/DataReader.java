@@ -16,11 +16,12 @@ public class DataReader {
     private String mResult;
 
     public String getResult(InputStreamReader streamReader) {
+        BufferedReader in = null;
         String inputLine;
 
         try {
             //Create a new buffered reader and String Builder
-            BufferedReader in = new BufferedReader(streamReader);
+            in = new BufferedReader(streamReader);
             StringBuilder stringBuilder = new StringBuilder();
 
             //Check if the line we are reading is not null
@@ -28,14 +29,23 @@ public class DataReader {
                 stringBuilder.append(inputLine).append("\n");
             }
 
-            //Close our InputStream and Buffered reader
-            in.close();
-            streamReader.close();
+//            //Close our InputStream and Buffered reader
+//            in.close();
+//            streamReader.close();
 
             mResult = stringBuilder.toString();
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "doInBackground: Error closing stream " + e.getMessage());
+                }
+            }
         }
 
         Log.d(TAG, "DataReader result is: " + mResult);
