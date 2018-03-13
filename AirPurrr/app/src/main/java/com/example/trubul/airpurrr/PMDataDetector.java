@@ -9,36 +9,36 @@ import java.util.concurrent.ExecutionException;
  * On 3/4/18.
  */
 
-public class PMData {
+public class PMDataDetector {
 
-//    private static final String TAG = "PMData";
-//    private static final String PM_DATA_URL_GLOBAL = "http://xxx.xxx.xxx.xxx:xxx/pm_data.txt";
-    private static final String PM_DATA_URL = "http://192.168.0.248/pm_data.txt";
+//    private static final String TAG = "PMDataDetector";
+//    private static final String PM_DATA_DETECTOR_URL_GLOBAL = "http://xxx.xxx.xxx.xxx:xxx/pm_data.txt";
+    private static final String PM_DATA_DETECTOR_URL = "http://192.168.0.248/pm_data.txt";
     public int flagTriStateAuto = 0;
     private MyCallback mCallback;
 
     public interface MyCallback {
-        TextView getPM25DataPerc();
-        TextView getPM10DataPerc();
+        TextView getPM25DataDetectorPerc();
+        TextView getPM10DataDetectorPerc();
 
-        void setPM25DataPerc(Double[] pmValues);
+        void setPM25DataPerc(Double[] pmValues); // set jest dla obu taki sam? - tj to samo TextView dla PMDataDetector i dla PMDataAPI
         void setPM10DataPerc(Double[] pmValues);
         void setPM25DataUgm3(Double[] pmValues);
         void setPM10DataUgm3(Double[] pmValues);
     }
 
-    public PMData(MyCallback callback) {
+    public PMDataDetector(MyCallback callback) {
         this.mCallback = callback;
     }
 
 
-    public Double[] downloadPMData() {
-        String pmData;
+    public Double[] downloadPMDataDetector() {
+        String pmDataDetector;
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
-            pmData = getRequest.execute(PM_DATA_URL).get();
+            pmDataDetector = getRequest.execute(PM_DATA_DETECTOR_URL).get();
 
-            String[] pmStrings = pmData.split("\n");
+            String[] pmStrings = pmDataDetector.split("\n");
             Double[] pmDoubles = new Double[pmStrings.length];
 
             for (int i = 0; i < pmStrings.length; i++) {
@@ -72,11 +72,11 @@ public class PMData {
 
         for(int i=0; i<2; i++) {
             if (i == 0) {
-                tempData = mCallback.getPM25DataPerc();
+                tempData = mCallback.getPM25DataDetectorPerc();
                 multiplier = 1;
             }
             else {
-                tempData = mCallback.getPM10DataPerc();
+                tempData = mCallback.getPM10DataDetectorPerc();
                 multiplier = 2;
             }
 

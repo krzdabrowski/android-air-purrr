@@ -76,7 +76,6 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
                     Log.e(TAG, "doInBackground: Error closing stream " + e.getMessage());
                 }
             }
-
         }
 
         Log.d(TAG, "HttpGetRequest result is: " + mResult);

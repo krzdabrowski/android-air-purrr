@@ -1,6 +1,5 @@
 package com.example.trubul.airpurrr;
 
-import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
@@ -16,7 +15,7 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
 
     public interface MyCallback{
         void setSwipeRefreshing(boolean state);
-        PMData getPMData();
+        PMDataDetector getPMDataDetector();
     }
 
     public SwipeListener(MyCallback callback) {
@@ -27,8 +26,8 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     public void onRefresh() {
         Log.i(TAG, "onRefresh: ");
 
-        Double[] pmValues = mCallback.getPMData().downloadPMData();
-        mCallback.getPMData().showResults(pmValues);
+        Double[] pmValuesDetector = mCallback.getPMDataDetector().downloadPMDataDetector();
+        mCallback.getPMDataDetector().showResults(pmValuesDetector);
         mCallback.setSwipeRefreshing(false);
     }
 

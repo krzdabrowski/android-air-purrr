@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -14,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMData.MyCallback, AlertDialogForAuto.MyCallback {
+public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMDataDetector.MyCallback, AlertDialogForAuto.MyCallback {
 
     private static final String TAG = "MainActivity";
     @BindView(R.id.switch_auto) Switch mSwitchAuto;
@@ -25,8 +24,8 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     @BindView(R.id.PM10_data_ugm3) TextView pm10DataUgm3;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
-    private PMData pmData = new PMData(this);
-    private Double[] pmValues;
+    private PMDataDetector pmDataDetector = new PMDataDetector(this);
+    private Double[] pmValuesDetector;
 
     @Override
     public void setSwitchAuto(boolean keepState) {
@@ -62,21 +61,21 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
 
     @Override
-    public TextView getPM25DataPerc() {
+    public TextView getPM25DataDetectorPerc() {
         return pm25DataPerc;
     }
 
     @Override
-    public TextView getPM10DataPerc() {
+    public TextView getPM10DataDetectorPerc() {
         return pm10DataPerc;
     }
 
     @Override
-    public PMData getPMData() {
-        return pmData;
+    public PMDataDetector getPMDataDetector() {
+        return pmDataDetector;
     }
 
-    public Double[] getPMValues() { return pmValues; }
+    public Double[] getPMValuesDetector() { return pmValuesDetector; }
 
 
     @Override
@@ -85,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 
@@ -265,6 +265,11 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         //Double[] pmValues = {58.3, 92.7};
         pmValues = pmData.downloadPMData();
         pmData.showResults(pmValues);
+=======
+        //Double[] pmValuesDetector = {58.3, 92.7};
+        pmValuesDetector = pmDataDetector.downloadPMDataDetector();
+        pmDataDetector.showResults(pmValuesDetector);
+>>>>>>> f0db366... Refactor PMData etc. to PMDataDetector
 
         ///////////////////////////////////////////////////////////////
 >>>>>>> 87fbcba... Add working automatic mode, percentages and some minor fixes
@@ -277,6 +282,12 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         ///////////////////////////////////////////////////////////////
 
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
+
+        ///////////////////////////////////////////////////////////////
+
+        HttpGetRequest getRequest = new HttpGetRequest();
+        getRequest.execute("http://api.gios.gov.pl/pjp-api/rest/data/getData/3730");
+        Log.d(TAG, "getRequest is: " + getRequest);
 
     }
 

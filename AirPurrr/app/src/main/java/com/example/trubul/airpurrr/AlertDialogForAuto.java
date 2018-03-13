@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -24,8 +23,8 @@ public class AlertDialogForAuto {
     private EditText editText;
 
     public interface MyCallback {
-        PMData getPMData();
-        Double[] getPMValues();
+        PMDataDetector getPMDataDetector();
+        Double[] getPMValuesDetector();
     }
 
     public AlertDialogForAuto(Context context, MyCallback callback) {
@@ -97,11 +96,11 @@ public class AlertDialogForAuto {
 
     public void setAutoThreshold(int threshold) {
         // jesli jakakolwiek z obu wartosci przekroczy threshold
-        if ( (4 * mCallback.getPMValues()[0] > threshold) || (2 * mCallback.getPMValues()[1] > threshold) ) {
-            mCallback.getPMData().flagTriStateAuto = 2;
+        if ( (4 * mCallback.getPMValuesDetector()[0] > threshold) || (2 * mCallback.getPMValuesDetector()[1] > threshold) ) {
+            mCallback.getPMDataDetector().flagTriStateAuto = 2;
         }
         else {
-            mCallback.getPMData().flagTriStateAuto = 1;
+            mCallback.getPMDataDetector().flagTriStateAuto = 1;
         }
     }
 

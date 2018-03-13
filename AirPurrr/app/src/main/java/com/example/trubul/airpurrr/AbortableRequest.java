@@ -8,6 +8,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -36,6 +38,8 @@ public class AbortableRequest extends AsyncTask<String, Void, String>{
     @Override
     protected String doInBackground(String... params) {
         String result;
+        InputStreamReader streamReader = null;
+
         try {
             URI url = new URI("http://192.168.0.248/?" + params[0]);
 //            URI url = new URI("http://xxx.xxx.xxx.xxx:xxx/?" + params[0]);
@@ -44,16 +48,38 @@ public class AbortableRequest extends AsyncTask<String, Void, String>{
             HttpClient httpclient = new DefaultHttpClient();
             HttpResponse response = httpclient.execute(getRequest());
 
-            InputStreamReader streamReader = new InputStreamReader(response.getEntity().getContent());
+            streamReader = new InputStreamReader(response.getEntity().getContent());
 
             DataReader dataReader = new DataReader();
             result = dataReader.getResult(streamReader);
             Log.d(TAG, "AbortableRequest result is: " + result);
 
-        } catch (IOException e) {
+        }
+        catch (URISyntaxException e) {
             e.printStackTrace();
-        } catch (URISyntaxException e) {
+        }
+        catch (MalformedURLException e) {
+            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
+        }
+        catch (ProtocolException e) {
             e.printStackTrace();
+        }
+        catch(SecurityException e) {
+            Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
+        }
+        catch (IOException e) {
+            Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
+        }
+        finally {
+            if(streamReader != null) {
+                try {
+                    streamReader.close();
+                }
+                catch(IOException e) {
+                    Log.e(TAG, "doInBackground: Error closing stream " + e.getMessage());
+                }
+
+            }
         }
 
         return null;
