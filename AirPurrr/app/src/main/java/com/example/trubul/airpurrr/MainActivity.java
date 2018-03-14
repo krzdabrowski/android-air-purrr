@@ -6,26 +6,41 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMDataDetector.MyCallback, AlertDialogForAuto.MyCallback {
+public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMDataResults.MyCallback, AlertDialogForAuto.MyCallback {
 
     private static final String TAG = "MainActivity";
+    public static boolean flagDetectorAPI = false; // false = DetectorMode, true = APIMode
+
     @BindView(R.id.switch_auto) Switch mSwitchAuto;
     @BindView(R.id.switch_manual) Switch mSwitchManual;
     @BindView(R.id.PM25_data_perc) TextView pm25DataPerc;
     @BindView(R.id.PM10_data_perc) TextView pm10DataPerc;
     @BindView(R.id.PM25_data_ugm3) TextView pm25DataUgm3;
     @BindView(R.id.PM10_data_ugm3) TextView pm10DataUgm3;
+    @BindView(R.id.PM25_mode) TextView pm25Mode;
+    @BindView(R.id.PM10_mode) TextView pm10Mode;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
-    private PMDataDetector pmDataDetector = new PMDataDetector(this);
+    private PMDataDetector pmDataDetector = new PMDataDetector();
+    private PMDataAPI pmDataAPI = new PMDataAPI();
+
+    private PMDataResults pmDataDetectorResults = new PMDataResults(this);
+    private PMDataResults pmDataAPIResults = new PMDataResults(this);
+
     private Double[] pmValuesDetector;
+    private Double[] pmValuesAPI;
+    private String[] pmDatesAPI;
+
 
     @Override
     public void setSwitchAuto(boolean keepState) {
@@ -58,15 +73,25 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     }
 
     @Override
+    public void setPM25Mode(String mode) {
+        pm25Mode.setText(mode);
+    }
+
+    @Override
+    public void setPM10Mode(String mode) {
+        pm10Mode.setText(mode);
+    }
+
+    @Override
     public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
 
     @Override
-    public TextView getPM25DataDetectorPerc() {
+    public TextView getPM25DataPerc() {
         return pm25DataPerc;
     }
 
     @Override
-    public TextView getPM10DataDetectorPerc() {
+    public TextView getPM10DataPerc() {
         return pm10DataPerc;
     }
 
@@ -75,7 +100,33 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         return pmDataDetector;
     }
 
+    @Override
+    public PMDataAPI getPMDataAPI() {
+        return pmDataAPI;
+    }
+
+    @Override
+    public PMDataResults getPMDataDetectorResults() {
+        return pmDataDetectorResults;
+    }
+
+    @Override
+    public PMDataResults getPMDataAPIResults() {
+        return pmDataAPIResults;
+    }
+
+
     public Double[] getPMValuesDetector() { return pmValuesDetector; }
+
+    @Override
+    public Double[] getPMValuesAPI() {
+        return pmValuesAPI;
+    }
+
+    @Override
+    public String[] getPMDatesAPI() {
+        return pmDatesAPI;
+    }
 
 
     @Override
@@ -268,8 +319,16 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 =======
         //Double[] pmValuesDetector = {58.3, 92.7};
         pmValuesDetector = pmDataDetector.downloadPMDataDetector();
+<<<<<<< HEAD
         pmDataDetector.showResults(pmValuesDetector);
 >>>>>>> f0db366... Refactor PMData etc. to PMDataDetector
+=======
+        List<Object> pmValuesAndDatesAPI = pmDataAPI.downloadPMDataAPI(); // pobierz wartosci z List<Object> = {Double[], String[]}
+        pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
+        pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+
+        pmDataDetectorResults.showResults(pmValuesDetector, null); // domyslnie pokaz wartosci z detektora
+>>>>>>> f276198... Add support to smogAPI from the closest GIOS station
 
         ///////////////////////////////////////////////////////////////
 >>>>>>> 87fbcba... Add working automatic mode, percentages and some minor fixes
@@ -285,12 +344,24 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 
         ///////////////////////////////////////////////////////////////
 
-        HttpGetRequest getRequest = new HttpGetRequest();
-        getRequest.execute("http://api.gios.gov.pl/pjp-api/rest/data/getData/3730");
-        Log.d(TAG, "getRequest is: " + getRequest);
+        View.OnClickListener textViewListener = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!flagDetectorAPI) {
+                    flagDetectorAPI = true;
+                    pmDataAPIResults.showResults(pmValuesAPI, pmDatesAPI);
+                } else {
+                    flagDetectorAPI = false;
+                    pmDataDetectorResults.showResults(pmValuesDetector, null);
+                }
+            }
+        };
+
+        pm25DataPerc.setOnClickListener(textViewListener);
+        pm10DataPerc.setOnClickListener(textViewListener);
 
     }
-
 
     //////////////////////////  MENU  ///////////////////////////////
 
@@ -312,10 +383,13 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
                 return true;
             case R.id.refresh_detector:
                 mySwipeRefreshLayout.setRefreshing(true);
-                SwipeListener refreshDetector = new SwipeListener(this);
-                refreshDetector.onRefresh();
+                SwipeListener refreshDetectorListener = new SwipeListener(this);
+                refreshDetectorListener.onRefreshDetector();
                 return true;
-            case R.id.refresh_api: // TODO po 15)
+            case R.id.refresh_api:
+                mySwipeRefreshLayout.setRefreshing(true);
+                SwipeListener refreshAPIListener = new SwipeListener(this);
+                refreshAPIListener.onRefreshAPI();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

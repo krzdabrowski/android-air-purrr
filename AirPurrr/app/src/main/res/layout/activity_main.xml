@@ -3,6 +3,7 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -94,6 +95,17 @@
                     app:layout_constraintTop_toTopOf="@+id/PM25_data_perc" />
 
                 <TextView
+                    android:id="@+id/PM25_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:elevation="2dp"
+                    android:text="@string/pm25_mode"
+                    android:textSize="16sp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/PM25"
+                    app:layout_constraintEnd_toEndOf="@+id/PM25_data_perc" />
+
+                <TextView
                     android:id="@+id/PM25_data_perc"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -157,6 +169,17 @@
                     app:layout_constraintTop_toTopOf="@+id/guideline_mid_card"
                     tools:text="30%" />
 
+
+                <TextView
+                    android:id="@+id/PM10_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:elevation="2dp"
+                    android:text="@string/pm10_mode"
+                    android:textSize="16sp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/PM10"
+                    app:layout_constraintEnd_toEndOf="@+id/PM10_data_perc" />
 
                 <TextView
                     android:id="@+id/PM10_data_ugm3"

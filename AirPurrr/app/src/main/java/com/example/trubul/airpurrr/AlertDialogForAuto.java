@@ -23,7 +23,7 @@ public class AlertDialogForAuto {
     private EditText editText;
 
     public interface MyCallback {
-        PMDataDetector getPMDataDetector();
+        PMDataResults getPMDataDetectorResults();
         Double[] getPMValuesDetector();
     }
 
@@ -97,10 +97,10 @@ public class AlertDialogForAuto {
     public void setAutoThreshold(int threshold) {
         // jesli jakakolwiek z obu wartosci przekroczy threshold
         if ( (4 * mCallback.getPMValuesDetector()[0] > threshold) || (2 * mCallback.getPMValuesDetector()[1] > threshold) ) {
-            mCallback.getPMDataDetector().flagTriStateAuto = 2;
+            mCallback.getPMDataDetectorResults().flagTriStateAuto = 2;
         }
         else {
-            mCallback.getPMDataDetector().flagTriStateAuto = 1;
+            mCallback.getPMDataDetectorResults().flagTriStateAuto = 1;
         }
     }
 
