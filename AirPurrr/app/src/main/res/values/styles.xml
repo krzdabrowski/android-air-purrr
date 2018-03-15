@@ -1,11 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme.Main" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/mainPrimary</item>
+        <item name="colorPrimaryDark">@color/mainPrimaryDark</item>
+        <item name="colorAccent">@color/mainAccent</item>
+    </style>
+
+    <style name="AppTheme.Login" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/loginPrimary</item>
+        <item name="colorPrimaryDark">@color/loginPrimaryDark</item>
+        <item name="colorAccent">@color/loginAccent</item>
+
+        <item name="android:windowBackground">@color/loginPrimary</item>
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/iron</item>
+
+        <item name="colorButtonNormal">@color/loginPrimaryDarker</item>
+    </style>
+
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/iron</item>
+        <item name="android:background">@color/loginPrimary</item>
     </style>
 
 </resources>

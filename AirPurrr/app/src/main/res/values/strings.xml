@@ -21,4 +21,7 @@
     <string name="podaj_wartosc_w_procentach">Podaj wartość w procentach (%)</string>
     <string name="OK">OK</string>
     <string name="anuluj">Anuluj</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
 </resources>

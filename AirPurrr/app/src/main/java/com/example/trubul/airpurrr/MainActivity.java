@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -338,6 +340,11 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         ///////////////////////////////////////////////////////////////
 >>>>>>> 87fbcba... Add working automatic mode, percentages and some minor fixes
 =======
+=======
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
+>>>>>>> 355b373... Include LoginActivity with all visual widgets (no logic yet)
         // Download PM values from detector
 //        final Double[] pmValuesDetector = {58.3, 92.7};
         pmValuesDetector = pmDataDetector.downloadPMDataDetector();
