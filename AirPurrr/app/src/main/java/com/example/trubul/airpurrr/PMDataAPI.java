@@ -42,10 +42,10 @@ public class PMDataAPI {
                     pmDataAPI = getRequest.execute(PM10_DATA_API_URL).get();
                 }
 
-                JSONObject jsonData = new JSONObject(pmDataAPI); // zwraca typowy pythonowy slownik {key: value} z calego linka
-                JSONArray itemsArray = jsonData.getJSONArray("values"); // zwraca tablice slownikow spod wartosci values
+                JSONObject jsonData = new JSONObject(pmDataAPI);  // return python's {key: value} of the provided link
+                JSONArray itemsArray = jsonData.getJSONArray("values");  // return array of dicts from "values" value
 
-                for (int j = itemsArray.length() - 1; j >= 0; j--) { // aby wczytac ostatnia nie-nullowa wartosc (ostatnia aktualna)
+                for (int j = itemsArray.length() - 1; j >= 0; j--) {  // to load last not-null value (last current value)
                     JSONObject specificDict = itemsArray.getJSONObject(j);
 
                     String date = specificDict.getString("date");
@@ -84,7 +84,7 @@ public class PMDataAPI {
         catch (ExecutionException e) {
             e.printStackTrace();
         }
-        catch (NullPointerException e) { // gdy np nie ma internetu
+        catch (NullPointerException e) {  // no-internet?
             List<Object> empty = new ArrayList<>(2);
             Double[] emptyDouble = new Double[]{0.0, 0.0};
             String[] emptyString = new String[]{"", ""};

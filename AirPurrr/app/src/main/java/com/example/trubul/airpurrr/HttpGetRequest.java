@@ -31,23 +31,23 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
         InputStreamReader streamReader = null;
 
         try {
-            //Create a URL object holding our url
+            // Create a URL object holding our url
             URL myUrl = new URL(params[0]);
 
-            //Create a connection
+            // Create a connection
             connection = (HttpURLConnection) myUrl.openConnection();
 
-            //Set methods and timeouts
+            // Set methods and timeouts
             connection.setRequestMethod(REQUESTED_METHOD);
             connection.setReadTimeout(READ_TIMEOUT);
             connection.setConnectTimeout(CONNECTION_TIMEOUT);
 
-            //Connect to our url
+            // Connect to our url
             connection.connect();
 
-            //Create a new InputStreamReader
+            // Create a new InputStreamReader
             streamReader = new InputStreamReader(connection.getInputStream());
-            //Do the data-read
+            // Do the data-read
             DataReader dataReader = new DataReader();
             mResult = dataReader.getResult(streamReader);
 

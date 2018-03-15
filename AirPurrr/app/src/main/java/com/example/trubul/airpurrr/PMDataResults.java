@@ -16,7 +16,7 @@ public class PMDataResults {
         TextView getPM25DataPerc();
         TextView getPM10DataPerc();
 
-        void setPM25DataPerc(Double[] pmValues); // set jest dla obu taki sam? - tj to samo TextView dla PMDataDetector i dla PMDataAPI
+        void setPM25DataPerc(Double[] pmValues);
         void setPM10DataPerc(Double[] pmValues);
         void setPM25DataUgm3(Double[] pmValues);
         void setPM10DataUgm3(Double[] pmValues);
@@ -69,11 +69,11 @@ public class PMDataResults {
         mCallback.setPM25DataUgm3(pmValues);
         mCallback.setPM10DataUgm3(pmValues);
 
-        if (!MainActivity.flagDetectorAPI) { // jesli detektor
+        if (!MainActivity.flagDetectorAPI) {  // if detector
             mCallback.setPM25Mode("W mieszkaniu");
             mCallback.setPM10Mode("W mieszkaniu");
         }
-        else { // jesli API
+        else {  // if API
             mCallback.setPM25Mode("API z " + mCallback.getPMDatesAPI()[0]);
             mCallback.setPM10Mode("API z " + mCallback.getPMDatesAPI()[1]);
         }

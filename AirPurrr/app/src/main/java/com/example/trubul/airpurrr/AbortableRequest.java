@@ -31,10 +31,6 @@ public class AbortableRequest extends AsyncTask<String, Void, String>{
             return mRequest;
         }
 
-//    public void setRequest(HttpGet newRequest) {
-//            mRequest = newRequest;
-//        }
-
     @Override
     protected String doInBackground(String... params) {
         String result;

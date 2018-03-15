@@ -19,7 +19,6 @@ public class AlertDialogForAuto {
     private Context mContext;
     private MyCallback mCallback;
     private String newStringAutoThreshold;
-    private int newIntAutoThreshold;
     private EditText editText;
 
     public interface MyCallback {
@@ -40,11 +39,10 @@ public class AlertDialogForAuto {
         TextView title = new TextView(mContext);
         editText = new EditText(mContext);
 
-        // Konfiguracja
-
+        // Configuration of AlertDialog
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setTextSize(32);
-        editText.post(new Runnable() { // show keyboard automatically
+        editText.post(new Runnable() {  // show keyboard automatically
             public void run() {
                 editText.requestFocusFromTouch();
                 InputMethodManager lManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -58,8 +56,7 @@ public class AlertDialogForAuto {
         title.setTextSize(24);
 
         builder.setCustomTitle(title);
-        builder.setCancelable(true); // with BACK button
-
+        builder.setCancelable(true);  // with BACK button
         builder.setPositiveButton(
                 R.string.OK,
                 new DialogInterface.OnClickListener() {
@@ -68,7 +65,6 @@ public class AlertDialogForAuto {
                         getAutoThreshold();
                     }
                 });
-
         builder.setNegativeButton(
                 R.string.anuluj,
                 new DialogInterface.OnClickListener() {
@@ -85,9 +81,8 @@ public class AlertDialogForAuto {
 
     public void getAutoThreshold() {
         if (!newStringAutoThreshold.equals("")) {
-            newIntAutoThreshold = Integer.parseInt(newStringAutoThreshold);
+            int newIntAutoThreshold = Integer.parseInt(newStringAutoThreshold);
             setAutoThreshold(newIntAutoThreshold);
-
         }
         else {
             Toast.makeText(mContext, "Wprowadź poprawną wartość!", Toast.LENGTH_SHORT).show();

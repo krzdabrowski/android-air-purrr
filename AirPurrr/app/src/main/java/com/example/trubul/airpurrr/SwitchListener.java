@@ -16,7 +16,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 //    private static final String TAG = "SwitchListener";
 //    private static final String WORKSTATE_URL_GLOBAL = "http://xxx.xxx.xxx.xxx:xxx/workstate.txt";
     private static final String WORKSTATE_URL = "http://192.168.0.248/workstate.txt";
-    private boolean flagToggle1 = true;  // zawsze musi byc true
+    private boolean flagToggle1 = true;
     private boolean flagToggle2 = true;
     private HttpGet mRequestOn = new HttpGet();
     private HttpGet mRequestOff = new HttpGet();
@@ -55,7 +55,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
             if (res.equals("WorkStates.Sleeping\n")) {
                 Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
-                if (!keepState) {  // wyslij zadanie, jesli to byl switch wlaczajacy
+                if (!keepState) {  // send request if it was switch -> ON
                     switchOn.execute(mode + "=1");
                 }
                 else {
@@ -88,7 +88,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         catch (ExecutionException e) {
             e.printStackTrace();
         }
-        catch (NullPointerException e) { // gdy np nie ma internetu
+        catch (NullPointerException e) {  // no-internet?
             Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
             if (mode.equals(WorkingMode.AUTO)) {
                 mCallback.setSwitchAuto(keepState);
@@ -102,32 +102,32 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        // Tryb automatyczny - wlacz wentylator gdy dowolna wartosc PM2.5/10 przekroczy 100% normy
+        // Automatic mode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
         if (mode.equals(WorkingMode.AUTO)) {
-            // Poczatkowa konfiguracja flag, umozliwiajaca wielokrotne zmiany switchy
+            // Initial flag configuration - multiple switching possible
             if (!flagToggle1) {
                 mRequestOn = new HttpGet();
                 mRequestOff = new HttpGet();
                 flagToggle1 = true;
             }
 
-            if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2) // if true
+            if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2)  // if true
                 if (isChecked) {
                     controlRequests(false);
                 }
                 else {
-                    mRequestOn.abort();  // zerwij petle while w pracy wentylatora
+                    mRequestOn.abort();  // break while loop of working air purifier
                     controlRequests(true);
                     flagToggle1 = false;
                 }
-            else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 1) {} // if false
-            else { // if null
+            else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 1) {}  // if false
+            else {  // if null
                 Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
                 mCallback.setSwitchAuto(false);
             }
         }
 
-        // Tryb manualny - wlaczaj kiedy chcesz
+        // Manual mode - control anytime!
         else {
             if (!flagToggle2) {
                 mRequestOn = new HttpGet();
@@ -139,7 +139,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 controlRequests(false);
             }
             else {
-                mRequestOn.abort();  // zerwij petle while w pracy wentylatora
+                mRequestOn.abort();  // break while loop of working air purifier
                 controlRequests(true);
                 flagToggle2 = false;
 

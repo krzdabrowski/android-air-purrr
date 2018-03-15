@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMDataResults.MyCallback, AlertDialogForAuto.MyCallback {
 
-    private static final String TAG = "MainActivity";
+//    private static final String TAG = "MainActivity";
     public static boolean flagDetectorAPI = false; // false = DetectorMode, true = APIMode
 
     @BindView(R.id.switch_auto) Switch mSwitchAuto;
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     private String[] pmDatesAPI;
 
 
+    //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
     @Override
     public void setSwitchAuto(boolean keepState) {
         mSwitchAuto.setChecked(keepState);
@@ -85,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     @Override
     public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
 
+
+    //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
     @Override
     public TextView getPM25DataPerc() {
         return pm25DataPerc;
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         return pmDataAPIResults;
     }
 
-
+    @Override
     public Double[] getPMValuesDetector() { return pmValuesDetector; }
 
     @Override
@@ -129,12 +132,14 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     }
 
 
+    //////////////////////////////////////////  ONCREATE  //////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -332,20 +337,30 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 
         ///////////////////////////////////////////////////////////////
 >>>>>>> 87fbcba... Add working automatic mode, percentages and some minor fixes
+=======
+        // Download PM values from detector
+//        final Double[] pmValuesDetector = {58.3, 92.7};
+        pmValuesDetector = pmDataDetector.downloadPMDataDetector();
 
+        // Download PM values from API
+        List<Object> pmValuesAndDatesAPI = pmDataAPI.downloadPMDataAPI();  // List<Object> = {Double[], String[]}
+        pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
+        pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+
+        // Default: show PM values from detector
+        pmDataDetectorResults.showResults(pmValuesDetector, null);
+
+>>>>>>> ef21956... Clean up comments and little fixes
+
+        /////////////////////// LISTENERS ///////////////////////
         SwitchListener autoListener = new SwitchListener(this, SwitchListener.WorkingMode.AUTO, this);
         mSwitchAuto.setOnCheckedChangeListener(autoListener);
         SwitchListener manualListener = new SwitchListener(this, SwitchListener.WorkingMode.MANUAL, this);
         mSwitchManual.setOnCheckedChangeListener(manualListener);
 
-        ///////////////////////////////////////////////////////////////
-
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
 
-        ///////////////////////////////////////////////////////////////
-
         View.OnClickListener textViewListener = new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (!flagDetectorAPI) {
@@ -357,14 +372,13 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
                 }
             }
         };
-
         pm25DataPerc.setOnClickListener(textViewListener);
         pm10DataPerc.setOnClickListener(textViewListener);
 
     }
 
-    //////////////////////////  MENU  ///////////////////////////////
 
+    ////////////////////////////////////////////  MENU  ////////////////////////////////////////////
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;

@@ -29,10 +29,6 @@ public class DataReader {
                 stringBuilder.append(inputLine).append("\n");
             }
 
-//            //Close our InputStream and Buffered reader
-//            in.close();
-//            streamReader.close();
-
             mResult = stringBuilder.toString();
         }
         catch (IOException e) {

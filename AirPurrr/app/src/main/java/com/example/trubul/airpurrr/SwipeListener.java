@@ -39,11 +39,11 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
 
     @Override
     public void onRefresh() {
-        if (!MainActivity.flagDetectorAPI) { // jesli detektor
+        if (!MainActivity.flagDetectorAPI) {  // if detector
             onRefreshAPI();
             onRefreshDetector();
         }
-        else { // jesli API
+        else {  // if API
             onRefreshDetector();
             onRefreshAPI();
         }
