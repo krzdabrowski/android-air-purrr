@@ -35,10 +35,20 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "SwitchListener";
 
+    private static boolean state;
+
+    public static boolean isState() {
+        return state;
+    }
 
     private Context mContext;
-    private WorkingMode mode;
-    private MyCallback mCallback;
+
+    public static WorkingMode getMode() {
+        return mode;
+    }
+
+    private static WorkingMode mode;
+    private static MyCallback mCallback;
 
     public enum WorkingMode {
         AUTO,
@@ -47,8 +57,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
 
     public interface MyCallback {
-        void setSwitchAuto(boolean keepState);
-        void setSwitchManual(boolean keepState);
+        void setSwitchAuto(boolean state);
+        void setSwitchManual(boolean state);
         PMDataResults getPMDataDetectorResults();
     }
 
@@ -59,11 +69,14 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         this.mCallback = callback;
     }
 
-    private void controlRequests(boolean keepState) {
+    private void controlRequests(boolean state) {
+
+        this.state = state;
+
         String res;
 
-        AbortableRequest switchOn = new AbortableRequest(mRequestOn, mContext);
-        AbortableRequest switchOff = new AbortableRequest(mRequestOff, mContext);
+        AbortableRequest switchOn = new AbortableRequest(mContext);
+        AbortableRequest switchOff = new AbortableRequest(mContext);
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
@@ -71,7 +84,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
             if (res.equals("WorkStates.Sleeping\n")) {
                 Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
-                if (!keepState) {  // send request if it was switch -> ON
+                if (state) {  // send request if it was switch -> ON
                     switchOn.execute(mode + "=1"); // to moze tak byc, to pojdzie w req = params[0]
 
                 } else {
@@ -79,18 +92,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 }
             } else if (res.equals("WorkStates.Measuring\n")) {
                 Toast.makeText(mContext, "Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym", Toast.LENGTH_LONG).show();
-                if (mode.equals(WorkingMode.AUTO)) {
-                    mCallback.setSwitchAuto(keepState);
-                } else {
-                    mCallback.setSwitchManual(keepState);
-                }
+                keepState();
             } else {
                 Toast.makeText(mContext, "Coś się popsuło i nie było mnie słychać", Toast.LENGTH_LONG).show();
-                if (mode.equals(WorkingMode.AUTO)) {
-                    mCallback.setSwitchAuto(keepState);
-                } else {
-                    mCallback.setSwitchManual(keepState);
-                }
+                keepState();
             }
 
 
@@ -112,12 +117,16 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         }
         catch (NullPointerException e) {
             Toast.makeText(mContext, "Serwer nie odpowiada, spróbuj ponownie później" , Toast.LENGTH_LONG).show();
-            if (mode.equals(WorkingMode.AUTO)) {
-                mCallback.setSwitchAuto(keepState);
-            }
-            else {
-                mCallback.setSwitchManual(keepState);
-            }
+            keepState();
+        }
+    }
+
+    public static void keepState() {
+        if (mode.equals(WorkingMode.AUTO)) {
+            mCallback.setSwitchAuto(!state);
+        }
+        else {
+            mCallback.setSwitchManual(!state);
         }
     }
 
@@ -137,17 +146,17 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
             if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2)  // if true
                 if (isChecked) {
-                    controlRequests(false);
+                    controlRequests(true);
                 }
                 else {
 //                    mRequestOn.abort();  // break while loop of working air purifier
 //                    mRequestOn.cancel("req");
-                    controlRequests(true);
+                    controlRequests(false);
                     flagToggle1 = false;
                 }
             else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 1) {}  // if false
             else {  // if null
-                Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "Serwer nie odpowiada, spróbuj ponownie później (flagTriState = 0)" , Toast.LENGTH_LONG).show();
                 mCallback.setSwitchAuto(false);
             }
         }
@@ -164,12 +173,12 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             }
 
             if (isChecked) {
-                controlRequests(false);
+                controlRequests(true);
             }
             else {
 //                mRequestOn.abort();  // break while loop of working air purifier
 //                mRequestOn.cancel(TAG);
-                controlRequests(true);
+                controlRequests(false);
                 flagToggle2 = false;
 
             }

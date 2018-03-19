@@ -46,15 +46,27 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     private String[] pmDatesAPI;
 
 
+    public static SwitchListener getAutoListener() {
+        return autoListener;
+    }
+
+    public static SwitchListener getManualListener() {
+        return manualListener;
+    }
+
+    private static SwitchListener autoListener;
+    private static SwitchListener manualListener;
+
+
     //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
     @Override
-    public void setSwitchAuto(boolean keepState) {
-        mSwitchAuto.setChecked(keepState);
+    public void setSwitchAuto(boolean state) {
+        mSwitchAuto.setChecked(state);
     }
 
     @Override
-    public void setSwitchManual(boolean keepState) {
-        mSwitchManual.setChecked(keepState);
+    public void setSwitchManual(boolean state) {
+        mSwitchManual.setChecked(state);
     }
 
     @Override // 100% = 25ug/m3
@@ -92,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 
 
     //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
+
     @Override
     public TextView getPM25DataPerc() {
         return pm25DataPerc;
@@ -368,9 +381,9 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 >>>>>>> ef21956... Clean up comments and little fixes
 
         /////////////////////// LISTENERS ///////////////////////
-        SwitchListener autoListener = new SwitchListener(this, SwitchListener.WorkingMode.AUTO, this);
+        autoListener = new SwitchListener(this, SwitchListener.WorkingMode.AUTO, this);
         mSwitchAuto.setOnCheckedChangeListener(autoListener);
-        SwitchListener manualListener = new SwitchListener(this, SwitchListener.WorkingMode.MANUAL, this);
+        manualListener = new SwitchListener(this, SwitchListener.WorkingMode.MANUAL, this);
         mSwitchManual.setOnCheckedChangeListener(manualListener);
 
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));

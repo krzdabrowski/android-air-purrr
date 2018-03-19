@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -61,16 +62,16 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
 //    private HttpPost mRequest = new HttpPost();
     private OkHttpClient mOkHttpClient;
     private static Context mContext;
-
-
+    private boolean flagSSLHandshake = false;
 
 //    public AbortableRequest(HttpPost newRequest, Context context) {
 //            mRequest = newRequest;
 //            this.mContext = context;
 //        }
 
-    public AbortableRequest(OkHttpClient httpClient, Context context) {
-        mOkHttpClient = httpClient;
+
+
+    public AbortableRequest(Context context) {
         this.mContext = context;
     }
 
@@ -159,6 +160,8 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
             Log.d(TAG, "PRZED WRITE");
             os.write( outputInBytes );
 
+//            os.flush();
+
             Log.d(TAG, "PRZED ZAMKNIECIEM");
             os.close();
 
@@ -226,8 +229,11 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
         }
         catch (IOException e) {
             Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
-//            Toast.makeText(, "Serwer jest przeciążony, spróbuj ponownie później", Toast.LENGTH_LONG).show();
-//            throw new CustomException("bum");
+            if (!e.getMessage().equals("timeout")) { // timeout == there was a connection and it's while(true)'ing == good
+                flagSSLHandshake = true;
+            }
+//            Toast.makeText(context, "Serwer nie odp, spróbuj ponownie później", Toast.LENGTH_LONG).show();
+//            mCallback.setSwitchAuto(false);
         }
         finally {
             if(streamReader != null) {
@@ -244,5 +250,20 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(String s) {
+        if (flagSSLHandshake) {
+            Toast.makeText(mContext, "BLAD SERWERAAAA", Toast.LENGTH_LONG).show();
+//            if (SwitchListener.getMode().equals(SwitchListener.WorkingMode.AUTO)) {
+//                mCallback.setSwitchAuto(!SwitchListener.isState());
+//            }
+//            else {
+//                mCallback.setSwitchManual(!SwitchListener.isState());
+//            }
+            MainActivity.getAutoListener().keepState();
+            MainActivity.getManualListener().keepState();
+
+        }
+    }
 }
 

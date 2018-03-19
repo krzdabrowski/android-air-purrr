@@ -68,6 +68,7 @@ public class LoginActivity extends BaseActivity implements
     private static EditText mPasswordField;
 
     private FirebaseAuth mAuth;
+
 //    private Context mContext;
 
 
@@ -108,8 +109,9 @@ public class LoginActivity extends BaseActivity implements
             URL url = new URL("https://89.70.85.249:2137");
 //            HttpPost request = LoginActivity.sendPOST(url, getRequest());
 
-            List<String> data = LoginActivity.sendPOST();
-
+//            List<String> data = LoginActivity.sendPOST();
+            String email = mEmailField.getText().toString();
+            String password = mPasswordField.getText().toString();
 
 //            URL url = new URL(urlStr);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
@@ -132,7 +134,7 @@ public class LoginActivity extends BaseActivity implements
 
 
             // Use this if you need SSL authentication
-            String userpass = data.get(0) + ":" + data.get(1);
+            String userpass = email + ":" + password;
             String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
             conn.setRequestProperty("Authorization", basicAuth);
 //            conn.setRequestProperty("req", params[0]);
@@ -140,13 +142,12 @@ public class LoginActivity extends BaseActivity implements
             Log.d(TAG, "PO BASIC AUTH");
 
             // set Timeout and method
-            conn.setReadTimeout(3000);
-            conn.setConnectTimeout(3000);
+            conn.setReadTimeout(3000); // czas na cala reszte, responsy itd
+            conn.setConnectTimeout(7000); // czas na polaczenie sie z IP
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
 
             Log.d(TAG, "PO USTAWIENIU TIMEOUTOW");
-
 
             return conn;
 
@@ -172,7 +173,7 @@ public class LoginActivity extends BaseActivity implements
         }
         catch (IOException e) {
             Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
-            Toast.makeText(context, "Serwer nie odp, spróbuj ponownie później", Toast.LENGTH_LONG).show();
+
 //            throw new CustomException("bum");
         }
 
@@ -222,20 +223,19 @@ public class LoginActivity extends BaseActivity implements
         // [END sign_in_with_email]
     }
 
-    public static List<String> sendPOST() {
-//        request.setURI(url);
-
-//        try {
-
-        List<String> data = new ArrayList<>(2);
-
-        String email = mEmailField.getText().toString();
-        String password = mPasswordField.getText().toString();
-
-        data.add(email);
-        data.add(password);
-
-        return data;
+//    public static List<String> sendPOST() {
+////        request.setURI(url);
+//
+////        try {
+//
+//        List<String> data = new ArrayList<>(2);
+//
+//
+//
+//        data.add(email);
+//        data.add(password);
+//
+//        return data;
 
 
 //            List nameValuePairs = new ArrayList(1);
@@ -253,7 +253,7 @@ public class LoginActivity extends BaseActivity implements
 //        }
 //
 //        return null;
-    }
+//    }
 
 
     private boolean validateForm() {
