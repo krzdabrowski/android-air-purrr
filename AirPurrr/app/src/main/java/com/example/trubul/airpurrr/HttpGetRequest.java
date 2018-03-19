@@ -22,8 +22,8 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "HttpGetRequest";
     private static final String REQUESTED_METHOD = "GET";
-    private static final int READ_TIMEOUT = 15000;
-    private static final int CONNECTION_TIMEOUT = 15000;
+    private static final int READ_TIMEOUT = 5000;
+    private static final int CONNECTION_TIMEOUT = 5000;
     private String mResult = null;
 
 
@@ -64,7 +64,7 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
         }
         catch (IOException e) {
-            Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
+            Log.e(TAG, "HttpGetRequest: IO Exception reading data: " + e.getMessage());
         }
         finally {
             if(connection != null) {

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mklimek.sslutilsandroid.SslUtils;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -59,7 +60,7 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
 //    private HttpGet mRequest = new HttpGet();
 //    private HttpPost mRequest = new HttpPost();
     private OkHttpClient mOkHttpClient;
-    private Context mContext;
+    private static Context mContext;
 
 
 
@@ -98,6 +99,9 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
 //    }
 
 
+
+
+
     @Override
     protected String doInBackground(String... params) {
         String result;
@@ -106,64 +110,66 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
 
         try {
 //            URI url = new URI("http://192.168.0.248/?" + params[0]);
-//            URI url = new URI("https://89.70.85.249:2137/?" + params[0]);
-//            URL url = new URL("https://89.70.85.249:2137/?" + params[0]);
-
-            URL url = new URL("https://89.70.85.249:2137");
-//            HttpPost request = LoginActivity.sendPOST(url, getRequest());
-
-            List<String> data = LoginActivity.sendPOST();
 
 
-//            URL url = new URL(urlStr);
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setDefaultHostnameVerifier(new NullHostNameVerifier());
-
-            // Create the SSL connection
-            SSLContext sc;
-            sc = SSLContext.getInstance("TLS");
-//            sc.init(null, null, new java.security.SecureRandom());
-
-            sc.init(null, new X509TrustManager[]{new NullX509TrustManager()}, new SecureRandom());
-
-            sc = SslUtils.getSslContextForCertificateFile(mContext, "mycert333.cer");
-            conn.setSSLSocketFactory(sc.getSocketFactory());
-            conn.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
+//            URL url = new URL("https://89.70.85.249:2137");
+//            List<String> data = LoginActivity.sendPOST();
 //
-//            Response response = getHttpClient().newCall(request).execute();
+////            URL url = new URL(urlStr);
+//            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+//            conn.setDefaultHostnameVerifier(new NullHostNameVerifier());
+//
+//            // Create the SSL connection
+//            SSLContext sc;
+//            sc = SSLContext.getInstance("TLS");
+//            sc.init(null, new X509TrustManager[]{new NullX509TrustManager()}, new SecureRandom());
+//
+//            sc = SslUtils.getSslContextForCertificateFile(mContext, "mycert1024.cer");
+//            conn.setSSLSocketFactory(sc.getSocketFactory());
+//            conn.setDefaultSSLSocketFactory(sc.getSocketFactory());
+//
+//            Log.d(TAG, "PO SSL SOCKECIE");
+//
+//
+//            // Use this if you need SSL authentication
+//            String userpass = data.get(0) + ":" + data.get(1);
+//            String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
+//            conn.setRequestProperty("Authorization", basicAuth);
+//            Log.d(TAG, "PO BASIC AUTH");
 
 
-            // Use this if you need SSL authentication
-            String userpass = data.get(0) + ":" + data.get(1);
-            String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
-            conn.setRequestProperty("Authorization", basicAuth);
-//            conn.setRequestProperty("req", params[0]);
+
+            HttpsURLConnection conn = LoginActivity.doMagic(mContext);
 
 
 
 
-//            String str =  "{\"x\": \"val1\",\"y\":\"val2\"}";
-
-
-            // set Timeout and method
-            conn.setReadTimeout(5000);
-            conn.setConnectTimeout(10000);
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
 
             // Add any data you wish to post here
 
+            Log.d(TAG, "PRZED STR");
             String str = "req=" + params[0];
+
+            Log.d(TAG, "PRZED BYTE[]");
             byte[] outputInBytes = str.getBytes("UTF-8");
+
+            Log.d(TAG, "PRZED OS");
             OutputStream os = conn.getOutputStream();
+
+            Log.d(TAG, "PRZED WRITE");
             os.write( outputInBytes );
+
+            Log.d(TAG, "PRZED ZAMKNIECIEM");
             os.close();
+
+            Log.d(TAG, "PO OUTPUTSTREAMIE, PRZED NAWIAZANIEM POLACZENIA");
 
 
 
             conn.connect();
-            Log.d(TAG, "getInputStream is: " + conn.getInputStream());
+            Log.d(TAG, "PO NAWIAZANIU POLACZENIA");
+
+//            Log.d(TAG, "getInputStream is: " + conn.getInputStream());
 //            return conn.getInputStream();
 
 
@@ -203,12 +209,12 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
 //            e.printStackTrace();
 //        }
 
-        catch (NoSuchAlgorithmException e) {
-            Log.e(TAG, "sdds " + e.getMessage());
-        }
-        catch (KeyManagementException e) {
-            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
-        }
+//        catch (NoSuchAlgorithmException e) {
+//            Log.e(TAG, "sdds " + e.getMessage());
+//        }
+//        catch (KeyManagementException e) {
+//            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
+//        }
         catch (MalformedURLException e) {
             Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
         }
@@ -220,6 +226,8 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
         }
         catch (IOException e) {
             Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
+//            Toast.makeText(, "Serwer jest przeciążony, spróbuj ponownie później", Toast.LENGTH_LONG).show();
+//            throw new CustomException("bum");
         }
         finally {
             if(streamReader != null) {
@@ -237,3 +245,4 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
     }
 
 }
+

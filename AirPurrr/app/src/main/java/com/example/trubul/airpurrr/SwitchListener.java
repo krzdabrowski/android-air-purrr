@@ -1,6 +1,7 @@
 package com.example.trubul.airpurrr;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import com.squareup.okhttp.RequestBody;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -59,6 +61,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private void controlRequests(boolean keepState) {
         String res;
+
         AbortableRequest switchOn = new AbortableRequest(mRequestOn, mContext);
         AbortableRequest switchOff = new AbortableRequest(mRequestOff, mContext);
 
@@ -71,29 +74,34 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 if (!keepState) {  // send request if it was switch -> ON
                     switchOn.execute(mode + "=1"); // to moze tak byc, to pojdzie w req = params[0]
 
-                }
-                else {
+                } else {
                     switchOff.execute(mode + "=0");
                 }
-            }
-            else if (res.equals("WorkStates.Measuring\n")) {
-                Toast.makeText(mContext, "Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym" , Toast.LENGTH_LONG).show();
+            } else if (res.equals("WorkStates.Measuring\n")) {
+                Toast.makeText(mContext, "Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym", Toast.LENGTH_LONG).show();
                 if (mode.equals(WorkingMode.AUTO)) {
                     mCallback.setSwitchAuto(keepState);
-                }
-                else {
+                } else {
                     mCallback.setSwitchManual(keepState);
                 }
-            }
-            else {
+            } else {
                 Toast.makeText(mContext, "Coś się popsuło i nie było mnie słychać", Toast.LENGTH_LONG).show();
                 if (mode.equals(WorkingMode.AUTO)) {
                     mCallback.setSwitchAuto(keepState);
-                }
-                else {
+                } else {
                     mCallback.setSwitchManual(keepState);
                 }
             }
+
+
+//            else {
+//                Toast.makeText(mContext, "ZA DŁUGO", Toast.LENGTH_LONG).show();
+//                if (mode.equals(WorkingMode.AUTO)) {
+//                    mCallback.setSwitchAuto(keepState);
+//                } else {
+//                    mCallback.setSwitchManual(keepState);
+//                }
+
 
         }
         catch (InterruptedException e) {
@@ -102,8 +110,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         catch (ExecutionException e) {
             e.printStackTrace();
         }
-        catch (NullPointerException e) {  // no-internet?
-            Toast.makeText(mContext, "Nie mogę się połączyć z domową siecią Wi-Fi!" , Toast.LENGTH_LONG).show();
+        catch (NullPointerException e) {
+            Toast.makeText(mContext, "Serwer nie odpowiada, spróbuj ponownie później" , Toast.LENGTH_LONG).show();
             if (mode.equals(WorkingMode.AUTO)) {
                 mCallback.setSwitchAuto(keepState);
             }
@@ -122,8 +130,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             if (!flagToggle1) {
 //                mRequestOn = new HttpPost();
 //                mRequestOff = new HttpPost();
-                mRequestOn = new OkHttpClient();
-                mRequestOff = new OkHttpClient();
+//                mRequestOn = new OkHttpClient();
+//                mRequestOff = new OkHttpClient();
                 flagToggle1 = true;
             }
 
@@ -133,7 +141,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 }
                 else {
 //                    mRequestOn.abort();  // break while loop of working air purifier
-//                    mRequestOn.cancel(TAG); // TODO: CZY TO WYSTARCZY ZAMIAST ABORT???
+//                    mRequestOn.cancel("req");
                     controlRequests(true);
                     flagToggle1 = false;
                 }
@@ -150,8 +158,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             if (!flagToggle2) {
 //                mRequestOn = new HttpPost();
 //                mRequestOff = new HttpPost();
-                mRequestOn = new OkHttpClient();
-                mRequestOff = new OkHttpClient();
+//                mRequestOn = new OkHttpClient();
+//                mRequestOff = new OkHttpClient();
                 flagToggle2 = true;
             }
 
