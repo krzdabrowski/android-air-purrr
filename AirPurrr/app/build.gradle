@@ -6,6 +6,9 @@ allprojects {
         maven {
             url "https://maven.google.com"
         }
+        maven {
+            url "https://jitpack.io"
+        }
     }
 }
 
@@ -18,6 +21,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -28,6 +32,7 @@ android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
+
 }
 
 dependencies {
@@ -45,4 +50,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:11.8.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.firebase:firebase-auth:11.8.0'
+    implementation 'com.github.mklimek:ssl-utils-android:1.0.1'
+    implementation 'com.squareup.okhttp:okhttp:2.7.2'
+    implementation 'com.github.mklimek:ssl-utils-android:1.0.1'
+
 }
+
+apply plugin: 'com.google.gms.google-services'

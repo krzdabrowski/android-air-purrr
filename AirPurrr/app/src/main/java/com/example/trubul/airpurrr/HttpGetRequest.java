@@ -11,6 +11,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 /**
  * Created by krzysiek
  * On 3/3/18.

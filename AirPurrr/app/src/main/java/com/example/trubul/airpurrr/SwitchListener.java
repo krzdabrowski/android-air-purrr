@@ -1,9 +1,17 @@
 package com.example.trubul.airpurrr;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -14,12 +22,17 @@ import java.util.concurrent.ExecutionException;
 public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
 //    private static final String TAG = "SwitchListener";
-//    private static final String WORKSTATE_URL_GLOBAL = "http://xxx.xxx.xxx.xxx:xxx/workstate.txt";
-    private static final String WORKSTATE_URL = "http://192.168.0.248/workstate.txt";
+    private static final String WORKSTATE_URL = "http://89.70.85.249:2138/workstate.txt";
+//    private static final String WORKSTATE_URL = "http://192.168.0.248/workstate.txt";
     private boolean flagToggle1 = true;
     private boolean flagToggle2 = true;
-    private HttpGet mRequestOn = new HttpGet();
-    private HttpGet mRequestOff = new HttpGet();
+//    private HttpPost mRequestOn = new HttpPost();
+//    private HttpPost mRequestOff = new HttpPost();
+    private OkHttpClient mRequestOn = new OkHttpClient();
+    private OkHttpClient mRequestOff = new OkHttpClient();
+
+    private static final String TAG = "SwitchListener";
+
 
     private Context mContext;
     private WorkingMode mode;
@@ -46,8 +59,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private void controlRequests(boolean keepState) {
         String res;
-        AbortableRequest switchOn = new AbortableRequest(mRequestOn);
-        AbortableRequest switchOff = new AbortableRequest(mRequestOff);
+        AbortableRequest switchOn = new AbortableRequest(mRequestOn, mContext);
+        AbortableRequest switchOff = new AbortableRequest(mRequestOff, mContext);
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
@@ -56,7 +69,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             if (res.equals("WorkStates.Sleeping\n")) {
                 Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
                 if (!keepState) {  // send request if it was switch -> ON
-                    switchOn.execute(mode + "=1");
+                    switchOn.execute(mode + "=1"); // to moze tak byc, to pojdzie w req = params[0]
+
                 }
                 else {
                     switchOff.execute(mode + "=0");
@@ -106,8 +120,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         if (mode.equals(WorkingMode.AUTO)) {
             // Initial flag configuration - multiple switching possible
             if (!flagToggle1) {
-                mRequestOn = new HttpGet();
-                mRequestOff = new HttpGet();
+//                mRequestOn = new HttpPost();
+//                mRequestOff = new HttpPost();
+                mRequestOn = new OkHttpClient();
+                mRequestOff = new OkHttpClient();
                 flagToggle1 = true;
             }
 
@@ -116,7 +132,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                     controlRequests(false);
                 }
                 else {
-                    mRequestOn.abort();  // break while loop of working air purifier
+//                    mRequestOn.abort();  // break while loop of working air purifier
+//                    mRequestOn.cancel(TAG); // TODO: CZY TO WYSTARCZY ZAMIAST ABORT???
                     controlRequests(true);
                     flagToggle1 = false;
                 }
@@ -129,9 +146,12 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
         // Manual mode - control anytime!
         else {
+            Log.d(TAG, "NACISNIECIE TUTAJ");
             if (!flagToggle2) {
-                mRequestOn = new HttpGet();
-                mRequestOff = new HttpGet();
+//                mRequestOn = new HttpPost();
+//                mRequestOff = new HttpPost();
+                mRequestOn = new OkHttpClient();
+                mRequestOff = new OkHttpClient();
                 flagToggle2 = true;
             }
 
@@ -139,7 +159,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 controlRequests(false);
             }
             else {
-                mRequestOn.abort();  // break while loop of working air purifier
+//                mRequestOn.abort();  // break while loop of working air purifier
+//                mRequestOn.cancel(TAG);
                 controlRequests(true);
                 flagToggle2 = false;
 

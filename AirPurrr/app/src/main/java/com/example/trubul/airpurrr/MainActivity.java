@@ -2,6 +2,7 @@ package com.example.trubul.airpurrr;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -343,6 +347,10 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 =======
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+=======
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+>>>>>>> b234e27... Add HTTPS POST support for controlling the fan (big mess, bug with 1st verification NOT fixed)
 
 >>>>>>> 355b373... Include LoginActivity with all visual widgets (no logic yet)
         // Download PM values from detector

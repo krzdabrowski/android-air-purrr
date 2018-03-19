@@ -12,8 +12,8 @@ import java.util.concurrent.ExecutionException;
 public class PMDataDetector {
 
 //    private static final String TAG = "PMDataDetector";
-//    private static final String PM_DATA_DETECTOR_URL_GLOBAL = "http://xxx.xxx.xxx.xxx:xxx/pm_data.txt";
-    private static final String PM_DATA_DETECTOR_URL = "http://192.168.0.248/pm_data.txt";
+    private static final String PM_DATA_DETECTOR_URL = "http://89.70.85.249:2138/pm_data.txt";
+//    private static final String PM_DATA_DETECTOR_URL = "http://192.168.0.248/pm_data.txt";
 
     public Double[] downloadPMDataDetector() {
         String pmDataDetector;
