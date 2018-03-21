@@ -3,9 +3,7 @@ package com.example.trubul.airpurrr;
 import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
-
 import com.mklimek.sslutilsandroid.SslUtils;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -14,7 +12,6 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
-
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
@@ -41,6 +38,7 @@ public class HttpsPostRequest {
         List<String> getEmailPassword();
     }
 
+
     public static HttpsURLConnection setRequest(Context context) {
         try {
 
@@ -64,17 +62,7 @@ public class HttpsPostRequest {
             connection.setSSLSocketFactory(sc.getSocketFactory());
             connection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
-
-            // TLS authentication
-//            String userpass = email + ":" + password;
-//            String userpass = mCallback.getEmailPassword().get(0) + ":" + mCallback.getEmailPassword().get(1);
-//            String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
-//            connection.setRequestProperty("Authorization", basicAuth);
-
-//            connection.setDoInput(true);
-
             return connection;
-
         }
 
         catch (NoSuchAlgorithmException e) {
@@ -106,6 +94,5 @@ public class HttpsPostRequest {
 
         return conn;
     }
-
 
 }

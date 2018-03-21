@@ -28,18 +28,18 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         MANUAL
     }
 
+    public interface MyCallback {
+        void setSwitchAuto(boolean state);
+        void setSwitchManual(boolean state);
+        PMDataResults getPMDataDetectorResults();
+    }
+
     public boolean isFlagLastUseAuto() {
         return flagLastUseAuto;
     }
 
     public boolean isFlagLastUseManual() {
         return flagLastUseManual;
-    }
-
-    public interface MyCallback {
-        void setSwitchAuto(boolean state);
-        void setSwitchManual(boolean state);
-        PMDataResults getPMDataDetectorResults();
     }
 
 

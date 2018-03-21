@@ -7,6 +7,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.util.List;
@@ -22,34 +23,35 @@ import javax.security.auth.login.LoginException;
 public class AbortableRequest extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "AbortableRequest";
-    private Context mContext;
+    private WeakReference<Context> contextRef;
     private boolean flagSSLHandshake = false;
 
 
     public AbortableRequest(Context context) {
-        this.mContext = context;
+        contextRef = new WeakReference<>(context);
     }
-
-
 
     @Override
     protected String doInBackground(String... params) {
         InputStreamReader streamReader = null;
+        Context context = contextRef.get();
 
         try {
-            HttpsURLConnection connInit = HttpsPostRequest.setRequest(mContext);
+            HttpsURLConnection connInit = HttpsPostRequest.setRequest(context);
             HttpsURLConnection conn = HttpsPostRequest.finishSetRequest(connInit);
 
-            // Add any data you wish to post here
+            // Send POST data
             String str = "req=" + params[0];
             byte[] outputInBytes = str.getBytes("UTF-8");
 
             OutputStream os = conn.getOutputStream();
-            os.write( outputInBytes );
+            os.write(outputInBytes);
             os.close();
             conn.connect();
 
+            // Create a new InputStreamReader
             streamReader = new InputStreamReader(conn.getInputStream());
+            // Do the data-read
             DataReader dataReader = new DataReader();
             dataReader.getResult(streamReader);
 
@@ -86,8 +88,10 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
+        Context context = contextRef.get();
+
         if (flagSSLHandshake) {
-            Toast.makeText(mContext, "Błąd SSL handshake'a", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Błąd SSL handshake'a", Toast.LENGTH_LONG).show();
 
             if (MainActivity.getAutoListener().isFlagLastUseAuto()) {
                 MainActivity.getAutoListener().keepState();

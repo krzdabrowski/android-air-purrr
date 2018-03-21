@@ -437,4 +437,10 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the LoginActivity
+        moveTaskToBack(true);
+    }
+
 }
