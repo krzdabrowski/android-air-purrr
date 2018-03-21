@@ -4,12 +4,10 @@ import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 
-
 /**
  * Created by krzysiek
  * On 3/16/18.
  */
-
 
 public class BaseActivity extends AppCompatActivity {
 

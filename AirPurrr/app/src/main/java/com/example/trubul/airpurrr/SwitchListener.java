@@ -1,19 +1,8 @@
 package com.example.trubul.airpurrr;
 
 import android.content.Context;
-import android.os.SystemClock;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Toast;
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -23,35 +12,14 @@ import java.util.concurrent.ExecutionException;
 
 public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
-//    private static final String TAG = "SwitchListener";
+    private static final String TAG = "SwitchListener";
     private static final String WORKSTATE_URL = "http://89.70.85.249:2138/workstate.txt";
 //    private static final String WORKSTATE_URL = "http://192.168.0.248/workstate.txt";
-    private boolean flagToggleAuto = true;
-
-    public boolean isFlagToggleAuto() {
-        return flagToggleAuto;
-    }
-
-    public boolean isFlagToggleManual() {
-        return flagToggleManual;
-    }
-
-    private boolean flagToggleManual = false;
-//    private HttpPost mRequestOn = new HttpPost();
-//    private HttpPost mRequestOff = new HttpPost();
-    private OkHttpClient mRequestOn = new OkHttpClient();
-    private OkHttpClient mRequestOff = new OkHttpClient();
-
-    private static final String TAG = "SwitchListener";
-
-    private static boolean state;
-
-    public static boolean isState() {
-        return state;
-    }
-
+    private boolean flagLastUseAuto = false;
+    private boolean flagLastUseManual = false;
+    private boolean flagStateAuto = false;
+    private boolean flagStateManual = false;
     private Context mContext;
-
     private WorkingMode mode;
     private MyCallback mCallback;
 
@@ -60,6 +28,13 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         MANUAL
     }
 
+    public boolean isFlagLastUseAuto() {
+        return flagLastUseAuto;
+    }
+
+    public boolean isFlagLastUseManual() {
+        return flagLastUseManual;
+    }
 
     public interface MyCallback {
         void setSwitchAuto(boolean state);
@@ -101,16 +76,6 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 keepState();
             }
 
-
-//            else {
-//                Toast.makeText(mContext, "ZA DŁUGO", Toast.LENGTH_LONG).show();
-//                if (mode.equals(WorkingMode.AUTO)) {
-//                    mCallback.setSwitchAuto(keepState);
-//                } else {
-//                    mCallback.setSwitchManual(keepState);
-//                }
-
-
         }
         catch (InterruptedException e) {
             e.printStackTrace();
@@ -126,39 +91,30 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     public void keepState() {
         if (mode.equals(WorkingMode.AUTO)) {
-            mCallback.setSwitchAuto(!flagToggleAuto);
+            mCallback.setSwitchAuto(!flagStateAuto);
         }
         else {
-            mCallback.setSwitchManual(!flagToggleManual);
+            mCallback.setSwitchManual(!flagStateManual);
         }
     }
 
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        Log.d(TAG, "mode is: " + mode);
-
         // Automatic mode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
         if (mode.equals(WorkingMode.AUTO)) {
-            // Initial flag configuration - multiple switching possible
-            if (!flagToggleAuto) {
-//                mRequestOn = new HttpPost();
-//                mRequestOff = new HttpPost();
-//                mRequestOn = new OkHttpClient();
-//                mRequestOff = new OkHttpClient();
-                flagToggleAuto = true;
-            }
 
-            if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2)  // if true
+            if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2) { // if true
+                flagLastUseAuto = true;
+                flagLastUseManual = false;
+
                 if (isChecked) {
+                    flagStateAuto = true;
                     controlRequests(true);
-                }
-                else {
-//                    mRequestOn.abort();  // break while loop of working air purifier
-//                    mRequestOn.cancel("req");
+                } else {
+                    flagStateAuto = false;
                     controlRequests(false);
-                    flagToggleAuto = false;
                 }
+            }
             else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 1) {}  // if false
             else {  // if null
                 Toast.makeText(mContext, "Serwer nie odpowiada, spróbuj ponownie później (flagTriState = 0)" , Toast.LENGTH_LONG).show();
@@ -168,27 +124,16 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
         // Manual mode - control anytime!
         else {
-            Log.d(TAG, "NACISNIECIE TUTAJ");
-//            if (!flagToggle2) {
-////                mRequestOn = new HttpPost();
-////                mRequestOff = new HttpPost();
-////                mRequestOn = new OkHttpClient();
-////                mRequestOff = new OkHttpClient();
-//                flagToggle2 = true;
-//            }
+            flagLastUseAuto = false;
+            flagLastUseManual = true;
 
             if (isChecked) {
-                flagToggleManual = true;
+                flagStateManual = true;
                 controlRequests(true);
-
             }
             else {
-//                mRequestOn.abort();  // break while loop of working air purifier
-//                mRequestOn.cancel(TAG);
-                flagToggleManual = false;
+                flagStateManual = false;
                 controlRequests(false);
-
-
             }
         }
 

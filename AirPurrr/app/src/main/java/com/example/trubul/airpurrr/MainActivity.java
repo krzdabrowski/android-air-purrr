@@ -45,15 +45,6 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
 
-
-    public static SwitchListener getAutoListener() {
-        return autoListener;
-    }
-
-    public static SwitchListener getManualListener() {
-        return manualListener;
-    }
-
     private static SwitchListener autoListener;
     private static SwitchListener manualListener;
 
@@ -146,6 +137,14 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     @Override
     public String[] getPMDatesAPI() {
         return pmDatesAPI;
+    }
+
+    public static SwitchListener getAutoListener() {
+        return autoListener;
+    }
+
+    public static SwitchListener getManualListener() {
+        return manualListener;
     }
 
 

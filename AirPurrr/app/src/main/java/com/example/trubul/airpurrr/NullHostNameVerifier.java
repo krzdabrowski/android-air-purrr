@@ -1,14 +1,13 @@
 package com.example.trubul.airpurrr;
 
+import android.util.Log;
+import javax.net.ssl.HostnameVerifier ;
+import javax.net.ssl.SSLSession;
+
 /**
  * Created by krzysiek
  * On 3/18/18.
  */
-
-import android.util.Log;
-
-import javax.net.ssl.HostnameVerifier ;
-import javax.net.ssl.SSLSession;
 
 public class NullHostNameVerifier implements HostnameVerifier {
 

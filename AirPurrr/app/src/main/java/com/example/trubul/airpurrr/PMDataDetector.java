@@ -1,7 +1,5 @@
 package com.example.trubul.airpurrr;
 
-import android.widget.TextView;
-
 import java.util.concurrent.ExecutionException;
 
 /**

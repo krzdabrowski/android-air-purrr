@@ -1,14 +1,8 @@
 package com.example.trubul.airpurrr;
 
-/**
- * Created by krzysiek
- * On 3/18/18.
- */
-
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
 import javax.net.ssl.X509TrustManager;
 
 /**
