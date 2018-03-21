@@ -9,7 +9,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.util.List;
+
 import javax.net.ssl.HttpsURLConnection;
+import javax.security.auth.login.LoginException;
 
 /**
  * Created by krzysiek
@@ -28,12 +31,14 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
     }
 
 
+
     @Override
     protected String doInBackground(String... params) {
         InputStreamReader streamReader = null;
 
         try {
-            HttpsURLConnection conn = LoginActivity.doMagic(mContext);
+            HttpsURLConnection connInit = HttpsPostRequest.setRequest(mContext);
+            HttpsURLConnection conn = HttpsPostRequest.finishSetRequest(connInit);
 
             // Add any data you wish to post here
             String str = "req=" + params[0];

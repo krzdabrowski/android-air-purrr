@@ -23,17 +23,42 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 
-public class LoginActivity extends BaseActivity implements
-        View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, HttpsPostRequest.MyCallback {
     private static final String TAG = "LoginActivity";
-    private static EditText mEmailField;
-    private static EditText mPasswordField;
+
+    private EditText mEmailField;
+    private EditText mPasswordField;
+    private String email = null;
+    private String password = null;
+
     private FirebaseAuth mAuth;
 
+    public HttpsPostRequest getHttpsPostRequest() {
+        return httpsPostRequest;
+    }
+
+    private HttpsPostRequest httpsPostRequest = new HttpsPostRequest(this);
+
+
+
+    public List<String> getEmailPassword() {
+        List<String> emailPassword = new ArrayList<>(2);
+
+        email = mEmailField.getText().toString();
+        password = mPasswordField.getText().toString();
+
+        emailPassword.add(email);
+        emailPassword.add(password);
+
+        return emailPassword;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,64 +79,67 @@ public class LoginActivity extends BaseActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
 
-        doMagic(this);
+        // First TLS setting - otherwise it doesn't verify even null-hostname (but don't send anything yet)
+        httpsPostRequest.setRequest(this);
+//        httpsPostRequest.finish
+//        setHttpsPostRequest(this);
     }
 
 
-    public static HttpsURLConnection doMagic(Context context) {
-        try {
+//    public HttpsURLConnection finishSetRequest(HttpsURLConnection conn) {
+//        try {
 
-            URL url = new URL("https://89.70.85.249:2137");
+//            String email = mEmailField.getText().toString();
+//            String password = mPasswordField.getText().toString();
 
-            String email = mEmailField.getText().toString();
-            String password = mPasswordField.getText().toString();
+//            URL url = new URL("https://89.70.85.249:2137");
+//
+//            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+//            connection.setDefaultHostnameVerifier(new NullHostNameVerifier());
+//
+//            // Create the SSL connection
+//            SSLContext sc;
+//            sc = SSLContext.getInstance("TLS");
+//            sc.init(null, new X509TrustManager[]{new NullX509TrustManager()}, new SecureRandom());
+//            sc = SslUtils.getSslContextForCertificateFile(context, "mycert1024.cer");
+//            connection.setSSLSocketFactory(sc.getSocketFactory());
+//            connection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setDefaultHostnameVerifier(new NullHostNameVerifier());
+//            // Use this if you need SSL authentication
+//            String userpass = email + ":" + password;
+//            String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
+//            conn.setRequestProperty("Authorization", basicAuth);
 
-            // Create the SSL connection
-            SSLContext sc;
-            sc = SSLContext.getInstance("TLS");
-            sc.init(null, new X509TrustManager[]{new NullX509TrustManager()}, new SecureRandom());
-            sc = SslUtils.getSslContextForCertificateFile(context, "mycert1024.cer");
-            conn.setSSLSocketFactory(sc.getSocketFactory());
-            conn.setDefaultSSLSocketFactory(sc.getSocketFactory());
+//            // set Timeout and method
+//            connection.setReadTimeout(3000); // czas na cala reszte, responsy itd
+//            connection.setConnectTimeout(7000); // czas na polaczenie sie z IP
+//            connection.setRequestMethod("POST");
+//            connection.setDoInput(true);
 
-            // Use this if you need SSL authentication
-            String userpass = email + ":" + password;
-            String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
-            conn.setRequestProperty("Authorization", basicAuth);
-
-            // set Timeout and method
-            conn.setReadTimeout(3000); // czas na cala reszte, responsy itd
-            conn.setConnectTimeout(7000); // czas na polaczenie sie z IP
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-
-            return conn;
-
-        }
-        catch (NoSuchAlgorithmException e) {
-            Log.e(TAG, "sdds " + e.getMessage());
-        }
-        catch (KeyManagementException e) {
-            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
-        }
-        catch (MalformedURLException e) {
-            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
-        }
-        catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-        catch(SecurityException e) {
-            Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
-        }
-        catch (IOException e) {
-            Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
-        }
-
-        return null;
-    }
+//            return conn;
+//
+//        }
+//        catch (NoSuchAlgorithmException e) {
+//            Log.e(TAG, "sdds " + e.getMessage());
+//        }
+//        catch (KeyManagementException e) {
+//            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
+//        }
+//        catch (MalformedURLException e) {
+//            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
+//        }
+//        catch (ProtocolException e) {
+//            e.printStackTrace();
+//        }
+//        catch(SecurityException e) {
+//            Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
+//        }
+//        catch (IOException e) {
+//            Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
+//        }
+//
+//        return null;
+//    }
 
 
 
@@ -154,7 +182,7 @@ public class LoginActivity extends BaseActivity implements
     private boolean validateForm() {
         boolean valid = true;
 
-        String email = mEmailField.getText().toString();
+        email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Required.");
             valid = false;
@@ -162,7 +190,7 @@ public class LoginActivity extends BaseActivity implements
             mEmailField.setError(null);
         }
 
-        String password = mPasswordField.getText().toString();
+        password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
             mPasswordField.setError("Required.");
             valid = false;
@@ -189,7 +217,9 @@ public class LoginActivity extends BaseActivity implements
 
     @Override
     public void onClick(View v) {
-        signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+        email = mEmailField.getText().toString();
+        password = mPasswordField.getText().toString();
+        signIn(email, password);
     }
 
 
