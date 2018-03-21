@@ -26,8 +26,17 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 //    private static final String TAG = "SwitchListener";
     private static final String WORKSTATE_URL = "http://89.70.85.249:2138/workstate.txt";
 //    private static final String WORKSTATE_URL = "http://192.168.0.248/workstate.txt";
-    private boolean flagToggle1 = true;
-    private boolean flagToggle2 = true;
+    private boolean flagToggleAuto = true;
+
+    public boolean isFlagToggleAuto() {
+        return flagToggleAuto;
+    }
+
+    public boolean isFlagToggleManual() {
+        return flagToggleManual;
+    }
+
+    private boolean flagToggleManual = false;
 //    private HttpPost mRequestOn = new HttpPost();
 //    private HttpPost mRequestOff = new HttpPost();
     private OkHttpClient mRequestOn = new OkHttpClient();
@@ -43,12 +52,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private Context mContext;
 
-    public static WorkingMode getMode() {
-        return mode;
-    }
-
-    private static WorkingMode mode;
-    private static MyCallback mCallback;
+    private WorkingMode mode;
+    private MyCallback mCallback;
 
     public enum WorkingMode {
         AUTO,
@@ -70,8 +75,6 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     }
 
     private void controlRequests(boolean state) {
-
-        this.state = state;
 
         String res;
 
@@ -121,27 +124,29 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         }
     }
 
-    public static void keepState() {
+    public void keepState() {
         if (mode.equals(WorkingMode.AUTO)) {
-            mCallback.setSwitchAuto(!state);
+            mCallback.setSwitchAuto(!flagToggleAuto);
         }
         else {
-            mCallback.setSwitchManual(!state);
+            mCallback.setSwitchManual(!flagToggleManual);
         }
     }
 
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        Log.d(TAG, "mode is: " + mode);
+
         // Automatic mode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
         if (mode.equals(WorkingMode.AUTO)) {
             // Initial flag configuration - multiple switching possible
-            if (!flagToggle1) {
+            if (!flagToggleAuto) {
 //                mRequestOn = new HttpPost();
 //                mRequestOff = new HttpPost();
 //                mRequestOn = new OkHttpClient();
 //                mRequestOff = new OkHttpClient();
-                flagToggle1 = true;
+                flagToggleAuto = true;
             }
 
             if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2)  // if true
@@ -152,7 +157,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 //                    mRequestOn.abort();  // break while loop of working air purifier
 //                    mRequestOn.cancel("req");
                     controlRequests(false);
-                    flagToggle1 = false;
+                    flagToggleAuto = false;
                 }
             else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 1) {}  // if false
             else {  // if null
@@ -164,22 +169,25 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         // Manual mode - control anytime!
         else {
             Log.d(TAG, "NACISNIECIE TUTAJ");
-            if (!flagToggle2) {
-//                mRequestOn = new HttpPost();
-//                mRequestOff = new HttpPost();
-//                mRequestOn = new OkHttpClient();
-//                mRequestOff = new OkHttpClient();
-                flagToggle2 = true;
-            }
+//            if (!flagToggle2) {
+////                mRequestOn = new HttpPost();
+////                mRequestOff = new HttpPost();
+////                mRequestOn = new OkHttpClient();
+////                mRequestOff = new OkHttpClient();
+//                flagToggle2 = true;
+//            }
 
             if (isChecked) {
+                flagToggleManual = true;
                 controlRequests(true);
+
             }
             else {
 //                mRequestOn.abort();  // break while loop of working air purifier
 //                mRequestOn.cancel(TAG);
+                flagToggleManual = false;
                 controlRequests(false);
-                flagToggle2 = false;
+
 
             }
         }

@@ -172,6 +172,8 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
             conn.connect();
             Log.d(TAG, "PO NAWIAZANIU POLACZENIA");
 
+//            throw new IOException("dsdsd");
+
 //            Log.d(TAG, "getInputStream is: " + conn.getInputStream());
 //            return conn.getInputStream();
 
@@ -260,8 +262,16 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
 //            else {
 //                mCallback.setSwitchManual(!SwitchListener.isState());
 //            }
-            MainActivity.getAutoListener().keepState();
-            MainActivity.getManualListener().keepState();
+
+
+            if (MainActivity.getManualListener().isFlagToggleManual() || !MainActivity.getManualListener().isFlagToggleManual()) {
+                MainActivity.getManualListener().keepState();
+            }
+            else if (MainActivity.getAutoListener().isFlagToggleAuto() || !MainActivity.getAutoListener().isFlagToggleAuto()) {
+                MainActivity.getAutoListener().keepState();
+            }
+
+            flagSSLHandshake = false;
 
         }
     }

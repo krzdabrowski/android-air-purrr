@@ -22,8 +22,8 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "HttpGetRequest";
     private static final String REQUESTED_METHOD = "GET";
-    private static final int READ_TIMEOUT = 5000;
-    private static final int CONNECTION_TIMEOUT = 5000;
+    private static final int READ_TIMEOUT = 3000;
+    private static final int CONNECTION_TIMEOUT = 7000;
     private String mResult = null;
 
 
