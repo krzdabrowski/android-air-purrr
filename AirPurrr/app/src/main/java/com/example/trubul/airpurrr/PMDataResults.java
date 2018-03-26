@@ -45,8 +45,11 @@ public class PMDataResults {
                 tempData = mCallback.getPM10DataPerc();
                 multiplier = 2;
             }
-
-            if (pmValues[i] > 0 && pmValues[i] <= 12.5 * multiplier) {
+            if (pmValues [i] == 0) {  // blad polaczenia
+                tempData.setBackgroundResource(R.drawable.default_color);
+                flagTriStateAuto = 0;
+            }
+            else if (pmValues[i] > 0 && pmValues[i] <= 12.5 * multiplier) {
                 tempData.setBackgroundResource(R.drawable.green_color);
                 flagTriStateAuto = 1;
             }
