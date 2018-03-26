@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.PM10_mode) TextView pm10Mode;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
-    private PMDataDetector pmDataDetector = new PMDataDetector(this, this);
+    private PMDataDetector pmDataDetector = new PMDataDetector(this, this, this);
     private PMDataAPI pmDataAPI = new PMDataAPI(this, this);
 
     private PMDataResults pmDataDetectorResults = new PMDataResults(this);
@@ -392,7 +392,9 @@ public class MainActivity extends AppCompatActivity implements
         // Download PM values from detector
 //        final Double[] pmValuesDetector = {58.3, 92.7};
         pmValuesDetector = pmDataDetector.downloadPMDataDetector(PM_DATA_DETECTOR_URL_REMOTE);
+        Log.d(TAG, "onCreate: pmValuesDetector is: " + java.util.Arrays.toString(pmValuesDetector));
         currentPMDetector = pmValuesDetector;  // to update TextView correctly
+        Log.d(TAG, "onCreate: currentPMDetector is: " + java.util.Arrays.toString(currentPMDetector));
         pmDataDetector.downloadAutoPMData();  // download pmDataDetector every 1 minute
 
         // Download PM values from API
@@ -402,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements
         pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
 
         // Default: show PM values from detector
-        pmDataDetectorResults.showResults(pmValuesDetector, null);
+        pmDataDetectorResults.showResults(currentPMDetector, null);
 
 >>>>>>> ef21956... Clean up comments and little fixes
 
@@ -430,6 +432,15 @@ public class MainActivity extends AppCompatActivity implements
         };
         pm25DataPerc.setOnClickListener(textViewListener);
         pm10DataPerc.setOnClickListener(textViewListener);
+
+        pmDataDetector.setListener(new PMDataDetector.ChangeListener() {
+            @Override
+            public void onChange() {
+                Log.d(TAG, "onChange: ZMIANA WARTOSCI");
+                flagDetectorAPI = false;
+                pmDataDetectorResults.showResults(currentPMDetector, null);
+            }
+        });
 
     }
 

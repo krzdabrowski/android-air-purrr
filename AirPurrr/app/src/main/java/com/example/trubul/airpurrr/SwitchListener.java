@@ -32,6 +32,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         void setSwitchAuto(boolean state);
         void setSwitchManual(boolean state);
         PMDataResults getPMDataDetectorResults();
+        Double[] getCurrentPMDetector();
     }
 
     public boolean isFlagLastUseAuto() {
@@ -62,7 +63,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             if (res.equals("WorkStates.Sleeping\n")) {
                 Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
                 if (state) {  // send request if it was switch -> ON
-                    switchOn.execute(mode + "=1"); // to moze tak byc, to pojdzie w req = params[0]
+                    switchOn.execute(mode + "=1");  // it will be POST: req = params[0]
 
                 } else {
                     switchOff.execute(mode + "=0");

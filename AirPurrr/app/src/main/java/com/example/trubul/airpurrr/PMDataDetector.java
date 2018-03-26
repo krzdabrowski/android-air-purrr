@@ -1,11 +1,13 @@
 package com.example.trubul.airpurrr;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.sql.Array;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
@@ -19,19 +21,27 @@ public class PMDataDetector {
     private static final String TAG = "PMDataDetector";
     private Context mContext;
     private MyCallback mCallback;
+    private ChangeListener listener;
+    private final Activity mActivity;
 
     public interface MyCallback {
         void setCurrentPMDetector(Double[] currentPMDetector);
         Double[] getCurrentPMDetector();
     }
 
-    public PMDataDetector(Context context, MyCallback callback) {
+    public interface ChangeListener {
+        void onChange();
+    }
+
+    public PMDataDetector(Context context, MyCallback callback, Activity activity) {
         mContext = context;
         mCallback = callback;
+        mActivity = activity;
     }
 
     public Double[] downloadPMDataDetector(String pmDataDetectorURL) {
         String pmDataDetector;
+
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
             pmDataDetector = getRequest.execute(pmDataDetectorURL).get();
@@ -48,6 +58,13 @@ public class PMDataDetector {
                 }
             }
 
+            // if values has changed
+            if (!Arrays.equals(pmDoubles, mCallback.getCurrentPMDetector())) {
+                mCallback.setCurrentPMDetector(pmDoubles);
+                listener.onChange();
+            }
+
+            // if not
             mCallback.setCurrentPMDetector(pmDoubles);
             return pmDoubles;
         }
@@ -59,7 +76,7 @@ public class PMDataDetector {
         }
         catch (NullPointerException e) {
             Double[] empty = {0.0, 0.0};
-            Toast.makeText(mContext, "Błąd połączenia z serwerem" , Toast.LENGTH_LONG).show();
+//            Toast.makeText(mContext, "Błąd połączenia z serwerem" , Toast.LENGTH_LONG).show();
 
             mCallback.setCurrentPMDetector(empty);
             return empty;
@@ -73,15 +90,28 @@ public class PMDataDetector {
         TimerTask minuteTask = new TimerTask() {
             @Override
             public void run() {
-                downloadPMDataDetector(MainActivity.PM_DATA_DETECTOR_URL_REMOTE);
-                Log.d(TAG, "values are: " + java.util.Arrays.toString(mCallback.getCurrentPMDetector()));
+
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        downloadPMDataDetector(MainActivity.PM_DATA_DETECTOR_URL_REMOTE);
+                        Log.d(TAG, "values are: " + java.util.Arrays.toString(mCallback.getCurrentPMDetector()));
+
+                    }
+                });
+
             }
         };
 
         // Schedule the task to run starting now and then every 1 minute
         // It works while screen is off and when app is in background!
-        timer.schedule(minuteTask, 0, 1000*60);  // 1000*60*10 every 10 minute -> 1 min
+        timer.schedule(minuteTask, 0, 1000*5);  // 1000*60*10 every 10 minute -> 1 min
     }
 
+
+    public void setListener(ChangeListener listener) {
+        this.listener = listener;
+    }
 
 }
