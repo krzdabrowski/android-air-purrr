@@ -24,9 +24,13 @@ public class PMDataDetector {
     private ChangeListener listener;
     private final Activity mActivity;
 
+    private Double[] pmDoubles;
+
+
     public interface MyCallback {
         void setCurrentPMDetector(Double[] currentPMDetector);
         Double[] getCurrentPMDetector();
+        PMDataResults getPMDataDetectorResults();
     }
 
     public interface ChangeListener {
@@ -39,6 +43,10 @@ public class PMDataDetector {
         mActivity = activity;
     }
 
+    public void setListener(ChangeListener listener) {
+        this.listener = listener;
+    }
+
     public Double[] downloadPMDataDetector(String pmDataDetectorURL) {
         String pmDataDetector;
 
@@ -47,7 +55,7 @@ public class PMDataDetector {
             pmDataDetector = getRequest.execute(pmDataDetectorURL).get();
 
             String[] pmStrings = pmDataDetector.split("\n");
-            Double[] pmDoubles = new Double[pmStrings.length];
+            pmDoubles = new Double[pmStrings.length];
 
             for (int i = 0; i < pmStrings.length; i++) {
                 try {
@@ -58,9 +66,13 @@ public class PMDataDetector {
                 }
             }
 
-            // if values has changed
+            // Convert results to percentages (to ease handling with auto mode)
+            pmDoubles = convertToPercent(pmDoubles);
+
+            // if values have changed
             if (!Arrays.equals(pmDoubles, mCallback.getCurrentPMDetector())) {
                 mCallback.setCurrentPMDetector(pmDoubles);
+                Log.d(TAG, "listener is: " + listener);
                 listener.onChange();
             }
 
@@ -96,7 +108,10 @@ public class PMDataDetector {
                     public void run() {
 
                         downloadPMDataDetector(MainActivity.PM_DATA_DETECTOR_URL_REMOTE);
-                        Log.d(TAG, "values are: " + java.util.Arrays.toString(mCallback.getCurrentPMDetector()));
+                        Log.d(TAG, "percentages are: " + java.util.Arrays.toString(mCallback.getCurrentPMDetector()));
+//                        AlertDialogForAuto.setAutoThreshold()
+                        Log.d(TAG, "runOnUiThread flagTriStateAuto is: " + mCallback.getPMDataDetectorResults().flagTriStateAuto);
+
 
                     }
                 });
@@ -110,8 +125,13 @@ public class PMDataDetector {
     }
 
 
-    public void setListener(ChangeListener listener) {
-        this.listener = listener;
+    public Double[] convertToPercent(Double[] pmDoubles) {
+        Double[] pmDoublesPerc = new Double[2];
+
+        pmDoublesPerc[0] = 4 * pmDoubles[0];  // PM2.5
+        pmDoublesPerc[1] = 2 * pmDoubles[1];  // PM10
+
+        return pmDoublesPerc;
     }
 
 }

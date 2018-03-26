@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -16,14 +17,23 @@ import android.widget.Toast;
  */
 
 public class AlertDialogForAuto {
+    private static final String TAG = "AlertDialogForAuto";
     private Context mContext;
     private MyCallback mCallback;
     private String newStringAutoThreshold;
     private EditText editText;
+    private static int newIntAutoThreshold;
+
+    public static int getThreshold() {
+        return newIntAutoThreshold;
+    }
+
 
     public interface MyCallback {
         PMDataResults getPMDataDetectorResults();
         Double[] getPMValuesDetector();
+        Double[] getCurrentPMDetector();
+
     }
 
     public AlertDialogForAuto(Context context, MyCallback callback) {
@@ -81,21 +91,10 @@ public class AlertDialogForAuto {
 
     public void getAutoThreshold() {
         if (!newStringAutoThreshold.equals("")) {
-            int newIntAutoThreshold = Integer.parseInt(newStringAutoThreshold);
-            setAutoThreshold(newIntAutoThreshold);
+            newIntAutoThreshold = Integer.parseInt(newStringAutoThreshold);
         }
         else {
             Toast.makeText(mContext, "Wprowadź poprawną wartość!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void setAutoThreshold(int threshold) {
-        // jesli jakakolwiek z obu wartosci przekroczy threshold
-        if ( (4 * mCallback.getPMValuesDetector()[0] > threshold) || (2 * mCallback.getPMValuesDetector()[1] > threshold) ) {
-            mCallback.getPMDataDetectorResults().flagTriStateAuto = 2;
-        }
-        else {
-            mCallback.getPMDataDetectorResults().flagTriStateAuto = 1;
         }
     }
 

@@ -83,6 +83,7 @@ public class PMDataAPI {
             pm10LatestDoubleValue = Double.parseDouble(pm10LatestStringValue);
 
             Double[] pmDoubles = new Double[]{ pm25LatestDoubleValue, pm10LatestDoubleValue } ;
+            pmDoubles = convertToPercent(pmDoubles);  // convert to percentages to normalize data
             String[] pmDates = new String[]{ pm25LatestStringDate, pm10LatestStringDate };
 
             List<Object> pmDoublesDates = new ArrayList<>(2);
@@ -116,6 +117,15 @@ public class PMDataAPI {
         }
 
         return null;
+    }
+
+    public Double[] convertToPercent(Double[] pmDoubles) {
+        Double[] pmDoublesPerc = new Double[2];
+
+        pmDoublesPerc[0] = 4 * pmDoubles[0];  // PM2.5
+        pmDoublesPerc[1] = 2 * pmDoubles[1];  // PM10
+
+        return pmDoublesPerc;
     }
 
 }

@@ -75,22 +75,22 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // 100% = 25ug/m3
     public void setPM25DataPerc(Double[] pmValues) {
-        pm25DataPerc.setText(getString(R.string.pm25_data_perc, 4 * pmValues[0]));
+        pm25DataPerc.setText(getString(R.string.pm25_data_perc, pmValues[0]));
     }
 
     @Override // 100% = 50ug/m3
     public void setPM10DataPerc(Double[] pmValues) {
-        pm10DataPerc.setText(getString(R.string.pm10_data_perc, 2 * pmValues[1]));
+        pm10DataPerc.setText(getString(R.string.pm10_data_perc, pmValues[1]));
     }
 
     @Override
     public void setPM25DataUgm3(Double[] pmValues) {
-        pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0]));
+        pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0] / 4));
     }
 
     @Override
     public void setPM10DataUgm3(Double[] pmValues) {
-        pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1]));
+        pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1] / 2));
     }
 
     @Override
@@ -403,15 +403,14 @@ public class MainActivity extends AppCompatActivity implements
         pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
         pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
 
-        // Default: show PM values from detector
-        pmDataDetectorResults.showResults(currentPMDetector, null);
+
 
 >>>>>>> ef21956... Clean up comments and little fixes
 
         /////////////////////// LISTENERS ///////////////////////
-        autoListener = new SwitchListener(this, SwitchListener.WorkingMode.AUTO, this);
+        autoListener = new SwitchListener(this, SwitchListener.WorkingMode.AUTO, this, this);
         mSwitchAuto.setOnCheckedChangeListener(autoListener);
-        manualListener = new SwitchListener(this, SwitchListener.WorkingMode.MANUAL, this);
+        manualListener = new SwitchListener(this, SwitchListener.WorkingMode.MANUAL, this, this);
         mSwitchManual.setOnCheckedChangeListener(manualListener);
 
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
@@ -433,6 +432,7 @@ public class MainActivity extends AppCompatActivity implements
         pm25DataPerc.setOnClickListener(textViewListener);
         pm10DataPerc.setOnClickListener(textViewListener);
 
+        // PMDataDetector ChangeListener (auto-update in background)
         pmDataDetector.setListener(new PMDataDetector.ChangeListener() {
             @Override
             public void onChange() {
@@ -441,6 +441,19 @@ public class MainActivity extends AppCompatActivity implements
                 pmDataDetectorResults.showResults(currentPMDetector, null);
             }
         });
+//
+//        // flagTriStateAuto ChangeListener
+//        pmDataDetectorResults.setListener(new PMDataResults.ChangeListener() {
+//            @Override
+//            public void onChange() {
+//                Log.d(TAG, "flag is: " + pmDataDetectorResults.flagTriStateAuto);
+//                autoListener.autoMode();
+//            }
+//        });
+
+
+        // Default: show PM values from detector
+        pmDataDetectorResults.showResults(currentPMDetector, null);
 
     }
 

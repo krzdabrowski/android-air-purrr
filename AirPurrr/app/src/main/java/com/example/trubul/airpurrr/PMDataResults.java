@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr;
 
+import android.util.Log;
 import android.widget.TextView;
 
 /**
@@ -8,9 +9,20 @@ import android.widget.TextView;
  */
 
 public class PMDataResults {
-
+    private static final String TAG = "PMDataResults";
     public int flagTriStateAuto = 0;
+    int threshold = 100;
     private MyCallback mCallback;
+
+//    private ChangeListener listener;
+//
+//    public interface ChangeListener {
+//        void onChange();
+//    }
+//
+//    public void setListener(ChangeListener listener) {
+//        this.listener = listener;
+//    }
 
     public interface MyCallback {
         TextView getPM25DataPerc();
@@ -32,38 +44,41 @@ public class PMDataResults {
     }
 
     public void showResults(Double[] pmValues, String[] pmDates) {
-
         TextView tempData;
-        int multiplier;
+
+        // Check if threshold has been set
+        int getThreshold = AlertDialogForAuto.getThreshold();
+        if (getThreshold != 0) {
+            threshold = getThreshold;
+        }
+        Log.d(TAG, "THRESHOLD IS: " + threshold);
+
 
         for(int i=0; i<2; i++) {
+            // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
                 tempData = mCallback.getPM25DataPerc();
-                multiplier = 1;
             }
             else {
                 tempData = mCallback.getPM10DataPerc();
-                multiplier = 2;
             }
+
+            // Update colors
             if (pmValues [i] == 0) {  // blad polaczenia
                 tempData.setBackgroundResource(R.drawable.default_color);
                 flagTriStateAuto = 0;
             }
-            else if (pmValues[i] > 0 && pmValues[i] <= 12.5 * multiplier) {
+            else if (pmValues[i] > 0 && pmValues[i] <= 50) {
                 tempData.setBackgroundResource(R.drawable.green_color);
-                flagTriStateAuto = 1;
             }
-            else if (pmValues[i] > 12.5 * multiplier && pmValues[i] <= 25 * multiplier) {
+            else if (pmValues[i] > 50 && pmValues[i] <= 100) {
                 tempData.setBackgroundResource(R.drawable.lime_color);
-                flagTriStateAuto = 1;
             }
-            else if (pmValues[i] > 25 * multiplier && pmValues[i] <= 50 * multiplier) {
+            else if (pmValues[i] > 100 && pmValues[i] <= 200) {
                 tempData.setBackgroundResource(R.drawable.yellow_color);
-                flagTriStateAuto = 2;
             }
-            else if (pmValues[i] > 50 * multiplier && pmValues[i] <= 100 * multiplier) {
+            else {
                 tempData.setBackgroundResource(R.drawable.red_color);
-                flagTriStateAuto = 2;
             }
         }
 
@@ -80,6 +95,17 @@ public class PMDataResults {
             mCallback.setPM25Mode("API z " + mCallback.getPMDatesAPI()[0]);
             mCallback.setPM10Mode("API z " + mCallback.getPMDatesAPI()[1]);
         }
+
+
+        // Update flags = default threshold is 100%
+        if (pmValues[0] > threshold || pmValues[1] > threshold) {
+            flagTriStateAuto = 2;
+        }
+        else {
+            flagTriStateAuto = 1;
+        }
+
+        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().flagStateAuto);
 
     }
 
