@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -22,8 +23,11 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMDataResults.MyCallback, AlertDialogForAuto.MyCallback {
 
-//    private static final String TAG = "MainActivity";
-    public static boolean flagDetectorAPI = false; // false = DetectorMode, true = APIMode
+    private static final String TAG = "MainActivity";
+    public static final String PM_DATA_DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
+    public static final String PM_DATA_DETECTOR_URL_REMOTE = "http://89.70.85.249:2138/pm_data.txt";
+    public static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
+    public static boolean flagLocalRemote = true;  // false = LocalMode, true = RemoteMode
 
     @BindView(R.id.switch_auto) Switch mSwitchAuto;
     @BindView(R.id.switch_manual) Switch mSwitchManual;
@@ -35,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     @BindView(R.id.PM10_mode) TextView pm10Mode;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
-    private PMDataDetector pmDataDetector = new PMDataDetector();
-    private PMDataAPI pmDataAPI = new PMDataAPI();
+    private PMDataDetector pmDataDetector = new PMDataDetector(this);
+    private PMDataAPI pmDataAPI = new PMDataAPI(this);
 
     private PMDataResults pmDataDetectorResults = new PMDataResults(this);
     private PMDataResults pmDataAPIResults = new PMDataResults(this);
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 
     private static SwitchListener autoListener;
     private static SwitchListener manualListener;
+
+    MenuItem radioLocal;
+    MenuItem radioRemote;
 
 
     //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
@@ -367,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
 >>>>>>> 355b373... Include LoginActivity with all visual widgets (no logic yet)
         // Download PM values from detector
 //        final Double[] pmValuesDetector = {58.3, 92.7};
-        pmValuesDetector = pmDataDetector.downloadPMDataDetector();
+        pmValuesDetector = pmDataDetector.downloadPMDataDetector(PM_DATA_DETECTOR_URL_REMOTE);
 
         // Download PM values from API
         List<Object> pmValuesAndDatesAPI = pmDataAPI.downloadPMDataAPI();  // List<Object> = {Double[], String[]}
@@ -408,6 +415,8 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     ////////////////////////////////////////////  MENU  ////////////////////////////////////////////
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        radioLocal = menu.findItem(R.id.control_locally);
+        radioRemote = menu.findItem(R.id.control_remotely);
         return true;
     }
 
@@ -415,9 +424,13 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.control_locally: // TODO po 16)
+            case R.id.control_locally:
+                flagLocalRemote = false;
+                radioLocal.setChecked(true);
                 return true;
-            case R.id.control_remotely: // TODO po 16)
+            case R.id.control_remotely:
+                flagLocalRemote = true;
+                radioRemote.setChecked(true);
                 return true;
             case R.id.set_auto_threshold:
                 new AlertDialogForAuto(this, this);
@@ -425,7 +438,12 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
             case R.id.refresh_detector:
                 mySwipeRefreshLayout.setRefreshing(true);
                 SwipeListener refreshDetectorListener = new SwipeListener(this);
-                refreshDetectorListener.onRefreshDetector();
+                if (!flagLocalRemote) {
+                    refreshDetectorListener.onRefreshDetector(PM_DATA_DETECTOR_URL_LOCAL);
+                }
+                else {
+                    refreshDetectorListener.onRefreshDetector(PM_DATA_DETECTOR_URL_REMOTE);
+                }
                 return true;
             case R.id.refresh_api:
                 mySwipeRefreshLayout.setRefreshing(true);

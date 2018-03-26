@@ -15,7 +15,6 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
 //    private static final String TAG = "SwipeListener";
     private MyCallback mCallback;
     Double[] pmValuesDetector;
-
     List<Object> pmValuesAndDatesAPI;
     Double[] pmValuesAPI;
     String[] pmDatesAPI;
@@ -39,18 +38,26 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
 
     @Override
     public void onRefresh() {
+        String pmDataDetectorURL;
+        if (!MainActivity.flagLocalRemote) {  // if local
+            pmDataDetectorURL = MainActivity.PM_DATA_DETECTOR_URL_LOCAL;
+        }
+        else {  // if remote
+            pmDataDetectorURL = MainActivity.PM_DATA_DETECTOR_URL_REMOTE;
+        }
+
         if (!MainActivity.flagDetectorAPI) {  // if detector
             onRefreshAPI();
-            onRefreshDetector();
+            onRefreshDetector(pmDataDetectorURL);
         }
         else {  // if API
-            onRefreshDetector();
+            onRefreshDetector(pmDataDetectorURL);
             onRefreshAPI();
         }
     }
 
-    public void onRefreshDetector() {
-        pmValuesDetector = mCallback.getPMDataDetector().downloadPMDataDetector();
+    public void onRefreshDetector(String pmDataDetectorURL) {
+        pmValuesDetector = mCallback.getPMDataDetector().downloadPMDataDetector(pmDataDetectorURL);
         mCallback.getPMDataDetectorResults().showResults(pmValuesDetector, null );
         mCallback.setPM25Mode("W mieszkaniu");
         mCallback.setPM10Mode("W mieszkaniu");

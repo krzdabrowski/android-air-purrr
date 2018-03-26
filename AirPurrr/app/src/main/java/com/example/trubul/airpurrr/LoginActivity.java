@@ -50,7 +50,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         mAuth = FirebaseAuth.getInstance();
 
-        // First TLS setting - otherwise it doesn't verify even null-hostname (but don't send anything yet)
+        // First TLS setting - otherwise it doesn't verify null-hostname (but don't send anything yet)
         httpsPostRequest.setRequest(this);
     }
 

@@ -13,8 +13,8 @@ import java.util.concurrent.ExecutionException;
 public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "SwitchListener";
-    private static final String WORKSTATE_URL = "http://89.70.85.249:2138/workstate.txt";
-//    private static final String WORKSTATE_URL = "http://192.168.0.248/workstate.txt";
+    private static final String WORKSTATE_URL_LOCAL = "http://192.168.0.248/workstate.txt";
+    private static final String WORKSTATE_URL_REMOTE = "http://89.70.85.249:2138/workstate.txt";
     private boolean flagLastUseAuto = false;
     private boolean flagLastUseManual = false;
     private boolean flagStateAuto = false;
@@ -49,8 +49,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         this.mCallback = callback;
     }
 
-    private void controlRequests(boolean state) {
-
+    private void controlRequests(boolean state, String workstateURL) {
         String res;
 
         AbortableRequest switchOn = new AbortableRequest(mContext);
@@ -58,7 +57,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
-            res = getRequest.execute(WORKSTATE_URL).get();
+            res = getRequest.execute(workstateURL).get();
 
             if (res.equals("WorkStates.Sleeping\n")) {
                 Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
@@ -100,6 +99,15 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        String workstateURL;
+        if (!MainActivity.flagLocalRemote) {  // if local
+            workstateURL = WORKSTATE_URL_LOCAL;
+        }
+        else {  // if remote
+            workstateURL = WORKSTATE_URL_REMOTE;
+        }
+
+
         // Automatic mode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
         if (mode.equals(WorkingMode.AUTO)) {
 
@@ -109,10 +117,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
                 if (isChecked) {
                     flagStateAuto = true;
-                    controlRequests(true);
+                    controlRequests(true, workstateURL);
                 } else {
                     flagStateAuto = false;
-                    controlRequests(false);
+                    controlRequests(false, workstateURL);
                 }
             }
             else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 1) {}  // if false
@@ -129,11 +137,11 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
             if (isChecked) {
                 flagStateManual = true;
-                controlRequests(true);
+                controlRequests(true, workstateURL);
             }
             else {
                 flagStateManual = false;
-                controlRequests(false);
+                controlRequests(false, workstateURL);
             }
         }
 

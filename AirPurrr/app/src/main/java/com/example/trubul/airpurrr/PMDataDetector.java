@@ -1,5 +1,9 @@
 package com.example.trubul.airpurrr;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -10,14 +14,17 @@ import java.util.concurrent.ExecutionException;
 public class PMDataDetector {
 
 //    private static final String TAG = "PMDataDetector";
-    private static final String PM_DATA_DETECTOR_URL = "http://89.70.85.249:2138/pm_data.txt";
-//    private static final String PM_DATA_DETECTOR_URL = "http://192.168.0.248/pm_data.txt";
+    private Context mContext;
 
-    public Double[] downloadPMDataDetector() {
+    public PMDataDetector(Context context) {
+        mContext = context;
+    }
+
+    public Double[] downloadPMDataDetector(String pmDataDetectorURL) {
         String pmDataDetector;
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
-            pmDataDetector = getRequest.execute(PM_DATA_DETECTOR_URL).get();
+            pmDataDetector = getRequest.execute(pmDataDetectorURL).get();
 
             String[] pmStrings = pmDataDetector.split("\n");
             Double[] pmDoubles = new Double[pmStrings.length];
@@ -39,7 +46,8 @@ public class PMDataDetector {
         catch (ExecutionException e) {
             e.printStackTrace();
         }
-        catch (NullPointerException e) { // gdy np nie ma internetu
+        catch (NullPointerException e) {
+            Toast.makeText(mContext, "Błąd połączenia z serwerem" , Toast.LENGTH_LONG).show();
             return new Double[] {0.0, 0.0};
         }
 

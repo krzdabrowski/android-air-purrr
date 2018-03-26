@@ -7,8 +7,10 @@
 
     <group android:id="@+id/group_control"
         android:checkableBehavior="single">
-        <item android:id="@+id/control_locally"
-            android:title="@string/steruj_wentylatorem_lokalnie"/>
+        <item
+            android:id="@+id/control_locally"
+            android:checked="false"
+            android:title="@string/steruj_wentylatorem_lokalnie" />
         <item
             android:id="@+id/control_remotely"
             android:checked="true"

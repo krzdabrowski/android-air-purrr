@@ -67,7 +67,7 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
         }
         catch (IOException e) {
             Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
-            if (!e.getMessage().equals("timeout")) { // timeout == there was a connection and it's while(true)'ing == good
+            if (!e.getMessage().equals("timeout")) { // timeout = there was a connection and it's while(true)'ing = good
                 flagSSLHandshake = true;
             }
         }

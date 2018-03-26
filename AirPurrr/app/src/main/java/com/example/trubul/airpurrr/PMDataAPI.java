@@ -1,12 +1,15 @@
 package com.example.trubul.airpurrr;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +25,11 @@ public class PMDataAPI {
     private static final String TAG = "PMDataAPI";
     private static final String PM25_DATA_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
     private static final String PM10_DATA_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
+    private Context mContext;
+
+    public PMDataAPI(Context context) {
+        mContext = context;
+    }
 
     public List<Object> downloadPMDataAPI() {
         String pmDataAPI;
@@ -84,7 +92,8 @@ public class PMDataAPI {
         catch (ExecutionException e) {
             e.printStackTrace();
         }
-        catch (NullPointerException e) {  // no-internet?
+        catch (NullPointerException e) {
+            Toast.makeText(mContext, "Błąd połączenia z serwerem" , Toast.LENGTH_LONG).show();
             List<Object> empty = new ArrayList<>(2);
             Double[] emptyDouble = new Double[]{0.0, 0.0};
             String[] emptyString = new String[]{"", ""};
