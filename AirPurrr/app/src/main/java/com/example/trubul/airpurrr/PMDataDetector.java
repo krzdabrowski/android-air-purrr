@@ -15,9 +15,15 @@ public class PMDataDetector {
 
 //    private static final String TAG = "PMDataDetector";
     private Context mContext;
+    private MyCallback mCallback;
 
-    public PMDataDetector(Context context) {
+    public interface MyCallback {
+        void setCurrentPMDetector(Double[] currentPMDetector);
+    }
+
+    public PMDataDetector(Context context, MyCallback callback) {
         mContext = context;
+        mCallback = callback;
     }
 
     public Double[] downloadPMDataDetector(String pmDataDetectorURL) {
@@ -38,6 +44,7 @@ public class PMDataDetector {
                 }
             }
 
+            mCallback.setCurrentPMDetector(pmDoubles);
             return pmDoubles;
         }
         catch (InterruptedException e) {
@@ -47,8 +54,11 @@ public class PMDataDetector {
             e.printStackTrace();
         }
         catch (NullPointerException e) {
+            Double[] empty = {0.0, 0.0};
             Toast.makeText(mContext, "Błąd połączenia z serwerem" , Toast.LENGTH_LONG).show();
-            return new Double[] {0.0, 0.0};
+
+            mCallback.setCurrentPMDetector(empty);
+            return empty;
         }
 
         return null;

@@ -26,9 +26,15 @@ public class PMDataAPI {
     private static final String PM25_DATA_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
     private static final String PM10_DATA_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
     private Context mContext;
+    private MyCallback mCallback;
 
-    public PMDataAPI(Context context) {
+    public interface MyCallback {
+        void setCurrentPMAPI(List<Object> currentPMAPI);
+    }
+
+    public PMDataAPI(Context context, MyCallback callback) {
         mContext = context;
+        mCallback = callback;
     }
 
     public List<Object> downloadPMDataAPI() {
@@ -83,6 +89,7 @@ public class PMDataAPI {
             pmDoublesDates.add(pmDoubles);
             pmDoublesDates.add(pmDates);
 
+            mCallback.setCurrentPMAPI(pmDoublesDates);
             return pmDoublesDates;
 
         }
@@ -99,6 +106,8 @@ public class PMDataAPI {
             String[] emptyString = new String[]{"", ""};
             empty.add(emptyDouble);
             empty.add(emptyString);
+
+            mCallback.setCurrentPMAPI(empty);
             return empty;
         }
         catch (JSONException e) {

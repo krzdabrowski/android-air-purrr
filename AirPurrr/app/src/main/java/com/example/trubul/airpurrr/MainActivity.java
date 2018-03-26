@@ -21,7 +21,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity implements SwitchListener.MyCallback, SwipeListener.MyCallback, PMDataResults.MyCallback, AlertDialogForAuto.MyCallback {
+public class MainActivity extends AppCompatActivity implements
+        SwitchListener.MyCallback, SwipeListener.MyCallback, PMDataResults.MyCallback, AlertDialogForAuto.MyCallback, PMDataDetector.MyCallback, PMDataAPI.MyCallback {
 
     private static final String TAG = "MainActivity";
     public static final String PM_DATA_DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
@@ -39,13 +40,20 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     @BindView(R.id.PM10_mode) TextView pm10Mode;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
-    private PMDataDetector pmDataDetector = new PMDataDetector(this);
-    private PMDataAPI pmDataAPI = new PMDataAPI(this);
+    private PMDataDetector pmDataDetector = new PMDataDetector(this, this);
+    private PMDataAPI pmDataAPI = new PMDataAPI(this, this);
 
     private PMDataResults pmDataDetectorResults = new PMDataResults(this);
     private PMDataResults pmDataAPIResults = new PMDataResults(this);
 
     private Double[] pmValuesDetector;
+    private List<Object> pmValuesAndDatesAPI;
+
+    ////
+    private Double[] currentPMDetector;
+    private List<Object> currentPMAPI;
+    ////
+
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
 
@@ -101,6 +109,15 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
 
 
+    public void setCurrentPMDetector(Double[] currentPMDetector) {
+        this.currentPMDetector = currentPMDetector;
+    }
+
+    public void setCurrentPMAPI(List<Object> currentPMAPI) {
+        this.currentPMAPI = currentPMAPI;
+    }
+
+
     //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
 
     @Override
@@ -153,6 +170,15 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
     public static SwitchListener getManualListener() {
         return manualListener;
     }
+
+
+//    public Double[] getCurrentPMDetector() {
+//        return currentPMDetector;
+//    }
+//
+//    public List<Object> getCurrentPMAPI() {
+//        return currentPMAPI;
+//    }
 
 
     //////////////////////////////////////////  ONCREATE  //////////////////////////////////////////
@@ -375,9 +401,11 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
         // Download PM values from detector
 //        final Double[] pmValuesDetector = {58.3, 92.7};
         pmValuesDetector = pmDataDetector.downloadPMDataDetector(PM_DATA_DETECTOR_URL_REMOTE);
+        currentPMDetector = pmValuesDetector;  // to update TextView correctly
 
         // Download PM values from API
-        List<Object> pmValuesAndDatesAPI = pmDataAPI.downloadPMDataAPI();  // List<Object> = {Double[], String[]}
+        pmValuesAndDatesAPI = pmDataAPI.downloadPMDataAPI();  // List<Object> = {Double[], String[]}
+        currentPMAPI = pmValuesAndDatesAPI;
         pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
         pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
 
@@ -399,10 +427,12 @@ public class MainActivity extends AppCompatActivity implements SwitchListener.My
             public void onClick(View v) {
                 if (!flagDetectorAPI) {
                     flagDetectorAPI = true;
-                    pmDataAPIResults.showResults(pmValuesAPI, pmDatesAPI);
+                    Double[] currentPMValuesAPI = (Double[]) currentPMAPI.get(0);
+                    String[] currentPMDatesAPI = (String[]) currentPMAPI.get(1);
+                    pmDataAPIResults.showResults(currentPMValuesAPI, currentPMDatesAPI);
                 } else {
                     flagDetectorAPI = false;
-                    pmDataDetectorResults.showResults(pmValuesDetector, null);
+                    pmDataDetectorResults.showResults(currentPMDetector, null);
                 }
             }
         };
