@@ -49,10 +49,8 @@ public class MainActivity extends AppCompatActivity implements
     private Double[] pmValuesDetector;
     private List<Object> pmValuesAndDatesAPI;
 
-    ////
     private Double[] currentPMDetector;
     private List<Object> currentPMAPI;
-    ////
 
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
@@ -107,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
-
 
     public void setCurrentPMDetector(Double[] currentPMDetector) {
         this.currentPMDetector = currentPMDetector;
@@ -171,15 +168,9 @@ public class MainActivity extends AppCompatActivity implements
         return manualListener;
     }
 
-
-//    public Double[] getCurrentPMDetector() {
-//        return currentPMDetector;
-//    }
-//
-//    public List<Object> getCurrentPMAPI() {
-//        return currentPMAPI;
-//    }
-
+    public Double[] getCurrentPMDetector() {
+        return currentPMDetector;
+    }
 
     //////////////////////////////////////////  ONCREATE  //////////////////////////////////////////
     @Override
@@ -402,6 +393,7 @@ public class MainActivity extends AppCompatActivity implements
 //        final Double[] pmValuesDetector = {58.3, 92.7};
         pmValuesDetector = pmDataDetector.downloadPMDataDetector(PM_DATA_DETECTOR_URL_REMOTE);
         currentPMDetector = pmValuesDetector;  // to update TextView correctly
+        pmDataDetector.downloadAutoPMData();  // download pmDataDetector every 1 minute
 
         // Download PM values from API
         pmValuesAndDatesAPI = pmDataAPI.downloadPMDataAPI();  // List<Object> = {Double[], String[]}

@@ -57,7 +57,7 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     public void onRefreshDetector(String pmDataDetectorURL) {
-        pmValuesDetector = mCallback.getPMDataDetector().downloadPMDataDetector(pmDataDetectorURL);
+//        pmValuesDetector = mCallback.getPMDataDetector().downloadPMDataDetector(pmDataDetectorURL);
         mCallback.getPMDataDetectorResults().showResults(pmValuesDetector, null );
         mCallback.setPM25Mode("W mieszkaniu");
         mCallback.setPM10Mode("W mieszkaniu");
