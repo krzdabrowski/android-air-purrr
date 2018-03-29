@@ -20,9 +20,9 @@ It uses:
 * Cables, jumpers etc.
 * [SKILL WITH MAINS ELECTRICITY](https://www.youtube.com/watch?v=sskSFYxzkpE) - no joke here, this is a must
 
-### Results From SDS011
+### SDS011 PM2.5/10 Results
 
-I use ThingSpeak to show PM data from my device. Here's the [link](https://thingspeak.com/channels/462987) to charts.
+I use ThingSpeak to show data from my device. Here's the [link](https://thingspeak.com/channels/462987) to charts.
 
 ## Screenshots
 
