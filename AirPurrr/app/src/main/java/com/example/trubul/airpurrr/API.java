@@ -1,18 +1,19 @@
 package com.example.trubul.airpurrr;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -20,40 +21,45 @@ import java.util.concurrent.ExecutionException;
  * On 3/13/18.
  */
 
-public class PMDataAPI {
+public class API {
 
-    private static final String TAG = "PMDataAPI";
-    private static final String PM25_DATA_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
-    private static final String PM10_DATA_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
+    private static final String TAG = "API";
+    private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
+    private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
+
+    private final Activity mActivity;
     private Context mContext;
     private MyCallback mCallback;
 
     public interface MyCallback {
-        void setCurrentPMAPI(List<Object> currentPMAPI);
+        void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI);
+
+        TextViewResults getTextViewAPI();
     }
 
-    public PMDataAPI(Context context, MyCallback callback) {
+
+    public API(Activity activity, Context context, MyCallback callback) {
+        mActivity = activity;
         mContext = context;
         mCallback = callback;
     }
 
-    public List<Object> downloadPMDataAPI() {
+
+    public List<Object> download() {
         String pmDataAPI;
         String pm25LatestStringDate = null; // i = 0
         String pm10LatestStringDate = null; // i = 1
         String pm25LatestStringValue = null; // i = 0
         String pm10LatestStringValue = null; // i = 1
-        Double pm25LatestDoubleValue;
-        Double pm10LatestDoubleValue;
 
         try {
             for (int i=0; i<2; i++) {
                 HttpGetRequest getRequest = new HttpGetRequest();
 
                 if (i == 0) {
-                    pmDataAPI = getRequest.execute(PM25_DATA_API_URL).get();
+                    pmDataAPI = getRequest.execute(PM25_API_URL).get();
                 } else {
-                    pmDataAPI = getRequest.execute(PM10_DATA_API_URL).get();
+                    pmDataAPI = getRequest.execute(PM10_API_URL).get();
                 }
 
                 JSONObject jsonData = new JSONObject(pmDataAPI);  // return python's {key: value} of the provided link
@@ -79,18 +85,23 @@ public class PMDataAPI {
 
             }
 
-            pm25LatestDoubleValue = Double.parseDouble(pm25LatestStringValue);
-            pm10LatestDoubleValue = Double.parseDouble(pm10LatestStringValue);
+            // Convert string to Double
+            Double pm25LatestDoubleValue = Double.parseDouble(pm25LatestStringValue);
+            Double pm10LatestDoubleValue = Double.parseDouble(pm10LatestStringValue);
 
+            // Create Double[] and String[]
             Double[] pmDoubles = new Double[]{ pm25LatestDoubleValue, pm10LatestDoubleValue } ;
-            pmDoubles = convertToPercent(pmDoubles);  // convert to percentages to normalize data
             String[] pmDates = new String[]{ pm25LatestStringDate, pm10LatestStringDate };
 
+            // Convert results to percentages (to ease handling with auto mode)
+            pmDoubles = convertToPercent(pmDoubles);
+
+            // Add to List of Objects
             List<Object> pmDoublesDates = new ArrayList<>(2);
             pmDoublesDates.add(pmDoubles);
             pmDoublesDates.add(pmDates);
 
-            mCallback.setCurrentPMAPI(pmDoublesDates);
+            mCallback.setPMValuesAndDatesAPI(pmDoublesDates);
             return pmDoublesDates;
 
         }
@@ -101,19 +112,18 @@ public class PMDataAPI {
             e.printStackTrace();
         }
         catch (NullPointerException e) {
-            Toast.makeText(mContext, "Błąd połączenia z serwerem" , Toast.LENGTH_LONG).show();
             List<Object> empty = new ArrayList<>(2);
             Double[] emptyDouble = new Double[]{0.0, 0.0};
             String[] emptyString = new String[]{"", ""};
             empty.add(emptyDouble);
             empty.add(emptyString);
 
-            mCallback.setCurrentPMAPI(empty);
+            mCallback.setPMValuesAndDatesAPI(empty);
             return empty;
         }
         catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, "onDownloadComplete: Error processing Json data " + e.getMessage());
+            Log.e(TAG, "onDownloadComplete: Error processing JSON data " + e.getMessage());
         }
 
         return null;

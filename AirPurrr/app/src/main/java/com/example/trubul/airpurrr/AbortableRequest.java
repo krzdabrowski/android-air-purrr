@@ -10,10 +10,8 @@ import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.security.auth.login.LoginException;
 
 /**
  * Created by krzysiek
@@ -23,7 +21,7 @@ import javax.security.auth.login.LoginException;
 public class AbortableRequest extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "AbortableRequest";
-    private WeakReference<Context> contextRef;
+    private WeakReference<Context> contextRef;  // to use Toast
     private boolean flagSSLHandshake = false;
 
 
@@ -31,14 +29,14 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
         contextRef = new WeakReference<>(context);
     }
 
+
     @Override
     protected String doInBackground(String... params) {
         InputStreamReader streamReader = null;
         Context context = contextRef.get();
 
         try {
-            HttpsURLConnection connInit = HttpsPostRequest.setRequest(context);
-            HttpsURLConnection conn = HttpsPostRequest.finishSetRequest(connInit);
+            HttpsURLConnection conn = HttpsPostRequest.setRequest(context);
 
             // Send POST data
             String str = "req=" + params[0];
@@ -93,13 +91,10 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
         if (flagSSLHandshake) {
             Toast.makeText(context, "Błąd SSL handshake'a", Toast.LENGTH_LONG).show();
 
-            Log.d(TAG, "ifFlagLastUseAuto is: " + MainActivity.getAutoListener().isFlagLastUseAuto());
-            Log.d(TAG, "ifFlagLastUseManual is: " + MainActivity.getManualListener().isFlagLastUseManual());
-
-            if (MainActivity.getAutoListener().isFlagLastUseAuto()) {
+            if (MainActivity.getAutoListener().isLastUseAuto()) {
                 MainActivity.getAutoListener().keepState();
             }
-            else if (MainActivity.getManualListener().isFlagLastUseManual()) {
+            else if (MainActivity.getManualListener().isLastUseManual()) {
                 MainActivity.getManualListener().keepState();
             }
 

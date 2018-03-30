@@ -8,13 +8,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.X509TrustManager;
 
 /**
  * Created by krzysiek
@@ -26,10 +23,10 @@ public class HttpsPostRequest {
     private static final String TAG = "HttpsPostRequest";
     private static final String REQUESTED_METHOD = "POST";
     private static final int READ_TIMEOUT = 5000;
-//    private static final int READ_TIMEOUT = 1;
+//    private static final int READ_TIMEOUT = 1;  // to force SSLHandshake
     private static final int CONNECTION_TIMEOUT = 7000;
-
     private static MyCallback mCallback;
+
 
     public HttpsPostRequest(MyCallback callback) {
         mCallback = callback;
@@ -57,6 +54,11 @@ public class HttpsPostRequest {
             SSLContext sc = SslUtils.getSslContextForCertificateFile(context, "apache-selfsigned-nipio.cer");
             connection.setSSLSocketFactory(sc.getSocketFactory());
 
+            // Set username and password
+            String userpass = mCallback.getEmailPassword().get(0) + ":" + mCallback.getEmailPassword().get(1);
+            String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
+            connection.setRequestProperty("Authorization", basicAuth);
+
             return connection;
         }
 
@@ -77,14 +79,6 @@ public class HttpsPostRequest {
         }
 
         return null;
-    }
-
-    public static HttpsURLConnection finishSetRequest(HttpsURLConnection conn) {
-        String userpass = mCallback.getEmailPassword().get(0) + ":" + mCallback.getEmailPassword().get(1);
-        String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
-        conn.setRequestProperty("Authorization", basicAuth);
-
-        return conn;
     }
 
 }

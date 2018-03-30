@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
  * On 3/16/18.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     @VisibleForTesting
     public ProgressDialog mProgressDialog;

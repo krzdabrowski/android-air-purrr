@@ -1,8 +1,6 @@
 package com.example.trubul.airpurrr;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
-
 import java.util.List;
 
 /**
@@ -11,22 +9,23 @@ import java.util.List;
  */
 
 public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
-
-//    private static final String TAG = "SwipeListener";
+    private static final String TAG = "SwipeListener";
     private MyCallback mCallback;
+
     Double[] pmValuesDetector;
     List<Object> pmValuesAndDatesAPI;
     Double[] pmValuesAPI;
     String[] pmDatesAPI;
 
+
     public interface MyCallback{
+        Detector getDetector();
+        API getAPI();
+
+        TextViewResults getTextViewDetector();
+        TextViewResults getTextViewAPI();
+
         void setSwipeRefreshing(boolean state);
-
-        PMDataDetector getPMDataDetector();
-        PMDataAPI getPMDataAPI();
-
-        PMDataResults getPMDataDetectorResults();
-        PMDataResults getPMDataAPIResults();
 
         void setPM25Mode(String mode);
         void setPM10Mode(String mode);
@@ -36,14 +35,15 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
         this.mCallback = callback;
     }
 
+
     @Override
     public void onRefresh() {
         String pmDataDetectorURL;
         if (!MainActivity.flagLocalRemote) {  // if local
-            pmDataDetectorURL = MainActivity.PM_DATA_DETECTOR_URL_LOCAL;
+            pmDataDetectorURL = MainActivity.DETECTOR_URL_LOCAL;
         }
         else {  // if remote
-            pmDataDetectorURL = MainActivity.PM_DATA_DETECTOR_URL_REMOTE;
+            pmDataDetectorURL = MainActivity.DETECTOR_URL_REMOTE;
         }
 
         if (!MainActivity.flagDetectorAPI) {  // if detector
@@ -57,18 +57,20 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     public void onRefreshDetector(String pmDataDetectorURL) {
-        pmValuesDetector = mCallback.getPMDataDetector().downloadPMDataDetector(pmDataDetectorURL);
-        mCallback.getPMDataDetectorResults().showResults(pmValuesDetector, null );
+        pmValuesDetector = mCallback.getDetector().download(pmDataDetectorURL);
+        mCallback.getTextViewDetector().showResults(pmValuesDetector, null );
         mCallback.setPM25Mode("W mieszkaniu");
         mCallback.setPM10Mode("W mieszkaniu");
         mCallback.setSwipeRefreshing(false);
     }
 
     public void onRefreshAPI() {
-        pmValuesAndDatesAPI = mCallback.getPMDataAPI().downloadPMDataAPI();
+        pmValuesAndDatesAPI = mCallback.getAPI().download();
         pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
         pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
-        mCallback.getPMDataAPIResults().showResults(pmValuesAPI, pmDatesAPI);
+        mCallback.getTextViewAPI().showResults(pmValuesAPI, pmDatesAPI);
+        mCallback.setPM25Mode("API z " + pmDatesAPI[0]);
+        mCallback.setPM10Mode("API z " + pmDatesAPI[1]);
         mCallback.setSwipeRefreshing(false);
     }
 

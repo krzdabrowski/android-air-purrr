@@ -1,6 +1,5 @@
 package com.example.trubul.airpurrr;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,11 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -22,16 +18,16 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity implements
-        SwitchListener.MyCallback, SwipeListener.MyCallback, PMDataResults.MyCallback, AlertDialogForAuto.MyCallback, PMDataDetector.MyCallback, PMDataAPI.MyCallback {
+        SwitchListener.MyCallback, SwipeListener.MyCallback, TextViewResults.MyCallback, Detector.MyCallback, API.MyCallback {
 
     private static final String TAG = "MainActivity";
-    public static final String PM_DATA_DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
-    public static final String PM_DATA_DETECTOR_URL_REMOTE = "http://89.70.85.249:2138/pm_data.txt";
+    public static final String DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
+    public static final String DETECTOR_URL_REMOTE = "http://89.70.85.249:2138/pm_data.txt";
     public static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     public static boolean flagLocalRemote = true;  // false = LocalMode, true = RemoteMode
 
-    @BindView(R.id.switch_auto) Switch mSwitchAuto;
-    @BindView(R.id.switch_manual) Switch mSwitchManual;
+    @BindView(R.id.switch_auto) Switch switchAuto;
+    @BindView(R.id.switch_manual) Switch switchManual;
     @BindView(R.id.PM25_data_perc) TextView pm25DataPerc;
     @BindView(R.id.PM10_data_perc) TextView pm10DataPerc;
     @BindView(R.id.PM25_data_ugm3) TextView pm25DataUgm3;
@@ -40,20 +36,20 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.PM10_mode) TextView pm10Mode;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
-    private PMDataDetector pmDataDetector = new PMDataDetector(this, this, this);
-    private PMDataAPI pmDataAPI = new PMDataAPI(this, this);
+    // objects of DOWNLOADING PM data
+    private Detector detector = new Detector(this, this, this);
+    private API api = new API(this, this, this);
 
-    private PMDataResults pmDataDetectorResults = new PMDataResults(this);
-    private PMDataResults pmDataAPIResults = new PMDataResults(this);
-
+    // downloaded PM values
     private Double[] pmValuesDetector;
     private List<Object> pmValuesAndDatesAPI;
-
-    private Double[] currentPMDetector;
-    private List<Object> currentPMAPI;
-
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
+
+    // objects of SHOWING PM values
+    private TextViewResults TextViewDetector = new TextViewResults(this);
+    private TextViewResults TextViewAPI = new TextViewResults(this);
+
 
     private static SwitchListener autoListener;
     private static SwitchListener manualListener;
@@ -65,12 +61,12 @@ public class MainActivity extends AppCompatActivity implements
     //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
     @Override
     public void setSwitchAuto(boolean state) {
-        mSwitchAuto.setChecked(state);
+        switchAuto.setChecked(state);
     }
 
     @Override
     public void setSwitchManual(boolean state) {
-        mSwitchManual.setChecked(state);
+        switchManual.setChecked(state);
     }
 
     @Override // 100% = 25ug/m3
@@ -106,47 +102,30 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
 
-    public void setCurrentPMDetector(Double[] currentPMDetector) {
-        this.currentPMDetector = currentPMDetector;
+    public void setPMValuesDetector(Double[] pmValuesDetector) {
+        this.pmValuesDetector = pmValuesDetector;
     }
 
-    public void setCurrentPMAPI(List<Object> currentPMAPI) {
-        this.currentPMAPI = currentPMAPI;
+    public void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI) {
+        this.pmValuesAndDatesAPI = pmValuesAndDatesAPI;
     }
 
 
     //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
 
+    // DOWNLOADING PM data
     @Override
-    public TextView getPM25DataPerc() {
-        return pm25DataPerc;
+    public Detector getDetector() {
+        return detector;
     }
 
     @Override
-    public TextView getPM10DataPerc() {
-        return pm10DataPerc;
+    public API getAPI() {
+        return api;
     }
 
-    @Override
-    public PMDataDetector getPMDataDetector() {
-        return pmDataDetector;
-    }
 
-    @Override
-    public PMDataAPI getPMDataAPI() {
-        return pmDataAPI;
-    }
-
-    @Override
-    public PMDataResults getPMDataDetectorResults() {
-        return pmDataDetectorResults;
-    }
-
-    @Override
-    public PMDataResults getPMDataAPIResults() {
-        return pmDataAPIResults;
-    }
-
+    // Values
     @Override
     public Double[] getPMValuesDetector() { return pmValuesDetector; }
 
@@ -160,6 +139,30 @@ public class MainActivity extends AppCompatActivity implements
         return pmDatesAPI;
     }
 
+
+    // SHOWING PM values
+    @Override
+    public TextViewResults getTextViewDetector() {
+        return TextViewDetector;
+    }
+
+    @Override
+    public TextViewResults getTextViewAPI() {
+        return TextViewAPI;
+    }
+
+
+    // Others
+    @Override
+    public TextView getPM25DataPerc() {
+        return pm25DataPerc;
+    }
+
+    @Override
+    public TextView getPM10DataPerc() {
+        return pm10DataPerc;
+    }
+
     public static SwitchListener getAutoListener() {
         return autoListener;
     }
@@ -168,9 +171,6 @@ public class MainActivity extends AppCompatActivity implements
         return manualListener;
     }
 
-    public Double[] getCurrentPMDetector() {
-        return currentPMDetector;
-    }
 
     //////////////////////////////////////////  ONCREATE  //////////////////////////////////////////
     @Override
@@ -388,30 +388,32 @@ public class MainActivity extends AppCompatActivity implements
         StrictMode.setThreadPolicy(policy);
 >>>>>>> b234e27... Add HTTPS POST support for controlling the fan (big mess, bug with 1st verification NOT fixed)
 
+<<<<<<< HEAD
 >>>>>>> 355b373... Include LoginActivity with all visual widgets (no logic yet)
+=======
+
+>>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
         // Download PM values from detector
-//        final Double[] pmValuesDetector = {58.3, 92.7};
-        pmValuesDetector = pmDataDetector.downloadPMDataDetector(PM_DATA_DETECTOR_URL_REMOTE);
-        Log.d(TAG, "onCreate: pmValuesDetector is: " + java.util.Arrays.toString(pmValuesDetector));
-        currentPMDetector = pmValuesDetector;  // to update TextView correctly
-        Log.d(TAG, "onCreate: currentPMDetector is: " + java.util.Arrays.toString(currentPMDetector));
-        pmDataDetector.downloadAutoPMData();  // download pmDataDetector every 1 minute
+        pmValuesDetector = detector.download(DETECTOR_URL_REMOTE);
+        detector.downloadAutomatically();  // download detector every 1 minute
 
         // Download PM values from API
-        pmValuesAndDatesAPI = pmDataAPI.downloadPMDataAPI();  // List<Object> = {Double[], String[]}
-        currentPMAPI = pmValuesAndDatesAPI;
+        pmValuesAndDatesAPI = api.download();  // List<Object> = {Double[], String[]}
         pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
         pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
 
 
+<<<<<<< HEAD
 
 >>>>>>> ef21956... Clean up comments and little fixes
 
+=======
+>>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
         /////////////////////// LISTENERS ///////////////////////
-        autoListener = new SwitchListener(this, SwitchListener.WorkingMode.AUTO, this, this);
-        mSwitchAuto.setOnCheckedChangeListener(autoListener);
-        manualListener = new SwitchListener(this, SwitchListener.WorkingMode.MANUAL, this, this);
-        mSwitchManual.setOnCheckedChangeListener(manualListener);
+        autoListener = new SwitchListener(this, this, this, SwitchListener.WorkingMode.AUTO);
+        switchAuto.setOnCheckedChangeListener(autoListener);
+        manualListener = new SwitchListener(this, this, this, SwitchListener.WorkingMode.MANUAL);
+        switchManual.setOnCheckedChangeListener(manualListener);
 
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
 
@@ -420,41 +422,30 @@ public class MainActivity extends AppCompatActivity implements
             public void onClick(View v) {
                 if (!flagDetectorAPI) {
                     flagDetectorAPI = true;
-                    Double[] currentPMValuesAPI = (Double[]) currentPMAPI.get(0);
-                    String[] currentPMDatesAPI = (String[]) currentPMAPI.get(1);
-                    pmDataAPIResults.showResults(currentPMValuesAPI, currentPMDatesAPI);
+                    Double[] pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
+                    String[] pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+                    TextViewAPI.showResults(pmValuesAPI, pmDatesAPI);
                 } else {
                     flagDetectorAPI = false;
-                    pmDataDetectorResults.showResults(currentPMDetector, null);
+                    TextViewDetector.showResults(pmValuesDetector, null);
                 }
             }
         };
         pm25DataPerc.setOnClickListener(textViewListener);
         pm10DataPerc.setOnClickListener(textViewListener);
 
-        // PMDataDetector ChangeListener (auto-update in background)
-        pmDataDetector.setListener(new PMDataDetector.ChangeListener() {
+        // Detector ChangeListener (auto-update in background)
+        detector.setListener(new Detector.ChangeListener() {
             @Override
             public void onChange() {
                 Log.d(TAG, "onChange: ZMIANA WARTOSCI");
                 flagDetectorAPI = false;
-                pmDataDetectorResults.showResults(currentPMDetector, null);
+                TextViewDetector.showResults(pmValuesDetector, null);
             }
         });
-//
-//        // flagTriStateAuto ChangeListener
-//        pmDataDetectorResults.setListener(new PMDataResults.ChangeListener() {
-//            @Override
-//            public void onChange() {
-//                Log.d(TAG, "flag is: " + pmDataDetectorResults.flagTriStateAuto);
-//                autoListener.autoMode();
-//            }
-//        });
-
 
         // Default: show PM values from detector
-        pmDataDetectorResults.showResults(currentPMDetector, null);
-
+        TextViewDetector.showResults(pmValuesDetector, null);
     }
 
 
@@ -479,16 +470,16 @@ public class MainActivity extends AppCompatActivity implements
                 radioRemote.setChecked(true);
                 return true;
             case R.id.set_auto_threshold:
-                new AlertDialogForAuto(this, this);
+                new AlertDialogForAuto(this);
                 return true;
             case R.id.refresh_detector:
                 mySwipeRefreshLayout.setRefreshing(true);
                 SwipeListener refreshDetectorListener = new SwipeListener(this);
                 if (!flagLocalRemote) {
-                    refreshDetectorListener.onRefreshDetector(PM_DATA_DETECTOR_URL_LOCAL);
+                    refreshDetectorListener.onRefreshDetector(DETECTOR_URL_LOCAL);
                 }
                 else {
-                    refreshDetectorListener.onRefreshDetector(PM_DATA_DETECTOR_URL_REMOTE);
+                    refreshDetectorListener.onRefreshDetector(DETECTOR_URL_REMOTE);
                 }
                 return true;
             case R.id.refresh_api:

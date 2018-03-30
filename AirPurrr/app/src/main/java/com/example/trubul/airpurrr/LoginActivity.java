@@ -20,7 +20,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     private static final String TAG = "LoginActivity";
     private HttpsPostRequest httpsPostRequest = new HttpsPostRequest(this);
-
     private EditText mEmailField;
     private EditText mPasswordField;
     private String email;
@@ -49,9 +48,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         findViewById(R.id.button_login).setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
-
-        // First TLS setting - otherwise it doesn't verify null-hostname (but don't send anything yet)
-        httpsPostRequest.setRequest(this);
     }
 
     private void signIn(String email, String password) {
@@ -86,8 +82,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     private boolean validateForm() {
         boolean valid = true;
+        email = getEmailPassword().get(0);
+        password = getEmailPassword().get(1);
 
-        email = mEmailField.getText().toString();
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Wymagane");
             valid = false;
@@ -95,7 +92,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             mEmailField.setError(null);
         }
 
-        password = mPasswordField.getText().toString();
         if (TextUtils.isEmpty(password)) {
             mPasswordField.setError("Wymagane");
             valid = false;
@@ -108,8 +104,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-        email = mEmailField.getText().toString();
-        password = mPasswordField.getText().toString();
+        email = getEmailPassword().get(0);
+        password = getEmailPassword().get(1);
         signIn(email, password);
     }
 

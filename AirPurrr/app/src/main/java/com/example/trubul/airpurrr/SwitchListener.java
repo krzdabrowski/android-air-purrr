@@ -2,12 +2,9 @@ package com.example.trubul.airpurrr;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -15,20 +12,27 @@ import java.util.concurrent.ExecutionException;
  * On 3/3/18.
  */
 
+// CO Z TYM POD KONIEC TEXTVIEWRESULTS???
+//        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().isStateAuto);
+
+
 public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "SwitchListener";
     private static final String WORKSTATE_URL_LOCAL = "http://192.168.0.248/workstate.txt";
     private static final String WORKSTATE_URL_REMOTE = "http://89.70.85.249:2138/workstate.txt";
-    private boolean flagLastUseAuto = false;
-    private boolean flagLastUseManual = false;
-    public boolean flagStateAuto = false;
-    private boolean flagStateManual = false;
-    private boolean isWorkingOnAuto = false;
-    private Context mContext;
-    private WorkingMode mode;
-    private MyCallback mCallback;
+
     private final Activity mActivity;
+    private Context mContext;
+    private MyCallback mCallback;
+    private WorkingMode mode;
+
+    private boolean isLastUseAuto = false;
+    private boolean isLastUseManual = false;
+    public boolean isStateAuto = false;
+    private boolean isStateManual = false;
+
+    private boolean isWorkingOnAuto = false;
     private String workstateURL;
 
     public enum WorkingMode {
@@ -39,33 +43,24 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     public interface MyCallback {
         void setSwitchAuto(boolean state);
-
         void setSwitchManual(boolean state);
 
-        PMDataResults getPMDataDetectorResults();
+        TextViewResults getTextViewDetector();
+        }
 
-        Double[] getCurrentPMDetector();
+    public boolean isLastUseAuto() {
+        return isLastUseAuto;
     }
 
-    public boolean isFlagLastUseAuto() {
-        Log.d(TAG, "isFlagLastUseAuto W SWITCH_IS: " + flagLastUseAuto);
-        return flagLastUseAuto;
-
+    public boolean isLastUseManual() {
+        return isLastUseManual;
     }
 
-    public boolean isFlagLastUseManual() {
-        Log.d(TAG, "isFlagLastUseManual W SWITCH_IS: " + flagLastUseManual);
-
-        return flagLastUseManual;
-
-    }
-
-
-    public SwitchListener(Context context, WorkingMode mode, MyCallback callback, Activity activity) {
-        mContext = context;
-        this.mode = mode;
-        this.mCallback = callback;
+    public SwitchListener(Activity activity, Context context, MyCallback callback, WorkingMode mode) {
         mActivity = activity;
+        mContext = context;
+        mCallback = callback;
+        this.mode = mode;
 
         if (!MainActivity.flagLocalRemote) {  // if local
             workstateURL = WORKSTATE_URL_LOCAL;
@@ -73,6 +68,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             workstateURL = WORKSTATE_URL_REMOTE;
         }
     }
+
 
     private void controlRequests(boolean state, String workstateURL) {
         String res;
@@ -111,18 +107,16 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     }
 
     public void keepState() {
-        if (flagLastUseAuto) {
-            mCallback.setSwitchAuto(!flagStateAuto);
+        if (isLastUseAuto) {
+            isStateAuto = !isStateAuto;
+            mCallback.setSwitchAuto(isStateAuto);
+
             isWorkingOnAuto = !isWorkingOnAuto;
-            flagStateAuto = !flagStateAuto;
         } else {
-            mCallback.setSwitchManual(!flagStateManual);
-            flagStateManual = !flagStateManual;
+            isStateManual = !isStateManual;
+            mCallback.setSwitchManual(isStateManual);
         }
     }
-
-
-
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
@@ -133,15 +127,15 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
         // Manual mode - control anytime!
         else {
-            flagLastUseAuto = false;
-            flagLastUseManual = true;
+            isLastUseAuto = false;
+            isLastUseManual = true;
 
             if (isChecked) {
-                flagStateManual = true;
-                controlRequests(flagStateManual, workstateURL);
+                isStateManual = true;
+                controlRequests(isStateManual, workstateURL);
             } else {
-                flagStateManual = false;
-                controlRequests(flagStateManual, workstateURL);
+                isStateManual = false;
+                controlRequests(isStateManual, workstateURL);
             }
         }
 
@@ -149,31 +143,30 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     public void autoMode(boolean isChecked) {
 
-        if (isChecked) {  // rusza maszyna
-            flagLastUseAuto = true;
-            flagLastUseManual = false;
+        if (isChecked) {
+            isStateAuto = true;
+            isLastUseAuto = true;
+            isLastUseManual = false;
 
-            flagStateAuto = true;
-
-            if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2 && isWorkingOnAuto) {
+            if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && isWorkingOnAuto) {
                 // do nothing
             }
-            else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2 && !isWorkingOnAuto) {
+            else if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && !isWorkingOnAuto) {
                 isWorkingOnAuto = true;
                 controlRequests(true, workstateURL);
-            } else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 1 && isWorkingOnAuto) {
+            } else if (mCallback.getTextViewDetector().flagTriStateAuto == 1 && isWorkingOnAuto) {
                 isWorkingOnAuto = false;
                 controlRequests(false, workstateURL);
-            } else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 1 && !isWorkingOnAuto) {
+            } else if (mCallback.getTextViewDetector().flagTriStateAuto == 1 && !isWorkingOnAuto) {
                 // it does not exceed the threshold
-            } else if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 0) {  // if null
+            } else if (mCallback.getTextViewDetector().flagTriStateAuto == 0) {  // if null
                 Toast.makeText(mContext, "Serwer nie odpowiada, spróbuj ponownie później (flagTriState = 0)", Toast.LENGTH_LONG).show();
                 mCallback.setSwitchAuto(false);
             }
         }
 
         else {
-            flagStateAuto = false;
+            isStateAuto = false;
             if (isWorkingOnAuto) {
                 isWorkingOnAuto = false;
                 controlRequests(false, workstateURL);

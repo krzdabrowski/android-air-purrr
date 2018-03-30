@@ -15,6 +15,7 @@ public class DataReader {
     private static final String TAG = "DataReader";
     private String mResult;
 
+
     public String getResult(InputStreamReader streamReader) {
         BufferedReader in = null;
         String inputLine;

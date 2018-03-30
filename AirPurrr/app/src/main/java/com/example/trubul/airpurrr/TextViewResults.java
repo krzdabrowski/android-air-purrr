@@ -8,21 +8,13 @@ import android.widget.TextView;
  * On 3/14/18.
  */
 
-public class PMDataResults {
-    private static final String TAG = "PMDataResults";
-    public int flagTriStateAuto = 0;
-    int threshold = 100;
+public class TextViewResults {
+    private static final String TAG = "TextViewResults";
     private MyCallback mCallback;
 
-//    private ChangeListener listener;
-//
-//    public interface ChangeListener {
-//        void onChange();
-//    }
-//
-//    public void setListener(ChangeListener listener) {
-//        this.listener = listener;
-//    }
+    public int flagTriStateAuto = 0;
+    int threshold = 100;
+
 
     public interface MyCallback {
         TextView getPM25DataPerc();
@@ -39,9 +31,10 @@ public class PMDataResults {
         String[] getPMDatesAPI();
     }
 
-    public PMDataResults(MyCallback callback) {
+    public TextViewResults(MyCallback callback) {
         this.mCallback = callback;
     }
+
 
     public void showResults(Double[] pmValues, String[] pmDates) {
         TextView tempData;
@@ -64,7 +57,7 @@ public class PMDataResults {
             }
 
             // Update colors
-            if (pmValues [i] == 0) {  // blad polaczenia
+            if (pmValues [i] == 0) {  // connection error
                 tempData.setBackgroundResource(R.drawable.default_color);
                 flagTriStateAuto = 0;
             }
@@ -82,11 +75,15 @@ public class PMDataResults {
             }
         }
 
+        // Set PM values in TextView
         mCallback.setPM25DataPerc(pmValues);
         mCallback.setPM10DataPerc(pmValues);
         mCallback.setPM25DataUgm3(pmValues);
         mCallback.setPM10DataUgm3(pmValues);
 
+        Log.d(TAG, "SHOW RESULTS: " + mCallback.getPMDatesAPI()[0] + mCallback.getPMDatesAPI()[1]);
+
+        // Set mode in TextView
         if (!MainActivity.flagDetectorAPI) {  // if detector
             mCallback.setPM25Mode("W mieszkaniu");
             mCallback.setPM10Mode("W mieszkaniu");
@@ -96,7 +93,6 @@ public class PMDataResults {
             mCallback.setPM10Mode("API z " + mCallback.getPMDatesAPI()[1]);
         }
 
-
         // Update flags = default threshold is 100%
         if (pmValues[0] > threshold || pmValues[1] > threshold) {
             flagTriStateAuto = 2;
@@ -105,7 +101,7 @@ public class PMDataResults {
             flagTriStateAuto = 1;
         }
 
-        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().flagStateAuto);
+//        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().isStateAuto);
 
     }
 

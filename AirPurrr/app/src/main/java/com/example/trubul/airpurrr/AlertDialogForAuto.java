@@ -17,30 +17,23 @@ import android.widget.Toast;
  */
 
 public class AlertDialogForAuto {
+
     private static final String TAG = "AlertDialogForAuto";
     private Context mContext;
-    private MyCallback mCallback;
     private String newStringAutoThreshold;
     private EditText editText;
     private static int newIntAutoThreshold;
+
 
     public static int getThreshold() {
         return newIntAutoThreshold;
     }
 
-
-    public interface MyCallback {
-        PMDataResults getPMDataDetectorResults();
-        Double[] getPMValuesDetector();
-        Double[] getCurrentPMDetector();
-
-    }
-
-    public AlertDialogForAuto(Context context, MyCallback callback) {
+    public AlertDialogForAuto(Context context) {
         mContext = context;
-        mCallback = callback;
         createDialog();
     }
+
 
     private void createDialog() {
         float dpi = mContext.getResources().getDisplayMetrics().density;
