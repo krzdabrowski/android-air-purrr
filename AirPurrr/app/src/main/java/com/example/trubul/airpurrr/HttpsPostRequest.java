@@ -25,7 +25,7 @@ public class HttpsPostRequest {
 
     private static final String TAG = "HttpsPostRequest";
     private static final String REQUESTED_METHOD = "POST";
-    private static final int READ_TIMEOUT = 3000;
+    private static final int READ_TIMEOUT = 5000;
     private static final int CONNECTION_TIMEOUT = 7000;
 
     private static MyCallback mCallback;
@@ -43,33 +43,24 @@ public class HttpsPostRequest {
         try {
 
             // Create a connection
-            URL url = new URL("https://89.70.85.249:2137");
+            URL url = new URL("https://89.70.85.249.nip.io:2137");
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 
             // Set timeout and method
-            connection.setReadTimeout(READ_TIMEOUT);  // czas na cala reszte, responsy itd
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);  // czas na polaczenie sie z IP
+            connection.setReadTimeout(READ_TIMEOUT);  // time for anything, responses etc
+            connection.setConnectTimeout(CONNECTION_TIMEOUT);  // time to connect with IP
             connection.setRequestMethod(REQUESTED_METHOD);
 
-            // Set default hostname verifier to null
-            connection.setDefaultHostnameVerifier(new NullHostNameVerifier());
-
-            // Create the TLS connection, set trust manager to be null and cert to mycert1024
-            SSLContext sc;
-            sc = SSLContext.getInstance("TLS");
-            sc.init(null, new X509TrustManager[]{new NullX509TrustManager()}, new SecureRandom());
-            sc = SslUtils.getSslContextForCertificateFile(context, "mycert1024.cer");
+            // Set TLS and cert to my_IP_nip.io cert (it needs DNS to SSL hence nip.io)
+            SSLContext.getInstance("TLS");
+            SSLContext sc = SslUtils.getSslContextForCertificateFile(context, "apache-selfsigned-nipio.cer");
             connection.setSSLSocketFactory(sc.getSocketFactory());
-            connection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
             return connection;
         }
 
         catch (NoSuchAlgorithmException e) {
             Log.e(TAG, "sdds " + e.getMessage());
-        }
-        catch (KeyManagementException e) {
-            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
         }
         catch (MalformedURLException e) {
             Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
