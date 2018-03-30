@@ -93,6 +93,9 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
         if (flagSSLHandshake) {
             Toast.makeText(context, "Błąd SSL handshake'a", Toast.LENGTH_LONG).show();
 
+            Log.d(TAG, "ifFlagLastUseAuto is: " + MainActivity.getAutoListener().isFlagLastUseAuto());
+            Log.d(TAG, "ifFlagLastUseManual is: " + MainActivity.getManualListener().isFlagLastUseManual());
+
             if (MainActivity.getAutoListener().isFlagLastUseAuto()) {
                 MainActivity.getAutoListener().keepState();
             }

@@ -48,11 +48,16 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     }
 
     public boolean isFlagLastUseAuto() {
+        Log.d(TAG, "isFlagLastUseAuto W SWITCH_IS: " + flagLastUseAuto);
         return flagLastUseAuto;
+
     }
 
     public boolean isFlagLastUseManual() {
+        Log.d(TAG, "isFlagLastUseManual W SWITCH_IS: " + flagLastUseManual);
+
         return flagLastUseManual;
+
     }
 
 
@@ -106,12 +111,13 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     }
 
     public void keepState() {
-        if (mode.equals(WorkingMode.AUTO)) {
+        if (flagLastUseAuto) {
             mCallback.setSwitchAuto(!flagStateAuto);
             isWorkingOnAuto = !isWorkingOnAuto;
             flagStateAuto = !flagStateAuto;
         } else {
             mCallback.setSwitchManual(!flagStateManual);
+            flagStateManual = !flagStateManual;
         }
     }
 
@@ -122,22 +128,8 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
         // Automatic mode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
         if (mode.equals(WorkingMode.AUTO)) {
-//            flagLastUseAuto = true;
-//            flagLastUseManual = false;
-//
-//            if (isChecked) {  // rusza maszyna
-//                flagStateAuto = true;
-//                autoMode(isChecked);
-//            }
-//            else {
-//                flagStateAuto = false;
-//                if (isWorkingOnAuto) {
-//                    controlRequests(false, workstateURL);
-//                }
-//            }
             autoMode(isChecked);
         }
-
 
         // Manual mode - control anytime!
         else {
@@ -146,10 +138,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
             if (isChecked) {
                 flagStateManual = true;
-                controlRequests(true, workstateURL);
+                controlRequests(flagStateManual, workstateURL);
             } else {
                 flagStateManual = false;
-                controlRequests(false, workstateURL);
+                controlRequests(flagStateManual, workstateURL);
             }
         }
 
@@ -157,10 +149,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     public void autoMode(boolean isChecked) {
 
-        flagLastUseAuto = true;
-        flagLastUseManual = false;
-
         if (isChecked) {  // rusza maszyna
+            flagLastUseAuto = true;
+            flagLastUseManual = false;
+
             flagStateAuto = true;
 
             if (mCallback.getPMDataDetectorResults().flagTriStateAuto == 2 && isWorkingOnAuto) {

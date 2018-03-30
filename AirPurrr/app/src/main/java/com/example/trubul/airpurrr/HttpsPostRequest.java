@@ -26,6 +26,7 @@ public class HttpsPostRequest {
     private static final String TAG = "HttpsPostRequest";
     private static final String REQUESTED_METHOD = "POST";
     private static final int READ_TIMEOUT = 5000;
+//    private static final int READ_TIMEOUT = 1;
     private static final int CONNECTION_TIMEOUT = 7000;
 
     private static MyCallback mCallback;
