@@ -12,10 +12,6 @@ import java.util.concurrent.ExecutionException;
  * On 3/3/18.
  */
 
-// CO Z TYM POD KONIEC TEXTVIEWRESULTS???
-//        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().isStateAuto);
-
-
 public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "SwitchListener";
@@ -150,8 +146,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
             if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && isWorkingOnAuto) {
                 // do nothing
-            }
-            else if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && !isWorkingOnAuto) {
+            } else if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && !isWorkingOnAuto) {
                 isWorkingOnAuto = true;
                 controlRequests(true, workstateURL);
             } else if (mCallback.getTextViewDetector().flagTriStateAuto == 1 && isWorkingOnAuto) {

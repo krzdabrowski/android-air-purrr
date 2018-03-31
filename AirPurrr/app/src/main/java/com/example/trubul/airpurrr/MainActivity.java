@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements
     MenuItem radioLocal;
     MenuItem radioRemote;
 
+    private int threshold = 100;
+
 
     //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
     @Override
@@ -442,6 +444,19 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d(TAG, "onChange detector: ZMIANA WARTOSCI");
                 flagDetectorAPI = false;
                 TextViewDetector.showResults(pmValuesDetector, null);
+
+                // Update flags = default threshold is 100%
+                if (pmValuesDetector[0] > threshold || pmValuesDetector[1] > threshold) {
+                    TextViewDetector.setFlagTriStateAuto(2);
+                }
+                else {
+                    TextViewDetector.setFlagTriStateAuto(1);
+                }
+
+                // Control the fan
+                //        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().isStateAuto);
+                autoListener.autoMode(autoListener.isStateAuto);
+
             }
         });
 
@@ -451,7 +466,6 @@ public class MainActivity extends AppCompatActivity implements
             public void onChange() {
                 Log.d(TAG, "onChange alertDialog: ZMIANA WARTOSCI");
                 // Check if threshold has been set
-                int threshold = 100;
                 int getThreshold = AlertDialogForAuto.getThreshold();
 
                 if (getThreshold != 0) {

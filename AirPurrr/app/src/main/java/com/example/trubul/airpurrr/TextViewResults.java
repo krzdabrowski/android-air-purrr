@@ -97,9 +97,6 @@ public class TextViewResults {
             mCallback.setPM10Mode("API z " + mCallback.getPMDatesAPI()[1]);
         }
 
-
-//        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().isStateAuto);
-
     }
 
 }
