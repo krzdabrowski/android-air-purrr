@@ -85,8 +85,6 @@ public class TextViewResults {
         mCallback.setPM25DataUgm3(pmValues);
         mCallback.setPM10DataUgm3(pmValues);
 
-        Log.d(TAG, "SHOW RESULTS: " + mCallback.getPMDatesAPI()[0] + mCallback.getPMDatesAPI()[1]);
-
         // Set mode in TextView
         if (!MainActivity.flagDetectorAPI) {  // if detector
             mCallback.setPM25Mode("W mieszkaniu");

@@ -70,7 +70,6 @@ public class Detector {
             // If values have changed
             if(!Arrays.equals(pmDoubles, mCallback.getPMValuesDetector())) {
                 mCallback.setPMValuesDetector(pmDoubles);
-                Log.d(TAG, "listener is: " + listener);
                 listener.onChange();
             }
 
@@ -113,7 +112,7 @@ public class Detector {
 
         // Schedule the task to run starting now and then every 1 minute
         // It works while screen is off and when app is in background!
-        timer.schedule(minuteTask, 0, 1000*1);  // 1000*60*1 every 1 minute
+        timer.schedule(minuteTask, 0, 1000*60*1);  // 1000*60*1 every 1 minute
     }
 
 

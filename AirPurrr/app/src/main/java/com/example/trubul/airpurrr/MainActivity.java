@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // objects of DOWNLOADING PM data
     private Detector detector = new Detector(this, this, this);
-    private API api = new API(this, this, this);
+    private API api = new API(this);
 
     // downloaded PM values
     private Double[] pmValuesDetector;
@@ -51,14 +51,14 @@ public class MainActivity extends AppCompatActivity implements
     private TextViewResults TextViewAPI = new TextViewResults(this);
 
     AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
+    private int threshold = 100;
 
     private static SwitchListener autoListener;
     private static SwitchListener manualListener;
 
-    MenuItem radioLocal;
-    MenuItem radioRemote;
+    private MenuItem radioLocal;
+    private MenuItem radioRemote;
 
-    private int threshold = 100;
 
 
     //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
@@ -454,9 +454,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 // Control the fan
-                //        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().isStateAuto);
                 autoListener.autoMode(autoListener.isStateAuto);
-
             }
         });
 

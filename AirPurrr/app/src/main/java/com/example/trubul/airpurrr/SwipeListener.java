@@ -1,6 +1,8 @@
 package com.example.trubul.airpurrr;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
+
 import java.util.List;
 
 /**
@@ -21,6 +23,7 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     public interface MyCallback{
         Detector getDetector();
         API getAPI();
+        String[] getPMDatesAPI();
 
         TextViewResults getTextViewDetector();
         TextViewResults getTextViewAPI();
@@ -69,8 +72,16 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
         pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
         pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
         mCallback.getTextViewAPI().showResults(pmValuesAPI, pmDatesAPI);
-        mCallback.setPM25Mode("API z " + pmDatesAPI[0]);
-        mCallback.setPM10Mode("API z " + pmDatesAPI[1]);
+
+        if (!pmDatesAPI[0].isEmpty() && !pmDatesAPI[1].isEmpty()) {
+            mCallback.setPM25Mode("API z " + pmDatesAPI[0]);
+            mCallback.setPM10Mode("API z " + pmDatesAPI[1]);
+        }
+        else {
+            mCallback.setPM25Mode("API z " + mCallback.getPMDatesAPI()[0]);
+            mCallback.setPM10Mode("API z " + mCallback.getPMDatesAPI()[1]);
+        }
+
         mCallback.setSwipeRefreshing(false);
     }
 

@@ -145,7 +145,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             isLastUseManual = false;
 
             if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && isWorkingOnAuto) {
-                // do nothing
+                // continue work
             } else if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && !isWorkingOnAuto) {
                 isWorkingOnAuto = true;
                 controlRequests(true, workstateURL);

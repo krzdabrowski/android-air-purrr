@@ -27,20 +27,13 @@ public class API {
     private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
     private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
 
-    private final Activity mActivity;
-    private Context mContext;
     private MyCallback mCallback;
 
     public interface MyCallback {
         void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI);
+        }
 
-        TextViewResults getTextViewAPI();
-    }
-
-
-    public API(Activity activity, Context context, MyCallback callback) {
-        mActivity = activity;
-        mContext = context;
+    public API(MyCallback callback) {
         mCallback = callback;
     }
 
