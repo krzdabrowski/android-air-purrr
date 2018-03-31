@@ -113,7 +113,7 @@ public class Detector {
 
         // Schedule the task to run starting now and then every 1 minute
         // It works while screen is off and when app is in background!
-        timer.schedule(minuteTask, 0, 1000*5);  // 1000*60*1 every 1 minute
+        timer.schedule(minuteTask, 0, 1000*1);  // 1000*60*1 every 1 minute
     }
 
 

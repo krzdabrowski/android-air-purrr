@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements
     private TextViewResults TextViewDetector = new TextViewResults(this);
     private TextViewResults TextViewAPI = new TextViewResults(this);
 
+    AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
 
     private static SwitchListener autoListener;
     private static SwitchListener manualListener;
@@ -438,11 +439,37 @@ public class MainActivity extends AppCompatActivity implements
         detector.setListener(new Detector.ChangeListener() {
             @Override
             public void onChange() {
-                Log.d(TAG, "onChange: ZMIANA WARTOSCI");
+                Log.d(TAG, "onChange detector: ZMIANA WARTOSCI");
                 flagDetectorAPI = false;
                 TextViewDetector.showResults(pmValuesDetector, null);
             }
         });
+
+        // AlertDialog ChangeListener (get new threshold instantly)
+        alertDialog.setListener(new AlertDialogForAuto.ChangeListener() {
+            @Override
+            public void onChange() {
+                Log.d(TAG, "onChange alertDialog: ZMIANA WARTOSCI");
+                // Check if threshold has been set
+                int threshold = 100;
+                int getThreshold = AlertDialogForAuto.getThreshold();
+
+                if (getThreshold != 0) {
+                    threshold = getThreshold;
+                }
+                Log.d(TAG, "THRESHOLD IS: " + threshold);
+
+                // Update flags = default threshold is 100%
+                if (pmValuesDetector[0] > threshold || pmValuesDetector[1] > threshold) {
+                    TextViewDetector.setFlagTriStateAuto(2);
+                }
+                else {
+                    TextViewDetector.setFlagTriStateAuto(1);
+                }
+
+            }
+        });
+
 
         // Default: show PM values from detector
         TextViewDetector.showResults(pmValuesDetector, null);
@@ -470,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements
                 radioRemote.setChecked(true);
                 return true;
             case R.id.set_auto_threshold:
-                new AlertDialogForAuto(this);
+                alertDialog.createDialog();
                 return true;
             case R.id.refresh_detector:
                 mySwipeRefreshLayout.setRefreshing(true);

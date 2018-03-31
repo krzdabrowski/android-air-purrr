@@ -23,19 +23,27 @@ public class AlertDialogForAuto {
     private String newStringAutoThreshold;
     private EditText editText;
     private static int newIntAutoThreshold;
+    private ChangeListener listener;
 
 
     public static int getThreshold() {
         return newIntAutoThreshold;
     }
 
+    public interface ChangeListener {
+        void onChange();
+    }
+
+    public void setListener(ChangeListener listener) {
+        this.listener = listener;
+    }
+
     public AlertDialogForAuto(Context context) {
         mContext = context;
-        createDialog();
     }
 
 
-    private void createDialog() {
+    public void createDialog() {
         float dpi = mContext.getResources().getDisplayMetrics().density;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -85,6 +93,7 @@ public class AlertDialogForAuto {
     public void getAutoThreshold() {
         if (!newStringAutoThreshold.equals("")) {
             newIntAutoThreshold = Integer.parseInt(newStringAutoThreshold);
+            listener.onChange();
         }
         else {
             Toast.makeText(mContext, "Wprowadź poprawną wartość!", Toast.LENGTH_SHORT).show();

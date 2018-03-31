@@ -11,7 +11,6 @@ import android.widget.TextView;
 public class TextViewResults {
     private static final String TAG = "TextViewResults";
     private MyCallback mCallback;
-
     public int flagTriStateAuto = 0;
     int threshold = 100;
 
@@ -31,6 +30,10 @@ public class TextViewResults {
         String[] getPMDatesAPI();
     }
 
+    public void setFlagTriStateAuto(int flagTriStateAuto) {
+        this.flagTriStateAuto = flagTriStateAuto;
+    }
+
     public TextViewResults(MyCallback callback) {
         this.mCallback = callback;
     }
@@ -39,14 +42,15 @@ public class TextViewResults {
     public void showResults(Double[] pmValues, String[] pmDates) {
         TextView tempData;
 
-        // Check if threshold has been set
-        int getThreshold = AlertDialogForAuto.getThreshold();
-        if (getThreshold != 0) {
-            threshold = getThreshold;
+        // Initial setting of flagTriState, default=100%
+        if (pmValues[0] > threshold || pmValues[1] > threshold) {
+            flagTriStateAuto = 2;
         }
-        Log.d(TAG, "THRESHOLD IS: " + threshold);
+        else {
+            flagTriStateAuto = 1;
+        }
 
-
+        // Present results
         for(int i=0; i<2; i++) {
             // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
@@ -93,13 +97,6 @@ public class TextViewResults {
             mCallback.setPM10Mode("API z " + mCallback.getPMDatesAPI()[1]);
         }
 
-        // Update flags = default threshold is 100%
-        if (pmValues[0] > threshold || pmValues[1] > threshold) {
-            flagTriStateAuto = 2;
-        }
-        else {
-            flagTriStateAuto = 1;
-        }
 
 //        MainActivity.getAutoListener().autoMode(MainActivity.getAutoListener().isStateAuto);
 
