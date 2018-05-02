@@ -14,11 +14,6 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "SwipeListener";
     private MyCallback mCallback;
 
-    Double[] pmValuesDetector;
-    List<Object> pmValuesAndDatesAPI;
-    Double[] pmValuesAPI;
-    String[] pmDatesAPI;
-
 
     public interface MyCallback{
         Detector getDetector();
@@ -60,7 +55,7 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     public void onRefreshDetector(String pmDataDetectorURL) {
-        pmValuesDetector = mCallback.getDetector().download(pmDataDetectorURL);
+        Double[] pmValuesDetector = mCallback.getDetector().download(pmDataDetectorURL);
         mCallback.getTextViewDetector().showResults(pmValuesDetector, null );
         mCallback.setPM25Mode("W mieszkaniu");
         mCallback.setPM10Mode("W mieszkaniu");
@@ -68,9 +63,9 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     public void onRefreshAPI() {
-        pmValuesAndDatesAPI = mCallback.getAPI().download();
-        pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
-        pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+        List<Object> pmValuesAndDatesAPI = mCallback.getAPI().download();
+        Double[] pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
+        String[] pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
         mCallback.getTextViewAPI().showResults(pmValuesAPI, pmDatesAPI);
 
         if (!pmDatesAPI[0].isEmpty() && !pmDatesAPI[1].isEmpty()) {

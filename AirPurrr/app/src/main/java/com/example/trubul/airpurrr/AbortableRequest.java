@@ -47,11 +47,12 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
             os.close();
             conn.connect();
 
-            // Create a new InputStreamReader
+            // Create a new InputStreamReader to read output info from webserver
             streamReader = new InputStreamReader(conn.getInputStream());
             // Do the data-read
             DataReader dataReader = new DataReader();
             dataReader.getResult(streamReader);
+//            Log.d(TAG, "doInBackground: READ from site" + xxx);
 
         }
         catch (MalformedURLException e) {

@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 <<<<<<< HEAD
@@ -390,6 +391,10 @@ public class MainActivity extends AppCompatActivity implements
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 >>>>>>> b234e27... Add HTTPS POST support for controlling the fan (big mess, bug with 1st verification NOT fixed)
+=======
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//        StrictMode.setThreadPolicy(policy);
+>>>>>>> 1f6d3ea... Update gradle
 
 <<<<<<< HEAD
 >>>>>>> 355b373... Include LoginActivity with all visual widgets (no logic yet)
