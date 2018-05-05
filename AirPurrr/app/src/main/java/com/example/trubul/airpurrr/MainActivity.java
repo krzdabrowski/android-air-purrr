@@ -1,7 +1,6 @@
 package com.example.trubul.airpurrr;
 
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,9 +22,9 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = "MainActivity";
     public static final String DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
     public static final String DETECTOR_URL_REMOTE = "http://89.70.85.249:2138/pm_data.txt";
+
     public static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     public static boolean flagLocalRemote = true;  // false = LocalMode, true = RemoteMode
-
     public static int flagTriStateAuto = 0;
 
     @BindView(R.id.switch_auto) Switch switchAuto;
@@ -60,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private MenuItem radioLocal;
     private MenuItem radioRemote;
+
+    private static Bundle emailAndPassword;
 
 
 
@@ -182,6 +183,14 @@ public class MainActivity extends AppCompatActivity implements
 
     public static SwitchListener getManualListener() {
         return manualListener;
+    }
+
+    static String getEmail() {
+        return emailAndPassword.getString("email");
+    }
+
+    static String getPassword() {
+        return emailAndPassword.getString("password");
     }
 
 
@@ -407,8 +416,12 @@ public class MainActivity extends AppCompatActivity implements
 >>>>>>> 1f6d3ea... Update gradle
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 355b373... Include LoginActivity with all visual widgets (no logic yet)
 =======
+=======
+        emailAndPassword = getIntent().getExtras();
+>>>>>>> 26dbe62... Code refactor #2
 
 >>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
         // Download PM values from detector

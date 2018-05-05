@@ -1,6 +1,7 @@
 package com.example.trubul.airpurrr;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import com.mklimek.sslutilsandroid.SslUtils;
@@ -33,7 +34,8 @@ public class HttpsPostRequest {
     }
 
     public interface MyCallback {
-        String[] getEmailPassword();
+        String getEmail();
+        String getPassword();
     }
 
 
@@ -55,7 +57,8 @@ public class HttpsPostRequest {
             connection.setSSLSocketFactory(sc.getSocketFactory());
 
             // Set username and password
-            String userpass = mCallback.getEmailPassword()[0] + ":" + mCallback.getEmailPassword()[1];
+
+            String userpass = MainActivity.getEmail() + ":" + MainActivity.getPassword();
             String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
             connection.setRequestProperty("Authorization", basicAuth);
 

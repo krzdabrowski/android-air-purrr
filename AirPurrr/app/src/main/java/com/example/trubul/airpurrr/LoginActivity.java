@@ -16,30 +16,29 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener, HttpsPostRequest.MyCallback {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "LoginActivity";
-    private HttpsPostRequest httpsPostRequest = new HttpsPostRequest(this);
+//    private HttpsPostRequest httpsPostRequest = new HttpsPostRequest(this);
     private EditText mEmailField;
     private EditText mPasswordField;
-    private String email;
-    private String password;
+//    private String email;
+//    private String password;
     private FirebaseAuth mAuth;
 
 
-    public String[] getEmailPassword() {
-//        List<String> emailPassword = new ArrayList<>(2);
-        String[] emailPassword = new String[2];
-
-        email = mEmailField.getText().toString();
-        password = mPasswordField.getText().toString();
-//        emailPassword.add(email);
-//        emailPassword.add(password);
-        emailPassword[0] = email;
-        emailPassword[1] = password;
-
-        return emailPassword;
-    }
+//    public String[] getEmailPassword() {
+//        String[] emailPassword = new String[2];
+//
+//        email = mEmailField.getText().toString();
+//        password = mPasswordField.getText().toString();
+////        emailPassword.add(email);
+////        emailPassword.add(password);
+//        emailPassword[0] = email;
+//        emailPassword[1] = password;
+//
+//        return emailPassword;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,40 +52,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mAuth = FirebaseAuth.getInstance();
     }
 
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
-        if (!validateForm()) {
-            return;
-        }
-
-        showProgressDialog();
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, might implement update UI accordingly with FirebaseUser
-                            Log.d(TAG, "signInWithEmail:success");
-//                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(myIntent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Błąd uwierzytelnienia!", Toast.LENGTH_SHORT).show();
-                        }
-
-                        hideProgressDialog();
-                    }
-                });
+    @Override
+    public void onClick(View v) {
+        String email = getEmail();
+        String password = getPassword();
+        signIn(email, password);
     }
 
-    private boolean validateForm() {
+    public String getEmail() {
+        return mEmailField.getText().toString().trim();
+    }
+
+    public String getPassword() {
+        return mPasswordField.getText().toString().trim();
+    }
+
+    private boolean validateForm(String email, String password) {
         boolean valid = true;
-        email = getEmailPassword()[0];
-        password = getEmailPassword()[1];
 
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Wymagane");
@@ -105,11 +87,32 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         return valid;
     }
 
-    @Override
-    public void onClick(View v) {
-        email = getEmailPassword()[0];
-        password = getEmailPassword()[1];
-        signIn(email, password);
-    }
+    private void signIn(String email, String password) {
+        if (!validateForm(email, password)) {
+            return;
+        }
+        showProgressDialog();
 
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, might implement update UI accordingly with FirebaseUser
+                            Log.d(TAG, "signInWithEmail:success");
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("email", getEmail());
+                            intent.putExtra("password", getPassword());
+                            startActivity(intent);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Błąd uwierzytelnienia!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        hideProgressDialog();
+                    }
+                });
+    }
 }
