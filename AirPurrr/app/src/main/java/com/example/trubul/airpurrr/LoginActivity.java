@@ -16,29 +16,12 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "LoginActivity";
-//    private HttpsPostRequest httpsPostRequest = new HttpsPostRequest(this);
     private EditText mEmailField;
     private EditText mPasswordField;
-//    private String email;
-//    private String password;
     private FirebaseAuth mAuth;
-
-
-//    public String[] getEmailPassword() {
-//        String[] emailPassword = new String[2];
-//
-//        email = mEmailField.getText().toString();
-//        password = mPasswordField.getText().toString();
-////        emailPassword.add(email);
-////        emailPassword.add(password);
-//        emailPassword[0] = email;
-//        emailPassword[1] = password;
-//
-//        return emailPassword;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,16 +30,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         mEmailField = findViewById(R.id.input_email);
         mPasswordField = findViewById(R.id.input_password);
-        findViewById(R.id.button_login).setOnClickListener(this);
+        findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = getEmail();
+                String password = getPassword();
+                signIn(email, password);
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
-    }
-
-    @Override
-    public void onClick(View v) {
-        String email = getEmail();
-        String password = getPassword();
-        signIn(email, password);
     }
 
     public String getEmail() {
