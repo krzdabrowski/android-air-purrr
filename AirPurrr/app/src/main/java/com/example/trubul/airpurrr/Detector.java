@@ -27,7 +27,7 @@ public class Detector {
         Double[] getPMValuesDetector();
         void setPMValuesDetector(Double[] pmValuesDetector);
 
-        TextViewResults getTextViewDetector();
+//        TextViewResults getTextViewDetector();
     }
 
     public interface ChangeListener {
@@ -103,7 +103,7 @@ public class Detector {
                     public void run() {
                         download(MainActivity.DETECTOR_URL_REMOTE);
                         Log.d(TAG, "percentages are: " + java.util.Arrays.toString(mCallback.getPMValuesDetector()));
-                        Log.d(TAG, "runOnUiThread flagTriStateAuto is: " + mCallback.getTextViewDetector().flagTriStateAuto);
+                        Log.d(TAG, "runOnUiThread flagTriStateAuto is: " + MainActivity.flagTriStateAuto);
                     }
                 });
 

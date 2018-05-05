@@ -13,10 +13,10 @@ import java.io.InputStreamReader;
 public class DataReader {
 
     private static final String TAG = "DataReader";
-    private String mResult;
+    private String mRawData;
 
 
-    public String getResult(InputStreamReader streamReader) {
+    public String getData(InputStreamReader streamReader) {
         BufferedReader in = null;
         String inputLine;
 
@@ -30,23 +30,23 @@ public class DataReader {
                 stringBuilder.append(inputLine).append("\n");
             }
 
-            mResult = stringBuilder.toString();
+            mRawData = stringBuilder.toString();
+            return mRawData;
         }
         catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "DataReader: IO Exception getting data " + e.getMessage());
         }
         finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    Log.e(TAG, "doInBackground: Error closing stream " + e.getMessage());
+                    Log.e(TAG, "DataReader: Error closing stream " + e.getMessage());
                 }
             }
         }
 
-        Log.d(TAG, "DataReader result is: " + mResult);
-        return mResult;
+        return null;
     }
 
 }

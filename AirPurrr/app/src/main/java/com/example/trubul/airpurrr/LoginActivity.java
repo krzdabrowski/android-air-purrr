@@ -27,13 +27,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private FirebaseAuth mAuth;
 
 
-    public List<String> getEmailPassword() {
-        List<String> emailPassword = new ArrayList<>(2);
+    public String[] getEmailPassword() {
+//        List<String> emailPassword = new ArrayList<>(2);
+        String[] emailPassword = new String[2];
 
         email = mEmailField.getText().toString();
         password = mPasswordField.getText().toString();
-        emailPassword.add(email);
-        emailPassword.add(password);
+//        emailPassword.add(email);
+//        emailPassword.add(password);
+        emailPassword[0] = email;
+        emailPassword[1] = password;
 
         return emailPassword;
     }
@@ -82,8 +85,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     private boolean validateForm() {
         boolean valid = true;
-        email = getEmailPassword().get(0);
-        password = getEmailPassword().get(1);
+        email = getEmailPassword()[0];
+        password = getEmailPassword()[1];
 
         if (TextUtils.isEmpty(email)) {
             mEmailField.setError("Wymagane");
@@ -104,8 +107,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-        email = getEmailPassword().get(0);
-        password = getEmailPassword().get(1);
+        email = getEmailPassword()[0];
+        password = getEmailPassword()[1];
         signIn(email, password);
     }
 

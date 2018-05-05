@@ -33,7 +33,7 @@ public class HttpsPostRequest {
     }
 
     public interface MyCallback {
-        List<String> getEmailPassword();
+        String[] getEmailPassword();
     }
 
 
@@ -55,7 +55,7 @@ public class HttpsPostRequest {
             connection.setSSLSocketFactory(sc.getSocketFactory());
 
             // Set username and password
-            String userpass = mCallback.getEmailPassword().get(0) + ":" + mCallback.getEmailPassword().get(1);
+            String userpass = mCallback.getEmailPassword()[0] + ":" + mCallback.getEmailPassword()[1];
             String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
             connection.setRequestProperty("Authorization", basicAuth);
 

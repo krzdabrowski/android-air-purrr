@@ -21,7 +21,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     private final Activity mActivity;
     private Context mContext;
     private MyCallback mCallback;
-    private WorkingMode mode;
+    private WorkingMode mMode;
 
     private boolean isLastUseAuto = false;
     private boolean isLastUseManual = false;
@@ -41,7 +41,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         void setSwitchAuto(boolean state);
         void setSwitchManual(boolean state);
 
-        TextViewResults getTextViewDetector();
+//        TextViewResults getTextViewDetector();
         }
 
     public boolean isLastUseAuto() {
@@ -56,7 +56,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         mActivity = activity;
         mContext = context;
         mCallback = callback;
-        this.mode = mode;
+        mMode = mode;
 
         if (!MainActivity.flagLocalRemote) {  // if local
             workstateURL = WORKSTATE_URL_LOCAL;
@@ -79,10 +79,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             if (res.equals("WorkStates.Sleeping\n")) {
                 Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
                 if (state) {  // send request if it was switch -> ON
-                    switchOn.execute(mode + "=1");  // it will be POST: req = params[0]
+                    switchOn.execute(mMode + "=1");  // it will be POST: req = params[0]
 
                 } else {
-                    switchOff.execute(mode + "=0");
+                    switchOff.execute(mMode + "=0");
                 }
             } else if (res.equals("WorkStates.Measuring\n")) {
                 Toast.makeText(mContext, "Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym", Toast.LENGTH_LONG).show();
@@ -116,12 +116,12 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        // Automatic mode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
-        if (mode.equals(WorkingMode.AUTO)) {
+        // Automatic mMode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
+        if (mMode.equals(WorkingMode.AUTO)) {
             autoMode(isChecked);
         }
 
-        // Manual mode - control anytime!
+        // Manual mMode - control anytime!
         else {
             isLastUseAuto = false;
             isLastUseManual = true;
@@ -144,17 +144,17 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             isLastUseAuto = true;
             isLastUseManual = false;
 
-            if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && isWorkingOnAuto) {
+            if (MainActivity.flagTriStateAuto == 2 && isWorkingOnAuto) {
                 // continue work
-            } else if (mCallback.getTextViewDetector().flagTriStateAuto == 2 && !isWorkingOnAuto) {
+            } else if (MainActivity.flagTriStateAuto == 2 && !isWorkingOnAuto) {
                 isWorkingOnAuto = true;
                 controlRequests(true, workstateURL);
-            } else if (mCallback.getTextViewDetector().flagTriStateAuto == 1 && isWorkingOnAuto) {
+            } else if (MainActivity.flagTriStateAuto == 1 && isWorkingOnAuto) {
                 isWorkingOnAuto = false;
                 controlRequests(false, workstateURL);
-            } else if (mCallback.getTextViewDetector().flagTriStateAuto == 1 && !isWorkingOnAuto) {
+            } else if (MainActivity.flagTriStateAuto == 1 && !isWorkingOnAuto) {
                 // it does not exceed the threshold
-            } else if (mCallback.getTextViewDetector().flagTriStateAuto == 0) {  // if null
+            } else if (MainActivity.flagTriStateAuto == 0) {  // if null
                 Toast.makeText(mContext, "Serwer nie odpowiada, spróbuj ponownie później (flagTriState = 0)", Toast.LENGTH_LONG).show();
                 mCallback.setSwitchAuto(false);
             }

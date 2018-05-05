@@ -91,7 +91,7 @@ public class AlertDialogForAuto {
     }
 
     public void getAutoThreshold() {
-        if (!newStringAutoThreshold.equals("")) {
+        if (!newStringAutoThreshold.equals("")) { // TODO: TextUtils.isEmpty?
             newIntAutoThreshold = Integer.parseInt(newStringAutoThreshold);
             listener.onChange();
         }

@@ -18,13 +18,15 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity implements
-        SwitchListener.MyCallback, SwipeListener.MyCallback, TextViewResults.MyCallback, Detector.MyCallback, API.MyCallback {
+        SwitchListener.MyCallback, SwipeListener.MyCallback, Detector.MyCallback, API.MyCallback {
 
     private static final String TAG = "MainActivity";
     public static final String DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
     public static final String DETECTOR_URL_REMOTE = "http://89.70.85.249:2138/pm_data.txt";
     public static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     public static boolean flagLocalRemote = true;  // false = LocalMode, true = RemoteMode
+
+    public static int flagTriStateAuto = 0;
 
     @BindView(R.id.switch_auto) Switch switchAuto;
     @BindView(R.id.switch_manual) Switch switchManual;
@@ -47,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements
     private String[] pmDatesAPI;
 
     // objects of SHOWING PM values
-    private TextViewResults TextViewDetector = new TextViewResults(this);
-    private TextViewResults TextViewAPI = new TextViewResults(this);
+//    private TextViewResults TextViewDetector = new TextViewResults(this);
+//    private TextViewResults TextViewAPI = new TextViewResults(this);
 
     AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
@@ -72,35 +74,35 @@ public class MainActivity extends AppCompatActivity implements
         switchManual.setChecked(state);
     }
 
-    @Override // 100% = 25ug/m3
-    public void setPM25DataPerc(Double[] pmValues) {
-        pm25DataPerc.setText(getString(R.string.pm25_data_perc, pmValues[0]));
-    }
+//    @Override // 100% = 25ug/m3
+//    public void setPM25DataPerc(Double[] pmValues) {
+//        pm25DataPerc.setText(getString(R.string.pm25_data_perc, pmValues[0]));
+//    }
+//
+//    @Override // 100% = 50ug/m3
+//    public void setPM10DataPerc(Double[] pmValues) {
+//        pm10DataPerc.setText(getString(R.string.pm10_data_perc, pmValues[1]));
+//    }
+//
+//    @Override
+//    public void setPM25DataUgm3(Double[] pmValues) {
+//        pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0] / 4));
+//    }
+//
+//    @Override
+//    public void setPM10DataUgm3(Double[] pmValues) {
+//        pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1] / 2));
+//    }
 
-    @Override // 100% = 50ug/m3
-    public void setPM10DataPerc(Double[] pmValues) {
-        pm10DataPerc.setText(getString(R.string.pm10_data_perc, pmValues[1]));
-    }
-
-    @Override
-    public void setPM25DataUgm3(Double[] pmValues) {
-        pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0] / 4));
-    }
-
-    @Override
-    public void setPM10DataUgm3(Double[] pmValues) {
-        pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1] / 2));
-    }
-
-    @Override
-    public void setPM25Mode(String mode) {
-        pm25Mode.setText(mode);
-    }
-
-    @Override
-    public void setPM10Mode(String mode) {
-        pm10Mode.setText(mode);
-    }
+//    @Override
+//    public void setPM25Mode(String mode) {
+//        pm25Mode.setText(mode);
+//    }
+//
+//    @Override
+//    public void setPM10Mode(String mode) {
+//        pm10Mode.setText(mode);
+//    }
 
     @Override
     public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
@@ -117,14 +119,22 @@ public class MainActivity extends AppCompatActivity implements
     //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
 
     // DOWNLOADING PM data
-    @Override
-    public Detector getDetector() {
-        return detector;
+//    @Override
+//    public Detector getDetector() {
+//        return detector;
+//    }
+//    @Override
+    public void onNewDetectorData() {
+        pmValuesDetector = detector.download(DETECTOR_URL_REMOTE);
     }
 
-    @Override
-    public API getAPI() {
-        return api;
+//    @Override
+//    public API getAPI() {
+//        return api;
+//    }
+//    @Override
+    public void onNewAPIData() {
+        pmValuesAndDatesAPI = api.download();
     }
 
 
@@ -132,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Double[] getPMValuesDetector() { return pmValuesDetector; }
 
-    @Override
+//    @Override
     public Double[] getPMValuesAPI() {
         return pmValuesAPI;
     }
@@ -144,27 +154,27 @@ public class MainActivity extends AppCompatActivity implements
 
 
     // SHOWING PM values
-    @Override
-    public TextViewResults getTextViewDetector() {
-        return TextViewDetector;
-    }
-
-    @Override
-    public TextViewResults getTextViewAPI() {
-        return TextViewAPI;
-    }
+//    @Override
+//    public TextViewResults getTextViewDetector() {
+//        return TextViewDetector;
+//    }
+//
+//    @Override
+//    public TextViewResults getTextViewAPI() {
+//        return TextViewAPI;
+//    }
 
 
     // Others
-    @Override
-    public TextView getPM25DataPerc() {
-        return pm25DataPerc;
-    }
-
-    @Override
-    public TextView getPM10DataPerc() {
-        return pm10DataPerc;
-    }
+//    @Override
+//    public TextView getPM25DataPerc() {
+//        return pm25DataPerc;
+//    }
+//
+//    @Override
+//    public TextView getPM10DataPerc() {
+//        return pm10DataPerc;
+//    }
 
     public static SwitchListener getAutoListener() {
         return autoListener;
@@ -432,10 +442,12 @@ public class MainActivity extends AppCompatActivity implements
                     flagDetectorAPI = true;
                     Double[] pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
                     String[] pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
-                    TextViewAPI.showResults(pmValuesAPI, pmDatesAPI);
+                    showResults(pmValuesAPI, pmDatesAPI);
                 } else {
                     flagDetectorAPI = false;
-                    TextViewDetector.showResults(pmValuesDetector, null);
+//                    TextViewDetector.showResults(pmValuesDetector, null);
+                    showResults(pmValuesDetector, null);
+
                 }
             }
         };
@@ -448,14 +460,18 @@ public class MainActivity extends AppCompatActivity implements
             public void onChange() {
                 Log.d(TAG, "onChange detector: ZMIANA WARTOSCI");
                 flagDetectorAPI = false;
-                TextViewDetector.showResults(pmValuesDetector, null);
+//                TextViewDetector.showResults(pmValuesDetector, null);
+                showResults(pmValuesDetector, null);
 
                 // Update flags = default threshold is 100%
                 if (pmValuesDetector[0] > threshold || pmValuesDetector[1] > threshold) {
-                    TextViewDetector.setFlagTriStateAuto(2);
+//                    TextViewDetector.setFlagTriStateAuto(2);
+                    flagTriStateAuto = 2;
+
                 }
                 else {
-                    TextViewDetector.setFlagTriStateAuto(1);
+//                    TextViewDetector.setFlagTriStateAuto(1);
+                    flagTriStateAuto = 1;
                 }
 
                 // Control the fan
@@ -478,10 +494,12 @@ public class MainActivity extends AppCompatActivity implements
 
                 // Update flags = default threshold is 100%
                 if (pmValuesDetector[0] > threshold || pmValuesDetector[1] > threshold) {
-                    TextViewDetector.setFlagTriStateAuto(2);
+//                    TextViewDetector.setFlagTriStateAuto(2);
+                    flagTriStateAuto = 2;
                 }
                 else {
-                    TextViewDetector.setFlagTriStateAuto(1);
+//                    TextViewDetector.setFlagTriStateAuto(1);
+                    flagTriStateAuto = 1;
                 }
 
             }
@@ -489,7 +507,9 @@ public class MainActivity extends AppCompatActivity implements
 
 
         // Default: show PM values from detector
-        TextViewDetector.showResults(pmValuesDetector, null);
+//        TextViewDetector.showResults(pmValuesDetector, null);
+        showResults(pmValuesDetector, null);
+
     }
 
 
@@ -541,5 +561,81 @@ public class MainActivity extends AppCompatActivity implements
         // Disable going back to the LoginActivity
         moveTaskToBack(true);
     }
+
+
+    public void showResults(Double[] pmValues, String[] pmDates) {
+        TextView tempData;
+
+
+        // Initial setting of flagTriState, default=100%
+        if (pmValues[0] > threshold || pmValues[1] > threshold) {
+            flagTriStateAuto = 2;
+        }
+        else {
+            flagTriStateAuto = 1;
+        }
+
+        // Present results
+        for(int i=0; i<2; i++) {
+            // First iteration = update PM2.5, second iteration = update PM10
+            if (i == 0) {
+                tempData = pm25DataPerc;
+            }
+            else {
+                tempData = pm10DataPerc;
+            }
+
+            // Update colors
+            if (pmValues [i] == 0) {  // connection error
+                tempData.setBackgroundResource(R.drawable.default_color);
+                flagTriStateAuto = 0;
+            }
+            else if (pmValues[i] > 0 && pmValues[i] <= 50) {
+                tempData.setBackgroundResource(R.drawable.green_color);
+            }
+            else if (pmValues[i] > 50 && pmValues[i] <= 100) {
+                tempData.setBackgroundResource(R.drawable.lime_color);
+            }
+            else if (pmValues[i] > 100 && pmValues[i] <= 200) {
+                tempData.setBackgroundResource(R.drawable.yellow_color);
+            }
+            else {
+                tempData.setBackgroundResource(R.drawable.red_color);
+            }
+        }
+
+        // Set PM values in TextView
+
+        pm25DataPerc.setText(getString(R.string.pm25_data_perc, pmValues[0]));
+        pm10DataPerc.setText(getString(R.string.pm10_data_perc, pmValues[1]));
+        pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0] / 4));
+        pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1] / 2));
+//
+//
+//        mCallback.setPM25DataPerc(pmValues);
+//        mCallback.setPM10DataPerc(pmValues);
+//        mCallback.setPM25DataUgm3(pmValues);
+//        mCallback.setPM10DataUgm3(pmValues);
+
+        // Set mode in TextView
+        if (!flagDetectorAPI) {  // if detector
+            pm25Mode.setText("W mieszkaniu");
+            pm10Mode.setText("W mieszkaniu");
+
+//            mCallback.setPM25Mode("W mieszkaniu");
+//            mCallback.setPM10Mode("W mieszkaniu");
+        }
+        else {  // if API
+//            mCallback.setPM25Mode("API z " + mCallback.getPMDatesAPI()[0]);
+//            mCallback.setPM10Mode("API z " + mCallback.getPMDatesAPI()[1]);
+
+            pm25Mode.setText("API z " + pmDatesAPI[0]);
+            pm10Mode.setText("API z " + pmDatesAPI[1]);
+
+        }
+
+    }
+
+
 
 }

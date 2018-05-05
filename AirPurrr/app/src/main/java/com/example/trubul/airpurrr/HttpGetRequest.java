@@ -47,7 +47,7 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             streamReader = new InputStreamReader(connection.getInputStream());
             // Do the data-read
             DataReader dataReader = new DataReader();
-            mResult = dataReader.getResult(streamReader);
+            mResult = dataReader.getData(streamReader);
 
         }
         catch (MalformedURLException e) {
@@ -60,7 +60,7 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
         }
         catch (IOException e) {
-            Log.e(TAG, "HttpGetRequest: IO Exception reading data: " + e.getMessage());
+            Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
         }
         finally {
             if(connection != null) {

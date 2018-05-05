@@ -51,20 +51,16 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
             streamReader = new InputStreamReader(conn.getInputStream());
             // Do the data-read
             DataReader dataReader = new DataReader();
-            dataReader.getResult(streamReader);
+            dataReader.getData(streamReader);
 //            Log.d(TAG, "doInBackground: READ from site" + xxx);
 
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
-        }
-        catch (ProtocolException e) {
+        } catch (ProtocolException e) {
             e.printStackTrace();
-        }
-        catch(SecurityException e) {
+        } catch(SecurityException e) {
             Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
             if (!e.getMessage().equals("timeout")) { // timeout = there was a connection and it's while(true)'ing = good
                 flagSSLHandshake = true;
@@ -74,11 +70,9 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
             if(streamReader != null) {
                 try {
                     streamReader.close();
-                }
-                catch(IOException e) {
+                } catch(IOException e) {
                     Log.e(TAG, "doInBackground: Error closing stream " + e.getMessage());
                 }
-
             }
         }
 
@@ -94,8 +88,7 @@ public class AbortableRequest extends AsyncTask<String, Void, String> {
 
             if (MainActivity.getAutoListener().isLastUseAuto()) {
                 MainActivity.getAutoListener().keepState();
-            }
-            else if (MainActivity.getManualListener().isLastUseManual()) {
+            } else if (MainActivity.getManualListener().isLastUseManual()) {
                 MainActivity.getManualListener().keepState();
             }
 
