@@ -5,18 +5,6 @@
       tools:context="com.example.trubul.airpurrr.MainActivity" >
 
 
-    <group android:id="@+id/group_control"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/control_locally"
-            android:checked="false"
-            android:title="@string/steruj_wentylatorem_lokalnie" />
-        <item
-            android:id="@+id/control_remotely"
-            android:checked="true"
-            android:title="@string/steruj_wentylatorem_zdalnie" />
-    </group>
-
     <item
         android:id="@+id/set_auto_threshold"
         android:title="@string/ustaw_prog_trybu_automatycznego" />

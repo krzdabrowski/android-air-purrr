@@ -91,8 +91,8 @@
                     android:elevation="2dp"
                     android:text="@string/pm25"
                     android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="@+id/PM25_data_perc"
-                    app:layout_constraintTop_toTopOf="@+id/PM25_data_perc" />
+                    app:layout_constraintStart_toStartOf="@+id/PM25_data"
+                    app:layout_constraintTop_toTopOf="@+id/PM25_data" />
 
                 <TextView
                     android:id="@+id/PM25_mode"
@@ -103,10 +103,10 @@
                     android:text="@string/pm25_mode"
                     android:textSize="16sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/PM25"
-                    app:layout_constraintEnd_toEndOf="@+id/PM25_data_perc" />
+                    app:layout_constraintEnd_toEndOf="@+id/PM25_data" />
 
                 <TextView
-                    android:id="@+id/PM25_data_perc"
+                    android:id="@+id/PM25_data"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginBottom="8dp"
@@ -133,9 +133,9 @@
                     android:text="@string/pm25_textholder"
                     android:textAlignment="center"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/PM25_data_perc"
-                    app:layout_constraintEnd_toEndOf="@+id/PM25_data_perc"
-                    app:layout_constraintStart_toStartOf="@+id/PM25_data_perc"
+                    app:layout_constraintBottom_toBottomOf="@+id/PM25_data"
+                    app:layout_constraintEnd_toEndOf="@+id/PM25_data"
+                    app:layout_constraintStart_toStartOf="@+id/PM25_data"
                     tools:text="(10.0)" />
 
                 <TextView
@@ -147,11 +147,11 @@
                     android:elevation="2dp"
                     android:text="@string/pm10"
                     android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="@+id/PM10_data_perc"
-                    app:layout_constraintTop_toTopOf="@+id/PM10_data_perc" />
+                    app:layout_constraintStart_toStartOf="@+id/PM10_data"
+                    app:layout_constraintTop_toTopOf="@+id/PM10_data" />
 
                 <TextView
-                    android:id="@+id/PM10_data_perc"
+                    android:id="@+id/PM10_data"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginBottom="8dp"
@@ -179,7 +179,7 @@
                     android:text="@string/pm10_mode"
                     android:textSize="16sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/PM10"
-                    app:layout_constraintEnd_toEndOf="@+id/PM10_data_perc" />
+                    app:layout_constraintEnd_toEndOf="@+id/PM10_data" />
 
                 <TextView
                     android:id="@+id/PM10_data_ugm3"
@@ -190,9 +190,9 @@
                     android:text="@string/pm10_textholder"
                     android:textAlignment="center"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/PM10_data_perc"
-                    app:layout_constraintEnd_toEndOf="@+id/PM10_data_perc"
-                    app:layout_constraintStart_toStartOf="@+id/PM10_data_perc"
+                    app:layout_constraintBottom_toBottomOf="@+id/PM10_data"
+                    app:layout_constraintEnd_toEndOf="@+id/PM10_data"
+                    app:layout_constraintStart_toStartOf="@+id/PM10_data"
                     tools:text="(15.0)" />
 
                 <android.support.constraint.Guideline

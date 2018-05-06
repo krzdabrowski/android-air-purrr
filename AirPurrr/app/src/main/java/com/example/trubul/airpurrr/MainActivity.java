@@ -20,17 +20,17 @@ public class MainActivity extends AppCompatActivity implements
         SwitchListener.MyCallback, SwipeListener.MyCallback, Detector.MyCallback, API.MyCallback {
 
     private static final String TAG = "MainActivity";
-    public static final String DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
-    public static final String DETECTOR_URL_REMOTE = "http://89.70.85.249:2138/pm_data.txt";
+//    public static final String DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
+    public static final String DETECTOR_URL = "http://89.70.85.249:2138/pm_data.txt";
 
     public static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
-    public static boolean flagLocalRemote = true;  // false = LocalMode, true = RemoteMode
+//    public static boolean flagLocalRemote = true;  // false = LocalMode, true = RemoteMode
     public static int flagTriStateAuto = 0;
 
     @BindView(R.id.switch_auto) Switch switchAuto;
     @BindView(R.id.switch_manual) Switch switchManual;
-    @BindView(R.id.PM25_data_perc) TextView pm25DataPerc;
-    @BindView(R.id.PM10_data_perc) TextView pm10DataPerc;
+    @BindView(R.id.PM25_data) TextView pm25Data;
+    @BindView(R.id.PM10_data) TextView pm10Data;
     @BindView(R.id.PM25_data_ugm3) TextView pm25DataUgm3;
     @BindView(R.id.PM10_data_ugm3) TextView pm10DataUgm3;
     @BindView(R.id.PM25_mode) TextView pm25Mode;
@@ -47,18 +47,11 @@ public class MainActivity extends AppCompatActivity implements
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
 
-    // objects of SHOWING PM values
-//    private TextViewResults TextViewDetector = new TextViewResults(this);
-//    private TextViewResults TextViewAPI = new TextViewResults(this);
-
     AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
 
     private static SwitchListener autoListener;
     private static SwitchListener manualListener;
-
-    private MenuItem radioLocal;
-    private MenuItem radioRemote;
 
     private static Bundle emailAndPassword;
 
@@ -75,38 +68,14 @@ public class MainActivity extends AppCompatActivity implements
         switchManual.setChecked(state);
     }
 
-//    @Override // 100% = 25ug/m3
-//    public void setPM25DataPerc(Double[] pmValues) {
-//        pm25DataPerc.setText(getString(R.string.pm25_data_perc, pmValues[0]));
-//    }
-//
-//    @Override // 100% = 50ug/m3
-//    public void setPM10DataPerc(Double[] pmValues) {
-//        pm10DataPerc.setText(getString(R.string.pm10_data_perc, pmValues[1]));
-//    }
-//
-//    @Override
-//    public void setPM25DataUgm3(Double[] pmValues) {
-//        pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0] / 4));
-//    }
-//
-//    @Override
-//    public void setPM10DataUgm3(Double[] pmValues) {
-//        pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1] / 2));
-//    }
-
-//    @Override
-//    public void setPM25Mode(String mode) {
-//        pm25Mode.setText(mode);
-//    }
-//
-//    @Override
-//    public void setPM10Mode(String mode) {
-//        pm10Mode.setText(mode);
-//    }
-
     @Override
-    public void setSwipeRefreshing(boolean state) { mySwipeRefreshLayout.setRefreshing(false); }
+    public void setSwipeRefreshing() {
+        mySwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mySwipeRefreshLayout.setRefreshing(false);
+            }
+    }); }
 
     public void setPMValuesDetector(Double[] pmValuesDetector) {
         this.pmValuesDetector = pmValuesDetector;
@@ -116,66 +85,10 @@ public class MainActivity extends AppCompatActivity implements
         this.pmValuesAndDatesAPI = pmValuesAndDatesAPI;
     }
 
-
     //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
-
-    // DOWNLOADING PM data
-//    @Override
-//    public Detector getDetector() {
-//        return detector;
-//    }
-//    @Override
-    public void onNewDetectorData() {
-        pmValuesDetector = detector.download(DETECTOR_URL_REMOTE);
-    }
-
-//    @Override
-//    public API getAPI() {
-//        return api;
-//    }
-//    @Override
-    public void onNewAPIData() {
-        pmValuesAndDatesAPI = api.download();
-    }
-
-
-    // Values
     @Override
     public Double[] getPMValuesDetector() { return pmValuesDetector; }
 
-//    @Override
-    public Double[] getPMValuesAPI() {
-        return pmValuesAPI;
-    }
-
-    @Override
-    public String[] getPMDatesAPI() {
-        return pmDatesAPI;
-    }
-
-
-    // SHOWING PM values
-//    @Override
-//    public TextViewResults getTextViewDetector() {
-//        return TextViewDetector;
-//    }
-//
-//    @Override
-//    public TextViewResults getTextViewAPI() {
-//        return TextViewAPI;
-//    }
-
-
-    // Others
-//    @Override
-//    public TextView getPM25DataPerc() {
-//        return pm25DataPerc;
-//    }
-//
-//    @Override
-//    public TextView getPM10DataPerc() {
-//        return pm10DataPerc;
-//    }
 
     public static SwitchListener getAutoListener() {
         return autoListener;
@@ -185,6 +98,10 @@ public class MainActivity extends AppCompatActivity implements
         return manualListener;
     }
 
+
+
+
+    // Get email and password from LoginActivity
     static String getEmail() {
         return emailAndPassword.getString("email");
     }
@@ -193,6 +110,37 @@ public class MainActivity extends AppCompatActivity implements
         return emailAndPassword.getString("password");
     }
 
+    // Download new data
+    @Override
+    public void onNewDetectorData() {
+        pmValuesDetector = detector.download();
+    }
+
+    @Override
+    public void onNewAPIData() {
+        pmValuesAndDatesAPI = api.download();
+    }
+
+    // Update UI
+    private void updateDetector() {
+        flagDetectorAPI = false;
+        showResults(pmValuesDetector, null);
+    }
+
+    private void updateAPI() {
+        flagDetectorAPI = true;
+        Double[] pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
+        String[] pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+        showResults(pmValuesAPI, pmDatesAPI);
+    }
+
+    private void updateAutoMode() {
+        if (pmValuesDetector[0] > threshold || pmValuesDetector[1] > threshold) {
+            flagTriStateAuto = 2;
+        } else {
+            flagTriStateAuto = 1;
+        }
+    }
 
     //////////////////////////////////////////  ONCREATE  //////////////////////////////////////////
     @Override
@@ -200,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -420,19 +369,23 @@ public class MainActivity extends AppCompatActivity implements
 >>>>>>> 355b373... Include LoginActivity with all visual widgets (no logic yet)
 =======
 =======
+=======
+>>>>>>> 393f4e9... Code refactor #4
         emailAndPassword = getIntent().getExtras();
 >>>>>>> 26dbe62... Code refactor #2
 
 >>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
         // Download PM values from detector
-        pmValuesDetector = detector.download(DETECTOR_URL_REMOTE);
+        onNewDetectorData();
         detector.downloadAutomatically();  // download detector every 1 minute
 
         // Download PM values from API
-        pmValuesAndDatesAPI = api.download();  // List<Object> = {Double[], String[]}
+        onNewAPIData();  // List<Object> = {Double[], String[]}
         pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
         pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
 
+        // Default: show PM values from detector
+        showResults(pmValuesDetector, null);
 
 <<<<<<< HEAD
 
@@ -445,47 +398,27 @@ public class MainActivity extends AppCompatActivity implements
         switchAuto.setOnCheckedChangeListener(autoListener);
         manualListener = new SwitchListener(this, this, this, SwitchListener.WorkingMode.MANUAL);
         switchManual.setOnCheckedChangeListener(manualListener);
-
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
 
         View.OnClickListener textViewListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!flagDetectorAPI) {
-                    flagDetectorAPI = true;
-                    Double[] pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
-                    String[] pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
-                    showResults(pmValuesAPI, pmDatesAPI);
-                } else {
-                    flagDetectorAPI = false;
-//                    TextViewDetector.showResults(pmValuesDetector, null);
-                    showResults(pmValuesDetector, null);
-
-                }
+                if (flagDetectorAPI) { updateDetector(); }
+                else { updateAPI(); }
             }
         };
-        pm25DataPerc.setOnClickListener(textViewListener);
-        pm10DataPerc.setOnClickListener(textViewListener);
+        pm25Data.setOnClickListener(textViewListener);
+        pm10Data.setOnClickListener(textViewListener);
 
-        // Detector ChangeListener (auto-update in background)
+        // ChangeListeners
         detector.setListener(new Detector.ChangeListener() {
             @Override
             public void onChange() {
                 Log.d(TAG, "onChange detector: ZMIANA WARTOSCI");
-                flagDetectorAPI = false;
-//                TextViewDetector.showResults(pmValuesDetector, null);
-                showResults(pmValuesDetector, null);
+                updateDetector();
 
-                // Update flags = default threshold is 100%
-                if (pmValuesDetector[0] > threshold || pmValuesDetector[1] > threshold) {
-//                    TextViewDetector.setFlagTriStateAuto(2);
-                    flagTriStateAuto = 2;
-
-                }
-                else {
-//                    TextViewDetector.setFlagTriStateAuto(1);
-                    flagTriStateAuto = 1;
-                }
+                // Update auto mode flags = default threshold is 100%
+                updateAutoMode();
 
                 // Control the fan
                 autoListener.autoMode(autoListener.isStateAuto);
@@ -505,74 +438,11 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 Log.d(TAG, "THRESHOLD IS: " + threshold);
 
-                // Update flags = default threshold is 100%
-                if (pmValuesDetector[0] > threshold || pmValuesDetector[1] > threshold) {
-//                    TextViewDetector.setFlagTriStateAuto(2);
-                    flagTriStateAuto = 2;
-                }
-                else {
-//                    TextViewDetector.setFlagTriStateAuto(1);
-                    flagTriStateAuto = 1;
-                }
-
+                // Update auto mode flags = default threshold is 100%
+                updateAutoMode();
             }
         });
 
-
-        // Default: show PM values from detector
-//        TextViewDetector.showResults(pmValuesDetector, null);
-        showResults(pmValuesDetector, null);
-
-    }
-
-
-    ////////////////////////////////////////////  MENU  ////////////////////////////////////////////
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        radioLocal = menu.findItem(R.id.control_locally);
-        radioRemote = menu.findItem(R.id.control_remotely);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.control_locally:
-                flagLocalRemote = false;
-                radioLocal.setChecked(true);
-                return true;
-            case R.id.control_remotely:
-                flagLocalRemote = true;
-                radioRemote.setChecked(true);
-                return true;
-            case R.id.set_auto_threshold:
-                alertDialog.createDialog();
-                return true;
-            case R.id.refresh_detector:
-                mySwipeRefreshLayout.setRefreshing(true);
-                SwipeListener refreshDetectorListener = new SwipeListener(this);
-                if (!flagLocalRemote) {
-                    refreshDetectorListener.onRefreshDetector(DETECTOR_URL_LOCAL);
-                }
-                else {
-                    refreshDetectorListener.onRefreshDetector(DETECTOR_URL_REMOTE);
-                }
-                return true;
-            case R.id.refresh_api:
-                mySwipeRefreshLayout.setRefreshing(true);
-                SwipeListener refreshAPIListener = new SwipeListener(this);
-                refreshAPIListener.onRefreshAPI();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Disable going back to the LoginActivity
-        moveTaskToBack(true);
     }
 
 
@@ -580,19 +450,20 @@ public class MainActivity extends AppCompatActivity implements
         TextView textView;
 
         // Initial setting of flagTriState, default=100%
-        if (pmValues[0] > threshold || pmValues[1] > threshold) {
-            flagTriStateAuto = 2;
-        } else {
-            flagTriStateAuto = 1;
-        }
+//            if (pmValues[0] > threshold || pmValues[1] > threshold) {
+//                flagTriStateAuto = 2;
+//            } else {
+//                flagTriStateAuto = 1;
+//            }
+//        updateAutoMode();
 
         // Present results
         for(int i=0; i<2; i++) {
             // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
-                textView = pm25DataPerc;
+                textView = pm25Data;
             } else {
-                textView = pm10DataPerc;
+                textView = pm10Data;
             }
 
             // Update colors
@@ -611,8 +482,8 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Set PM values in TextView
-        pm25DataPerc.setText(getString(R.string.pm25_data_perc, pmValues[0]));
-        pm10DataPerc.setText(getString(R.string.pm10_data_perc, pmValues[1]));
+        pm25Data.setText(getString(R.string.pm25_data_perc, pmValues[0]));
+        pm10Data.setText(getString(R.string.pm10_data_perc, pmValues[1]));
         pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0] / 4));
         pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1] / 2));
 
@@ -621,9 +492,42 @@ public class MainActivity extends AppCompatActivity implements
             pm25Mode.setText("W mieszkaniu");
             pm10Mode.setText("W mieszkaniu");
         } else {  // if API
-            pm25Mode.setText("API z " + pmDatesAPI[0]);
-            pm10Mode.setText("API z " + pmDatesAPI[1]);
+            if (pmDates != null) {
+                pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+                pm25Mode.setText("API z " + pmDatesAPI[0]);
+                pm10Mode.setText("API z " + pmDatesAPI[1]);
+            }
         }
     }
 
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.set_auto_threshold:
+                alertDialog.createDialog();
+                return true;
+            case R.id.refresh_detector:
+                SwipeListener refreshDetectorListener = new SwipeListener(this);
+                refreshDetectorListener.onRefresh();
+                return true;
+            case R.id.refresh_api:
+                SwipeListener refreshAPIListener = new SwipeListener(this);
+                refreshAPIListener.onRefresh();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Disable going back to the LoginActivity
+        moveTaskToBack(true);
+    }
 }

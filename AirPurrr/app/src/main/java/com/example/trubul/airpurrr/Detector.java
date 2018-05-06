@@ -26,8 +26,6 @@ public class Detector {
     public interface MyCallback {
         Double[] getPMValuesDetector();
         void setPMValuesDetector(Double[] pmValuesDetector);
-
-//        TextViewResults getTextViewDetector();
     }
 
     public interface ChangeListener {
@@ -45,12 +43,12 @@ public class Detector {
     }
 
 
-    public Double[] download(String detectorURL) {
+    public Double[] download() {
         String rawData;
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
-            rawData = getRequest.execute(detectorURL).get();
+            rawData = getRequest.execute(MainActivity.DETECTOR_URL).get();
 
             String[] pmStrings = rawData.split("\n");
             Double[] pmDoubles = new Double[pmStrings.length];
@@ -74,7 +72,7 @@ public class Detector {
             }
 
             // If not
-            mCallback.setPMValuesDetector(pmDoubles);
+            mCallback.setPMValuesDetector(pmDoubles); // czy to jest potrzebne???
             return pmDoubles;
         }
         catch (InterruptedException e) {
@@ -101,7 +99,7 @@ public class Detector {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        download(MainActivity.DETECTOR_URL_REMOTE);
+                        download();
                         Log.d(TAG, "percentages are: " + java.util.Arrays.toString(mCallback.getPMValuesDetector()));
                         Log.d(TAG, "runOnUiThread flagTriStateAuto is: " + MainActivity.flagTriStateAuto);
                     }
@@ -112,7 +110,7 @@ public class Detector {
 
         // Schedule the task to run starting now and then every 1 minute
         // It works while screen is off and when app is in background!
-        timer.schedule(minuteTask, 0, 1000*60*1);  // 1000*60*1 every 1 minute
+        timer.schedule(minuteTask, 0, 1000*60*100);  // 1000*60*1 every 1 minute
     }
 
 

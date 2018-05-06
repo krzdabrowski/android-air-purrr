@@ -24,8 +24,10 @@ import java.util.concurrent.ExecutionException;
 public class API {
 
     private static final String TAG = "API";
-    private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
-    private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
+//    private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
+//    private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
+    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
+    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
 
     private MyCallback mCallback;
 
@@ -36,6 +38,7 @@ public class API {
     public API(MyCallback callback) {
         mCallback = callback;
     }
+
 
 
     public List<Object> download() {

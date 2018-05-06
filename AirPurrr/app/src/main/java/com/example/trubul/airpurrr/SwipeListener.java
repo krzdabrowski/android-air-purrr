@@ -19,19 +19,10 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
 
 
     public interface MyCallback{
-//        Detector getDetector();
         void onNewDetectorData();
         void onNewAPIData();
-//        API getAPI();
-        String[] getPMDatesAPI();
 
-//        TextViewResults getTextViewDetector();
-//        TextViewResults getTextViewAPI();
-
-        void setSwipeRefreshing(boolean state);
-//
-//        void setPM25Mode(String mode);
-//        void setPM10Mode(String mode);
+        void setSwipeRefreshing();
     }
 
     public SwipeListener(MyCallback callback) {
@@ -41,32 +32,17 @@ public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
 
     @Override
     public void onRefresh() {
-        String pmDataDetectorURL;
-        if (!MainActivity.flagLocalRemote) {  // if local
-            pmDataDetectorURL = MainActivity.DETECTOR_URL_LOCAL;
-        }
-        else {  // if remote
-            pmDataDetectorURL = MainActivity.DETECTOR_URL_REMOTE;
-        }
-
         if (!MainActivity.flagDetectorAPI) {  // if detector
-            onRefreshAPI();
-            onRefreshDetector(pmDataDetectorURL);
+            mCallback.onNewAPIData();
+            mCallback.onNewDetectorData();
+        } else {  // if API
+            mCallback.onNewDetectorData();
+            mCallback.onNewAPIData();
         }
-        else {  // if API
-            onRefreshDetector(pmDataDetectorURL);
-            onRefreshAPI();
-        }
+
+        mCallback.setSwipeRefreshing();
     }
 
-    public void onRefreshDetector(String pmDataDetectorURL) {
-//        Double[] pmValuesDetector = mCallback.getDetector().download(pmDataDetectorURL);
-        mCallback.onNewDetectorData();
-//        MainActivity.showResults(pmValuesDetector, null );
-//        mCallback.setPM25Mode("W mieszkaniu");
-//        mCallback.setPM10Mode("W mieszkaniu");
-//        mCallback.setSwipeRefreshing(false);
-    }
 
     public void onRefreshAPI() {
 //        List<Object> pmValuesAndDatesAPI = mCallback.getAPI().download();

@@ -15,8 +15,7 @@ import java.util.concurrent.ExecutionException;
 public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "SwitchListener";
-    private static final String WORKSTATE_URL_LOCAL = "http://192.168.0.248/workstate.txt";
-    private static final String WORKSTATE_URL_REMOTE = "http://89.70.85.249:2138/workstate.txt";
+    private static final String WORKSTATE_URL = "http://89.70.85.249:2138/workstate.txt";
 
     private final Activity mActivity;
     private Context mContext;
@@ -29,7 +28,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     private boolean isStateManual = false;
 
     private boolean isWorkingOnAuto = false;
-    private String workstateURL;
+//    private String workstateURL;
 
     public enum WorkingMode {
         AUTO,
@@ -58,15 +57,15 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         mCallback = callback;
         mMode = mode;
 
-        if (!MainActivity.flagLocalRemote) {  // if local
-            workstateURL = WORKSTATE_URL_LOCAL;
-        } else {  // if remote
-            workstateURL = WORKSTATE_URL_REMOTE;
-        }
+//        if (!MainActivity.flagLocalRemote) {  // if local
+//            workstateURL = WORKSTATE_URL_LOCAL;
+//        } else {  // if remote
+//            workstateURL = WORKSTATE_URL_REMOTE;
+//        }
     }
 
 
-    private void controlRequests(boolean state, String workstateURL) {
+    private void controlRequests(boolean state) {
         String res;
 
         AbortableRequest switchOn = new AbortableRequest(mContext);
@@ -74,7 +73,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
-            res = getRequest.execute(workstateURL).get();
+            res = getRequest.execute(WORKSTATE_URL).get();
 
             if (res.equals("WorkStates.Sleeping\n")) {
                 Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
@@ -128,10 +127,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
             if (isChecked) {
                 isStateManual = true;
-                controlRequests(isStateManual, workstateURL);
+                controlRequests(isStateManual);
             } else {
                 isStateManual = false;
-                controlRequests(isStateManual, workstateURL);
+                controlRequests(isStateManual);
             }
         }
 
@@ -148,10 +147,10 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 // continue work
             } else if (MainActivity.flagTriStateAuto == 2 && !isWorkingOnAuto) {
                 isWorkingOnAuto = true;
-                controlRequests(true, workstateURL);
+                controlRequests(true);
             } else if (MainActivity.flagTriStateAuto == 1 && isWorkingOnAuto) {
                 isWorkingOnAuto = false;
-                controlRequests(false, workstateURL);
+                controlRequests(false);
             } else if (MainActivity.flagTriStateAuto == 1 && !isWorkingOnAuto) {
                 // it does not exceed the threshold
             } else if (MainActivity.flagTriStateAuto == 0) {  // if null
@@ -164,7 +163,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             isStateAuto = false;
             if (isWorkingOnAuto) {
                 isWorkingOnAuto = false;
-                controlRequests(false, workstateURL);
+                controlRequests(false);
             }
         }
     }

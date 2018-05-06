@@ -33,9 +33,7 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = getEmail();
-                String password = getPassword();
-                signIn(email, password);
+                signIn(getEmail(), getPassword());
             }
         });
 
