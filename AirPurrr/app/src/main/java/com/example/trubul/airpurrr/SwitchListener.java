@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
  * On 3/3/18.
  */
 
-public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
+class SwitchListener implements CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "SwitchListener";
     private static final String WORKSTATE_URL = "http://89.70.85.249:2138/workstate.txt";
     private Context mContext;
@@ -20,22 +20,22 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
     private boolean isLastUseAuto = false;
     private boolean isLastUseManual = false;
-    public boolean stateAuto = false;
+    boolean stateAuto = false;
     private boolean stateManual = false;
     private boolean isWorking = false;
 
 
-    public enum WorkingMode {
+    enum WorkingMode {
         AUTO,
         MANUAL
     }
 
-    public interface SwitchCallback {
+    interface SwitchCallback {
         void setSwitchAuto(boolean state);
         void setSwitchManual(boolean state);
     }
 
-    public SwitchListener(Context context, SwitchCallback callback, WorkingMode mode) {
+    SwitchListener(Context context, SwitchCallback callback, WorkingMode mode) {
         mContext = context;
         mCallback = callback;
         mMode = mode;
@@ -77,7 +77,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         }
     }
 
-    public void keepState() {
+    private void keepState() {
         if (isLastUseAuto) {
             stateAuto = !stateAuto;
             mCallback.setSwitchAuto(stateAuto);
@@ -88,6 +88,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         isWorking = !isWorking;
     }
 
+    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         // Automatic mode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
         if (mMode.equals(WorkingMode.AUTO)) {
@@ -111,7 +112,7 @@ public class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         }
     }
 
-    public void autoMode(boolean isChecked) {
+    void autoMode(boolean isChecked) {
         if (isChecked) {
             stateAuto = true;
             isLastUseAuto = true;

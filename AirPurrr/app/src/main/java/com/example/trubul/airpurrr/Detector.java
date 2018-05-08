@@ -13,32 +13,32 @@ import java.util.concurrent.ExecutionException;
  * On 3/4/18.
  */
 
-public class Detector {
+class Detector {
     private static final String TAG = "Detector";
-    private final Activity mActivity;
+    private final Activity mActivity;  // to make auto-download working
     private DetectorCallback mCallback;
     private ChangeListener listener;
 
 
-    public interface DetectorCallback {
+    interface DetectorCallback {
         Double[] getPMValuesDetector();
         void setPMValuesDetector(Double[] pmValuesDetector);
     }
 
-    public interface ChangeListener {
+    interface ChangeListener {
         void onChange();
     }
 
-    public void setListener(ChangeListener listener) {
+    void setListener(ChangeListener listener) {
         this.listener = listener;
     }
 
-    public Detector(Activity activity, DetectorCallback callback) {
+    Detector(Activity activity, DetectorCallback callback) {
         mActivity = activity;
         mCallback = callback;
     }
 
-    public Double[] download() {
+    Double[] download() {
         String rawData;
 
         try {
@@ -85,12 +85,11 @@ public class Detector {
         return null;
     }
 
-    public void downloadAutomatically() {
+    void downloadAutomatically() {
         Timer timer = new Timer();
         TimerTask minuteTask = new TimerTask() {
             @Override
             public void run() {
-
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -104,11 +103,11 @@ public class Detector {
 
         // Schedule the task to run starting now and then every 1 minute
         // It works while screen is off and when app is in background!
-        timer.schedule(minuteTask, 0, 1000 * 60);  // 1000*60*1 every 1 minute
+        timer.schedule(minuteTask, 0, 1000 * 60 * 1);  // 1000*60*1 every 1 minute
     }
 
 
-    public Double[] convertToPercent(Double[] pmDoubles) {
+    private Double[] convertToPercent(Double[] pmDoubles) {
         Double[] pmDoublesPerc = new Double[2];
 
         pmDoublesPerc[0] = 4 * pmDoubles[0];  // PM2.5

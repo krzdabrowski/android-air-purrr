@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity implements
         SwitchListener.SwitchCallback, SwipeListener.SwipeCallback, Detector.DetectorCallback, API.APICallback {
 
     private static final String TAG = "MainActivity";
-    public static final String DETECTOR_URL = "http://89.70.85.249:2138/pm_data.txt";
-    public static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
-    public static int flagTriStateAuto = 0;
+    static final String DETECTOR_URL = "http://89.70.85.249:2138/pm_data.txt";
+    static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
+    static int flagTriStateAuto = 0;
 
     @BindView(R.id.switch_auto) Switch switchAuto;
     @BindView(R.id.switch_manual) Switch switchManual;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
 
-    AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
+    private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
 
     private SwitchListener autoListener;
@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-    public void setUI(Double[] pmValues, String[] pmDates) {
+    private void setUI(Double[] pmValues, String[] pmDates) {
         TextView textView;
 
         // Set TextView colors
@@ -473,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;

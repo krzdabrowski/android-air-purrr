@@ -11,10 +11,10 @@ import java.io.InputStreamReader;
  * On 3/3/18.
  */
 
-public class DataReader {
+class DataReader {
     private static final String TAG = "DataReader";
 
-    public String getData(InputStreamReader streamReader) {
+    String getData(InputStreamReader streamReader) {
         BufferedReader in = null;
         String inputLine;
 

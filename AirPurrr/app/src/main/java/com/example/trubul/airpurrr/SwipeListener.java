@@ -7,18 +7,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
  * On 3/5/18.
  */
 
-public class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
+class SwipeListener implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "SwipeListener";
     private SwipeCallback mCallback;
 
 
-    public interface SwipeCallback {
+    interface SwipeCallback {
         void onNewDetectorData();
         void onNewAPIData();
         void setSwipeRefreshing();
     }
 
-    public SwipeListener(SwipeCallback callback) {
+    SwipeListener(SwipeCallback callback) {
         mCallback = callback;
     }
 

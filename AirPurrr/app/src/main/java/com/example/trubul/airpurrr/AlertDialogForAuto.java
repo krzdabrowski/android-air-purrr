@@ -17,7 +17,7 @@ import android.widget.Toast;
  * On 3/12/18.
  */
 
-public class AlertDialogForAuto {
+class AlertDialogForAuto {
     private Context mContext;
     private ChangeListener mListener;
     private String newStringAutoThreshold;
@@ -25,23 +25,23 @@ public class AlertDialogForAuto {
     private boolean isCorrectInput;
 
 
-    public interface ChangeListener {
+    interface ChangeListener {
         void onChange();
     }
 
-    public int getThreshold() {
+    int getThreshold() {
         return newIntAutoThreshold;
     }
 
-    public void setListener(ChangeListener listener) {
+    void setListener(ChangeListener listener) {
         mListener = listener;
     }
 
-    public AlertDialogForAuto(Context context) {
+    AlertDialogForAuto(Context context) {
         mContext = context;
     }
 
-    public void createDialog() {
+    void createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         TextView title = new TextView(mContext);
         final EditText editText = new EditText(mContext);
@@ -50,6 +50,7 @@ public class AlertDialogForAuto {
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setTextSize(32);
         editText.post(new Runnable() {  // show keyboard automatically
+            @Override
             public void run() {
                 editText.requestFocusFromTouch();
                 InputMethodManager lManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -96,7 +97,7 @@ public class AlertDialogForAuto {
         });
     }
 
-    public void getAutoThreshold() {
+    private void getAutoThreshold() {
         if (!TextUtils.isEmpty(newStringAutoThreshold)) {
             isCorrectInput = true;
             newIntAutoThreshold = Integer.parseInt(newStringAutoThreshold);

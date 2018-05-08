@@ -25,7 +25,7 @@ import javax.net.ssl.SSLContext;
  */
 
 // a.k.a. old AbortableRequest
-public class HttpsPostRequest extends AsyncTask<String, Void, String> {
+class HttpsPostRequest extends AsyncTask<String, Void, String> {
     private static final String TAG = "HttpsPostRequest";
     private WeakReference<Context> contextRef;
     private static final String REQUESTED_METHOD = "POST";
@@ -33,7 +33,7 @@ public class HttpsPostRequest extends AsyncTask<String, Void, String> {
     private static final int CONNECTION_TIMEOUT = 1000;
 
 
-    public HttpsPostRequest(Context context) {
+    HttpsPostRequest(Context context) {
         contextRef = new WeakReference<>(context);
     }
 

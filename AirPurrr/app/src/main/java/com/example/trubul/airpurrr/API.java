@@ -15,25 +15,24 @@ import java.util.concurrent.ExecutionException;
  * On 3/13/18.
  */
 
-public class API {
+class API {
     private static final String TAG = "API";
     private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
     private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
 //    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
 //    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
-
     private APICallback mCallback;
 
 
-    public interface APICallback {
+    interface APICallback {
         void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI);
         }
 
-    public API(APICallback callback) {
+    API(APICallback callback) {
         mCallback = callback;
     }
 
-    public List<Object> download() {
+    List<Object> download() {
         String pmDataAPI;
         String pm25LatestStringDate = null; // i = 0
         String pm10LatestStringDate = null; // i = 1
@@ -116,7 +115,7 @@ public class API {
         return null;
     }
 
-    public Double[] convertToPercent(Double[] pmDoubles) {
+    private Double[] convertToPercent(Double[] pmDoubles) {
         Double[] pmDoublesPerc = new Double[2];
 
         pmDoublesPerc[0] = 4 * pmDoubles[0];  // PM2.5

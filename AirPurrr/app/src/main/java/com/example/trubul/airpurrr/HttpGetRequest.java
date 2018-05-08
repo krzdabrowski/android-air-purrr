@@ -15,7 +15,7 @@ import java.net.URL;
  * On 3/3/18.
  */
 
-public class HttpGetRequest extends AsyncTask<String, Void, String> {
+class HttpGetRequest extends AsyncTask<String, Void, String> {
     private static final String TAG = "HttpGetRequest";
     private static final String REQUESTED_METHOD = "GET";
     private static final int READ_TIMEOUT = 5000;
