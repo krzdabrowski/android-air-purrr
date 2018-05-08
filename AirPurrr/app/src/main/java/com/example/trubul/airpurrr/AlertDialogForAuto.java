@@ -4,8 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,38 +18,33 @@ import android.widget.Toast;
  */
 
 public class AlertDialogForAuto {
-
-    private static final String TAG = "AlertDialogForAuto";
     private Context mContext;
+    private ChangeListener mListener;
     private String newStringAutoThreshold;
-    private EditText editText;
-    private static int newIntAutoThreshold;
-    private ChangeListener listener;
+    private int newIntAutoThreshold;
+    private boolean isCorrectInput;
 
-
-    public static int getThreshold() {
-        return newIntAutoThreshold;
-    }
 
     public interface ChangeListener {
         void onChange();
     }
 
+    public int getThreshold() {
+        return newIntAutoThreshold;
+    }
+
     public void setListener(ChangeListener listener) {
-        this.listener = listener;
+        mListener = listener;
     }
 
     public AlertDialogForAuto(Context context) {
         mContext = context;
     }
 
-
     public void createDialog() {
-        float dpi = mContext.getResources().getDisplayMetrics().density;
-
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         TextView title = new TextView(mContext);
-        editText = new EditText(mContext);
+        final EditText editText = new EditText(mContext);
 
         // Configuration of AlertDialog
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -72,30 +68,42 @@ public class AlertDialogForAuto {
                 R.string.OK,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        newStringAutoThreshold = editText.getText().toString();
-                        getAutoThreshold();
                     }
                 });
         builder.setNegativeButton(
                 R.string.anuluj,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 });
 
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
+        float dpi = mContext.getResources().getDisplayMetrics().density;
         dialog.setView(editText, (int) (135 * dpi), (int) (10 * dpi), (int) (135 * dpi), (int) (10 * dpi));
         dialog.show();
 
+        //Overriding the handler immediately after show is probably a better approach than OnShowListener
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newStringAutoThreshold = editText.getText().toString();
+                getAutoThreshold();
+
+                if (isCorrectInput)
+                    dialog.dismiss();
+            }
+        });
     }
 
     public void getAutoThreshold() {
-        if (!newStringAutoThreshold.equals("")) { // TODO: TextUtils.isEmpty?
+        if (!TextUtils.isEmpty(newStringAutoThreshold)) {
+            isCorrectInput = true;
             newIntAutoThreshold = Integer.parseInt(newStringAutoThreshold);
-            listener.onChange();
+            mListener.onChange();
         }
         else {
+            isCorrectInput = false;
             Toast.makeText(mContext, "Wprowadź poprawną wartość!", Toast.LENGTH_SHORT).show();
         }
     }

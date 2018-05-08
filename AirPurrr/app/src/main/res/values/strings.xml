@@ -25,4 +25,6 @@
     <string name="password">Hasło</string>
     <string name="login">Zaloguj</string>
     <string name="loading">Ładowanie…</string>
+    <string name="w_mieszkaniu">W mieszkaniu</string>
+    <string name="api_z">API z %s</string>
 </resources>

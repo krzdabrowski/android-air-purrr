@@ -2,6 +2,7 @@ package com.example.trubul.airpurrr;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -15,16 +16,15 @@ import java.net.URL;
  */
 
 public class HttpGetRequest extends AsyncTask<String, Void, String> {
-
     private static final String TAG = "HttpGetRequest";
     private static final String REQUESTED_METHOD = "GET";
     private static final int READ_TIMEOUT = 5000;
-    private static final int CONNECTION_TIMEOUT = 7000;
-    private String mResult = null;
+    private static final int CONNECTION_TIMEOUT = 3000;
 
 
     @Override
     protected String doInBackground(String... params) {
+        Log.d(TAG, "START");
         HttpURLConnection connection = null;
         InputStreamReader streamReader = null;
 
@@ -47,37 +47,31 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
             streamReader = new InputStreamReader(connection.getInputStream());
             // Do the data-read
             DataReader dataReader = new DataReader();
-            mResult = dataReader.getData(streamReader);
 
-        }
-        catch (MalformedURLException e) {
+            return dataReader.getData(streamReader);
+
+        } catch (MalformedURLException e) {
             Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
-        }
-        catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-        catch(SecurityException e) {
+        } catch (ProtocolException e) {
+            Log.e(TAG, "doInBackground: Protocol Exception " + e.getMessage());
+        } catch (SecurityException e) {
             Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
-        }
-        finally {
+        } finally {
             if(connection != null) {
                 connection.disconnect();
             }
-            if(streamReader != null) {
+            if (streamReader != null) {
                 try {
                     streamReader.close();
-                }
-                catch(IOException e) {
+                } catch (IOException e) {
                     Log.e(TAG, "doInBackground: Error closing stream " + e.getMessage());
                 }
             }
         }
 
-        Log.d(TAG, "HttpGetRequest result is: " + mResult);
-        return mResult;
+        return null;
     }
 
 }

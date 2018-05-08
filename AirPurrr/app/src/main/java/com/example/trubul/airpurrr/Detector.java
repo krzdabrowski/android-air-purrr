@@ -1,7 +1,6 @@
 package com.example.trubul.airpurrr;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -15,15 +14,13 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class Detector {
-
     private static final String TAG = "Detector";
     private final Activity mActivity;
-    private Context mContext;
-    private MyCallback mCallback;
+    private DetectorCallback mCallback;
     private ChangeListener listener;
 
 
-    public interface MyCallback {
+    public interface DetectorCallback {
         Double[] getPMValuesDetector();
         void setPMValuesDetector(Double[] pmValuesDetector);
     }
@@ -36,12 +33,10 @@ public class Detector {
         this.listener = listener;
     }
 
-    public Detector(Activity activity, Context context, MyCallback callback) {
+    public Detector(Activity activity, DetectorCallback callback) {
         mActivity = activity;
-        mContext = context;
         mCallback = callback;
     }
-
 
     public Double[] download() {
         String rawData;
@@ -58,7 +53,7 @@ public class Detector {
                     pmDoubles[i] = Double.parseDouble(pmStrings[i]);
                 }
                 catch (NumberFormatException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Detector: Number Format Exception " + e.getMessage());
                 }
             }
 
@@ -72,14 +67,14 @@ public class Detector {
             }
 
             // If not
-            mCallback.setPMValuesDetector(pmDoubles); // czy to jest potrzebne???
+            mCallback.setPMValuesDetector(pmDoubles);
             return pmDoubles;
         }
         catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Detector: Interrupted Exception " + e.getMessage());
         }
         catch (ExecutionException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Detector: Execution Exception " + e.getMessage());
         }
         catch (NullPointerException e) {
             Double[] empty = {0.0, 0.0};
@@ -104,13 +99,12 @@ public class Detector {
                         Log.d(TAG, "runOnUiThread flagTriStateAuto is: " + MainActivity.flagTriStateAuto);
                     }
                 });
-
             }
         };
 
         // Schedule the task to run starting now and then every 1 minute
         // It works while screen is off and when app is in background!
-        timer.schedule(minuteTask, 0, 1000*60*100);  // 1000*60*1 every 1 minute
+        timer.schedule(minuteTask, 0, 1000 * 60);  // 1000*60*1 every 1 minute
     }
 
 

@@ -1,47 +1,49 @@
 package com.example.trubul.airpurrr;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
+
 import com.mklimek.sslutilsandroid.SslUtils;
+
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
 /**
  * Created by krzysiek
- * On 3/21/18.
+ * On 3/3/18.
  */
 
-public class HttpsPostRequest {
-
+// a.k.a. old AbortableRequest
+public class HttpsPostRequest extends AsyncTask<String, Void, String> {
     private static final String TAG = "HttpsPostRequest";
+    private WeakReference<Context> contextRef;
     private static final String REQUESTED_METHOD = "POST";
-    private static final int READ_TIMEOUT = 5000;
-//    private static final int READ_TIMEOUT = 1;  // to force SSLHandshake
-    private static final int CONNECTION_TIMEOUT = 7000;
-    private static MyCallback mCallback;
+    private static final int READ_TIMEOUT = 3000;
+    private static final int CONNECTION_TIMEOUT = 1000;
 
 
-    public HttpsPostRequest(MyCallback callback) {
-        mCallback = callback;
+    public HttpsPostRequest(Context context) {
+        contextRef = new WeakReference<>(context);
     }
 
-    public interface MyCallback {
-        String getEmail();
-        String getPassword();
-    }
+    @Override
+    protected String doInBackground(String... params) {
+        Log.w(TAG, "START<-END");
+        InputStreamReader streamReader = null;
+        Context context = contextRef.get();
 
-
-    public static HttpsURLConnection setRequest(Context context) {
         try {
-
             // Create a connection
             URL url = new URL("https://89.70.85.249.nip.io:2137");
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -57,31 +59,47 @@ public class HttpsPostRequest {
             connection.setSSLSocketFactory(sc.getSocketFactory());
 
             // Set username and password
-
             String userpass = MainActivity.getEmail() + ":" + MainActivity.getPassword();
             String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
             connection.setRequestProperty("Authorization", basicAuth);
 
-            return connection;
-        }
 
-        catch (NoSuchAlgorithmException e) {
-            Log.e(TAG, "sdds " + e.getMessage());
-        }
-        catch (MalformedURLException e) {
+            // Send POST data
+            String str = "req=" + params[0];
+            byte[] outputInBytes = str.getBytes("UTF-8");
+
+            OutputStream os = connection.getOutputStream();
+            os.write(outputInBytes);
+            os.close();
+            connection.connect();
+
+            Log.w(TAG, "START->END");
+            // Create a new InputStreamReader to read output info from webserver
+            streamReader = new InputStreamReader(connection.getInputStream());
+            // Do the data-read
+            DataReader dataReader = new DataReader();
+            dataReader.getData(streamReader);
+
+        } catch (MalformedURLException e) {
             Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
-        }
-        catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-        catch(SecurityException e) {
+        } catch (ProtocolException e) {
+            Log.e(TAG, "doInBackground: Protocol Exception " + e.getMessage());
+        } catch(SecurityException e) {
             Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e(TAG, "doInBackground: No Such Algorithm Exception " + e.getMessage());
+        } finally {
+            if(streamReader != null) {
+                try {
+                    streamReader.close();
+                } catch(IOException e) {
+                    Log.e(TAG, "doInBackground: Error closing stream " + e.getMessage());
+                }
+            }
         }
 
         return null;
     }
-
 }

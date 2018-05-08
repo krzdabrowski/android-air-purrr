@@ -1,6 +1,7 @@
 package com.example.trubul.airpurrr;
 
 import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,10 +12,7 @@ import java.io.InputStreamReader;
  */
 
 public class DataReader {
-
     private static final String TAG = "DataReader";
-    private String mRawData;
-
 
     public String getData(InputStreamReader streamReader) {
         BufferedReader in = null;
@@ -30,8 +28,7 @@ public class DataReader {
                 stringBuilder.append(inputLine).append("\n");
             }
 
-            mRawData = stringBuilder.toString();
-            return mRawData;
+            return stringBuilder.toString();
         }
         catch (IOException e) {
             Log.e(TAG, "DataReader: IO Exception getting data " + e.getMessage());
@@ -45,8 +42,6 @@ public class DataReader {
                 }
             }
         }
-
         return null;
     }
-
 }

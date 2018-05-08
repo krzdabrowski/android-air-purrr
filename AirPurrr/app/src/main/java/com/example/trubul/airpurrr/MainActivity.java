@@ -15,16 +15,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 public class MainActivity extends AppCompatActivity implements
-        SwitchListener.MyCallback, SwipeListener.MyCallback, Detector.MyCallback, API.MyCallback {
+        SwitchListener.SwitchCallback, SwipeListener.SwipeCallback, Detector.DetectorCallback, API.APICallback {
 
     private static final String TAG = "MainActivity";
-//    public static final String DETECTOR_URL_LOCAL = "http://192.168.0.248/pm_data.txt";
     public static final String DETECTOR_URL = "http://89.70.85.249:2138/pm_data.txt";
-
     public static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
-//    public static boolean flagLocalRemote = true;  // false = LocalMode, true = RemoteMode
     public static int flagTriStateAuto = 0;
 
     @BindView(R.id.switch_auto) Switch switchAuto;
@@ -37,8 +33,10 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.PM10_mode) TextView pm10Mode;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
+    private static Bundle emailAndPassword;
+
     // objects of DOWNLOADING PM data
-    private Detector detector = new Detector(this, this, this);
+    private Detector detector = new Detector(this, this);
     private API api = new API(this);
 
     // downloaded PM values
@@ -50,14 +48,11 @@ public class MainActivity extends AppCompatActivity implements
     AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
 
-    private static SwitchListener autoListener;
-    private static SwitchListener manualListener;
-
-    private static Bundle emailAndPassword;
+    private SwitchListener autoListener;
+    private SwitchListener manualListener;
 
 
-
-    //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
+    /////////////////////////////////////  GETTERS & SETTERS  //////////////////////////////////////
     @Override
     public void setSwitchAuto(boolean state) {
         switchAuto.setChecked(state);
@@ -77,29 +72,18 @@ public class MainActivity extends AppCompatActivity implements
             }
     }); }
 
-    public void setPMValuesDetector(Double[] pmValuesDetector) {
-        this.pmValuesDetector = pmValuesDetector;
-    }
-
+    @Override
     public void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI) {
         this.pmValuesAndDatesAPI = pmValuesAndDatesAPI;
     }
 
-    //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
+    @Override
+    public void setPMValuesDetector(Double[] pmValuesDetector) {
+        this.pmValuesDetector = pmValuesDetector;
+    }
+
     @Override
     public Double[] getPMValuesDetector() { return pmValuesDetector; }
-
-
-    public static SwitchListener getAutoListener() {
-        return autoListener;
-    }
-
-    public static SwitchListener getManualListener() {
-        return manualListener;
-    }
-
-
-
 
     // Get email and password from LoginActivity
     static String getEmail() {
@@ -124,14 +108,14 @@ public class MainActivity extends AppCompatActivity implements
     // Update UI
     private void updateDetector() {
         flagDetectorAPI = false;
-        showResults(pmValuesDetector, null);
+        setUI(pmValuesDetector, null);
     }
 
     private void updateAPI() {
         flagDetectorAPI = true;
-        Double[] pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
-        String[] pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
-        showResults(pmValuesAPI, pmDatesAPI);
+        pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
+        pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+        setUI(pmValuesAPI, pmDatesAPI);
     }
 
     private void updateAutoMode() {
@@ -385,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements
         pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
 
         // Default: show PM values from detector
-        showResults(pmValuesDetector, null);
+        setUI(pmValuesDetector, null);
 
 <<<<<<< HEAD
 
@@ -394,9 +378,9 @@ public class MainActivity extends AppCompatActivity implements
 =======
 >>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
         /////////////////////// LISTENERS ///////////////////////
-        autoListener = new SwitchListener(this, this, this, SwitchListener.WorkingMode.AUTO);
+        autoListener = new SwitchListener(this, this, SwitchListener.WorkingMode.AUTO);
         switchAuto.setOnCheckedChangeListener(autoListener);
-        manualListener = new SwitchListener(this, this, this, SwitchListener.WorkingMode.MANUAL);
+        manualListener = new SwitchListener(this, this, SwitchListener.WorkingMode.MANUAL);
         switchManual.setOnCheckedChangeListener(manualListener);
         mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
 
@@ -421,17 +405,16 @@ public class MainActivity extends AppCompatActivity implements
                 updateAutoMode();
 
                 // Control the fan
-                autoListener.autoMode(autoListener.isStateAuto);
+                autoListener.autoMode(autoListener.stateAuto);
             }
         });
 
-        // AlertDialog ChangeListener (get new threshold instantly)
         alertDialog.setListener(new AlertDialogForAuto.ChangeListener() {
             @Override
             public void onChange() {
                 Log.d(TAG, "onChange alertDialog: ZMIANA WARTOSCI");
                 // Check if threshold has been set
-                int getThreshold = AlertDialogForAuto.getThreshold();
+                int getThreshold = alertDialog.getThreshold();
 
                 if (getThreshold != 0) {
                     threshold = getThreshold;
@@ -442,22 +425,12 @@ public class MainActivity extends AppCompatActivity implements
                 updateAutoMode();
             }
         });
-
     }
 
-
-    public void showResults(Double[] pmValues, String[] pmDates) {
+    public void setUI(Double[] pmValues, String[] pmDates) {
         TextView textView;
 
-        // Initial setting of flagTriState, default=100%
-//            if (pmValues[0] > threshold || pmValues[1] > threshold) {
-//                flagTriStateAuto = 2;
-//            } else {
-//                flagTriStateAuto = 1;
-//            }
-//        updateAutoMode();
-
-        // Present results
+        // Set TextView colors
         for(int i=0; i<2; i++) {
             // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
@@ -481,21 +454,21 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
 
-        // Set PM values in TextView
+        // Set TextView PM values
         pm25Data.setText(getString(R.string.pm25_data_perc, pmValues[0]));
         pm10Data.setText(getString(R.string.pm10_data_perc, pmValues[1]));
         pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0] / 4));
         pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1] / 2));
 
-        // Set mode in TextView
+        // Set TextView mode
         if (!flagDetectorAPI) {  // if detector
-            pm25Mode.setText("W mieszkaniu");
-            pm10Mode.setText("W mieszkaniu");
+            pm25Mode.setText(R.string.w_mieszkaniu);
+            pm10Mode.setText(R.string.w_mieszkaniu);
         } else {  // if API
             if (pmDates != null) {
                 pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
-                pm25Mode.setText("API z " + pmDatesAPI[0]);
-                pm10Mode.setText("API z " + pmDatesAPI[1]);
+                pm25Mode.setText(getString(R.string.api_z, pmDatesAPI[0]));
+                pm10Mode.setText(getString(R.string.api_z, pmDatesAPI[1]));
             }
         }
     }

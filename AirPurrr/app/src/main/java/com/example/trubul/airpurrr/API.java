@@ -1,19 +1,13 @@
 package com.example.trubul.airpurrr;
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -22,24 +16,22 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class API {
-
     private static final String TAG = "API";
-//    private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
-//    private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
-    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
-    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
+    private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
+    private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
+//    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
+//    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
 
-    private MyCallback mCallback;
+    private APICallback mCallback;
 
-    public interface MyCallback {
+
+    public interface APICallback {
         void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI);
         }
 
-    public API(MyCallback callback) {
+    public API(APICallback callback) {
         mCallback = callback;
     }
-
-
 
     public List<Object> download() {
         String pmDataAPI;
@@ -78,7 +70,6 @@ public class API {
                         }
                     }
                 }
-
             }
 
             // Convert string to Double
