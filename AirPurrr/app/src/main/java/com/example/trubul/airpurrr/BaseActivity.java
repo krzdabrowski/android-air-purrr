@@ -17,7 +17,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setMessage(getString(R.string.login_authenticating));
             mProgressDialog.setIndeterminate(true);
         }
 

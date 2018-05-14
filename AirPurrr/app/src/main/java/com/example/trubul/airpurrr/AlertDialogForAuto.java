@@ -46,7 +46,6 @@ class AlertDialogForAuto {
         TextView title = new TextView(mContext);
         final EditText editText = new EditText(mContext);
 
-        // Configuration of AlertDialog
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setTextSize(32);
         editText.post(new Runnable() {  // show keyboard automatically
@@ -58,7 +57,7 @@ class AlertDialogForAuto {
             }
         });
 
-        title.setText(R.string.podaj_wartosc_w_procentach);
+        title.setText(R.string.menu_enter_a_value);
         title.setPadding(16, 16, 16, 16);
         title.setGravity(Gravity.CENTER);
         title.setTextSize(24);
@@ -66,13 +65,13 @@ class AlertDialogForAuto {
         builder.setCustomTitle(title);
         builder.setCancelable(true);  // with BACK button
         builder.setPositiveButton(
-                R.string.OK,
+                R.string.menu_ok,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
         builder.setNegativeButton(
-                R.string.anuluj,
+                R.string.menu_cancel,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -105,7 +104,7 @@ class AlertDialogForAuto {
         }
         else {
             isCorrectInput = false;
-            Toast.makeText(mContext, "Wprowadź poprawną wartość!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.menu_enter_the_correct_value, Toast.LENGTH_SHORT).show();
         }
     }
 

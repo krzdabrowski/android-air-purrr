@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="schemas.android.com/tools"
-      tools:context="com.example.trubul.airpurrr.MainActivity" >
+    xmlns:tools="schemas.android.com/tools"
+    tools:context="com.example.trubul.airpurrr.MainActivity">
 
 
     <item
         android:id="@+id/set_auto_threshold"
-        android:title="@string/ustaw_prog_trybu_automatycznego" />
+        android:title="@string/menu_set_auto_threshold" />
 
     <item
         android:id="@+id/refresh_detector"
-        android:title="@string/odswiez_dane_z_miernika" />
+        android:title="@string/menu_refresh_data_from_detector" />
     <item
         android:id="@+id/refresh_api"
-        android:title="@string/odswiez_dane_z_api" />
+        android:title="@string/menu_refresh_data_from_api" />
 
 </menu>

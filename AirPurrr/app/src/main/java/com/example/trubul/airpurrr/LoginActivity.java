@@ -50,14 +50,14 @@ public class LoginActivity extends BaseActivity {
         boolean valid = true;
 
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError("Wymagane");
+            mEmailField.setError(getString(R.string.login_required));
             valid = false;
         } else {
             mEmailField.setError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError("Wymagane");
+            mPasswordField.setError(getString(R.string.login_required));
             valid = false;
         } else {
             mPasswordField.setError(null);
@@ -81,13 +81,13 @@ public class LoginActivity extends BaseActivity {
                             Log.d(TAG, "signInWithEmail:success");
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("email", getEmail());
-                            intent.putExtra("password", getPassword());
+                            intent.putExtra("login_email", getEmail());
+                            intent.putExtra("login_password", getPassword());
                             startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Błąd uwierzytelnienia!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, R.string.login_auth_error, Toast.LENGTH_SHORT).show();
                         }
 
                         hideProgressDialog();

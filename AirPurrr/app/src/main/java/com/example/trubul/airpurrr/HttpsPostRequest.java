@@ -39,7 +39,7 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        Log.w(TAG, "START<-END");
+//        Log.w(TAG, "START<-END");
         InputStreamReader streamReader = null;
         Context context = contextRef.get();
 
@@ -58,7 +58,7 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
             SSLContext sc = SslUtils.getSslContextForCertificateFile(context, "apache-selfsigned-nipio.cer");
             connection.setSSLSocketFactory(sc.getSocketFactory());
 
-            // Set username and password
+            // Set username and login_password
             String userpass = MainActivity.getEmail() + ":" + MainActivity.getPassword();
             String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
             connection.setRequestProperty("Authorization", basicAuth);
@@ -73,7 +73,7 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
             os.close();
             connection.connect();
 
-            Log.w(TAG, "START->END");
+//            Log.w(TAG, "START->END");
             // Create a new InputStreamReader to read output info from webserver
             streamReader = new InputStreamReader(connection.getInputStream());
             // Do the data-read

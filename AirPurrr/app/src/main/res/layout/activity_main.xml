@@ -27,7 +27,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
-            android:text="@string/tryb_automatyczny"
+            android:text="@string/UI_auto_mode"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="40dp"
-            android:text="@string/tryb_manualny"
+            android:text="@string/UI_manual_mode"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintStart_toStartOf="@+id/auto_mode"
             app:layout_constraintTop_toBottomOf="@+id/auto_mode" />
@@ -89,7 +89,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:elevation="2dp"
-                    android:text="@string/pm25"
+                    android:text="@string/UI_pm25"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="@+id/PM25_data"
                     app:layout_constraintTop_toTopOf="@+id/PM25_data" />
@@ -100,7 +100,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:elevation="2dp"
-                    android:text="@string/pm25_mode"
                     android:textSize="16sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/PM25"
                     app:layout_constraintEnd_toEndOf="@+id/PM25_data" />
@@ -130,7 +129,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:elevation="2dp"
-                    android:text="@string/pm25_textholder"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/PM25_data"
@@ -145,7 +143,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:elevation="2dp"
-                    android:text="@string/pm10"
+                    android:text="@string/UI_pm10"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="@+id/PM10_data"
                     app:layout_constraintTop_toTopOf="@+id/PM10_data" />
@@ -176,7 +174,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:elevation="2dp"
-                    android:text="@string/pm10_mode"
                     android:textSize="16sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/PM10"
                     app:layout_constraintEnd_toEndOf="@+id/PM10_data" />
@@ -187,7 +184,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:elevation="2dp"
-                    android:text="@string/pm10_textholder"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="@+id/PM10_data"

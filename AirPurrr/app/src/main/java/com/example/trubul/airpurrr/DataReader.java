@@ -31,14 +31,14 @@ class DataReader {
             return stringBuilder.toString();
         }
         catch (IOException e) {
-            Log.e(TAG, "DataReader: IO Exception getting data " + e.getMessage());
+            Log.e(TAG, "getData: IO Exception getting data " + e.getMessage());
         }
         finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    Log.e(TAG, "DataReader: Error closing stream " + e.getMessage());
+                    Log.e(TAG, "getData: Error closing stream " + e.getMessage());
                 }
             }
         }

@@ -85,13 +85,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public Double[] getPMValuesDetector() { return pmValuesDetector; }
 
-    // Get email and password from LoginActivity
+    // Get login_email and login_password from LoginActivity
     static String getEmail() {
-        return emailAndPassword.getString("email");
+        return emailAndPassword.getString("login_email");
     }
 
     static String getPassword() {
-        return emailAndPassword.getString("password");
+        return emailAndPassword.getString("login_password");
     }
 
     // Download new data
@@ -398,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements
         detector.setListener(new Detector.ChangeListener() {
             @Override
             public void onChange() {
-                Log.d(TAG, "onChange detector: ZMIANA WARTOSCI");
+                Log.d(TAG, "onChange detector: CHANGE");
                 updateDetector();
 
                 // Update auto mode flags = default threshold is 100%
@@ -412,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements
         alertDialog.setListener(new AlertDialogForAuto.ChangeListener() {
             @Override
             public void onChange() {
-                Log.d(TAG, "onChange alertDialog: ZMIANA WARTOSCI");
+                Log.d(TAG, "onChange alertDialog: CHANGE");
                 // Check if threshold has been set
                 int getThreshold = alertDialog.getThreshold();
 
@@ -455,20 +455,20 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Set TextView PM values
-        pm25Data.setText(getString(R.string.pm25_data_perc, pmValues[0]));
-        pm10Data.setText(getString(R.string.pm10_data_perc, pmValues[1]));
-        pm25DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[0] / 4));
-        pm10DataUgm3.setText(getString(R.string.pm25_data_ugm3, pmValues[1] / 2));
+        pm25Data.setText(getString(R.string.UI_data_perc, pmValues[0]));
+        pm10Data.setText(getString(R.string.UI_data_perc, pmValues[1]));
+        pm25DataUgm3.setText(getString(R.string.UI_data_ugm3, pmValues[0] / 4));
+        pm10DataUgm3.setText(getString(R.string.UI_data_ugm3, pmValues[1] / 2));
 
         // Set TextView mode
         if (!flagDetectorAPI) {  // if detector
-            pm25Mode.setText(R.string.w_mieszkaniu);
-            pm10Mode.setText(R.string.w_mieszkaniu);
+            pm25Mode.setText(R.string.UI_indoors);
+            pm10Mode.setText(R.string.UI_indoors);
         } else {  // if API
             if (pmDates != null) {
                 pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
-                pm25Mode.setText(getString(R.string.api_z, pmDatesAPI[0]));
-                pm10Mode.setText(getString(R.string.api_z, pmDatesAPI[1]));
+                pm25Mode.setText(getString(R.string.UI_api, pmDatesAPI[0]));
+                pm10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
             }
         }
     }

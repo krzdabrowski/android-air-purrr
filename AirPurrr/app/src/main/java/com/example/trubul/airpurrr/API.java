@@ -109,7 +109,7 @@ class API {
         }
         catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, "onDownloadComplete: Error processing JSON data " + e.getMessage());
+            Log.e(TAG, "download: Error processing JSON data " + e.getMessage());
         }
 
         return null;

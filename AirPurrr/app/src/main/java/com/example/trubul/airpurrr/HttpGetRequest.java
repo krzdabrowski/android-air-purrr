@@ -24,7 +24,7 @@ class HttpGetRequest extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        Log.d(TAG, "START");
+//        Log.d(TAG, "START");
         HttpURLConnection connection = null;
         InputStreamReader streamReader = null;
 

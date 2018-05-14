@@ -52,7 +52,7 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             res = getRequest.execute(WORKSTATE_URL).get();
 
             if (res.equals("WorkStates.Sleeping\n")) {
-                Toast.makeText(mContext, "Przetwarzam żądanie...", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, R.string.switch_processing_the_request, Toast.LENGTH_LONG).show();
                 if (state) {  // send request if it was switch -> ON
                     switchOn.execute(mMode + "=1");  // it will be POST: req = params[0]
 
@@ -60,10 +60,10 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                     switchOff.execute(mMode + "=0");
                 }
             } else if (res.equals("WorkStates.Measuring\n")) {
-                Toast.makeText(mContext, "Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, R.string.switch_cannot_process, Toast.LENGTH_LONG).show();
                 keepState();
             } else {
-                Toast.makeText(mContext, "Coś się popsuło i nie było mnie słychać", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, R.string.switch_error_detector + "NoWorkStates)", Toast.LENGTH_LONG).show();
                 keepState();
             }
 
@@ -72,7 +72,7 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
-            Toast.makeText(mContext, "Serwer nie odpowiada, spróbuj ponownie później", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getString(R.string.switch_error_server) + "NullPointer)", Toast.LENGTH_LONG).show();
             keepState();
         }
     }
@@ -129,12 +129,10 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             } else if (MainActivity.flagTriStateAuto == 1 && !isWorking) {
                 // It does not exceed the threshold
             } else if (MainActivity.flagTriStateAuto == 0) {  // if null
-                Toast.makeText(mContext, "Serwer nie odpowiada, spróbuj ponownie później (flagTriState = 0)", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, R.string.switch_error_server, Toast.LENGTH_LONG).show();
                 mCallback.setSwitchAuto(false);
             }
-        }
-
-        else {
+        } else {
             stateAuto = false;
             if (isWorking) {
                 isWorking = false;
