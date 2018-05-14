@@ -35,11 +35,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private static Bundle emailAndPassword;
 
-    // objects of DOWNLOADING PM data
     private Detector detector = new Detector(this, this);
     private API api = new API(this);
 
-    // downloaded PM values
+    // Downloaded PM values
     private Double[] pmValuesDetector;
     private List<Object> pmValuesAndDatesAPI;
     private Double[] pmValuesAPI;
