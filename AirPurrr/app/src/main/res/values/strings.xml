@@ -7,6 +7,7 @@
     <string name="login_authenticating">Authenticating…</string>
     <string name="login_required">Required</string>
     <string name="login_auth_error">Authentication error!</string>
+    <string name="login_internet_error">No Internet connection!</string>
 
     <string name="UI_auto_mode">Automatic mode</string>
     <string name="UI_manual_mode">Manual mode</string>

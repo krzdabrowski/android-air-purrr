@@ -6,6 +6,7 @@
     <string name="login_password">Hasło</string>
     <string name="login_log_in">Zaloguj</string>
     <string name="login_authenticating">Ładowanie…</string>
+    <string name="login_internet_error">Brak połączenia z Internetem!</string>
     <string name="UI_indoors">W mieszkaniu</string>
     <string name="UI_api">API z %s</string>
     <string name="menu_set_auto_threshold">Ustaw próg trybu automatycznego</string>

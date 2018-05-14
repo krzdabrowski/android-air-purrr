@@ -1,6 +1,9 @@
 package com.example.trubul.airpurrr;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -50,17 +53,30 @@ public class LoginActivity extends BaseActivity {
         boolean valid = true;
 
         if (TextUtils.isEmpty(email)) {
-            mEmailField.setError(getString(R.string.login_required));
             valid = false;
+            mEmailField.setError(getString(R.string.login_required));
         } else {
             mEmailField.setError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
-            mPasswordField.setError(getString(R.string.login_required));
             valid = false;
+            mPasswordField.setError(getString(R.string.login_required));
         } else {
             mPasswordField.setError(null);
+        }
+
+        return valid;
+    }
+
+    private boolean validateInternet() {
+        boolean valid = true;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo == null || !networkInfo.isConnected() || (networkInfo.getType() != ConnectivityManager.TYPE_WIFI && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
+            valid = false;
+            Toast.makeText(this, R.string.login_internet_error, Toast.LENGTH_SHORT).show();
         }
 
         return valid;
@@ -70,28 +86,31 @@ public class LoginActivity extends BaseActivity {
         if (!validateForm(email, password)) {
             return;
         }
-        showProgressDialog();
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, might implement update UI accordingly with FirebaseUser
-                            Log.d(TAG, "signInWithEmail:success");
+        if (validateInternet()) {
+            showProgressDialog();
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("login_email", getEmail());
-                            intent.putExtra("login_password", getPassword());
-                            startActivity(intent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, R.string.login_auth_error, Toast.LENGTH_SHORT).show();
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, might implement update UI accordingly with FirebaseUser
+                                Log.d(TAG, "signInWithEmail:success");
+
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("login_email", getEmail());
+                                intent.putExtra("login_password", getPassword());
+                                startActivity(intent);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(LoginActivity.this, R.string.login_auth_error, Toast.LENGTH_SHORT).show();
+                            }
+
+                            hideProgressDialog();
                         }
-
-                        hideProgressDialog();
-                    }
-                });
+                    });
+        }
     }
 }
