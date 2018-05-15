@@ -15,11 +15,6 @@
         android:layout_height="match_parent"
         tools:context="com.example.trubul.airpurrr.MainActivity">
 
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
         <TextView
             android:id="@+id/auto_mode"
             android:layout_width="wrap_content"
@@ -29,6 +24,7 @@
             android:layout_marginTop="32dp"
             android:text="@string/UI_auto_mode"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="@dimen/text_size_switch"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,6 +47,7 @@
             android:layout_marginTop="40dp"
             android:text="@string/UI_manual_mode"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="@dimen/text_size_switch"
             app:layout_constraintStart_toStartOf="@+id/auto_mode"
             app:layout_constraintTop_toBottomOf="@+id/auto_mode" />
 
@@ -78,145 +75,142 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/switch_manual">
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/PM25"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:elevation="2dp"
-                    android:text="@string/UI_pm25"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="@+id/PM25_data"
-                    app:layout_constraintTop_toTopOf="@+id/PM25_data" />
-
-                <TextView
-                    android:id="@+id/PM25_mode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:elevation="2dp"
-                    android:textSize="16sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/PM25"
-                    app:layout_constraintEnd_toEndOf="@+id/PM25_data" />
-
-                <TextView
-                    android:id="@+id/PM25_data"
-                    android:layout_width="0dp"
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/default_color"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:elevation="1dp"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="96sp"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline_mid_card"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="40%" />
+                    android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/PM25_data_ugm3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:elevation="2dp"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/PM25_data"
-                    app:layout_constraintEnd_toEndOf="@+id/PM25_data"
-                    app:layout_constraintStart_toStartOf="@+id/PM25_data"
-                    tools:text="(10.0)" />
+                    <TextView
+                        android:id="@+id/PM25"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:elevation="2dp"
+                        android:text="@string/UI_pm25"
+                        android:textSize="@dimen/text_size_pm_mode"
+                        app:layout_constraintStart_toStartOf="@+id/PM25_data"
+                        app:layout_constraintTop_toTopOf="@+id/PM25_data" />
 
-                <TextView
-                    android:id="@+id/PM10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:elevation="2dp"
-                    android:text="@string/UI_pm10"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="@+id/PM10_data"
-                    app:layout_constraintTop_toTopOf="@+id/PM10_data" />
+                    <TextView
+                        android:id="@+id/PM25_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:elevation="2dp"
+                        android:text="@string/UI_indoors"
+                        android:textSize="@dimen/text_size_pm_mode"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/PM25"
+                        app:layout_constraintEnd_toEndOf="@+id/PM25_data" />
 
-                <TextView
-                    android:id="@+id/PM10_data"
-                    android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/PM25_data"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/default_color"
+                        android:elevation="1dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:textAlignment="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="@dimen/text_size_pm_data"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="40%" />
+
+                    <TextView
+                        android:id="@+id/PM25_data_ugm3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:elevation="2dp"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/text_size_pm_data_ugm3"
+                        app:layout_constraintBottom_toBottomOf="@+id/PM25_data"
+                        app:layout_constraintEnd_toEndOf="@+id/PM25_data"
+                        app:layout_constraintStart_toStartOf="@+id/PM25_data"
+                        tools:text="(10.0)" />
+
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/default_color"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:elevation="1dp"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="96sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/guideline_mid_card"
-                    tools:text="30%" />
+                    android:layout_weight="1">
 
+                    <TextView
+                        android:id="@+id/PM10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:elevation="2dp"
+                        android:text="@string/UI_pm10"
+                        android:textSize="@dimen/text_size_pm_mode"
+                        app:layout_constraintStart_toStartOf="@+id/PM10_data"
+                        app:layout_constraintTop_toTopOf="@+id/PM10_data" />
 
-                <TextView
-                    android:id="@+id/PM10_mode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:elevation="2dp"
-                    android:textSize="16sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/PM10"
-                    app:layout_constraintEnd_toEndOf="@+id/PM10_data" />
+                    <TextView
+                        android:id="@+id/PM10_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:elevation="2dp"
+                        android:text="@string/UI_indoors"
+                        android:textSize="@dimen/text_size_pm_mode"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/PM10"
+                        app:layout_constraintEnd_toEndOf="@+id/PM10_data" />
 
-                <TextView
-                    android:id="@+id/PM10_data_ugm3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:elevation="2dp"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/PM10_data"
-                    app:layout_constraintEnd_toEndOf="@+id/PM10_data"
-                    app:layout_constraintStart_toStartOf="@+id/PM10_data"
-                    tools:text="(15.0)" />
+                    <TextView
+                        android:id="@+id/PM10_data"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/default_color"
+                        android:elevation="1dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:textAlignment="center"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="@dimen/text_size_pm_data"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="30%" />
 
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline_mid_card"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_end="205dp" />
-            </android.support.constraint.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/PM10_data_ugm3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:elevation="2dp"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/text_size_pm_data_ugm3"
+                        app:layout_constraintBottom_toBottomOf="@+id/PM10_data"
+                        app:layout_constraintEnd_toEndOf="@+id/PM10_data"
+                        app:layout_constraintStart_toStartOf="@+id/PM10_data"
+                        tools:text="(15.0)" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </LinearLayout>
 
 
         </android.support.v7.widget.CardView>
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline_top_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="171dp" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline_bottom_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="627dp" />
 
 
     </android.support.constraint.ConstraintLayout>
