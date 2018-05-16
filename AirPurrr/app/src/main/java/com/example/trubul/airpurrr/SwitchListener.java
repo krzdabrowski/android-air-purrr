@@ -4,6 +4,8 @@ import android.content.Context;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by krzysiek
  * On 3/3/18.
@@ -39,54 +41,6 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         mMode = mode;
     }
 
-    private void controlRequests(boolean state) {
-        String res;
-
-        HttpsPostRequest switchOn = new HttpsPostRequest(mContext);
-        HttpsPostRequest switchOff = new HttpsPostRequest(mContext);
-
-        try {
-            HttpGetRequest getRequest = new HttpGetRequest();
-//            res = getRequest.execute(WORKSTATE_URL).get();
-            res = null;
-
-            if (res.equals("WorkStates.Sleeping\n")) {
-                Toast.makeText(mContext, R.string.switch_processing_the_request, Toast.LENGTH_LONG).show();
-                if (state) {  // send request if it was switch -> ON
-                    switchOn.execute(mMode + "=1");  // it will be POST: req = params[0]
-
-                } else {
-                    switchOff.execute(mMode + "=0");
-                }
-            } else if (res.equals("WorkStates.Measuring\n")) {
-                Toast.makeText(mContext, R.string.switch_cannot_process, Toast.LENGTH_LONG).show();
-                keepState();
-            } else {
-                Toast.makeText(mContext, R.string.switch_error_detector + "NoWorkStates)", Toast.LENGTH_LONG).show();
-                keepState();
-            }
-
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-        } catch (NullPointerException e) {
-            Toast.makeText(mContext, mContext.getString(R.string.switch_error_server) + "NullPointer)", Toast.LENGTH_LONG).show();
-            keepState();
-        }
-    }
-
-    private void keepState() {
-        if (isLastUseAuto) {
-            stateAuto = !stateAuto;
-            mCallback.setSwitchAuto(stateAuto);
-        } else {
-            stateManual = !stateManual;
-            mCallback.setSwitchManual(stateManual);
-        }
-        isWorking = !isWorking;
-    }
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         // Automatic mode - turn on the fan if any of PM2.5/10 will be higher than threshold (default: 100%)
@@ -109,6 +63,51 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 controlRequests(stateManual);
             }
         }
+    }
+
+    private void controlRequests(boolean state) {
+        String workStates;
+        HttpsPostRequest switchOn = new HttpsPostRequest(mContext);
+        HttpsPostRequest switchOff = new HttpsPostRequest(mContext);
+
+        try {
+            HttpGetRequest getRequest = new HttpGetRequest();
+            workStates = getRequest.execute(WORKSTATE_URL).get();
+
+            if (workStates.equals("WorkStates.Sleeping\n")) {
+                Toast.makeText(mContext, R.string.switch_processing_the_request, Toast.LENGTH_LONG).show();
+                if (state) {  // send request if it was switch -> ON
+                    switchOn.execute(mMode + "=1");  // it will be POST: req = params[0]
+
+                } else {
+                    switchOff.execute(mMode + "=0");
+                }
+            } else if (workStates.equals("WorkStates.Measuring\n")) {
+                Toast.makeText(mContext, R.string.switch_cannot_process, Toast.LENGTH_LONG).show();
+                keepState();
+            } else {
+                Toast.makeText(mContext, R.string.switch_error_detector + "NoWorkStates)", Toast.LENGTH_LONG).show();
+                keepState();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            Toast.makeText(mContext, mContext.getString(R.string.switch_error_server) + "NullPointer)", Toast.LENGTH_LONG).show();
+            keepState();
+        }
+    }
+
+    private void keepState() {
+        if (isLastUseAuto) {
+            stateAuto = !stateAuto;
+            mCallback.setSwitchAuto(stateAuto);
+        } else {
+            stateManual = !stateManual;
+            mCallback.setSwitchManual(stateManual);
+        }
+        isWorking = !isWorking;
     }
 
     void autoMode(boolean isChecked) {

@@ -29,8 +29,8 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
     private static final String TAG = "HttpsPostRequest";
     private WeakReference<Context> contextRef;
     private static final String REQUESTED_METHOD = "POST";
-    private static final int READ_TIMEOUT = 3000;
-    private static final int CONNECTION_TIMEOUT = 1000;
+    private static final int READ_TIMEOUT = 5000;
+    private static final int CONNECTION_TIMEOUT = 3000;
 
 
     HttpsPostRequest(Context context) {
@@ -62,7 +62,6 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
             String userpass = MainActivity.getEmail() + ":" + MainActivity.getPassword();
             String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
             connection.setRequestProperty("Authorization", basicAuth);
-
 
             // Send POST data
             String str = "req=" + params[0];

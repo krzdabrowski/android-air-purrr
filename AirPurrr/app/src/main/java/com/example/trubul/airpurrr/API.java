@@ -43,9 +43,9 @@ private static APICallback mCallback;
                 HttpGetRequest getRequest = new HttpGetRequest();
 
                 if (i == 0) {
-                    pmDataAPI = getRequest.makeHttpRequest(PM25_API_URL);
+                    pmDataAPI = getRequest.doHttpRequest(PM25_API_URL);
                 } else {
-                    pmDataAPI = getRequest.makeHttpRequest(PM10_API_URL);
+                    pmDataAPI = getRequest.doHttpRequest(PM10_API_URL);
                 }
 
                 JSONObject jsonData = new JSONObject(pmDataAPI);  // return python's {key: value} of the provided link
@@ -89,14 +89,7 @@ private static APICallback mCallback;
             mCallback.setPMValuesAndDatesAPI(pmDoublesDates);
             return pmDoublesDates;
 
-        }
-//        catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             List<Object> empty = new ArrayList<>(2);
             Double[] emptyDouble = new Double[]{0.0, 0.0};
             String[] emptyString = new String[]{"", ""};
@@ -105,8 +98,7 @@ private static APICallback mCallback;
 
             mCallback.setPMValuesAndDatesAPI(empty);
             return empty;
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "download: Error processing JSON data " + e.getMessage());
         }

@@ -1,6 +1,5 @@
 package com.example.trubul.airpurrr;
 
-import android.app.Activity;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -12,7 +11,6 @@ import java.util.Arrays;
 
 class Detector {
     private static final String TAG = "Detector";
-    private final Activity mActivity;  // to make auto-download working
     private static DetectorCallback mCallback;
     private static ChangeListener listener;
 
@@ -30,8 +28,7 @@ class Detector {
         this.listener = listener;
     }
 
-    Detector(Activity activity, DetectorCallback callback) {
-        mActivity = activity;
+    Detector(DetectorCallback callback) {
         mCallback = callback;
     }
 
@@ -40,7 +37,7 @@ class Detector {
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
-            rawData = getRequest.makeHttpRequest(MainActivity.DETECTOR_URL);
+            rawData = getRequest.doHttpRequest(MainActivity.DETECTOR_URL);
 
             String[] pmStrings = rawData.split("\n");
             Double[] pmDoubles = new Double[pmStrings.length];
@@ -57,18 +54,20 @@ class Detector {
             // Convert results to percentages (to ease handling with auto mode)
             pmDoubles = convertToPercent(pmDoubles);
 
+            Log.d(TAG, "download: PMDOUBLES ARE " + Arrays.toString(pmDoubles));
+            Log.d(TAG, "download: GETPMVALUESDETECTOR ARE " + Arrays.toString(mCallback.getPMValuesDetector()));
+
             // If values have changed
-//            if(!Arrays.equals(pmDoubles, mCallback.getPMValuesDetector())) {
-//                mCallback.setPMValuesDetector(pmDoubles);
-//                listener.onChange();
-//            }
+            if (!Arrays.equals(pmDoubles, mCallback.getPMValuesDetector())) {
+                mCallback.setPMValuesDetector(pmDoubles);
+                listener.onChange();
+            }
 
             // If not
             mCallback.setPMValuesDetector(pmDoubles);
-            Log.d(TAG, "download: PMDOUBLES ARE" + Arrays.toString(pmDoubles));
+
             return pmDoubles;
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             Double[] empty = {0.0, 0.0};
             mCallback.setPMValuesDetector(empty);
             return empty;

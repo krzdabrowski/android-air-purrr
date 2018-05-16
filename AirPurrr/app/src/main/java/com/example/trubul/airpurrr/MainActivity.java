@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private static Bundle emailAndPassword;
 
-    private Detector detector = new Detector(this, this);
-    private API api = new API(this);
+    private Detector detector = new Detector(this);
+    private API api = new API(this);  // must-be instance to make mCallback work
 
     // Downloaded PM values
     private Double[] pmValuesDetector;
@@ -141,27 +142,23 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
                     @Override
                     public void run() {
                         getLoaderManager().initLoader(LOADER_DETECTOR, null, MainActivity.this).forceLoad();
-                        Log.d(TAG, "percentages are: " + java.util.Arrays.toString(getPMValuesDetector()));
+                        Log.d(TAG, "percentages are: " + Arrays.toString(getPMValuesDetector()));
                         Log.d(TAG, "runOnUiThread flagTriStateAuto is: " + flagTriStateAuto);
                     }
                 });
             }
         };
 
-        // Schedule the task to run starting now and then every 1 minute
-        // It works while screen is off and when app is in background!
         timer.schedule(minuteTask, 0, 1000 * 60);  // 1000*60*1 every 1 minute
     }
 
     //////////////////////////////////////////  ONCREATE  //////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();
-        getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();
         ButterKnife.bind(this);
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 <<<<<<< HEAD
@@ -395,9 +392,16 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         detector.downloadAutomatically();  // download detector every 1 minute
 =======
 //        // Download PM values automatically from detector
+=======
+        emailAndPassword = getIntent().getExtras();  // get Email and Password from LoginActivity
+
+        getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for Detector
+        getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();  // Loader for API
+>>>>>>> f93a4fa... Implement AsyncTaskLoaders (part #2)
         automaticDownload();  // download Detector values every 1 minute
 >>>>>>> 8ff772a... Implement AsyncTaskLoaders (part #1)
 
+<<<<<<< HEAD
 
         // Default: show PM values from detector
 //        setUI(pmValuesDetector, null);
@@ -408,6 +412,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
 =======
 >>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
+=======
+>>>>>>> f93a4fa... Implement AsyncTaskLoaders (part #2)
         /////////////////////// LISTENERS ///////////////////////
         autoListener = new SwitchListener(this, this, SwitchListener.WorkingMode.AUTO);
         switchAuto.setOnCheckedChangeListener(autoListener);
@@ -429,34 +435,27 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         pm10Data.setOnClickListener(textViewListener);
 
         // ChangeListeners
-//        detector.setListener(new Detector.ChangeListener() {
-//            @Override
-//            public void onChange() {
-//                Log.d(TAG, "onChange detector: CHANGE");
-//                updateDetector();
-//
-//                // Update auto mode flags = default threshold is 100%
-//                updateAutoMode();
-//
-//                // Control the fan
-//                autoListener.autoMode(autoListener.stateAuto);
-//            }
-//        });
+        detector.setListener(new Detector.ChangeListener() {
+            @Override
+            public void onChange() {
+                Log.d(TAG, "onChange detector: CHANGE");
+
+                updateAutoMode();  // update auto mode flags = default threshold is 100%
+                autoListener.autoMode(autoListener.stateAuto);  // control the fan
+            }
+        });
 
         alertDialog.setListener(new AlertDialogForAuto.ChangeListener() {
             @Override
             public void onChange() {
                 Log.d(TAG, "onChange alertDialog: CHANGE");
-                // Check if threshold has been set
                 int getThreshold = alertDialog.getThreshold();
-
                 if (getThreshold != 0) {
                     threshold = getThreshold;
                 }
                 Log.d(TAG, "THRESHOLD IS: " + threshold);
 
-                // Update auto mode flags = default threshold is 100%
-                updateAutoMode();
+                updateAutoMode();  // update auto mode flags = default threshold is 100%
             }
         });
     }
