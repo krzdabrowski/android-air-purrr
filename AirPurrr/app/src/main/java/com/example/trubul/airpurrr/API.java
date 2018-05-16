@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by krzysiek
@@ -21,7 +20,7 @@ class API {
     private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
 //    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
 //    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
-    private APICallback mCallback;
+private static APICallback mCallback;
 
 
     interface APICallback {
@@ -32,7 +31,7 @@ class API {
         mCallback = callback;
     }
 
-    List<Object> download() {
+    static List<Object> download() {
         String pmDataAPI;
         String pm25LatestStringDate = null; // i = 0
         String pm10LatestStringDate = null; // i = 1
@@ -44,9 +43,9 @@ class API {
                 HttpGetRequest getRequest = new HttpGetRequest();
 
                 if (i == 0) {
-                    pmDataAPI = getRequest.execute(PM25_API_URL).get();
+                    pmDataAPI = getRequest.makeHttpRequest(PM25_API_URL);
                 } else {
-                    pmDataAPI = getRequest.execute(PM10_API_URL).get();
+                    pmDataAPI = getRequest.makeHttpRequest(PM10_API_URL);
                 }
 
                 JSONObject jsonData = new JSONObject(pmDataAPI);  // return python's {key: value} of the provided link
@@ -91,12 +90,12 @@ class API {
             return pmDoublesDates;
 
         }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+//        catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
         catch (NullPointerException e) {
             List<Object> empty = new ArrayList<>(2);
             Double[] emptyDouble = new Double[]{0.0, 0.0};
@@ -115,7 +114,7 @@ class API {
         return null;
     }
 
-    private Double[] convertToPercent(Double[] pmDoubles) {
+    private static Double[] convertToPercent(Double[] pmDoubles) {
         Double[] pmDoublesPerc = new Double[2];
 
         pmDoublesPerc[0] = 4 * pmDoubles[0];  // PM2.5

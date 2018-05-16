@@ -4,8 +4,6 @@ import android.content.Context;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import java.util.concurrent.ExecutionException;
-
 /**
  * Created by krzysiek
  * On 3/3/18.
@@ -49,7 +47,8 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
-            res = getRequest.execute(WORKSTATE_URL).get();
+//            res = getRequest.execute(WORKSTATE_URL).get();
+            res = null;
 
             if (res.equals("WorkStates.Sleeping\n")) {
                 Toast.makeText(mContext, R.string.switch_processing_the_request, Toast.LENGTH_LONG).show();
@@ -67,10 +66,10 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
                 keepState();
             }
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
         } catch (NullPointerException e) {
             Toast.makeText(mContext, mContext.getString(R.string.switch_error_server) + "NullPointer)", Toast.LENGTH_LONG).show();
             keepState();

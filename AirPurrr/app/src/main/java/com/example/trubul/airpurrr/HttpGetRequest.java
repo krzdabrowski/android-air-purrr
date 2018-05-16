@@ -1,6 +1,5 @@
 package com.example.trubul.airpurrr;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -15,15 +14,15 @@ import java.net.URL;
  * On 3/3/18.
  */
 
-class HttpGetRequest extends AsyncTask<String, Void, String> {
+class HttpGetRequest {
     private static final String TAG = "HttpGetRequest";
     private static final String REQUESTED_METHOD = "GET";
     private static final int READ_TIMEOUT = 5000;
     private static final int CONNECTION_TIMEOUT = 3000;
 
 
-    @Override
-    protected String doInBackground(String... params) {
+    // a.k.a. dawny doInBackground()
+    String makeHttpRequest(String... params) {
 //        Log.d(TAG, "START");
         HttpURLConnection connection = null;
         InputStreamReader streamReader = null;

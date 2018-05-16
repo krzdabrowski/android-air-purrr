@@ -1,5 +1,7 @@
 package com.example.trubul.airpurrr;
 
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +13,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements
-        SwitchListener.SwitchCallback, SwipeListener.SwipeCallback, Detector.DetectorCallback, API.APICallback {
+public class MainActivity extends AppCompatActivity implements // SwipeListener.SwipeCallback,
+        SwitchListener.SwitchCallback, Detector.DetectorCallback, API.APICallback,
+        LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
     static final String DETECTOR_URL = "http://89.70.85.249:2138/pm_data.txt";
@@ -27,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements
     private static final String STATE_API_DATES = "APIDates";
     private static final String STATE_THRESHOLD = "Threshold";
     private static final String STATE_FLAGTRISTATEAUTO = "FlagTriStateAuto";
+
+    private static final int LOADER_DETECTOR = 1;
+    private static final int LOADER_API = 2;
 
     static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     static int flagTriStateAuto = 0;
@@ -71,15 +79,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void setSwipeRefreshing() {
-        mySwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mySwipeRefreshLayout.setRefreshing(false);
-            }
-    }); }
-
-    @Override
     public void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI) {
         this.pmValuesAndDatesAPI = pmValuesAndDatesAPI;
     }
@@ -89,8 +88,19 @@ public class MainActivity extends AppCompatActivity implements
         this.pmValuesDetector = pmValuesDetector;
     }
 
+    private void setSwipeRefreshing(final boolean value) {
+        mySwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mySwipeRefreshLayout.setRefreshing(value);
+            }
+        });
+    }
+
     @Override
-    public Double[] getPMValuesDetector() { return pmValuesDetector; }
+    public Double[] getPMValuesDetector() {
+        return pmValuesDetector;
+    }
 
     // Get login_email and login_password from LoginActivity
     static String getEmail() {
@@ -99,17 +109,6 @@ public class MainActivity extends AppCompatActivity implements
 
     static String getPassword() {
         return emailAndPassword.getString("login_password");
-    }
-
-    // Download new data
-    @Override
-    public void onNewDetectorData() {
-        pmValuesDetector = detector.download();
-    }
-
-    @Override
-    public void onNewAPIData() {
-        pmValuesAndDatesAPI = api.download();
     }
 
     // Update UI
@@ -133,11 +132,35 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void automaticDownload() {
+        Timer timer = new Timer();
+        TimerTask minuteTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getLoaderManager().initLoader(LOADER_DETECTOR, null, MainActivity.this).forceLoad();
+                        Log.d(TAG, "percentages are: " + java.util.Arrays.toString(getPMValuesDetector()));
+                        Log.d(TAG, "runOnUiThread flagTriStateAuto is: " + flagTriStateAuto);
+                    }
+                });
+            }
+        };
+
+        // Schedule the task to run starting now and then every 1 minute
+        // It works while screen is off and when app is in background!
+        timer.schedule(minuteTask, 0, 1000 * 60);  // 1000*60*1 every 1 minute
+    }
+
     //////////////////////////////////////////  ONCREATE  //////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();
+        getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();
         ButterKnife.bind(this);
 <<<<<<< HEAD
 
@@ -365,18 +388,19 @@ public class MainActivity extends AppCompatActivity implements
         emailAndPassword = getIntent().getExtras();
 >>>>>>> 26dbe62... Code refactor #2
 
+<<<<<<< HEAD
 >>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
         // Download PM values from detector
         onNewDetectorData();
         detector.downloadAutomatically();  // download detector every 1 minute
+=======
+//        // Download PM values automatically from detector
+        automaticDownload();  // download Detector values every 1 minute
+>>>>>>> 8ff772a... Implement AsyncTaskLoaders (part #1)
 
-        // Download PM values from API
-        onNewAPIData();  // List<Object> = {Double[], String[]}
-        pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
-        pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
 
         // Default: show PM values from detector
-        setUI(pmValuesDetector, null);
+//        setUI(pmValuesDetector, null);
 
 <<<<<<< HEAD
 
@@ -389,32 +413,35 @@ public class MainActivity extends AppCompatActivity implements
         switchAuto.setOnCheckedChangeListener(autoListener);
         manualListener = new SwitchListener(this, this, SwitchListener.WorkingMode.MANUAL);
         switchManual.setOnCheckedChangeListener(manualListener);
-        mySwipeRefreshLayout.setOnRefreshListener(new SwipeListener(this));
+        mySwipeRefreshLayout.setOnRefreshListener(this);
 
         View.OnClickListener textViewListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (flagDetectorAPI) { updateDetector(); }
-                else { updateAPI(); }
+                if (flagDetectorAPI) {
+                    updateDetector();
+                } else {
+                    updateAPI();
+                }
             }
         };
         pm25Data.setOnClickListener(textViewListener);
         pm10Data.setOnClickListener(textViewListener);
 
         // ChangeListeners
-        detector.setListener(new Detector.ChangeListener() {
-            @Override
-            public void onChange() {
-                Log.d(TAG, "onChange detector: CHANGE");
-                updateDetector();
-
-                // Update auto mode flags = default threshold is 100%
-                updateAutoMode();
-
-                // Control the fan
-                autoListener.autoMode(autoListener.stateAuto);
-            }
-        });
+//        detector.setListener(new Detector.ChangeListener() {
+//            @Override
+//            public void onChange() {
+//                Log.d(TAG, "onChange detector: CHANGE");
+//                updateDetector();
+//
+//                // Update auto mode flags = default threshold is 100%
+//                updateAutoMode();
+//
+//                // Control the fan
+//                autoListener.autoMode(autoListener.stateAuto);
+//            }
+//        });
 
         alertDialog.setListener(new AlertDialogForAuto.ChangeListener() {
             @Override
@@ -434,6 +461,7 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
+    //////////////////////////////////////////  ROTATION  //////////////////////////////////////////
     @Override  // logic has to be BEFORE super() because it saves
     protected void onSaveInstanceState(Bundle outState) {
         outState.putDouble(STATE_DETECTOR_PM25, pmValuesDetector[0]);
@@ -457,17 +485,85 @@ public class MainActivity extends AppCompatActivity implements
         pmValuesAPI[1] = savedInstanceState.getDouble(STATE_API_PM10);
         pmDatesAPI = savedInstanceState.getStringArray(STATE_API_DATES);
         threshold = savedInstanceState.getInt(STATE_THRESHOLD, threshold);
-        flagDetectorAPI = false;
         flagTriStateAuto = savedInstanceState.getInt(STATE_FLAGTRISTATEAUTO);
 
-        setUI(pmValuesDetector, null);
+        updateDetector();
     }
+
+    //////////////////////////////////////////  LOADERS  ///////////////////////////////////////////
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        if (id == LOADER_DETECTOR) {
+            return new DetectorLoader(this);
+        } else if (id == LOADER_API) {
+            return new APILoader(this);
+        }
+        return null;
+    }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public void onLoadFinished(Loader loader, Object data) {
+        int id = loader.getId();
+
+        if (id == LOADER_DETECTOR) {
+            pmValuesDetector = (Double[]) data;
+            updateDetector();
+        } else if (id == LOADER_API) {
+            pmValuesAndDatesAPI = (List<Object>) data;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+    }
+
+    ////////////////////////////////////////////  MENU  ////////////////////////////////////////////
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.set_auto_threshold:
+                alertDialog.createDialog();
+                return true;
+            case R.id.refresh_detector:
+                getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();
+                setSwipeRefreshing(false);
+                return true;
+            case R.id.refresh_api:
+                getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();
+                updateAPI();
+                setSwipeRefreshing(false);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    ///////////////////////////////////////////  OTHERS  ///////////////////////////////////////////
+    @Override
+    public void onRefresh() {
+        getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();
+        getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();
+        setSwipeRefreshing(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);  // disable going back to the LoginActivity
+    }
+
 
     private void setUI(Double[] pmValues, String[] pmDates) {
         TextView textView;
 
         // Set TextView colors
-        for(int i=0; i<2; i++) {
+        for (int i = 0; i < 2; i++) {
             // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
                 textView = pm25Data;
@@ -476,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             // Update colors
-            if (pmValues [i] == 0) {  // connection error
+            if (pmValues[i] == 0) {  // connection error
                 textView.setBackgroundResource(R.drawable.default_color);
                 flagTriStateAuto = 0;
             } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
@@ -507,36 +603,5 @@ public class MainActivity extends AppCompatActivity implements
                 pm10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.set_auto_threshold:
-                alertDialog.createDialog();
-                return true;
-            case R.id.refresh_detector:
-                SwipeListener refreshDetectorListener = new SwipeListener(this);
-                refreshDetectorListener.onRefresh();
-                return true;
-            case R.id.refresh_api:
-                SwipeListener refreshAPIListener = new SwipeListener(this);
-                refreshAPIListener.onRefresh();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Disable going back to the LoginActivity
-        moveTaskToBack(true);
     }
 }
