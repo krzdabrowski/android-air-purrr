@@ -56,10 +56,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private API api = new API(this);  // must-be instance to make mCallback work
 
     // Downloaded PM values
-    private Double[] pmValuesDetector;
+    private Double[] pmValuesDetector = {0.0, 0.0};
     private List<Object> pmValuesAndDatesAPI;
-    private Double[] pmValuesAPI;
-    private String[] pmDatesAPI;
+    private Double[] pmValuesAPI = {0.0, 0.0};
+    private String[] pmDatesAPI = {"date1", "date2"};
 
     private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
