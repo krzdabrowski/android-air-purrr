@@ -20,4 +20,8 @@
     <string name="switch_cannot_process">Nie mogę przetworzyć żądania - czujnik w trybie pomiarowym</string>
     <string name="switch_error_detector">Coś się popsuło i nie było mnie słychać</string>
     <string name="switch_error_server">Serwer nie odpowiada, spróbuj ponownie później</string>
+    <string name="login_fingerprint_not_recognized">Nie rozpoznano odcisku palca. Spróbuj ponownie</string>
+    <string name="login_no_secure_screen">Nie ustawiono ekranu blokady. Ustaw odcisk palca w \'Ustawienia\' -> \'Lokalizacja i blokady\' -> \'Odcisk palca\'</string>
+    <string name="login_no_saved_fingerprints">Zarejestruj co najmniej jeden odcisk palca w \'Ustawienia\' -> \'Lokalizacja i blokady\' -> \'Odcisk palca\'</string>
+
 </resources>

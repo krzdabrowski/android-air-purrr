@@ -1,8 +1,11 @@
 package com.example.trubul.airpurrr;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     @BindView(R.id.PM10_mode) TextView pm10Mode;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
-    private static Bundle emailAndPassword;
+    private static SharedPreferences mSharedPreferences;
 
     private Detector detector = new Detector(this);
     private API api = new API(this);  // must-be instance to make mCallback work
@@ -105,11 +108,11 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     // Get login_email and login_password from LoginActivity
     static String getEmail() {
-        return emailAndPassword.getString("login_email");
+        return mSharedPreferences.getString(LoginActivity.SAVED_EMAIL_KEY, null);
     }
 
     static String getPassword() {
-        return emailAndPassword.getString("login_password");
+        return mSharedPreferences.getString(LoginActivity.SAVED_PASSWORD_KEY, null);
     }
 
     // Update UI
@@ -158,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -394,6 +398,9 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 //        // Download PM values automatically from detector
 =======
         emailAndPassword = getIntent().getExtras();  // get Email and Password from LoginActivity
+=======
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+>>>>>>> 885e77f... First try of fingerprint authentication's implementation
 
         getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for Detector
         getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();  // Loader for API

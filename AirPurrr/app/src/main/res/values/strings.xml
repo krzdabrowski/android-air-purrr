@@ -8,6 +8,9 @@
     <string name="login_required">Required</string>
     <string name="login_auth_error">Authentication error!</string>
     <string name="login_internet_error">No Internet connection!</string>
+    <string name="login_fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
+    <string name="login_no_secure_screen">Secure lock screen hasn\'t set up. Go to \'Settings\' -> \'Security &amp; Location\' -> \'Fingerprint\' to set up a fingerprint</string>
+    <string name="login_no_saved_fingerprints">Go to \'Settings\' -> \'Security &amp; Location\' -> \'Fingerprint\' and register at least one fingerprint</string>
 
     <string name="UI_auto_mode">Automatic mode</string>
     <string name="UI_manual_mode">Manual mode</string>
@@ -16,7 +19,7 @@
     <string name="UI_data_perc" translatable="false">%.1f%%</string>
     <string name="UI_data_ugm3" translatable="false">(%.1f)</string>
     <string name="UI_indoors">Indoors</string>
-    <string name="UI_api">API (%s)</string>
+    <string name="UI_api" translatable="false">API (%s)</string>
 
     <string name="menu_set_auto_threshold">Set threshold for auto mode</string>
     <string name="menu_enter_a_value">Enter a value in percentage (%)</string>
