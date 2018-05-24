@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     // Downloaded PM values
     private Double[] pmValuesDetector = {0.0, 0.0};
     private List<Object> pmValuesAndDatesAPI;
-    private Double[] pmValuesAPI = {0.0, 0.0};
-    private String[] pmDatesAPI = {"date1", "date2"};
+    private Double[] pmValuesAPI;
+    private String[] pmDatesAPI;
 
     private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
@@ -107,12 +107,13 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     }
 
     // Get login_email and login_password from LoginActivity
-    static String getEmail() {
-        return mSharedPreferences.getString(LoginActivity.SAVED_EMAIL_KEY, null);
+    static String getHashedEmail() {
+        Log.d(TAG, "getHashedEmail: " + mSharedPreferences.getString(LoginActivity.SAVED_HASH_EMAIL_KEY, null));
+        return mSharedPreferences.getString(LoginActivity.SAVED_HASH_EMAIL_KEY, null);
     }
 
-    static String getPassword() {
-        return mSharedPreferences.getString(LoginActivity.SAVED_PASSWORD_KEY, null);
+    static String getHashedPassword() {
+        return mSharedPreferences.getString(LoginActivity.SAVED_HASH_PASSWORD_KEY, null);
     }
 
     // Update UI
@@ -123,8 +124,14 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private void updateAPI() {
         flagDetectorAPI = true;
-        pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
-        pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+        if (pmValuesAndDatesAPI != null) {
+            pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
+            pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+        }
+        else {
+            pmValuesAPI = new Double[]{0.0, 0.0};
+            pmDatesAPI = new String[]{getString(R.string.UI_no_api_data), getString(R.string.UI_no_api_data)};
+        }
         setUI(pmValuesAPI, pmDatesAPI);
     }
 
@@ -603,11 +610,9 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             pm25Mode.setText(R.string.UI_indoors);
             pm10Mode.setText(R.string.UI_indoors);
         } else {  // if API
-            if (pmDates != null) {
-                pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
-                pm25Mode.setText(getString(R.string.UI_api, pmDatesAPI[0]));
-                pm10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
-            }
+//                pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
+            pm25Mode.setText(getString(R.string.UI_api, pmDatesAPI[0]));
+            pm10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
         }
     }
 }

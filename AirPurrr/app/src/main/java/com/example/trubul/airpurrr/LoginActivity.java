@@ -19,25 +19,25 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.trubul.airpurrr.BaseActivity;
-import com.example.trubul.airpurrr.FingerprintHelper;
+import com.example.trubul.airpurrr.LoginHelper;
+import com.example.trubul.airpurrr.MainActivity;
 import com.example.trubul.airpurrr.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends BaseActivity implements FingerprintHelper.FingerprintCallback {
+public class LoginActivity extends BaseActivity implements LoginHelper.FingerprintCallback {
 
     private static final String TAG = "LoginActivity";
-    static final String SAVED_EMAIL_KEY = "login_email";
-    static final String SAVED_PASSWORD_KEY = "login_password";
-    private String mSavedEmail;
-    private String mSavedPassword;
+    static final String SAVED_HASH_EMAIL_KEY = "login_email";
+    static final String SAVED_HASH_PASSWORD_KEY = "login_password";
+    private String mHashedEmail;
     private EditText mEmailField;
     private EditText mPasswordField;
 
     private FirebaseAuth mAuth;
-    private FingerprintHelper mFingerprintHelper;
+    private LoginHelper mLoginHelper;
     private InputMethodManager mInputMethodManager;
     private SharedPreferences mSharedPreferences;
 
@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity implements FingerprintHelper.Fin
         findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn(getEmail(), getPassword());
+                manualLogin(getEmail(), getPassword());
             }
         });
         mAuth = FirebaseAuth.getInstance();
@@ -67,14 +67,12 @@ public class LoginActivity extends BaseActivity implements FingerprintHelper.Fin
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
             FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
-            mFingerprintHelper = new FingerprintHelper(fingerprintManager, this);
+            mLoginHelper = new LoginHelper(fingerprintManager, this);
             mInputMethodManager = getSystemService(InputMethodManager.class);
 
-            if (mFingerprintHelper.isFingerprintAuthAvailable()) {
+            if (mLoginHelper.isFingerprintAuthAvailable()) {
                 mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-                mSavedEmail = mSharedPreferences.getString(SAVED_EMAIL_KEY, null);
-                mSavedPassword = mSharedPreferences.getString(SAVED_PASSWORD_KEY, null);
+                mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null);
 
                 if (!keyguardManager.isKeyguardSecure()) {  // show a message that the user hasn't set up a fingerprint or lock screen
                     Toast.makeText(this, R.string.login_no_secure_screen, Toast.LENGTH_LONG).show();
@@ -90,8 +88,8 @@ public class LoginActivity extends BaseActivity implements FingerprintHelper.Fin
     @Override
     public void onResume() {
         super.onResume();
-        if (mFingerprintHelper.isFingerprintAuthAvailable() && mSavedEmail != null) {
-            mFingerprintHelper.startListening();
+        if (mLoginHelper.isFingerprintAuthAvailable() && mHashedEmail != null) {
+            mLoginHelper.startListening();
         } else {
             activateKeyboard();
         }
@@ -100,8 +98,8 @@ public class LoginActivity extends BaseActivity implements FingerprintHelper.Fin
     @Override
     public void onPause() {
         super.onPause();
-        if (mFingerprintHelper.isFingerprintAuthAvailable()) {
-            mFingerprintHelper.stopListening();
+        if (mLoginHelper.isFingerprintAuthAvailable()) {
+            mLoginHelper.stopListening();
         }
     }
 
@@ -138,7 +136,7 @@ public class LoginActivity extends BaseActivity implements FingerprintHelper.Fin
         return valid;
     }
 
-    private void signIn(final String email, final String password) {
+    private void manualLogin(final String email, final String password) {
         if (!isInternetConnection() || !isFormFilled(email, password)) {
             return;
         }
@@ -149,10 +147,12 @@ public class LoginActivity extends BaseActivity implements FingerprintHelper.Fin
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
                     SharedPreferences.Editor editor = mSharedPreferences.edit();
-                    editor.putString(SAVED_EMAIL_KEY, email);
-                    editor.putString(SAVED_PASSWORD_KEY, password);
+
+                    mHashedEmail = LoginHelper.sha512Hash(email);
+                    String hashedPassword = LoginHelper.sha512Hash(password);
+                    editor.putString(SAVED_HASH_EMAIL_KEY, mHashedEmail);
+                    editor.putString(SAVED_HASH_PASSWORD_KEY, hashedPassword);
                     editor.apply();
 
                     startActivity(intent);
@@ -168,13 +168,13 @@ public class LoginActivity extends BaseActivity implements FingerprintHelper.Fin
     private void activateKeyboard() {
         mPasswordField.requestFocus();
         mPasswordField.postDelayed(mShowKeyboardRunnable, 500);  // show the keyboard
-        mFingerprintHelper.stopListening();
+        mLoginHelper.stopListening();
     }
 
     private final Runnable mShowKeyboardRunnable = new Runnable() {
         @Override
         public void run() {
-            mInputMethodManager.showSoftInput(mPasswordField, 0);
+            mInputMethodManager.showSoftInput(mEmailField, 0);
         }
     };
 
@@ -199,6 +199,9 @@ public class LoginActivity extends BaseActivity implements FingerprintHelper.Fin
     @Override
     public void onAuthenticated() {
         Log.d(TAG, "onAuthenticated: ");
-        signIn(mSavedEmail, mSavedPassword);
+        showProgressDialog();
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        hideProgressDialog();
     }
 }

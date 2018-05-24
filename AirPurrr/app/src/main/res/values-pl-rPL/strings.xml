@@ -8,6 +8,7 @@
     <string name="login_authenticating">Ładowanie…</string>
     <string name="login_internet_error">Brak połączenia z Internetem!</string>
     <string name="UI_indoors">W mieszkaniu</string>
+    <string name="UI_no_api_data">brak danych</string>
     <string name="menu_set_auto_threshold">Ustaw próg trybu automatycznego</string>
     <string name="menu_enter_a_value">Podaj wartość w procentach (%)</string>
     <string name="menu_cancel">Anuluj</string>

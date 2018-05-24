@@ -74,20 +74,24 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
             HttpGetRequest getRequest = new HttpGetRequest();
             workStates = getRequest.execute(WORKSTATE_URL).get();
 
-            if (workStates.equals("WorkStates.Sleeping\n")) {
-                Toast.makeText(mContext, R.string.switch_processing_the_request, Toast.LENGTH_LONG).show();
-                if (state) {  // send request if it was switch -> ON
-                    switchOn.execute(mMode + "=1");  // it will be POST: req = params[0]
+            switch (workStates) {
+                case "WorkStates.Sleeping\n":
+                    Toast.makeText(mContext, R.string.switch_processing_the_request, Toast.LENGTH_LONG).show();
+                    if (state) {  // send request if it was switch -> ON
+                        switchOn.execute(mMode + "=1");  // it will be POST: req = params[0]
 
-                } else {
-                    switchOff.execute(mMode + "=0");
-                }
-            } else if (workStates.equals("WorkStates.Measuring\n")) {
-                Toast.makeText(mContext, R.string.switch_cannot_process, Toast.LENGTH_LONG).show();
-                keepState();
-            } else {
-                Toast.makeText(mContext, R.string.switch_error_detector + "NoWorkStates)", Toast.LENGTH_LONG).show();
-                keepState();
+                    } else {
+                        switchOff.execute(mMode + "=0");
+                    }
+                    break;
+                case "WorkStates.Measuring\n":
+                    Toast.makeText(mContext, R.string.switch_cannot_process, Toast.LENGTH_LONG).show();
+                    keepState();
+                    break;
+                default:
+                    Toast.makeText(mContext, R.string.switch_error_detector + "NoWorkStates)", Toast.LENGTH_LONG).show();
+                    keepState();
+                    break;
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -20,6 +20,7 @@
     <string name="UI_data_ugm3" translatable="false">(%.1f)</string>
     <string name="UI_indoors">Indoors</string>
     <string name="UI_api" translatable="false">API (%s)</string>
+    <string name="UI_no_api_data">no data</string>
 
     <string name="menu_set_auto_threshold">Set threshold for auto mode</string>
     <string name="menu_enter_a_value">Enter a value in percentage (%)</string>

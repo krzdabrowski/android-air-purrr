@@ -59,8 +59,8 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
             connection.setSSLSocketFactory(sc.getSocketFactory());
 
             // Set username and login_password
-            String userpass = MainActivity.getEmail() + ":" + MainActivity.getPassword();
-            String basicAuth = "Basic " + Base64.encodeToString(userpass.getBytes(), Base64.DEFAULT);
+            String hash = MainActivity.getHashedEmail() + ":" + MainActivity.getHashedPassword();
+            String basicAuth = "Basic " + Base64.encodeToString(hash.getBytes(), Base64.NO_WRAP);
             connection.setRequestProperty("Authorization", basicAuth);
 
             // Send POST data

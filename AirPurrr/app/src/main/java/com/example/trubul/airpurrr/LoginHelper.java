@@ -2,20 +2,23 @@ package com.example.trubul.airpurrr;
 
 import android.annotation.TargetApi;
 import android.hardware.fingerprint.FingerprintManager;
-import android.os.Build;
 import android.os.CancellationSignal;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by krzysiek
- * On 5/22/18.
+ * On 5/19/18.
  */
 
-@TargetApi(Build.VERSION_CODES.M)
-public class FingerprintHelper extends FingerprintManager.AuthenticationCallback {
+@TargetApi(23)
+public class LoginHelper extends FingerprintManager.AuthenticationCallback {
 
-    private static final String TAG = "MyFingerprintHelper";
+    private static final String TAG = "LoginHelper";
     private final FingerprintManager mFingerprintManager;
     private final FingerprintCallback mCallback;
     private CancellationSignal mCancellationSignal;
@@ -29,11 +32,12 @@ public class FingerprintHelper extends FingerprintManager.AuthenticationCallback
     }
 
 
-    FingerprintHelper(FingerprintManager fingerprintManager, FingerprintCallback callback) {
+    LoginHelper(FingerprintManager fingerprintManager, FingerprintCallback callback) {
         mFingerprintManager = fingerprintManager;
         mCallback = callback;
     }
 
+    ////////////////////////////////////////  FINGERPRINT  /////////////////////////////////////////
     boolean isFingerprintAuthAvailable() {
         return mFingerprintManager.isHardwareDetected() && mFingerprintManager.hasEnrolledFingerprints();
     }
@@ -80,5 +84,35 @@ public class FingerprintHelper extends FingerprintManager.AuthenticationCallback
     public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
         Log.d(TAG, "onAuthenticationSucceeded: ");
         mCallback.onAuthenticated();
+    }
+
+    //////////////////////////////////////////  HASHING  ///////////////////////////////////////////
+    static String sha512Hash(String toHash) {
+        String hash = null;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-512");
+            byte[] bytes = toHash.getBytes("UTF-8");
+            digest.update(bytes, 0, bytes.length);
+            bytes = digest.digest();
+
+            hash = bytesToHex(bytes);  // this is ~55x faster than looping and String.formating()
+        } catch(NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch(UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return hash;
+    }
+
+    // http://stackoverflow.com/questions/9655181/convert-from-byte-array-to-hex-string-in-java
+    private static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+    private static String bytesToHex( byte[] bytes ) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }
