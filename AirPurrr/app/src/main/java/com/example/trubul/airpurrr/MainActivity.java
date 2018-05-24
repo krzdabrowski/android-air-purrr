@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     // Get login_email and login_password from LoginActivity
     static String getHashedEmail() {
-        Log.d(TAG, "getHashedEmail: " + mSharedPreferences.getString(LoginActivity.SAVED_HASH_EMAIL_KEY, null));
         return mSharedPreferences.getString(LoginActivity.SAVED_HASH_EMAIL_KEY, null);
     }
 
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     // Update UI
     private void updateDetector() {
         flagDetectorAPI = false;
-        setUI(pmValuesDetector, null);
+        setUI(pmValuesDetector);
     }
 
     private void updateAPI() {
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             pmValuesAPI = new Double[]{0.0, 0.0};
             pmDatesAPI = new String[]{getString(R.string.UI_no_api_data), getString(R.string.UI_no_api_data)};
         }
-        setUI(pmValuesAPI, pmDatesAPI);
+        setUI(pmValuesAPI);
     }
 
     private void updateAutoMode() {
@@ -572,7 +571,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     }
 
 
-    private void setUI(Double[] pmValues, String[] pmDates) {
+    private void setUI(Double[] pmValues) {
         TextView textView;
 
         // Set TextView colors
@@ -610,7 +609,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             pm25Mode.setText(R.string.UI_indoors);
             pm10Mode.setText(R.string.UI_indoors);
         } else {  // if API
-//                pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
             pm25Mode.setText(getString(R.string.UI_api, pmDatesAPI[0]));
             pm10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
         }
