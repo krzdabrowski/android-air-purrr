@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -92,7 +93,8 @@ private static APICallback mCallback;
         } catch (NullPointerException e) {
             List<Object> empty = new ArrayList<>(2);
             Double[] emptyDouble = new Double[]{0.0, 0.0};
-            String[] emptyString = new String[]{"", ""};
+            String[] emptyString = new String[]{"no data", "no data"};
+
             empty.add(emptyDouble);
             empty.add(emptyString);
 

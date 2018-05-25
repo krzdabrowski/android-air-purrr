@@ -1,7 +1,6 @@
 package com.example.trubul.airpurrr;
 
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -585,16 +584,16 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
             // Update colors
             if (pmValues[i] == 0) {  // connection error
-                textView.setBackgroundResource(R.drawable.default_color);
+                textView.setBackgroundResource(R.drawable.color_default);
                 flagTriStateAuto = 0;
             } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
-                textView.setBackgroundResource(R.drawable.green_color);
+                textView.setBackgroundResource(R.drawable.color_green);
             } else if (pmValues[i] > 50 && pmValues[i] <= 100) {
-                textView.setBackgroundResource(R.drawable.lime_color);
+                textView.setBackgroundResource(R.drawable.color_lime);
             } else if (pmValues[i] > 100 && pmValues[i] <= 200) {
-                textView.setBackgroundResource(R.drawable.yellow_color);
+                textView.setBackgroundResource(R.drawable.color_yellow);
             } else {
-                textView.setBackgroundResource(R.drawable.red_color);
+                textView.setBackgroundResource(R.drawable.color_red);
             }
         }
 

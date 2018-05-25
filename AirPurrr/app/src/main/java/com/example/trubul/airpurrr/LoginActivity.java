@@ -4,6 +4,7 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,21 +12,25 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trubul.airpurrr.BaseActivity;
 import com.example.trubul.airpurrr.LoginHelper;
-import com.example.trubul.airpurrr.MainActivity;
 import com.example.trubul.airpurrr.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LoginActivity extends BaseActivity implements LoginHelper.FingerprintCallback {
 
@@ -33,8 +38,12 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     static final String SAVED_HASH_EMAIL_KEY = "login_email";
     static final String SAVED_HASH_PASSWORD_KEY = "login_password";
     private String mHashedEmail;
+
     private EditText mEmailField;
     private EditText mPasswordField;
+    private Button mButton;
+    private CircleImageView mFingerprintIcon;
+    private TextView mFingerprintMessage;
 
     private FirebaseAuth mAuth;
     private LoginHelper mLoginHelper;
@@ -56,21 +65,29 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
 
         mEmailField = findViewById(R.id.input_email);
         mPasswordField = findViewById(R.id.input_password);
-        findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
+        mButton = findViewById(R.id.button_login);
+        mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 manualLogin(getEmail(), getPassword());
             }
         });
+        mFingerprintIcon = findViewById(R.id.fingerprint_icon);
+        mFingerprintMessage = findViewById(R.id.fingerprint_message);
+        mFingerprintIcon.setVisibility(View.GONE);
+        mFingerprintMessage.setVisibility(View.GONE);
+
         mAuth = FirebaseAuth.getInstance();
 
+        // If Android is at least Marshmallow (6.0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
             FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
             mLoginHelper = new LoginHelper(fingerprintManager, this);
             mInputMethodManager = getSystemService(InputMethodManager.class);
 
-            if (mLoginHelper.isFingerprintAuthAvailable()) {
+            // If phone has fingerprint reader and user has granted permission for an app
+            if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted()) {
                 mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
                 mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null);
 
@@ -88,7 +105,13 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     @Override
     public void onResume() {
         super.onResume();
-        if (mLoginHelper.isFingerprintAuthAvailable() && mHashedEmail != null) {
+        if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted() && mHashedEmail != null) {
+            mEmailField.setVisibility(View.GONE);
+            mPasswordField.setVisibility(View.GONE);
+            mButton.setVisibility(View.GONE);
+            mFingerprintIcon.setVisibility(View.VISIBLE);
+            mFingerprintMessage.setVisibility(View.VISIBLE);
+
             mLoginHelper.startListening();
         } else {
             activateKeyboard();
@@ -98,9 +121,13 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     @Override
     public void onPause() {
         super.onPause();
-        if (mLoginHelper.isFingerprintAuthAvailable()) {
+        if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted()) {
             mLoginHelper.stopListening();
         }
+    }
+
+    private boolean isFingerprintPermissionGranted() {
+        return ActivityCompat.checkSelfPermission(this, android.Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean isFormFilled(String email, String password) {
