@@ -126,10 +126,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             pmValuesAPI = (Double[]) pmValuesAndDatesAPI.get(0);
             pmDatesAPI = (String[]) pmValuesAndDatesAPI.get(1);
         }
-        else {
-            pmValuesAPI = new Double[]{0.0, 0.0};
-            pmDatesAPI = new String[]{getString(R.string.UI_no_api_data), getString(R.string.UI_no_api_data)};
-        }
         setUI(pmValuesAPI);
     }
 
@@ -406,6 +402,9 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 =======
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 >>>>>>> 885e77f... First try of fingerprint authentication's implementation
+
+        pmValuesAPI = new Double[]{0.0, 0.0};
+        pmDatesAPI = new String[]{getString(R.string.UI_no_api_data), getString(R.string.UI_no_api_data)};
 
         getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for Detector
         getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();  // Loader for API

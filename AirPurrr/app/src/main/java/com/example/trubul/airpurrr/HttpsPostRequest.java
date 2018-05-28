@@ -63,18 +63,26 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
             String basicAuth = "Basic " + Base64.encodeToString(hash.getBytes(), Base64.NO_WRAP);
             connection.setRequestProperty("Authorization", basicAuth);
 
-            // Send POST data
+            // Send POST with data in body (key:value in form-data)
             String str = "req=" + params[0];
             byte[] outputInBytes = str.getBytes("UTF-8");
 
+            Log.d(TAG, "doInBackground: 1");
             OutputStream os = connection.getOutputStream();
             os.write(outputInBytes);
             os.close();
+            Log.d(TAG, "doInBackground: 2");
             connection.connect();
+            Log.d(TAG, "doInBackground: 3");
+
+            int code = connection.getResponseCode();
+            Log.d(TAG, "doInBackground: CODE is " + code);
+            Log.d(TAG, "doInBackground: req method is " + connection.getRequestMethod());
 
 //            Log.w(TAG, "START->END");
             // Create a new InputStreamReader to read output info from webserver
             streamReader = new InputStreamReader(connection.getInputStream());
+            Log.d(TAG, "doInBackground: 4");
             // Do the data-read
             DataReader dataReader = new DataReader();
             dataReader.getData(streamReader);

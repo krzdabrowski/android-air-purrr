@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,8 +40,8 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     static final String SAVED_HASH_PASSWORD_KEY = "login_password";
     private String mHashedEmail;
 
-    private EditText mEmailField;
-    private EditText mPasswordField;
+    private TextInputEditText mEmailField;
+    private TextInputEditText mPasswordField;
     private Button mButton;
     private CircleImageView mFingerprintIcon;
     private TextView mFingerprintMessage;
