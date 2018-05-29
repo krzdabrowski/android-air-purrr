@@ -1,5 +1,7 @@
 package com.example.trubul.airpurrr;
 
+import android.content.AsyncTaskLoader;
+import android.content.Context;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -82,5 +84,16 @@ class Detector {
 
         return pmDoublesPerc;
     }
+}
 
+
+class DetectorLoader extends AsyncTaskLoader<Double[]> {
+    DetectorLoader(Context context) {
+        super(context);
+    }
+
+    @Override
+    public Double[] loadInBackground() {
+        return Detector.download();
+    }
 }

@@ -29,7 +29,7 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
     private static final String TAG = "HttpsPostRequest";
     private WeakReference<Context> contextRef;
     private static final String REQUESTED_METHOD = "POST";
-    private static final int READ_TIMEOUT = 5000;
+    private static final int READ_TIMEOUT = 7000;
     private static final int CONNECTION_TIMEOUT = 3000;
 
 
@@ -67,22 +67,16 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
             String str = "req=" + params[0];
             byte[] outputInBytes = str.getBytes("UTF-8");
 
-            Log.d(TAG, "doInBackground: 1");
             OutputStream os = connection.getOutputStream();
             os.write(outputInBytes);
             os.close();
-            Log.d(TAG, "doInBackground: 2");
             connection.connect();
-            Log.d(TAG, "doInBackground: 3");
 
-            int code = connection.getResponseCode();
-            Log.d(TAG, "doInBackground: CODE is " + code);
-            Log.d(TAG, "doInBackground: req method is " + connection.getRequestMethod());
+            Log.d(TAG, "doInBackground: CODE is " + connection.getResponseCode());
 
 //            Log.w(TAG, "START->END");
             // Create a new InputStreamReader to read output info from webserver
             streamReader = new InputStreamReader(connection.getInputStream());
-            Log.d(TAG, "doInBackground: 4");
             // Do the data-read
             DataReader dataReader = new DataReader();
             dataReader.getData(streamReader);

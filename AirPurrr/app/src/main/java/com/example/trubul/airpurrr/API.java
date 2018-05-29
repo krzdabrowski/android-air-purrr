@@ -1,5 +1,7 @@
 package com.example.trubul.airpurrr;
 
+import android.content.AsyncTaskLoader;
+import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
@@ -21,7 +23,7 @@ class API {
     private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
 //    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
 //    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
-private static APICallback mCallback;
+    private static APICallback mCallback;
 
 
     interface APICallback {
@@ -117,4 +119,16 @@ private static APICallback mCallback;
         return pmDoublesPerc;
     }
 
+}
+
+
+class APILoader extends AsyncTaskLoader<List<Object>> {
+    APILoader(Context context) {
+        super(context);
+    }
+
+    @Override
+    public List<Object> loadInBackground() {
+        return API.download();
+    }
 }
