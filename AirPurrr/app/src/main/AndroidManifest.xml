@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="false"
@@ -23,6 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" android:theme="@style/AppTheme.Main"/>
+
+        <service android:name=".LocationService" android:process=":my_service" />
     </application>
 
 </manifest>

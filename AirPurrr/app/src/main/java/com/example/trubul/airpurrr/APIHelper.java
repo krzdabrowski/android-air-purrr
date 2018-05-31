@@ -2,7 +2,6 @@ package com.example.trubul.airpurrr;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -17,8 +16,8 @@ import java.util.List;
  * On 3/13/18.
  */
 
-class API {
-    private static final String TAG = "API";
+class APIHelper {
+    private static final String TAG = "APIHelper";
     private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
     private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
 //    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
@@ -30,7 +29,7 @@ class API {
         void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI);
         }
 
-    API(APICallback callback) {
+    APIHelper(APICallback callback) {
         mCallback = callback;
     }
 
@@ -119,16 +118,15 @@ class API {
         return pmDoublesPerc;
     }
 
-}
+    static class Loader extends AsyncTaskLoader<List<Object>> {
+        Loader(Context context) {
+            super(context);
+        }
 
-
-class APILoader extends AsyncTaskLoader<List<Object>> {
-    APILoader(Context context) {
-        super(context);
+        @Override
+        public List<Object> loadInBackground() {
+            return APIHelper.download();
+        }
     }
 
-    @Override
-    public List<Object> loadInBackground() {
-        return API.download();
-    }
 }

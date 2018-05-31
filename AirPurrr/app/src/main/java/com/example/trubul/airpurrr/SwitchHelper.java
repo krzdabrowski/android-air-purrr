@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutionException;
  * On 3/3/18.
  */
 
-class SwitchListener implements CompoundButton.OnCheckedChangeListener {
-    private static final String TAG = "SwitchListener";
+class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
+    private static final String TAG = "SwitchHelper";
     private static final String WORKSTATE_URL = "http://89.70.85.249:2138/workstate.txt";
     private Context mContext;
     private SwitchCallback mCallback;
@@ -35,7 +35,7 @@ class SwitchListener implements CompoundButton.OnCheckedChangeListener {
         void setSwitchManual(boolean state);
     }
 
-    SwitchListener(Context context, SwitchCallback callback, WorkingMode mode) {
+    SwitchHelper(Context context, SwitchCallback callback, WorkingMode mode) {
         mContext = context;
         mCallback = callback;
         mMode = mode;

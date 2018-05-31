@@ -11,8 +11,8 @@ import java.util.Arrays;
  * On 3/4/18.
  */
 
-class Detector {
-    private static final String TAG = "Detector";
+class DetectorHelper {
+    private static final String TAG = "DetectorHelper";
     private static DetectorCallback mCallback;
     private static ChangeListener listener;
 
@@ -30,7 +30,7 @@ class Detector {
         this.listener = listener;
     }
 
-    Detector(DetectorCallback callback) {
+    DetectorHelper(DetectorCallback callback) {
         mCallback = callback;
     }
 
@@ -84,16 +84,15 @@ class Detector {
 
         return pmDoublesPerc;
     }
-}
 
+    static class Loader extends AsyncTaskLoader<Double[]> {
+        Loader(Context context) {
+            super(context);
+        }
 
-class DetectorLoader extends AsyncTaskLoader<Double[]> {
-    DetectorLoader(Context context) {
-        super(context);
-    }
-
-    @Override
-    public Double[] loadInBackground() {
-        return Detector.download();
+        @Override
+        public Double[] loadInBackground() {
+            return DetectorHelper.download();
+        }
     }
 }

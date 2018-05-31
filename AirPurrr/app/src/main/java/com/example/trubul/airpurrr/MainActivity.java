@@ -1,8 +1,10 @@
 package com.example.trubul.airpurrr;
 
 import android.app.LoaderManager;
-import android.content.Loader;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements // SwipeListener.SwipeCallback,
-        SwitchListener.SwitchCallback, Detector.DetectorCallback, API.APICallback,
+        SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
@@ -54,11 +57,11 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private static SharedPreferences mSharedPreferences;
 
-    private Detector detector = new Detector(this);
-    private API api = new API(this);  // must-be instance to make mCallback work
+    private DetectorHelper detector = new DetectorHelper(this);
+    private APIHelper api = new APIHelper(this);  // must-be instance to make mCallback work
 
     // Downloaded PM values
-    private Double[] pmValuesDetector = {0.0, 0.0};
+    private Double[] pmValuesDetector;
     private List<Object> pmValuesAndDatesAPI;
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
@@ -66,9 +69,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
 
-    private SwitchListener autoListener;
-    private SwitchListener manualListener;
-
+    private SwitchHelper autoListener;
+    private SwitchHelper manualListener;
 
     /////////////////////////////////////  GETTERS & SETTERS  //////////////////////////////////////
     @Override
@@ -162,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -400,12 +403,17 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 =======
         emailAndPassword = getIntent().getExtras();  // get Email and Password from LoginActivity
 =======
+=======
+        startService(new Intent(this, LocationService.class));  // Location class
+>>>>>>> 2dee706... Classes refactor and add LocationService
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 >>>>>>> 885e77f... First try of fingerprint authentication's implementation
 
+        pmValuesDetector = new Double[]{0.0, 0.0};
         pmValuesAPI = new Double[]{0.0, 0.0};
         pmDatesAPI = new String[]{getString(R.string.UI_no_api_data), getString(R.string.UI_no_api_data)};
 
+<<<<<<< HEAD
         getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for Detector
         getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();  // Loader for API
 >>>>>>> f93a4fa... Implement AsyncTaskLoaders (part #2)
@@ -420,15 +428,20 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 <<<<<<< HEAD
 
 >>>>>>> ef21956... Clean up comments and little fixes
+=======
+        getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for DetectorHelper
+        getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();  // Loader for APIHelper
+        automaticDownload();  // download DetectorHelper values every 1 minute
+>>>>>>> 2dee706... Classes refactor and add LocationService
 
 =======
 >>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
 =======
 >>>>>>> f93a4fa... Implement AsyncTaskLoaders (part #2)
         /////////////////////// LISTENERS ///////////////////////
-        autoListener = new SwitchListener(this, this, SwitchListener.WorkingMode.AUTO);
+        autoListener = new SwitchHelper(this, this, SwitchHelper.WorkingMode.AUTO);
         switchAuto.setOnCheckedChangeListener(autoListener);
-        manualListener = new SwitchListener(this, this, SwitchListener.WorkingMode.MANUAL);
+        manualListener = new SwitchHelper(this, this, SwitchHelper.WorkingMode.MANUAL);
         switchManual.setOnCheckedChangeListener(manualListener);
         mySwipeRefreshLayout.setOnRefreshListener(this);
 
@@ -446,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         pm10Data.setOnClickListener(textViewListener);
 
         // ChangeListeners
-        detector.setListener(new Detector.ChangeListener() {
+        detector.setListener(new DetectorHelper.ChangeListener() {
             @Override
             public void onChange() {
                 Log.d(TAG, "onChange detector: CHANGE");
@@ -502,18 +515,18 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     //////////////////////////////////////////  LOADERS  ///////////////////////////////////////////
     @Override
-    public Loader onCreateLoader(int id, Bundle args) {
+    public android.content.Loader onCreateLoader(int id, Bundle args) {
         if (id == LOADER_DETECTOR) {
-            return new DetectorLoader(this);
+            return new DetectorHelper.Loader(this);
         } else if (id == LOADER_API) {
-            return new APILoader(this);
+            return new APIHelper.Loader(this);
         }
         return null;
     }
 
     @Override
     @SuppressWarnings(value = "unchecked")
-    public void onLoadFinished(Loader loader, Object data) {
+    public void onLoadFinished(android.content.Loader loader, Object data) {
         int id = loader.getId();
 
         if (id == LOADER_DETECTOR) {
@@ -525,8 +538,9 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     }
 
     @Override
-    public void onLoaderReset(Loader loader) {
+    public void onLoaderReset(android.content.Loader loader) {
     }
+
 
     ////////////////////////////////////////////  MENU  ////////////////////////////////////////////
     @Override
@@ -606,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         if (!flagDetectorAPI) {  // if detector
             pm25Mode.setText(R.string.UI_indoors);
             pm10Mode.setText(R.string.UI_indoors);
-        } else {  // if API
+        } else {  // if APIHelper
             pm25Mode.setText(getString(R.string.UI_api, pmDatesAPI[0]));
             pm10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
         }

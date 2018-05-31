@@ -16,11 +16,11 @@ import java.security.NoSuchAlgorithmException;
  */
 
 @TargetApi(23)
-public class LoginHelper extends FingerprintManager.AuthenticationCallback {
+class LoginHelper extends FingerprintManager.AuthenticationCallback {
 
     private static final String TAG = "LoginHelper";
-    private final FingerprintManager mFingerprintManager;
-    private final FingerprintCallback mCallback;
+    private FingerprintManager mFingerprintManager;
+    private FingerprintCallback mCallback;
     private CancellationSignal mCancellationSignal;
     private boolean mSelfCancelled;
 
