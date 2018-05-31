@@ -49,15 +49,15 @@ class DetectorHelper {
                     pmDoubles[i] = Double.parseDouble(pmStrings[i]);
                 }
                 catch (NumberFormatException e) {
-                    Log.e(TAG, "download: Number Format Exception " + e.getMessage());
+                    Log.e(TAG, "downloadPMValues: Number Format Exception " + e.getMessage());
                 }
             }
 
             // Convert results to percentages (to ease handling with auto mode)
             pmDoubles = convertToPercent(pmDoubles);
 
-            Log.d(TAG, "download: PMDOUBLES ARE " + Arrays.toString(pmDoubles));
-            Log.d(TAG, "download: GETPMVALUESDETECTOR ARE " + Arrays.toString(mCallback.getPMValuesDetector()));
+            Log.d(TAG, "downloadPMValues: PMDOUBLES ARE " + Arrays.toString(pmDoubles));
+            Log.d(TAG, "downloadPMValues: GETPMVALUESDETECTOR ARE " + Arrays.toString(mCallback.getPMValuesDetector()));
 
             // If values have changed
             if (!Arrays.equals(pmDoubles, mCallback.getPMValuesDetector())) {

@@ -20,6 +20,7 @@ class APIHelper {
     private static final String TAG = "APIHelper";
     private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
     private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
+    private static final String LOCATION_API_URL = "http://api.gios.gov.pl/pjp-api/rest/station/findAll";
 //    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
 //    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
     private static APICallback mCallback;
@@ -33,8 +34,8 @@ class APIHelper {
         mCallback = callback;
     }
 
-    static List<Object> download() {
-        String pmDataAPI;
+    static List<Object> downloadPMValues() {
+        String rawData;
         String pm25LatestStringDate = null; // i = 0
         String pm10LatestStringDate = null; // i = 1
         String pm25LatestStringValue = null; // i = 0
@@ -45,26 +46,25 @@ class APIHelper {
                 HttpGetRequest getRequest = new HttpGetRequest();
 
                 if (i == 0) {
-                    pmDataAPI = getRequest.doHttpRequest(PM25_API_URL);
+                    rawData = getRequest.doHttpRequest(PM25_API_URL);
                 } else {
-                    pmDataAPI = getRequest.doHttpRequest(PM10_API_URL);
+                    rawData = getRequest.doHttpRequest(PM10_API_URL);
                 }
 
-                JSONObject jsonData = new JSONObject(pmDataAPI);  // return python's {key: value} of the provided link
+                JSONObject jsonData = new JSONObject(rawData);  // return python's {key: value} of the provided link
                 JSONArray itemsArray = jsonData.getJSONArray("values");  // return array of dicts from "values" value
 
                 for (int j = itemsArray.length() - 1; j >= 0; j--) {  // to load last not-null value (last current value)
-                    JSONObject specificDict = itemsArray.getJSONObject(j);
+                    JSONObject specificDate = itemsArray.getJSONObject(j);
 
-                    String date = specificDict.getString("date");
-                    String value = specificDict.getString("value");
+                    String date = specificDate.getString("date");
+                    String value = specificDate.getString("value");
 
                     if (!value.equals("null")) {
                         if (i == 0) {
                             pm25LatestStringValue = value;
                             pm25LatestStringDate = date;
-                        }
-                        else {
+                        } else {
                             pm10LatestStringValue = value;
                             pm10LatestStringDate = date;
                         }
@@ -103,7 +103,7 @@ class APIHelper {
             return empty;
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, "download: Error processing JSON data " + e.getMessage());
+            Log.e(TAG, "downloadPMValues: Error processing JSON data " + e.getMessage());
         }
 
         return null;
@@ -118,15 +118,69 @@ class APIHelper {
         return pmDoublesPerc;
     }
 
-    static class Loader extends AsyncTaskLoader<List<Object>> {
-        Loader(Context context) {
+    static List<List<Object>> downloadStationLocations() {
+        String rawData;
+        List<List<Object>> stationList = new ArrayList<>();
+
+        try {
+            HttpGetRequest getRequest = new HttpGetRequest();
+            rawData = getRequest.doHttpRequest(LOCATION_API_URL);
+
+            JSONArray jsonData = new JSONArray(rawData);
+            for (int i = 0; i < jsonData.length(); i++) {
+                JSONObject specificStation = jsonData.getJSONObject(i);
+
+                Integer id = specificStation.getInt("id");
+                String latitudeString = specificStation.getString("gegrLat");
+                String longitudeString = specificStation.getString("gegrLon");
+                Double latitude = Double.parseDouble(latitudeString);
+                Double longitude = Double.parseDouble(longitudeString);
+
+                List<Object> station = new ArrayList<>(3);
+                station.add(0, id);
+                station.add(1, latitude);
+                station.add(2, longitude);
+
+                Log.d(TAG, "downloadStationLocation: id is: " + id);
+                Log.d(TAG, "downloadStationLocation: lat is: " + latitudeString);
+                Log.d(TAG, "downloadStationLocation: lon is: " + longitudeString);
+
+                if (!station.isEmpty()) {
+                    stationList.add(station);
+                }
+            }
+            return stationList;
+
+        } catch (NullPointerException e) {
+            Log.d(TAG, "downloadStationLocation: Empty stations loc data " + e.getMessage());
+            return new ArrayList<>();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "downloadStationLocation: Error processing JSON data " + e.getMessage());
+        }
+
+        return null;
+    }
+
+
+    static class PMLoader extends AsyncTaskLoader<List<Object>> {
+        PMLoader(Context context) {
             super(context);
         }
 
         @Override
         public List<Object> loadInBackground() {
-            return APIHelper.download();
+            return APIHelper.downloadPMValues();
         }
+    }
+
+    static class StationsLoader extends AsyncTaskLoader<List<List<Object>>> {
+        StationsLoader(Context context) {
+            super(context);
+        }
+
+        @Override
+        public List<List<Object>> loadInBackground() { return APIHelper.downloadStationLocations(); }
     }
 
 }

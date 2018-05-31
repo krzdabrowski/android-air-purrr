@@ -1,10 +1,8 @@
 package com.example.trubul.airpurrr;
 
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +37,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private static final String STATE_FLAGTRISTATEAUTO = "FlagTriStateAuto";
 
     private static final int LOADER_DETECTOR = 1;
-    private static final int LOADER_API = 2;
+    private static final int LOADER_API_PM = 2;
+    private static final int LOADER_API_STATIONS = 3;
 
     static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     static int flagTriStateAuto = 0;
@@ -65,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private List<Object> pmValuesAndDatesAPI;
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
+    private List<List<Object>> stationLocations;
 
     private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
@@ -414,6 +413,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         pmDatesAPI = new String[]{getString(R.string.UI_no_api_data), getString(R.string.UI_no_api_data)};
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for Detector
         getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();  // Loader for API
 >>>>>>> f93a4fa... Implement AsyncTaskLoaders (part #2)
@@ -433,6 +433,12 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();  // Loader for APIHelper
         automaticDownload();  // download DetectorHelper values every 1 minute
 >>>>>>> 2dee706... Classes refactor and add LocationService
+=======
+        getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for Detector PM data
+        getLoaderManager().initLoader(LOADER_API_PM, null, this).forceLoad();  // Loader for API PM data
+        getLoaderManager().initLoader(LOADER_API_STATIONS, null, this).forceLoad();  // Loader for API Station Locations
+        automaticDownload();  // downloadPMValues DetectorHelper values every 1 minute
+>>>>>>> 0aba3d6... Add downloading station locations from API
 
 =======
 >>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
@@ -518,8 +524,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     public android.content.Loader onCreateLoader(int id, Bundle args) {
         if (id == LOADER_DETECTOR) {
             return new DetectorHelper.Loader(this);
-        } else if (id == LOADER_API) {
-            return new APIHelper.Loader(this);
+        } else if (id == LOADER_API_PM) {
+            return new APIHelper.PMLoader(this);
+        } else if (id == LOADER_API_STATIONS) {
+            return new APIHelper.StationsLoader(this);
         }
         return null;
     }
@@ -532,8 +540,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         if (id == LOADER_DETECTOR) {
             pmValuesDetector = (Double[]) data;
             updateDetector();
-        } else if (id == LOADER_API) {
+        } else if (id == LOADER_API_PM) {
             pmValuesAndDatesAPI = (List<Object>) data;
+        } else if (id == LOADER_API_STATIONS) {
+            stationLocations = (List<List<Object>>) data;
         }
     }
 
@@ -560,7 +570,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
                 setSwipeRefreshing(false);
                 return true;
             case R.id.refresh_api:
-                getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();
+                getLoaderManager().initLoader(LOADER_API_PM, null, this).forceLoad();
                 updateAPI();
                 setSwipeRefreshing(false);
                 return true;
@@ -573,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     @Override
     public void onRefresh() {
         getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();
-        getLoaderManager().initLoader(LOADER_API, null, this).forceLoad();
+        getLoaderManager().initLoader(LOADER_API_PM, null, this).forceLoad();
         setSwipeRefreshing(false);
     }
 
