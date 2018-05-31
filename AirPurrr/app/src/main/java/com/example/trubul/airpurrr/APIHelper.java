@@ -2,6 +2,8 @@ package com.example.trubul.airpurrr;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -138,12 +140,8 @@ class APIHelper {
 
                 List<Object> station = new ArrayList<>(3);
                 station.add(0, id);
-                station.add(1, latitude);
-                station.add(2, longitude);
-
-                Log.d(TAG, "downloadStationLocation: id is: " + id);
-                Log.d(TAG, "downloadStationLocation: lat is: " + latitudeString);
-                Log.d(TAG, "downloadStationLocation: lon is: " + longitudeString);
+                Location stationLocation = convertToLocation(latitude, longitude);
+                station.add(1, stationLocation);
 
                 if (!station.isEmpty()) {
                     stationList.add(station);
@@ -162,6 +160,41 @@ class APIHelper {
         return null;
     }
 
+    private static Location convertToLocation(Double latitude, Double longitude) {
+        Location stationLocation = new Location("API");
+
+        stationLocation.setLatitude(latitude);
+        stationLocation.setLongitude(longitude);
+
+        return stationLocation;
+    }
+
+    private static int findClosestStation(List<List<Object>> stations) {
+        Location lastLocation = LocationService.getLastLocation();
+        Log.d(TAG, "findClosestStation: lastLocation is: " + lastLocation);
+        float[] results = {0};
+
+        Float closestDistance = null;
+        Integer closestDistanceId = 0;
+
+        for(List<Object> station : stations) {
+            Integer id = (Integer) station.get(0);
+            Location stationLocation = (Location) station.get(1);
+
+            // Calculate distance in meters
+            Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
+                    stationLocation.getLatitude(), stationLocation.getLongitude(), results);
+
+            float distance = results[0];
+            if (closestDistance == null || closestDistance > distance) {  // set first distance as closest distance
+                closestDistance = distance;
+                closestDistanceId = id;
+            }
+        }
+
+        return closestDistanceId;
+    }
+
 
     static class PMLoader extends AsyncTaskLoader<List<Object>> {
         PMLoader(Context context) {
@@ -170,17 +203,25 @@ class APIHelper {
 
         @Override
         public List<Object> loadInBackground() {
-            return APIHelper.downloadPMValues();
+            return downloadPMValues();
         }
     }
 
-    static class StationsLoader extends AsyncTaskLoader<List<List<Object>>> {
+    static class StationsLoader extends AsyncTaskLoader<Integer> {
         StationsLoader(Context context) {
             super(context);
         }
 
         @Override
-        public List<List<Object>> loadInBackground() { return APIHelper.downloadStationLocations(); }
+        public Integer loadInBackground() {
+            List<List<Object>> stationList = APIHelper.downloadStationLocations();
+
+            if (stationList != null) {
+                return findClosestStation(stationList);
+            } else {
+                return 0;
+            }
+        }
     }
 
 }

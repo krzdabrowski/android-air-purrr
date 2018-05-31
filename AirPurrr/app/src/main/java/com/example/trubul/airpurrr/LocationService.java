@@ -3,10 +3,12 @@ package com.example.trubul.airpurrr;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,16 +17,25 @@ public class LocationService extends Service {
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 0;
     private static final float LOCATION_DISTANCE = 1000;
+    private static Location mLastLocation;
 
-    private class LocationListener implements android.location.LocationListener {
-        Location mLastLocation;
+//    private SharedPreferences mSharedPreferences;
+//    private static final String LATITUDE_KEY = "LatitudeKey";
+//    private static final String LONGITUDE_KEY = "LongitudeKey";
+
+
+    public static Location getLastLocation() {
+        return mLastLocation;
+    }
+
+    class LocationListener implements android.location.LocationListener {
 
         LocationListener(String provider) { mLastLocation = new Location(provider); }
 
         @Override
         public void onLocationChanged(Location location) {
             mLastLocation.set(location);
-            Toast.makeText(LocationService.this, "LOCATION IS: " + String.valueOf(location.getLatitude()) + "; " + String.valueOf(location.getLongitude()), Toast.LENGTH_LONG).show();
+            Toast.makeText(LocationService.this, "LOCATION IS: " + String.valueOf(mLastLocation.getLatitude()) + "; " + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -51,13 +62,14 @@ public class LocationService extends Service {
 
     @Override
     public void onCreate() {
+//        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         if (mLocationManager == null) {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
+
         try {
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    mLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListener);
         } catch (java.lang.SecurityException e) {
             Log.i(TAG, "Failed to request location update", e);
         } catch (IllegalArgumentException e) {

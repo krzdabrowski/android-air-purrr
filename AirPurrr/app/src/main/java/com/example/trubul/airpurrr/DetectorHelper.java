@@ -92,7 +92,7 @@ class DetectorHelper {
 
         @Override
         public Double[] loadInBackground() {
-            return DetectorHelper.download();
+            return download();
         }
     }
 }

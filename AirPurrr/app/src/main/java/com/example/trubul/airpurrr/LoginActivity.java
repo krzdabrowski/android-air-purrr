@@ -63,6 +63,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        startService(new Intent(this, LocationService.class));  // Location class
 
         mEmailField = findViewById(R.id.input_email);
         mPasswordField = findViewById(R.id.input_password);
@@ -79,6 +80,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         mFingerprintMessage.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
+
 
         // If Android is at least Marshmallow (6.0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

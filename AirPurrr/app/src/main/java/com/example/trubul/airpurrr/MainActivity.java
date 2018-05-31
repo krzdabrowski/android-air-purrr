@@ -3,6 +3,7 @@ package com.example.trubul.airpurrr;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -63,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private List<Object> pmValuesAndDatesAPI;
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
-    private List<List<Object>> stationLocations;
+//    private List<List<Object>> stationLocations;
+    private Integer stationId;
 
     private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -405,6 +408,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 =======
         startService(new Intent(this, LocationService.class));  // Location class
 >>>>>>> 2dee706... Classes refactor and add LocationService
+=======
+>>>>>>> 546f0c9... Add finding closest GIOS station (not completed)
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 >>>>>>> 885e77f... First try of fingerprint authentication's implementation
 
@@ -543,7 +548,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         } else if (id == LOADER_API_PM) {
             pmValuesAndDatesAPI = (List<Object>) data;
         } else if (id == LOADER_API_STATIONS) {
-            stationLocations = (List<List<Object>>) data;
+            stationId = (Integer) data;
+            Log.d(TAG, "onLoadFinished: STATION ID IS: " + id);
+//            Location firstStationGPS = (Location) stationLocations.get(0).get(1);
+//            Log.d(TAG, "onLoadFinished: lat is:" + firstStationGPS.getLatitude());
         }
     }
 
