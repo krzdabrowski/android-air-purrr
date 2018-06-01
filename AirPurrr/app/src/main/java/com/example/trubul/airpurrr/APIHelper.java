@@ -205,15 +205,7 @@ class APIHelper {
             return pmDoublesDates;
 
         } catch (NullPointerException e) {
-            List<Object> empty = new ArrayList<>(2);
-            Double[] emptyDouble = new Double[]{0.0, 0.0};
-            String[] emptyString = new String[]{"no data", "no data"};
-
-            empty.add(emptyDouble);
-            empty.add(emptyString);
-
-            mCallback.setPMValuesAndDatesAPI(empty);
-            return empty;
+            return setEmptyList();
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "downloadPMValues: Error processing JSON data " + e.getMessage());
@@ -242,15 +234,30 @@ class APIHelper {
 
             if (stationList != null) {
                 Integer closestStation = findClosestStation(stationList);
+                Log.d(TAG, "loadInBackground: closestStation is: " + closestStation);
                 Integer[] stationSensors = downloadStationSensors(closestStation);
-                if (stationSensors != null) {
+
+                if (stationSensors != null && stationSensors[0] != 0) {  // stationSensors[0] = 0 if Location is {0.0, 0.0}
+                    Log.d(TAG, "loadInBackground: stationSensors are: " + stationSensors[0] + ", " + stationSensors[1]);
                     return downloadPMValues(stationSensors[0], stationSensors[1]);
                 } else {
                     return downloadPMValues(3731, 3730);  // sensors from my closest station
                 }
             } else {
-                return new ArrayList<>(2);
+                return setEmptyList();
             }
         }
+    }
+
+    private static List<Object> setEmptyList() {
+        List<Object> empty = new ArrayList<>(2);
+        Double[] emptyDouble = new Double[]{0.0, 0.0};
+        String[] emptyString = new String[]{"no data", "no data"};
+
+        empty.add(emptyDouble);
+        empty.add(emptyString);
+
+        mCallback.setPMValuesAndDatesAPI(empty);
+        return empty;
     }
 }
