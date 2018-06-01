@@ -20,12 +20,10 @@ import java.util.List;
 class APIHelper {
     private static final String TAG = "APIHelper";
     private static final String STATION_LOCATIONS_URL = "http://api.gios.gov.pl/pjp-api/rest/station/findAll";
-    private static final String STATION_SENSORS_URL = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/";
+    private static final String STATION_SENSORS_URL = "http://api.gios.gov.pl/pjp-api/rest/station/sensors";
+    private static final String STATION_PM25_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData";
+    private static final String STATION_PM10_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData";
 
-    private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
-    private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
-//    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
-//    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
     private static APICallback mCallback;
 
 
@@ -122,7 +120,7 @@ class APIHelper {
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();
-            rawData = getRequest.doHttpRequest(STATION_SENSORS_URL + stationId);
+            rawData = getRequest.doHttpRequest(STATION_SENSORS_URL + '/' + stationId);
 
             JSONArray jsonData = new JSONArray(rawData);
             for (int i = 0; i < jsonData.length(); i++) {
@@ -149,8 +147,7 @@ class APIHelper {
         return null;
     }
 
-
-    static List<Object> downloadPMValues() {
+    static List<Object> downloadPMValues(Integer pm25Sensor, Integer pm10Sensor) {
         String rawData;
         String pm25LatestStringDate = null; // i = 0
         String pm10LatestStringDate = null; // i = 1
@@ -162,9 +159,9 @@ class APIHelper {
                 HttpGetRequest getRequest = new HttpGetRequest();
 
                 if (i == 0) {
-                    rawData = getRequest.doHttpRequest(PM25_API_URL);
+                    rawData = getRequest.doHttpRequest(STATION_PM25_URL + '/' + pm25Sensor);
                 } else {
-                    rawData = getRequest.doHttpRequest(PM10_API_URL);
+                    rawData = getRequest.doHttpRequest(STATION_PM10_URL + '/' + pm10Sensor);
                 }
 
                 JSONObject jsonData = new JSONObject(rawData);  // return python's {key: value} of the provided link
@@ -241,24 +238,18 @@ class APIHelper {
 
         @Override
         public List<Object> loadInBackground() {
-            return downloadPMValues();
-        }
-    }
-
-    static class StationsLoader extends AsyncTaskLoader<Integer[]> {
-        StationsLoader(Context context) {
-            super(context);
-        }
-
-        @Override
-        public Integer[] loadInBackground() {
             List<List<Object>> stationList = APIHelper.downloadStationLocations();
 
             if (stationList != null) {
                 Integer closestStation = findClosestStation(stationList);
-                return downloadStationSensors(closestStation);
+                Integer[] stationSensors = downloadStationSensors(closestStation);
+                if (stationSensors != null) {
+                    return downloadPMValues(stationSensors[0], stationSensors[1]);
+                } else {
+                    return downloadPMValues(3731, 3730);  // sensors from my closest station
+                }
             } else {
-                return new Integer[]{0, 0};
+                return new ArrayList<>(2);
             }
         }
     }

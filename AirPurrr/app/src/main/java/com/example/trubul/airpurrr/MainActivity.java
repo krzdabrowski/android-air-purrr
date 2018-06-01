@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private static final int LOADER_DETECTOR = 1;
     private static final int LOADER_API_PM = 2;
-    private static final int LOADER_API_STATIONS = 3;
+//    private static final int LOADER_API_STATIONS = 3;
 
     static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     static int flagTriStateAuto = 0;
@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private List<Object> pmValuesAndDatesAPI;
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
-//    private List<List<Object>> stationLocations;
-    private Integer[] stationSensors;
+////    private List<List<Object>> stationLocations;
+//    private Integer[] stationSensors;
 
     private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
@@ -441,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 =======
         getLoaderManager().initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for Detector PM data
         getLoaderManager().initLoader(LOADER_API_PM, null, this).forceLoad();  // Loader for API PM data
-        getLoaderManager().initLoader(LOADER_API_STATIONS, null, this).forceLoad();  // Loader for API Station Locations
+//        getLoaderManager().initLoader(LOADER_API_STATIONS, null, this).forceLoad();  // Loader for API Station Locations
         automaticDownload();  // downloadPMValues DetectorHelper values every 1 minute
 >>>>>>> 0aba3d6... Add downloading station locations from API
 
@@ -531,8 +531,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             return new DetectorHelper.Loader(this);
         } else if (id == LOADER_API_PM) {
             return new APIHelper.PMLoader(this);
-        } else if (id == LOADER_API_STATIONS) {
-            return new APIHelper.StationsLoader(this);
         }
         return null;
     }
@@ -547,9 +545,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             updateDetector();
         } else if (id == LOADER_API_PM) {
             pmValuesAndDatesAPI = (List<Object>) data;
-        } else if (id == LOADER_API_STATIONS) {
-            stationSensors = (Integer[]) data;
-            Log.d(TAG, "onLoadFinished: STATION SENSORS IS: " + stationSensors[0] + ", " + stationSensors[1]);
         }
     }
 
