@@ -17,8 +17,8 @@ public class LocationService extends Service {
     private static final String TAG = "LocationService";
     private MyBinder binder;
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 0;
-    private static final float LOCATION_DISTANCE = 0;
+    private static final int LOCATION_INTERVAL = 1000 * 60;  // auto-update location every 1 min
+    private static final float LOCATION_DISTANCE = 0;  // should be 0 as user doesn't move much
     private Location mLastLocation;
 
     public Location getLastLocation() {
@@ -32,7 +32,7 @@ public class LocationService extends Service {
         @Override
         public void onLocationChanged(Location location) {
             mLastLocation.set(location);
-            Toast.makeText(LocationService.this, "LOCATION IS: " + String.valueOf(mLastLocation.getLatitude()) + "; " + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
+//            Toast.makeText(LocationService.this, "LOCATION IS: " + String.valueOf(mLastLocation.getLatitude()) + "; " + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
         }
 
         @Override
