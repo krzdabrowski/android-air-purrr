@@ -34,11 +34,7 @@
         <service android:name=".LocationService"
             android:process=":location"
             android:enabled="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-        </service>
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
 
     </application>
 

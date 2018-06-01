@@ -32,7 +32,7 @@ public class LocationService extends Service {
         @Override
         public void onLocationChanged(Location location) {
             mLastLocation.set(location);
-//            Toast.makeText(LocationService.this, "LOCATION IS: " + String.valueOf(mLastLocation.getLatitude()) + "; " + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
+            Toast.makeText(LocationService.this, "LOCATION IS: " + String.valueOf(mLastLocation.getLatitude()) + "; " + String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show(); // TODO: to comment-out later
         }
 
         @Override
