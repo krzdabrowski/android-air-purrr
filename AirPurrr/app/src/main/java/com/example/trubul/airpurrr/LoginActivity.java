@@ -53,6 +53,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
 
     static LocationService mLocationService;
     static boolean isLocation = false;
+    static Intent mLocationIntent;
 
 
     String getEmail() {
@@ -63,7 +64,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     }
 
     // Location service
-    ServiceConnection connection = new ServiceConnection() {
+    static ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             isLocation = true;
@@ -82,9 +83,8 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         FirebaseApp.initializeApp(this);
 
         // Location service init
-        Intent locationIntent = new Intent(this, LocationService.class);
-        startService(locationIntent);
-        bindService(locationIntent, connection, Context.BIND_AUTO_CREATE);
+        mLocationIntent = new Intent(this, LocationService.class);
+        bindService(mLocationIntent, connection, Context.BIND_AUTO_CREATE);
 
         mEmailField = findViewById(R.id.input_email);
         mPasswordField = findViewById(R.id.input_password);
@@ -145,14 +145,6 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         super.onPause();
         if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted()) {
             mLoginHelper.stopListening();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (connection != null) {
-            unbindService(connection);
         }
     }
 

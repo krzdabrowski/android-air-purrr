@@ -495,6 +495,15 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (LoginActivity.connection != null) {
+            stopService(LoginActivity.mLocationIntent);
+            unbindService(LoginActivity.connection);
+        }
+    }
+
     //////////////////////////////////////////  ROTATION  //////////////////////////////////////////
     @Override  // logic has to be BEFORE super() because it saves
     protected void onSaveInstanceState(Bundle outState) {

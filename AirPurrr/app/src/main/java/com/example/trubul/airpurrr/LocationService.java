@@ -17,8 +17,8 @@ public class LocationService extends Service {
     private static final String TAG = "LocationService";
     private MyBinder binder;
     private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 1000 * 60;  // auto-update location every 1 min
-    private static final float LOCATION_DISTANCE = 0;  // should be 0 as user doesn't move much
+    private static final int LOCATION_INTERVAL = 0;
+    private static final float LOCATION_DISTANCE = 1000;  // should be big enough to prevent getting location updates
     private Location mLastLocation;
 
     public Location getLastLocation() {
@@ -65,6 +65,15 @@ public class LocationService extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
+    }
+
+    @Override
+    public IBinder onBind(Intent arg0) { return binder; }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mLocationManager != null) {
@@ -81,14 +90,4 @@ public class LocationService extends Service {
             return LocationService.this;
         }
     }
-
-    @Override
-    public IBinder onBind(Intent arg0) { return binder; }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
-    }
-
 }
