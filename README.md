@@ -1,6 +1,6 @@
 # Air Purrr
 
-An app that handles controlling of self-made air purifier (consists of 230V fan and filter mats) and reading PM2.5/10 values from air quality detector and the nearest GIOS station (using smogAPI). App is currently in alpha release.
+An app that handles controlling of self-made air purifier (consists of 230V fan and filter mats) and reading PM2.5/10 values from air quality detector and the nearest GIOS station (using smogAPI and location coordinates). App is currently in alpha release.
 
 ### Getting Started
 
