@@ -549,7 +549,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             pmValuesAndDatesAPI = (List<Object>) data;
         } else if (id == LOADER_API_STATIONS) {
             stationId = (Integer) data;
-            Log.d(TAG, "onLoadFinished: STATION ID IS: " + id);
+            Log.d(TAG, "onLoadFinished: STATION ID IS: " + stationId);
 //            Location firstStationGPS = (Location) stationLocations.get(0).get(1);
 //            Log.d(TAG, "onLoadFinished: lat is:" + firstStationGPS.getLatitude());
         }

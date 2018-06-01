@@ -52,8 +52,6 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     private SharedPreferences mSharedPreferences;
 
     static LocationService mLocationService;
-    private LocationService.MyBinder binder;
-
     static boolean isLocation = false;
 
 
@@ -69,7 +67,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             isLocation = true;
-            binder = (LocationService.MyBinder) service;
+            LocationService.MyBinder binder = (LocationService.MyBinder) service;
             mLocationService = binder.getServiceSystem();
         }
 
@@ -127,18 +125,6 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-//        Log.d(TAG, "onStart: ");
-//
-//        while (!mLocationService.isLocationSet) {
-//            Log.d(TAG, "findClosestStation: isLocationSet is: " + mLocationService.isLocationSet);
-//        }
-//        Log.d(TAG, "findClosestStation: isLocationSet is AFTER: " + mLocationService.isLocationSet);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted() && mHashedEmail != null) {
@@ -152,15 +138,6 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         } else {
             activateKeyboard();
         }
-
-//        while (true) {
-//            if (mLocationService == null) {
-//                Log.d(TAG, "WHILE WCIAZ NULL");
-//            }
-//            else {
-//                Log.d(TAG, "WHILE TRUE JUZ NIE: " + mLocationService.getLastLocation());
-//            }
-//        }
     }
 
     @Override

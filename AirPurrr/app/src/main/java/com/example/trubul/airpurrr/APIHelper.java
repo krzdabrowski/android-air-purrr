@@ -131,7 +131,6 @@ class APIHelper {
             JSONArray jsonData = new JSONArray(rawData);
             for (int i = 0; i < jsonData.length(); i++) {
                 JSONObject specificStation = jsonData.getJSONObject(i);
-                Log.d(TAG, "downloadStationLocations: JSONOBJECT IS: " + jsonData.getJSONObject(i));
 
                 Integer id = specificStation.getInt("id");
                 String latitudeString = specificStation.getString("gegrLat");
@@ -195,7 +194,6 @@ class APIHelper {
                 closestDistance = distance;
                 closestDistanceId = id;
             }
-
         }
 
         return closestDistanceId;
