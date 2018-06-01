@@ -3,7 +3,6 @@ package com.example.trubul.airpurrr;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -20,9 +19,11 @@ import java.util.List;
 
 class APIHelper {
     private static final String TAG = "APIHelper";
+    private static final String STATION_LOCATIONS_URL = "http://api.gios.gov.pl/pjp-api/rest/station/findAll";
+    private static final String STATION_SENSORS_URL = "http://api.gios.gov.pl/pjp-api/rest/station/sensors/";
+
     private static final String PM25_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3731";
     private static final String PM10_API_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData/3730";
-    private static final String LOCATION_API_URL = "http://api.gios.gov.pl/pjp-api/rest/station/findAll";
 //    private static final String PM25_API_URL = "http://89.70.85.249:2138/testapi.txt";
 //    private static final String PM10_API_URL = "http://89.70.85.249:2138/testapi.txt";
     private static APICallback mCallback;
@@ -35,6 +36,119 @@ class APIHelper {
     APIHelper(APICallback callback) {
         mCallback = callback;
     }
+
+    static List<List<Object>> downloadStationLocations() {
+        String rawData;
+        List<List<Object>> stationList = new ArrayList<>();
+
+        try {
+            HttpGetRequest getRequest = new HttpGetRequest();
+            rawData = getRequest.doHttpRequest(STATION_LOCATIONS_URL);
+
+            JSONArray jsonData = new JSONArray(rawData);
+            for (int i = 0; i < jsonData.length(); i++) {
+                JSONObject specificStation = jsonData.getJSONObject(i);
+
+                Integer id = specificStation.getInt("id");
+                String latitudeString = specificStation.getString("gegrLat");
+                String longitudeString = specificStation.getString("gegrLon");
+                Double latitude = Double.parseDouble(latitudeString);
+                Double longitude = Double.parseDouble(longitudeString);
+
+                List<Object> station = new ArrayList<>(3);
+                station.add(0, id);
+                Location stationLocation = convertToLocation(latitude, longitude);
+                station.add(1, stationLocation);
+
+                if (!station.isEmpty()) {
+                    stationList.add(station);
+                }
+            }
+            return stationList;
+
+        } catch (NullPointerException e) {
+            Log.d(TAG, "downloadStationLocation: Empty stations loc data " + e.getMessage());
+            return new ArrayList<>();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "downloadStationLocation: Error processing JSON data " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    private static Location convertToLocation(Double latitude, Double longitude) {
+        Location stationLocation = new Location("API");
+
+        stationLocation.setLatitude(latitude);
+        stationLocation.setLongitude(longitude);
+
+        return stationLocation;
+    }
+
+    private static int findClosestStation(List<List<Object>> stations) {
+
+        while (!LoginActivity.isLocation) { Log.d(TAG, "findClosestStation: still can't get a location"); }
+
+        Location lastLocation = LoginActivity.mLocationService.getLastLocation();
+        Log.d(TAG, "findClosestStation: lastLocation is: " + lastLocation);
+
+        float[] results = {0};
+
+        Float closestDistance = -1f;
+        Integer closestDistanceId = 0;
+
+        for(List<Object> station : stations) {
+            Integer id = (Integer) station.get(0);
+            Location stationLocation = (Location) station.get(1);
+
+            // Calculate distance in meters
+            Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
+                    stationLocation.getLatitude(), stationLocation.getLongitude(), results);
+
+            float distance = results[0];
+            if (closestDistance == -1f || distance < closestDistance) {  // set first distance as closest distance
+                closestDistance = distance;
+                closestDistanceId = id;
+            }
+        }
+
+        return closestDistanceId;
+    }
+
+    static Integer[] downloadStationSensors(Integer stationId) {
+        String rawData;
+        Integer[] sensorsArray = {0, 0};
+
+        try {
+            HttpGetRequest getRequest = new HttpGetRequest();
+            rawData = getRequest.doHttpRequest(STATION_SENSORS_URL + stationId);
+
+            JSONArray jsonData = new JSONArray(rawData);
+            for (int i = 0; i < jsonData.length(); i++) {
+                JSONObject specificSensor = jsonData.getJSONObject(i);
+                JSONObject sensorDetails = specificSensor.getJSONObject("param");
+
+                if (sensorDetails.getString("paramCode").equals("PM2.5")) {
+                    sensorsArray[0] = specificSensor.getInt("id");
+                }
+                if (sensorDetails.getString("paramCode").equals("PM10")) {
+                    sensorsArray[1] = specificSensor.getInt("id");
+                }
+            }
+            return sensorsArray;
+
+        } catch (NullPointerException e) {
+            Log.d(TAG, "downloadStationLocation: Empty stations sensors data " + e.getMessage());
+            return new Integer[]{0, 0};
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "downloadStationLocation: Error processing JSON data " + e.getMessage());
+        }
+
+        return null;
+    }
+
 
     static List<Object> downloadPMValues() {
         String rawData;
@@ -120,86 +234,6 @@ class APIHelper {
         return pmDoublesPerc;
     }
 
-    static List<List<Object>> downloadStationLocations() {
-        String rawData;
-        List<List<Object>> stationList = new ArrayList<>();
-
-        try {
-            HttpGetRequest getRequest = new HttpGetRequest();
-            rawData = getRequest.doHttpRequest(LOCATION_API_URL);
-
-            JSONArray jsonData = new JSONArray(rawData);
-            for (int i = 0; i < jsonData.length(); i++) {
-                JSONObject specificStation = jsonData.getJSONObject(i);
-
-                Integer id = specificStation.getInt("id");
-                String latitudeString = specificStation.getString("gegrLat");
-                String longitudeString = specificStation.getString("gegrLon");
-                Double latitude = Double.parseDouble(latitudeString);
-                Double longitude = Double.parseDouble(longitudeString);
-
-                List<Object> station = new ArrayList<>(3);
-                station.add(0, id);
-                Location stationLocation = convertToLocation(latitude, longitude);
-                station.add(1, stationLocation);
-
-                if (!station.isEmpty()) {
-                    stationList.add(station);
-                }
-            }
-            return stationList;
-
-        } catch (NullPointerException e) {
-            Log.d(TAG, "downloadStationLocation: Empty stations loc data " + e.getMessage());
-            return new ArrayList<>();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(TAG, "downloadStationLocation: Error processing JSON data " + e.getMessage());
-        }
-
-        return null;
-    }
-
-    private static Location convertToLocation(Double latitude, Double longitude) {
-        Location stationLocation = new Location("API");
-
-        stationLocation.setLatitude(latitude);
-        stationLocation.setLongitude(longitude);
-
-        return stationLocation;
-    }
-
-    private static int findClosestStation(List<List<Object>> stations) {
-
-        while (!LoginActivity.isLocation) { Log.d(TAG, "findClosestStation: still can't get a location"); }
-
-        Location lastLocation = LoginActivity.mLocationService.getLastLocation();
-        Log.d(TAG, "findClosestStation: lastLocation is: " + lastLocation);
-
-        float[] results = {0};
-
-        Float closestDistance = -1f;
-        Integer closestDistanceId = 0;
-
-        for(List<Object> station : stations) {
-            Integer id = (Integer) station.get(0);
-            Location stationLocation = (Location) station.get(1);
-
-            // Calculate distance in meters
-            Location.distanceBetween(lastLocation.getLatitude(), lastLocation.getLongitude(),
-                    stationLocation.getLatitude(), stationLocation.getLongitude(), results);
-
-            float distance = results[0];
-            if (closestDistance == -1f || distance < closestDistance) {  // set first distance as closest distance
-                closestDistance = distance;
-                closestDistanceId = id;
-            }
-        }
-
-        return closestDistanceId;
-    }
-
-
     static class PMLoader extends AsyncTaskLoader<List<Object>> {
         PMLoader(Context context) {
             super(context);
@@ -211,21 +245,21 @@ class APIHelper {
         }
     }
 
-    static class StationsLoader extends AsyncTaskLoader<Integer> {
+    static class StationsLoader extends AsyncTaskLoader<Integer[]> {
         StationsLoader(Context context) {
             super(context);
         }
 
         @Override
-        public Integer loadInBackground() {
+        public Integer[] loadInBackground() {
             List<List<Object>> stationList = APIHelper.downloadStationLocations();
 
             if (stationList != null) {
-                return findClosestStation(stationList);
+                Integer closestStation = findClosestStation(stationList);
+                return downloadStationSensors(closestStation);
             } else {
-                return 0;
+                return new Integer[]{0, 0};
             }
         }
     }
-
 }

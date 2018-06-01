@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
 //    private List<List<Object>> stationLocations;
-    private Integer stationId;
+    private Integer[] stationSensors;
 
     private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
     private int threshold = 100;
@@ -548,10 +548,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         } else if (id == LOADER_API_PM) {
             pmValuesAndDatesAPI = (List<Object>) data;
         } else if (id == LOADER_API_STATIONS) {
-            stationId = (Integer) data;
-            Log.d(TAG, "onLoadFinished: STATION ID IS: " + stationId);
-//            Location firstStationGPS = (Location) stationLocations.get(0).get(1);
-//            Log.d(TAG, "onLoadFinished: lat is:" + firstStationGPS.getLatitude());
+            stationSensors = (Integer[]) data;
+            Log.d(TAG, "onLoadFinished: STATION SENSORS IS: " + stationSensors[0] + ", " + stationSensors[1]);
         }
     }
 
