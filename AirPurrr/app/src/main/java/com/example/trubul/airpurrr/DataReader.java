@@ -25,7 +25,7 @@ class DataReader {
 
             //Check if the line we are reading is not null
             while ((inputLine = in.readLine()) != null) {
-                stringBuilder.append(inputLine).append("\n");
+                stringBuilder.append(inputLine).append('\n');
             }
 
             return stringBuilder.toString();

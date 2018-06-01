@@ -1,8 +1,10 @@
 package com.example.trubul.airpurrr;
 
 import android.app.KeyguardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
@@ -10,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -19,15 +22,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.trubul.airpurrr.BaseActivity;
-import com.example.trubul.airpurrr.LoginHelper;
-import com.example.trubul.airpurrr.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -51,6 +51,11 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     private InputMethodManager mInputMethodManager;
     private SharedPreferences mSharedPreferences;
 
+    static LocationService mLocationService;
+    private LocationService.MyBinder binder;
+
+    static boolean isLocation = false;
+
 
     String getEmail() {
         return mEmailField.getText().toString().trim();
@@ -59,11 +64,29 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         return mPasswordField.getText().toString().trim();
     }
 
+    // Location service
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            isLocation = true;
+            binder = (LocationService.MyBinder) service;
+            mLocationService = binder.getServiceSystem();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) { }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        startService(new Intent(this, LocationService.class));  // Location class
+        FirebaseApp.initializeApp(this);
+
+        // Location service init
+        Intent locationIntent = new Intent(this, LocationService.class);
+        startService(locationIntent);
+        bindService(locationIntent, connection, Context.BIND_AUTO_CREATE);
 
         mEmailField = findViewById(R.id.input_email);
         mPasswordField = findViewById(R.id.input_password);
@@ -80,7 +103,6 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         mFingerprintMessage.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
-
 
         // If Android is at least Marshmallow (6.0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -102,7 +124,18 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
                 }
             }
         }
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+//        Log.d(TAG, "onStart: ");
+//
+//        while (!mLocationService.isLocationSet) {
+//            Log.d(TAG, "findClosestStation: isLocationSet is: " + mLocationService.isLocationSet);
+//        }
+//        Log.d(TAG, "findClosestStation: isLocationSet is AFTER: " + mLocationService.isLocationSet);
     }
 
     @Override
@@ -119,6 +152,15 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         } else {
             activateKeyboard();
         }
+
+//        while (true) {
+//            if (mLocationService == null) {
+//                Log.d(TAG, "WHILE WCIAZ NULL");
+//            }
+//            else {
+//                Log.d(TAG, "WHILE TRUE JUZ NIE: " + mLocationService.getLastLocation());
+//            }
+//        }
     }
 
     @Override
@@ -126,6 +168,14 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         super.onPause();
         if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted()) {
             mLoginHelper.stopListening();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (connection != null) {
+            unbindService(connection);
         }
     }
 

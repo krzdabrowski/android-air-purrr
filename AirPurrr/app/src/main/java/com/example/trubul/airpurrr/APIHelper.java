@@ -131,6 +131,7 @@ class APIHelper {
             JSONArray jsonData = new JSONArray(rawData);
             for (int i = 0; i < jsonData.length(); i++) {
                 JSONObject specificStation = jsonData.getJSONObject(i);
+                Log.d(TAG, "downloadStationLocations: JSONOBJECT IS: " + jsonData.getJSONObject(i));
 
                 Integer id = specificStation.getInt("id");
                 String latitudeString = specificStation.getString("gegrLat");
@@ -170,11 +171,15 @@ class APIHelper {
     }
 
     private static int findClosestStation(List<List<Object>> stations) {
-        Location lastLocation = LocationService.getLastLocation();
+
+        while (!LoginActivity.isLocation) { Log.d(TAG, "findClosestStation: still can't get a location"); }
+
+        Location lastLocation = LoginActivity.mLocationService.getLastLocation();
         Log.d(TAG, "findClosestStation: lastLocation is: " + lastLocation);
+
         float[] results = {0};
 
-        Float closestDistance = null;
+        Float closestDistance = -1f;
         Integer closestDistanceId = 0;
 
         for(List<Object> station : stations) {
@@ -186,10 +191,11 @@ class APIHelper {
                     stationLocation.getLatitude(), stationLocation.getLongitude(), results);
 
             float distance = results[0];
-            if (closestDistance == null || closestDistance > distance) {  // set first distance as closest distance
+            if (closestDistance == -1f || distance < closestDistance) {  // set first distance as closest distance
                 closestDistance = distance;
                 closestDistanceId = id;
             }
+
         }
 
         return closestDistanceId;

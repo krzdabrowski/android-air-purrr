@@ -17,16 +17,29 @@
         android:roundIcon="@mipmap/icon_livin_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Main">
-        <activity android:name=".LoginActivity" android:theme="@style/AppTheme.Login">
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.Login"
+            android:process=":location" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme.Main"/>
 
-        <service android:name=".LocationService" android:process=":my_service" />
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.Main"
+            android:process=":location"/>
+
+        <service android:name=".LocationService"
+            android:process=":location"
+            android:enabled="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
