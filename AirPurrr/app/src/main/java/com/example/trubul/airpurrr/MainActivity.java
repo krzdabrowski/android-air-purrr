@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
-    static final String DETECTOR_URL = "http://89.70.85.249:2138/pm_data.txt";
+    static final String DETECTOR_URL = "http://airpurrr.ga/pm_data.txt";
     private static final String STATE_DETECTOR_PM25 = "DetectorPM25";
     private static final String STATE_DETECTOR_PM10 = "DetectorPM10";
     private static final String STATE_API_PM25 = "APIPM25";

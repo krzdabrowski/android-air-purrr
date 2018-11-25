@@ -25,4 +25,5 @@
     <string name="login_no_secure_screen">Nie ustawiono ekranu blokady. Ustaw odcisk palca w \'Ustawienia\' -> \'Lokalizacja i blokady\' -> \'Odcisk palca\'</string>
     <string name="login_no_saved_fingerprints">Zarejestruj co najmniej jeden odcisk palca w \'Ustawienia\' -> \'Lokalizacja i blokady\' -> \'Odcisk palca\'</string>
     <string name="login_authenticate_with_your_fingerprint">Zaloguj z użyciem odcisku palca</string>
+    <string name="login_description_fingerprint_icon">Ikona odcisku palca</string>
 </resources>

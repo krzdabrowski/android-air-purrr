@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 
 class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "SwitchHelper";
-    private static final String WORKSTATE_URL = "http://89.70.85.249:2138/workstate.txt";
+    private static final String WORKSTATE_URL = "http://airpurrr.ga/workstate.txt";
     private Context mContext;
     private SwitchCallback mCallback;
     private WorkingMode mMode;
@@ -67,8 +67,8 @@ class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
 
     private void controlRequests(boolean state) {
         String workStates;
-        HttpsPostRequest switchOn = new HttpsPostRequest(mContext);
-        HttpsPostRequest switchOff = new HttpsPostRequest(mContext);
+        HttpsPostRequest switchOn = new HttpsPostRequest();
+        HttpsPostRequest switchOff = new HttpsPostRequest();
 
         try {
             HttpGetRequest getRequest = new HttpGetRequest();

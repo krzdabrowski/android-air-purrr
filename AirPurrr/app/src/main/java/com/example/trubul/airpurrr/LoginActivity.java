@@ -109,10 +109,12 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
             mLoginHelper = new LoginHelper(fingerprintManager, this);
             mInputMethodManager = getSystemService(InputMethodManager.class);
 
+            //TODO: zastanowic sie czy to na pewno tutaj czy gdzie indziej
+            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null);
+
             // If phone has fingerprint reader and user has granted permission for an app
             if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted()) {
-                mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-                mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null);
 
                 if (!keyguardManager.isKeyguardSecure()) {  // show a message that the user hasn't set up a fingerprint or lock screen
                     Toast.makeText(this, R.string.login_no_secure_screen, Toast.LENGTH_LONG).show();
