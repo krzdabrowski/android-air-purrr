@@ -27,5 +27,5 @@ I use ThingSpeak to show data from my device. Here's the [link](https://thingspe
 ## Screenshots
 
 <img src="https://i.imgur.com/pW3y7QT.png" width="285"> <img src="https://i.imgur.com/AaJY6o9.png" width="285"> <img src="https://i.imgur.com/mNsNVH2.png" width="285">
-<img src="https://i.imgur.com/4YNudRz.png" width="285"> <img src="https://i.imgur.com/UaosFkF.png" width="285"> <img src="https://i.imgur.com/xNHDOVQ.png" width="285">
+<img src="https://i.imgur.com/wPxHUAN.png" width="285"> <img src="https://i.imgur.com/UaosFkF.png" width="285"> <img src="https://i.imgur.com/xNHDOVQ.png" width="285">
 
