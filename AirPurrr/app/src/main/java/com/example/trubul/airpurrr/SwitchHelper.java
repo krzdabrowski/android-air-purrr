@@ -6,11 +6,6 @@ import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by krzysiek
- * On 3/3/18.
- */
-
 class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "SwitchHelper";
     private static final String WORKSTATE_URL = "http://airpurrr.ga/workstate.txt";

@@ -6,11 +6,6 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-/**
- * Created by krzysiek
- * On 3/4/18.
- */
-
 class DetectorHelper {
     private static final String TAG = "DetectorHelper";
     private static DetectorCallback mCallback;

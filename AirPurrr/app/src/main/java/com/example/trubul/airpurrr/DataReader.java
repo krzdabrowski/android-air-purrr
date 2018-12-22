@@ -6,11 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Created by krzysiek
- * On 3/3/18.
- */
-
 class DataReader {
     private static final String TAG = "DataReader";
 

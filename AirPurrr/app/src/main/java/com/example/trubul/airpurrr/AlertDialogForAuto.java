@@ -12,18 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by krzysiek
- * On 3/12/18.
- */
-
 class AlertDialogForAuto {
     private Context mContext;
     private ChangeListener mListener;
     private String newStringAutoThreshold;
     private int newIntAutoThreshold;
     private boolean isCorrectInput;
-
 
     interface ChangeListener {
         void onChange();

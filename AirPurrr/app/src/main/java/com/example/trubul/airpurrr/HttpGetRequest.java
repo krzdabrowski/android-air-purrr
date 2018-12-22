@@ -10,19 +10,12 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-/**
- * Created by krzysiek
- * On 3/3/18.
- */
-
 class HttpGetRequest extends AsyncTask<String, Void, String> {
     private static final String TAG = "HttpGetRequest";
     private static final String REQUESTED_METHOD = "GET";
     private static final int READ_TIMEOUT = 5000;
     private static final int CONNECTION_TIMEOUT = 3000;
 
-
-    // a.k.a. old doInBackground()
     String doHttpRequest(String url) {
         HttpURLConnection connection = null;
         InputStreamReader streamReader = null;

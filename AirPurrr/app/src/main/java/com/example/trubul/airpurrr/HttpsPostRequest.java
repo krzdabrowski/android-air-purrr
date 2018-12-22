@@ -13,19 +13,12 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-/**
- * Created by krzysiek
- * On 3/3/18.
- */
-
-// a.k.a. old AbortableRequest
 class HttpsPostRequest extends AsyncTask<String, Void, String> {
     private static final String TAG = "HttpsPostRequest";
     private static final String HTTPS_URL = "https://airpurrr.ga/login";
     private static final String REQUESTED_METHOD = "POST";
     private static final int READ_TIMEOUT = 7000;
     private static final int CONNECTION_TIMEOUT = 3000;
-
 
     HttpsPostRequest() { }
 

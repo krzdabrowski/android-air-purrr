@@ -12,11 +12,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by krzysiek
- * On 3/13/18.
- */
-
 class APIHelper {
     private static final String TAG = "APIHelper";
     private static final String STATION_LOCATIONS_URL = "http://api.gios.gov.pl/pjp-api/rest/station/findAll";
@@ -25,7 +20,6 @@ class APIHelper {
     private static final String STATION_PM10_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData";
 
     private static APICallback mCallback;
-
 
     interface APICallback {
         void setPMValuesAndDatesAPI(List<Object> pmValuesAndDatesAPI);

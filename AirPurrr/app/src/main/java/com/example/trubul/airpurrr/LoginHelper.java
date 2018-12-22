@@ -10,11 +10,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by krzysiek
- * On 5/19/18.
- */
-
 @TargetApi(23)
 class LoginHelper extends FingerprintManager.AuthenticationCallback {
 
