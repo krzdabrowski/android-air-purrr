@@ -89,12 +89,8 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         mEmailField = findViewById(R.id.input_email);
         mPasswordField = findViewById(R.id.input_password);
         mButton = findViewById(R.id.button_login);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                manualLogin(getEmail(), getPassword());
-            }
-        });
+        mButton.setOnClickListener((view) -> manualLogin(getEmail(), getPassword()));
+
         mFingerprintIcon = findViewById(R.id.fingerprint_icon);
         mFingerprintMessage = findViewById(R.id.fingerprint_message);
         mFingerprintIcon.setVisibility(View.GONE);
@@ -109,7 +105,6 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
             mLoginHelper = new LoginHelper(fingerprintManager, this);
             mInputMethodManager = getSystemService(InputMethodManager.class);
 
-            //TODO: zastanowic sie czy to na pewno tutaj czy gdzie indziej
             mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null);
 
@@ -193,27 +188,25 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         }
 
         showProgressDialog();
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    SharedPreferences.Editor editor = mSharedPreferences.edit();
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
 
-                    mHashedEmail = LoginHelper.sha512Hash(email);
-                    String hashedPassword = LoginHelper.sha512Hash(password);
-                    editor.putString(SAVED_HASH_EMAIL_KEY, mHashedEmail);
-                    editor.putString(SAVED_HASH_PASSWORD_KEY, hashedPassword);
-                    editor.apply();
+                mHashedEmail = LoginHelper.sha512Hash(email);
+                String hashedPassword = LoginHelper.sha512Hash(password);
+                editor.putString(SAVED_HASH_EMAIL_KEY, mHashedEmail);
+                editor.putString(SAVED_HASH_PASSWORD_KEY, hashedPassword);
+                editor.apply();
 
-                    startActivity(intent);
-                } else {
-                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                    Toast.makeText(LoginActivity.this, R.string.login_auth_error, Toast.LENGTH_SHORT).show();
-                }
+                startActivity(intent);
+            } else {
+                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                Toast.makeText(LoginActivity.this, R.string.login_auth_error, Toast.LENGTH_SHORT).show();
+            }
 
-                hideProgressDialog();
-            }});
+            hideProgressDialog();
+        });
     }
 
     private void activateKeyboard() {

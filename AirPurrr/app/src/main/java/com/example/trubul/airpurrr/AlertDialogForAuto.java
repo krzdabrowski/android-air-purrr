@@ -42,13 +42,10 @@ class AlertDialogForAuto {
 
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setTextSize(32);
-        editText.post(new Runnable() {  // show keyboard automatically
-            @Override
-            public void run() {
-                editText.requestFocusFromTouch();
-                InputMethodManager lManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                lManager.showSoftInput(editText, 0);
-            }
+        editText.post(() -> {  // show keyboard automatically
+            editText.requestFocusFromTouch();
+            InputMethodManager lManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            lManager.showSoftInput(editText, 0);
         });
 
         title.setText(R.string.menu_enter_a_value);
@@ -58,19 +55,8 @@ class AlertDialogForAuto {
 
         builder.setCustomTitle(title);
         builder.setCancelable(true);  // with BACK button
-        builder.setPositiveButton(
-                R.string.menu_ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-        builder.setNegativeButton(
-                R.string.menu_cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
+        builder.setPositiveButton(R.string.menu_ok, (dialog, id) -> {});
+        builder.setNegativeButton(R.string.menu_cancel, (dialog, id) -> dialog.dismiss());
 
         final AlertDialog dialog = builder.create();
         float dpi = mContext.getResources().getDisplayMetrics().density;
@@ -78,15 +64,12 @@ class AlertDialogForAuto {
         dialog.show();
 
         //Overriding the handler immediately after show is probably a better approach than OnShowListener
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newStringAutoThreshold = editText.getText().toString();
-                getAutoThreshold();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener((view) -> {
+            newStringAutoThreshold = editText.getText().toString();
+            getAutoThreshold();
 
-                if (isCorrectInput)
-                    dialog.dismiss();
-            }
+            if (isCorrectInput)
+                dialog.dismiss();
         });
     }
 

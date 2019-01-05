@@ -80,7 +80,7 @@ class DetectorHelper {
         return pmDoublesPerc;
     }
 
-    static class Loader extends AsyncTaskLoader<Double[]> {
+    static class Loader extends android.support.v4.content.AsyncTaskLoader<Double[]> {
         Loader(Context context) {
             super(context);
         }
