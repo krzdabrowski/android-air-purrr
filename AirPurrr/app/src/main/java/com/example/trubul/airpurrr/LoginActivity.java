@@ -67,7 +67,6 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         return activityLoginBinding.inputPassword.getText().toString().trim();
     }
 
-    // Location service
     static ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

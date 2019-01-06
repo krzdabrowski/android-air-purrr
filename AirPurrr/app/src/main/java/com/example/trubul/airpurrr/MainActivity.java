@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
-    // TODO: export this somewhere
+    // TODO: export these strings somewhere
     private static final String TAG = "MainActivity";
     static final String DETECTOR_URL = "http://airpurrr.ga/pm_data.txt";
     private static final String STATE_DETECTOR_PM25 = "DetectorPM25";
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     static int flagTriStateAuto = 0;
 
-    // TODO: remove as much butterknife as possible & implement .XML databinding
+    // TODO: remove as much butterknife as possible & implement more .XML databinding
     @BindView(R.id.switch_auto) Switch switchAuto;
     @BindView(R.id.switch_manual) Switch switchManual;
     @BindView(R.id.PM25_data) TextView pm25Data;
@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private static SharedPreferences mSharedPreferences;
 
+    // TODO: create model (Data: DetectorData, ApiData or so), viewmodel, view, helpers, ... packages
     private DetectorHelper detector = new DetectorHelper(this);
     private APIHelper api = new APIHelper(this);  // must-be instance to make mCallback work
 
-    // Downloaded PM values
     private Double[] pmValuesDetector;
     private List<Object> pmValuesAndDatesAPI;
     private Double[] pmValuesAPI;
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private ActivityMainBinding activityMainBinding;
 
-    /////////////////////////////////////  GETTERS & SETTERS  //////////////////////////////////////
+    // TODO: consider to do something with getters/setters
     @Override
     public void setSwitchAuto(boolean state) {
         switchAuto.setChecked(state);
@@ -160,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         timer.schedule(minuteTask, 0, 1000 * 60);  // 1000*60*1 every 1 minute
     }
 
-    //////////////////////////////////////////  ONCREATE  //////////////////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -415,6 +414,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 >>>>>>> 885e77f... First try of fingerprint authentication's implementation
 
+        // TODO: xml-data-bind these
         pmValuesDetector = new Double[]{0.0, 0.0};
         pmValuesAPI = new Double[]{0.0, 0.0};
         pmDatesAPI = new String[]{getString(R.string.UI_no_api_data), getString(R.string.UI_no_api_data)};
@@ -452,11 +452,14 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         automaticDownload();  // downloadPMValues DetectorHelper values every 1 minute
 >>>>>>> 0aba3d6... Add downloading station locations from API
 
+<<<<<<< HEAD
 =======
 >>>>>>> 2c6e5cf... Major refactoring, minor bug fixes & clean-up code
 =======
 >>>>>>> f93a4fa... Implement AsyncTaskLoaders (part #2)
         /////////////////////// LISTENERS ///////////////////////
+=======
+>>>>>>> 206fe32... clean-up
         autoListener = new SwitchHelper(this, this, SwitchHelper.WorkingMode.AUTO);
 //        switchAuto.setOnCheckedChangeListener();
         manualListener = new SwitchHelper(this, this, SwitchHelper.WorkingMode.MANUAL);
@@ -508,7 +511,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         }
     }
 
-    //////////////////////////////////////////  ROTATION  //////////////////////////////////////////
+    // TODO: consider removing rotation
     @Override  // logic has to be BEFORE super() because it saves
     protected void onSaveInstanceState(Bundle outState) {
         outState.putDouble(STATE_DETECTOR_PM25, pmValuesDetector[0]);
@@ -537,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         updateDetector();
     }
 
-    //////////////////////////////////////////  LOADERS  ///////////////////////////////////////////
+    // TODO: remove loaders while implementing MVVM with LiveData
     @Override
     public @NonNull Loader onCreateLoader(int id, Bundle args) {
         if (id == LOADER_DETECTOR) {
@@ -565,8 +568,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     public void onLoaderReset(@NonNull Loader loader) {
     }
 
-
-    ////////////////////////////////////////////  MENU  ////////////////////////////////////////////
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -593,7 +594,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         }
     }
 
-    ///////////////////////////////////////////  OTHERS  ///////////////////////////////////////////
     @Override
     public void onRefresh() {
         LoaderManager.getInstance(this).initLoader(LOADER_DETECTOR, null, this).forceLoad();
