@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.trubul.airpurrr.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -40,11 +42,11 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     static final String SAVED_HASH_PASSWORD_KEY = "login_password";
     private String mHashedEmail;
 
-    private TextInputEditText mEmailField;
-    private TextInputEditText mPasswordField;
-    private Button mButton;
-    private CircleImageView mFingerprintIcon;
-    private TextView mFingerprintMessage;
+//    private TextInputEditText mEmailField;
+//    private TextInputEditText mPasswordField;
+//    private Button mButton;
+//    private CircleImageView mFingerprintIcon;
+//    private TextView mFingerprintMessage;
 
     private FirebaseAuth mAuth;
     private LoginHelper mLoginHelper;
@@ -55,12 +57,14 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     static boolean isLocation = false;
     static Intent mLocationIntent;
 
+    private ActivityLoginBinding activityLoginBinding;
+
 
     String getEmail() {
-        return mEmailField.getText().toString().trim();
+        return activityLoginBinding.inputEmail.getText().toString().trim();
     }
     String getPassword() {
-        return mPasswordField.getText().toString().trim();
+        return activityLoginBinding.inputPassword.getText().toString().trim();
     }
 
     // Location service
@@ -79,22 +83,23 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+//        setContentView(R.layout.activity_login);
         FirebaseApp.initializeApp(this);
 
         // Location service init
         mLocationIntent = new Intent(this, LocationService.class);
         bindService(mLocationIntent, connection, Context.BIND_AUTO_CREATE);
 
-        mEmailField = findViewById(R.id.input_email);
-        mPasswordField = findViewById(R.id.input_password);
-        mButton = findViewById(R.id.button_login);
-        mButton.setOnClickListener((view) -> manualLogin(getEmail(), getPassword()));
+//        mEmailField = findViewById(R.id.input_email);
+//        mPasswordField = findViewById(R.id.input_password);
+//        mButton = findViewById(R.id.button_login);
+        activityLoginBinding.buttonLogin.setOnClickListener((view) -> manualLogin(getEmail(), getPassword()));
 
-        mFingerprintIcon = findViewById(R.id.fingerprint_icon);
-        mFingerprintMessage = findViewById(R.id.fingerprint_message);
-        mFingerprintIcon.setVisibility(View.GONE);
-        mFingerprintMessage.setVisibility(View.GONE);
+//        mFingerprintIcon = findViewById(R.id.fingerprint_icon);
+//        mFingerprintMessage = findViewById(R.id.fingerprint_message);
+        activityLoginBinding.fingerprintIcon.setVisibility(View.GONE);
+        activityLoginBinding.fingerprintMessage.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -125,11 +130,11 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     public void onResume() {
         super.onResume();
         if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted() && mHashedEmail != null) {
-            mEmailField.setVisibility(View.GONE);
-            mPasswordField.setVisibility(View.GONE);
-            mButton.setVisibility(View.GONE);
-            mFingerprintIcon.setVisibility(View.VISIBLE);
-            mFingerprintMessage.setVisibility(View.VISIBLE);
+            activityLoginBinding.inputEmail.setVisibility(View.GONE);
+            activityLoginBinding.inputPassword.setVisibility(View.GONE);
+            activityLoginBinding.buttonLogin.setVisibility(View.GONE);
+            activityLoginBinding.fingerprintIcon.setVisibility(View.VISIBLE);
+            activityLoginBinding.fingerprintMessage.setVisibility(View.VISIBLE);
 
             mLoginHelper.startListening();
         } else {
@@ -154,16 +159,16 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
 
         if (TextUtils.isEmpty(email)) {
             valid = false;
-            mEmailField.setError(getString(R.string.login_required));
+            activityLoginBinding.inputEmail.setError(getString(R.string.login_required));
         } else {
-            mEmailField.setError(null);
+            activityLoginBinding.inputEmail.setError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
             valid = false;
-            mPasswordField.setError(getString(R.string.login_required));
+            activityLoginBinding.inputPassword.setError(getString(R.string.login_required));
         } else {
-            mPasswordField.setError(null);
+            activityLoginBinding.inputPassword.setError(null);
         }
 
         return valid;
@@ -210,15 +215,15 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     }
 
     private void activateKeyboard() {
-        mPasswordField.requestFocus();
-        mPasswordField.postDelayed(mShowKeyboardRunnable, 500);  // show the keyboard
+        activityLoginBinding.inputPassword.requestFocus();
+        activityLoginBinding.inputPassword.postDelayed(mShowKeyboardRunnable, 500);  // show the keyboard
         mLoginHelper.stopListening();
     }
 
     private final Runnable mShowKeyboardRunnable = new Runnable() {
         @Override
         public void run() {
-            mInputMethodManager.showSoftInput(mEmailField, 0);
+            mInputMethodManager.showSoftInput(activityLoginBinding.inputEmail, 0);
         }
     };
 

@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr;
 
+import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.trubul.airpurrr.databinding.ActivityMainBinding;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
+    // TODO: export this somewhere
     private static final String TAG = "MainActivity";
     static final String DETECTOR_URL = "http://airpurrr.ga/pm_data.txt";
     private static final String STATE_DETECTOR_PM25 = "DetectorPM25";
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     static int flagTriStateAuto = 0;
 
+    // TODO: remove as much butterknife as possible & implement .XML databinding
     @BindView(R.id.switch_auto) Switch switchAuto;
     @BindView(R.id.switch_manual) Switch switchManual;
     @BindView(R.id.PM25_data) TextView pm25Data;
@@ -74,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private SwitchHelper autoListener;
     private SwitchHelper manualListener;
+
+    private ActivityMainBinding activityMainBinding;
 
     /////////////////////////////////////  GETTERS & SETTERS  //////////////////////////////////////
     @Override
@@ -157,7 +164,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -450,10 +458,13 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 >>>>>>> f93a4fa... Implement AsyncTaskLoaders (part #2)
         /////////////////////// LISTENERS ///////////////////////
         autoListener = new SwitchHelper(this, this, SwitchHelper.WorkingMode.AUTO);
-        switchAuto.setOnCheckedChangeListener(autoListener);
+//        switchAuto.setOnCheckedChangeListener();
         manualListener = new SwitchHelper(this, this, SwitchHelper.WorkingMode.MANUAL);
-        switchManual.setOnCheckedChangeListener(manualListener);
+//        switchManual.setOnCheckedChangeListener(manualListener);
         mySwipeRefreshLayout.setOnRefreshListener(this);
+
+        activityMainBinding.switchAuto.setOnCheckedChangeListener(autoListener);
+        activityMainBinding.switchManual.setOnCheckedChangeListener(manualListener);
 
         View.OnClickListener textViewListener = (view) -> {
             if (flagDetectorAPI) {
@@ -463,8 +474,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             }
         };
 
-        pm25Data.setOnClickListener(textViewListener);
-        pm10Data.setOnClickListener(textViewListener);
+//        pm25Data.setOnClickListener(textViewListener);
+//        pm10Data.setOnClickListener(textViewListener);
+        activityMainBinding.PM25Data.setOnClickListener(textViewListener);
+        activityMainBinding.PM10Data.setOnClickListener(textViewListener);
 
         // ChangeListeners
         detector.setListener(() -> {
@@ -593,7 +606,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         moveTaskToBack(true);  // disable going back to the LoginActivity
     }
 
-
     private void setUI(Double[] pmValues) {
         TextView textView;
 
@@ -601,9 +613,9 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         for (int i = 0; i < 2; i++) {
             // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
-                textView = pm25Data;
+                textView = activityMainBinding.PM25Data;
             } else {
-                textView = pm10Data;
+                textView = activityMainBinding.PM10Data;
             }
 
             // Update colors
@@ -622,18 +634,18 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         }
 
         // Set TextView PM values
-        pm25Data.setText(getString(R.string.UI_data_perc, pmValues[0]));
-        pm10Data.setText(getString(R.string.UI_data_perc, pmValues[1]));
-        pm25DataUgm3.setText(getString(R.string.UI_data_ugm3, pmValues[0] / 4));
-        pm10DataUgm3.setText(getString(R.string.UI_data_ugm3, pmValues[1] / 2));
+        activityMainBinding.PM25Data.setText(getString(R.string.UI_data_perc, pmValues[0]));
+        activityMainBinding.PM10Data.setText(getString(R.string.UI_data_perc, pmValues[1]));
+        activityMainBinding.PM25DataUgm3.setText(getString(R.string.UI_data_ugm3, pmValues[0] / 4));
+        activityMainBinding.PM10DataUgm3.setText(getString(R.string.UI_data_ugm3, pmValues[1] / 2));
 
         // Set TextView mode
         if (!flagDetectorAPI) {  // if detector
-            pm25Mode.setText(R.string.UI_indoors);
-            pm10Mode.setText(R.string.UI_indoors);
+            activityMainBinding.PM25Mode.setText(R.string.UI_indoors);
+            activityMainBinding.PM10Mode.setText(R.string.UI_indoors);
         } else {  // if APIHelper
-            pm25Mode.setText(getString(R.string.UI_api, pmDatesAPI[0]));
-            pm10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
+            activityMainBinding.PM25Mode.setText(getString(R.string.UI_api, pmDatesAPI[0]));
+            activityMainBinding.PM10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
         }
     }
 }

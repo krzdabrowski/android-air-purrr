@@ -1,220 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.SwipeRefreshLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_refresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.example.trubul.airpurrr.MainActivity">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/auto_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/UI_auto_mode"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="@dimen/text_size_switch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.example.trubul.airpurrr.MainActivity">
 
-
-        <Switch
-            android:id="@+id/switch_auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/auto_mode"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <TextView
+                android:id="@+id/auto_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/UI_auto_mode"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="@dimen/text_size_switch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/manual_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="40dp"
-            android:text="@string/UI_manual_mode"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="@dimen/text_size_switch"
-            app:layout_constraintStart_toStartOf="@+id/auto_mode"
-            app:layout_constraintTop_toBottomOf="@+id/auto_mode" />
+            <Switch
+                android:id="@+id/switch_auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/auto_mode"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
-        <Switch
-            android:id="@+id/switch_manual"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/manual_mode"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <TextView
+                android:id="@+id/manual_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="40dp"
+                android:text="@string/UI_manual_mode"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="@dimen/text_size_switch"
+                app:layout_constraintStart_toStartOf="@+id/auto_mode"
+                app:layout_constraintTop_toBottomOf="@+id/auto_mode" />
 
-        <android.support.v7.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch_manual">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <Switch
+                android:id="@+id/switch_manual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/manual_mode"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-                <android.support.constraint.ConstraintLayout
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="10dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/switch_manual">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/PM25"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:elevation="2dp"
-                        android:text="@string/UI_pm25"
-                        android:textSize="@dimen/text_size_pm_mode"
-                        app:layout_constraintStart_toStartOf="@+id/PM25_data"
-                        app:layout_constraintTop_toTopOf="@+id/PM25_data" />
-
-                    <TextView
-                        android:id="@+id/PM25_mode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:elevation="2dp"
-                        android:text="@string/UI_indoors"
-                        android:textSize="@dimen/text_size_pm_mode"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/PM25"
-                        app:layout_constraintEnd_toEndOf="@+id/PM25_data" />
-
-                    <TextView
-                        android:id="@+id/PM25_data"
-                        android:layout_width="0dp"
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/color_default"
-                        android:gravity="center_horizontal"
-                        android:elevation="1dp"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:textAlignment="center"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="@dimen/text_size_pm_data"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="40%" />
+                        android:layout_weight="1">
 
-                    <TextView
-                        android:id="@+id/PM25_data_ugm3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:elevation="2dp"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/text_size_pm_data_ugm3"
-                        app:layout_constraintBottom_toBottomOf="@+id/PM25_data"
-                        app:layout_constraintEnd_toEndOf="@+id/PM25_data"
-                        app:layout_constraintStart_toStartOf="@+id/PM25_data"
-                        tools:text="(10.0)" />
+                        <TextView
+                            android:id="@+id/PM25"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:elevation="2dp"
+                            android:text="@string/UI_pm25"
+                            android:textSize="@dimen/text_size_pm_mode"
+                            app:layout_constraintStart_toStartOf="@+id/PM25_data"
+                            app:layout_constraintTop_toTopOf="@+id/PM25_data" />
+
+                        <TextView
+                            android:id="@+id/PM25_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:elevation="2dp"
+                            android:text="@string/UI_indoors"
+                            android:textSize="@dimen/text_size_pm_mode"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/PM25"
+                            app:layout_constraintEnd_toEndOf="@+id/PM25_data" />
+
+                        <TextView
+                            android:id="@+id/PM25_data"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/color_default"
+                            android:gravity="center_horizontal"
+                            android:elevation="1dp"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="@dimen/text_size_pm_data"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="40%" />
+
+                        <TextView
+                            android:id="@+id/PM25_data_ugm3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:elevation="2dp"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/text_size_pm_data_ugm3"
+                            app:layout_constraintBottom_toBottomOf="@+id/PM25_data"
+                            app:layout_constraintEnd_toEndOf="@+id/PM25_data"
+                            app:layout_constraintStart_toStartOf="@+id/PM25_data"
+                            tools:text="(10.0)" />
 
 
-                </android.support.constraint.ConstraintLayout>
+                    </android.support.constraint.ConstraintLayout>
 
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/PM10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:elevation="2dp"
-                        android:text="@string/UI_pm10"
-                        android:textSize="@dimen/text_size_pm_mode"
-                        app:layout_constraintStart_toStartOf="@+id/PM10_data"
-                        app:layout_constraintTop_toTopOf="@+id/PM10_data" />
-
-                    <TextView
-                        android:id="@+id/PM10_mode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:elevation="2dp"
-                        android:text="@string/UI_indoors"
-                        android:textSize="@dimen/text_size_pm_mode"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/PM10"
-                        app:layout_constraintEnd_toEndOf="@+id/PM10_data" />
-
-                    <TextView
-                        android:id="@+id/PM10_data"
-                        android:layout_width="0dp"
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/color_default"
-                        android:gravity="center_horizontal"
-                        android:elevation="1dp"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:textAlignment="center"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="@dimen/text_size_pm_data"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="30%" />
+                        android:layout_weight="1">
 
-                    <TextView
-                        android:id="@+id/PM10_data_ugm3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:elevation="2dp"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/text_size_pm_data_ugm3"
-                        app:layout_constraintBottom_toBottomOf="@+id/PM10_data"
-                        app:layout_constraintEnd_toEndOf="@+id/PM10_data"
-                        app:layout_constraintStart_toStartOf="@+id/PM10_data"
-                        tools:text="(15.0)" />
+                        <TextView
+                            android:id="@+id/PM10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:elevation="2dp"
+                            android:text="@string/UI_pm10"
+                            android:textSize="@dimen/text_size_pm_mode"
+                            app:layout_constraintStart_toStartOf="@+id/PM10_data"
+                            app:layout_constraintTop_toTopOf="@+id/PM10_data" />
 
-                </android.support.constraint.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/PM10_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:elevation="2dp"
+                            android:text="@string/UI_indoors"
+                            android:textSize="@dimen/text_size_pm_mode"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/PM10"
+                            app:layout_constraintEnd_toEndOf="@+id/PM10_data" />
 
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/PM10_data"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/color_default"
+                            android:gravity="center_horizontal"
+                            android:elevation="1dp"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="@dimen/text_size_pm_data"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="30%" />
+
+                        <TextView
+                            android:id="@+id/PM10_data_ugm3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:elevation="2dp"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/text_size_pm_data_ugm3"
+                            app:layout_constraintBottom_toBottomOf="@+id/PM10_data"
+                            app:layout_constraintEnd_toEndOf="@+id/PM10_data"
+                            app:layout_constraintStart_toStartOf="@+id/PM10_data"
+                            tools:text="(15.0)" />
+
+                    </android.support.constraint.ConstraintLayout>
+
+                </LinearLayout>
 
 
-        </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>
 
 
-    </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</layout>
