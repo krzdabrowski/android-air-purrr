@@ -1,20 +1,16 @@
 package com.example.trubul.airpurrr;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 class DataReader {
-    private static final String TAG = "DataReader";
 
     String getData(InputStreamReader streamReader) {
         BufferedReader in = null;
         String inputLine;
 
         try {
-            //Create a new buffered reader and String Builder
             in = new BufferedReader(streamReader);
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -26,14 +22,14 @@ class DataReader {
             return stringBuilder.toString();
         }
         catch (IOException e) {
-            Log.e(TAG, "getData: IO Exception getting data " + e.getMessage());
+            e.printStackTrace();
         }
         finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    Log.e(TAG, "getData: Error closing stream " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }

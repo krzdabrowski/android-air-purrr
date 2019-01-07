@@ -7,8 +7,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -24,15 +22,12 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-//        Log.w(TAG, "START<-END");
         InputStreamReader streamReader = null;
 
         try {
-            // Create a connection
             URL url = new URL(HTTPS_URL);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 
-            // Set timeout and method
             connection.setReadTimeout(READ_TIMEOUT);  // time for anything, responses etc
             connection.setConnectTimeout(CONNECTION_TIMEOUT);  // time to connect with IP
             connection.setRequestMethod(REQUESTED_METHOD);
@@ -53,27 +48,20 @@ class HttpsPostRequest extends AsyncTask<String, Void, String> {
 
             Log.d(TAG, "doInBackground: CODE is " + connection.getResponseCode());
 
-//            Log.w(TAG, "START->END");
             // Create a new InputStreamReader to read output info from webserver
             streamReader = new InputStreamReader(connection.getInputStream());
             // Do the data-read
             DataReader dataReader = new DataReader();
             dataReader.getData(streamReader);
 
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "doInBackground: Invalid URL " + e.getMessage());
-        } catch (ProtocolException e) {
-            Log.e(TAG, "doInBackground: Protocol Exception " + e.getMessage());
-        } catch(SecurityException e) {
-            Log.e(TAG, "doInBackground: Security Exception. Needs permission? " + e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, "doInBackground: IO Exception reading data: " + e.getMessage());
+        } catch (IOException | SecurityException e) {
+            e.printStackTrace();
         } finally {
             if(streamReader != null) {
                 try {
                     streamReader.close();
                 } catch(IOException e) {
-                    Log.e(TAG, "doInBackground: Error closing stream " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }

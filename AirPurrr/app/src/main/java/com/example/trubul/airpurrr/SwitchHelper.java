@@ -7,18 +7,15 @@ import android.widget.Toast;
 import java.util.concurrent.ExecutionException;
 
 class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
-    private static final String TAG = "SwitchHelper";
     private static final String WORKSTATE_URL = "http://airpurrr.ga/workstate.txt";
     private Context mContext;
     private SwitchCallback mCallback;
     private WorkingMode mMode;
-
     private boolean isLastUseAuto = false;
     private boolean isLastUseManual = false;
     boolean stateAuto = false;
     private boolean stateManual = false;
     private boolean isWorking = false;
-
 
     enum WorkingMode {
         AUTO,
@@ -88,9 +85,7 @@ class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
                     keepState();
                     break;
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
             Toast.makeText(mContext, mContext.getString(R.string.switch_error_server) + "NullPointer)", Toast.LENGTH_LONG).show();

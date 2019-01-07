@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private ActivityMainBinding activityMainBinding;
 
-    // TODO: consider to do something with getters/setters
+    // TODO: consider to do something with getters/setters -> Observable variables?
     @Override
     public void setSwitchAuto(boolean state) {
         switchAuto.setChecked(state);

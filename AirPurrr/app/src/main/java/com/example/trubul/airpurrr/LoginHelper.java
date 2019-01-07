@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.CancellationSignal;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -26,13 +25,11 @@ class LoginHelper extends FingerprintManager.AuthenticationCallback {
         void onAuthenticated();
     }
 
-
     LoginHelper(FingerprintManager fingerprintManager, FingerprintCallback callback) {
         mFingerprintManager = fingerprintManager;
         mCallback = callback;
     }
 
-    ////////////////////////////////////////  FINGERPRINT  /////////////////////////////////////////
     boolean isFingerprintAuthAvailable() {
         return mFingerprintManager.isHardwareDetected() && mFingerprintManager.hasEnrolledFingerprints();
     }
@@ -81,7 +78,6 @@ class LoginHelper extends FingerprintManager.AuthenticationCallback {
         mCallback.onAuthenticated();
     }
 
-    //////////////////////////////////////////  HASHING  ///////////////////////////////////////////
     static String sha512Hash(String toHash) {
         String hash = null;
         try {
@@ -91,9 +87,7 @@ class LoginHelper extends FingerprintManager.AuthenticationCallback {
             bytes = digest.digest();
 
             hash = bytesToHex(bytes);  // this is ~55x faster than looping and String.formating()
-        } catch(NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch(UnsupportedEncodingException e) {
+        } catch(NoSuchAlgorithmException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return hash;
