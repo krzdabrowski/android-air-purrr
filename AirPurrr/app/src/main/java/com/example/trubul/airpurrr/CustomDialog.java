@@ -35,6 +35,7 @@ class CustomDialog {
         mContext = context;
     }
 
+    // TODO: inflate dialog from xml layout new file instead on making everything in Java code (lecture 255 on Udemy)
     void createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         TextView title = new TextView(mContext);
