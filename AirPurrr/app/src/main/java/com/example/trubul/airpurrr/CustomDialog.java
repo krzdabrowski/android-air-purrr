@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-class AlertDialogForAuto {
+class CustomDialog {
     private Context mContext;
     private ChangeListener mListener;
     private String newStringAutoThreshold;
@@ -31,7 +31,7 @@ class AlertDialogForAuto {
         mListener = listener;
     }
 
-    AlertDialogForAuto(Context context) {
+    CustomDialog(Context context) {
         mContext = context;
     }
 

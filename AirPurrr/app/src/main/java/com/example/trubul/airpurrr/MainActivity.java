@@ -3,9 +3,7 @@ package com.example.trubul.airpurrr;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.Loader;
@@ -28,6 +26,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+// TODO: migrate to AndroidX and deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
 public class MainActivity extends AppCompatActivity implements // SwipeListener.SwipeCallback,
         SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 ////    private List<List<Object>> stationLocations;
 //    private Integer[] stationSensors;
 
-    private AlertDialogForAuto alertDialog = new AlertDialogForAuto(this);
+    private CustomDialog alertDialog = new CustomDialog(this);
     private int threshold = 100;
 
     private SwitchHelper autoListener;
@@ -160,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         timer.schedule(minuteTask, 0, 1000 * 60);  // 1000*60*1 every 1 minute
     }
 
+    // TODO: re-design xml (ConstraintLayout is fine, but big tile of PM2.5/10 is a bad idea
+    // TODO: -> create empty TextView with color and data will be shown in another TextView with gravity.CENTER or so
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
