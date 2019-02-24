@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+<!-- TODO: pousuwac zbedne, poczyscic, zrobic wiecej dziedziczenia jak sie da? -->
     <!-- Base application theme. -->
     <style name="AppTheme.Main" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->

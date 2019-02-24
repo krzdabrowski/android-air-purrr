@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO: usunac wszystkie wersje 420dpi/560dpi, usunac zbedne pozostale dimensy bo syf -->
 <resources>
     <dimen name="text_size_switch">18sp</dimen>
     <dimen name="text_size_pm_data">80sp</dimen>
