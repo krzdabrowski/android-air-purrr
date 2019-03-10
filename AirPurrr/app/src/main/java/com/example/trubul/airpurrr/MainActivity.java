@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
+    // TODO: (later) implement TabLayout with current and predicted results/data in fragments
     // TODO: export these strings somewhere
+    // TODO: Snackbars instead of Toasts
     private static final String TAG = "MainActivity";
     static final String DETECTOR_URL = "http://airpurrr.ga/pm_data.txt";
     private static final String STATE_DETECTOR_PM25 = "DetectorPM25";

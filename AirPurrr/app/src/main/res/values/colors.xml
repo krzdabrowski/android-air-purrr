@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO: verify these colors to make it more 300-500-700? -->
+<!-- TODO: change names to color_500 and keep mainXXX in styles.xml -->
 <resources>
     <color name="mainPrimary">#616161</color>
     <color name="mainPrimaryDark">#212121</color>
