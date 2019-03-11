@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
+    // TODO: implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
     // TODO: (later) implement TabLayout with current and predicted results/data in fragments
     // TODO: export these strings somewhere
     // TODO: Snackbars instead of Toasts
