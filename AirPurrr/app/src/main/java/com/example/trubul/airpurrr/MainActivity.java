@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private static final int LOADER_DETECTOR = 1;
     private static final int LOADER_API_PM = 2;
-//    private static final int LOADER_API_STATIONS = 3;
 
     static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
     static int flagTriStateAuto = 0;
@@ -498,15 +497,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
             updateAutoMode();  // update auto mode flags = default threshold is 100%
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (LoginActivity.connection != null) {
-            stopService(LoginActivity.mLocationIntent);
-            unbindService(LoginActivity.connection);
-        }
     }
 
     // TODO: remove loaders while implementing MVVM with LiveData

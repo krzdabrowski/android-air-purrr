@@ -34,23 +34,11 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     static final String SAVED_HASH_PASSWORD_KEY = "login_password";
     private String mHashedEmail;
 
-//    private TextInputEditText mEmailField;
-//    private TextInputEditText mPasswordField;
-//    private Button mButton;
-//    private CircleImageView mFingerprintIcon;
-//    private TextView mFingerprintMessage;
-
     private FirebaseAuth mAuth;
     private LoginHelper mLoginHelper;
     private InputMethodManager mInputMethodManager;
     private SharedPreferences mSharedPreferences;
-
-    static LocationService mLocationService;
-    static boolean isLocation = false;
-    static Intent mLocationIntent;
-
     private ActivityLoginBinding activityLoginBinding;
-
 
     String getEmail() {
         return activityLoginBinding.inputEmail.getText().toString().trim();
@@ -59,60 +47,34 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         return activityLoginBinding.inputPassword.getText().toString().trim();
     }
 
-    static ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            isLocation = true;
-            LocationService.MyBinder binder = (LocationService.MyBinder) service;
-            mLocationService = binder.getServiceSystem();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) { }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-//        setContentView(R.layout.activity_login);
         FirebaseApp.initializeApp(this);
 
-        // Location service init
-        mLocationIntent = new Intent(this, LocationService.class);
-        bindService(mLocationIntent, connection, Context.BIND_AUTO_CREATE);
-
-//        mEmailField = findViewById(R.id.input_email);
-//        mPasswordField = findViewById(R.id.input_password);
-//        mButton = findViewById(R.id.button_login);
         activityLoginBinding.buttonLogin.setOnClickListener((view) -> manualLogin(getEmail(), getPassword()));
-
-//        mFingerprintIcon = findViewById(R.id.fingerprint_icon);
-//        mFingerprintMessage = findViewById(R.id.fingerprint_message);
         activityLoginBinding.fingerprintIcon.setVisibility(View.GONE);
         activityLoginBinding.fingerprintMessage.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
 
-        // If Android is at least Marshmallow (6.0)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
-            FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
-            mLoginHelper = new LoginHelper(fingerprintManager, this);
-            mInputMethodManager = getSystemService(InputMethodManager.class);
+        KeyguardManager keyguardManager = getSystemService(KeyguardManager.class);
+        FingerprintManager fingerprintManager = getSystemService(FingerprintManager.class);
+        mLoginHelper = new LoginHelper(fingerprintManager, this);
+        mInputMethodManager = getSystemService(InputMethodManager.class);
 
-            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null);
 
-            // If phone has fingerprint reader and user has granted permission for an app
-            if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted()) {
+        // If phone has fingerprint reader and user has granted permission for an app
+        if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted()) {
 
-                if (!keyguardManager.isKeyguardSecure()) {  // show a message that the user hasn't set up a fingerprint or lock screen
-                    Toast.makeText(this, R.string.login_no_secure_screen, Toast.LENGTH_LONG).show();
-                }
-                if (!fingerprintManager.hasEnrolledFingerprints()) {  // this happens when no fingerprints are registered
-                    Toast.makeText(this, R.string.login_no_saved_fingerprints, Toast.LENGTH_LONG).show();
-                }
+            if (!keyguardManager.isKeyguardSecure()) {  // show a message that the user hasn't set up a fingerprint or lock screen
+                Toast.makeText(this, R.string.login_no_secure_screen, Toast.LENGTH_LONG).show();
+            }
+            if (!fingerprintManager.hasEnrolledFingerprints()) {  // this happens when no fingerprints are registered
+                Toast.makeText(this, R.string.login_no_saved_fingerprints, Toast.LENGTH_LONG).show();
             }
         }
     }
