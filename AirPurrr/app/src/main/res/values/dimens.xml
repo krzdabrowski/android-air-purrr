@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- TODO: zrefaktorowac to, pousuwac zbedne, potworzyc nowe -->
 <resources>
-    <dimen name="text_size_switch">12sp</dimen>
-    <dimen name="text_size_pm_data">32sp</dimen>
-    <dimen name="text_size_pm_data_ugm3">10sp</dimen>
-    <dimen name="text_size_pm_mode">8sp</dimen>
+    <dimen name="text_size_switch">18sp</dimen>
+    <dimen name="text_size_pm_data">80sp</dimen>
+    <dimen name="text_size_pm_data_ugm3">18sp</dimen>
+    <dimen name="text_size_pm_mode">14sp</dimen>
+
+    <!-- Login screen -->
+    <dimen name="login_padding_tiny">8dp</dimen>
+    <dimen name="login_padding_small">16dp</dimen>
+    <dimen name="login_padding_medium">24dp</dimen>
+    <dimen name="login_padding_large">64dp</dimen>
+    <dimen name="login_padding_extra_large">96dp</dimen>
+    <dimen name="login_logo_size">96dp</dimen>
 </resources>

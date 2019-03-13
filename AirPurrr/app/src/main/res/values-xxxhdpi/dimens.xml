@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="text_size_switch">18sp</dimen>
-    <dimen name="text_size_pm_data">96sp</dimen>
-    <dimen name="text_size_pm_data_ugm3">20sp</dimen>
-    <dimen name="text_size_pm_mode">16sp</dimen>
-</resources>

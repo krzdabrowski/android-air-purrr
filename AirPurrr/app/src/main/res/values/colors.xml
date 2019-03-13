@@ -10,7 +10,6 @@
     <color name="loginPrimaryDark">#0277BD</color>
     <color name="loginPrimaryDarker">#01579B</color>
     <color name="loginAccent">#FFFFFF</color>
-
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
 </resources>

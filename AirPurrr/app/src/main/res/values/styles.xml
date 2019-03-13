@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!-- TODO: pousuwac zbedne, poczyscic, zrobic wiecej dziedziczenia jak sie da? -->
+<!-- TODO: unify to wszystko ze zwyklymi stylami -->
     <!-- Base application theme. -->
     <style name="AppTheme.Main" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
@@ -10,6 +11,14 @@
     </style>
 
     <style name="AppTheme.Login" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/loginPrimaryDarker</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
         <item name="colorPrimary">@color/loginPrimary</item>
         <item name="colorPrimaryDark">@color/loginPrimaryDark</item>
         <item name="colorAccent">@color/loginAccent</item>
@@ -22,6 +31,7 @@
         <item name="android:textColorHint">@color/iron</item>
 
         <item name="colorButtonNormal">@color/loginPrimaryDarker</item>
+        <item name="android:colorButtonNormal">@color/loginPrimaryDarker</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog">

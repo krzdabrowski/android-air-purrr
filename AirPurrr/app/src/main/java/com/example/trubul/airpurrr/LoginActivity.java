@@ -53,7 +53,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         FirebaseApp.initializeApp(this);
 
-        activityLoginBinding.partialLoginManual.buttonLogin.setOnClickListener((view) -> manualLogin(getEmail(), getPassword()));
+        activityLoginBinding.partialLoginManual.btnLogin.setOnClickListener((view) -> manualLogin(getEmail(), getPassword()));
 
         mAuth = FirebaseAuth.getInstance();
 

@@ -1,4 +1,6 @@
 <resources>
+<!-- TODO: zrefaktorowac to, pousuwac zbedne, potworzyc nowe -->
+
     <string name="app_name">Air Purrr</string>
 
     <string name="login_email" translatable="false">E-mail</string>
@@ -12,6 +14,7 @@
     <string name="login_no_secure_screen">Secure lock screen hasn\'t set up. Go to \'Settings\' -> \'Security &amp; Location\' -> \'Fingerprint\' to set up a fingerprint</string>
     <string name="login_no_saved_fingerprints">Go to \'Settings\' -> \'Security &amp; Location\' -> \'Fingerprint\' and register at least one fingerprint</string>
     <string name="login_description_fingerprint_icon">Fingerprint icon</string>
+    <string name="login_description_logo">Application logo</string>
     <string name="login_authenticate_with_your_fingerprint">Authenticate with your fingerprint</string>
 
     <string name="UI_auto_mode">Automatic mode</string>
