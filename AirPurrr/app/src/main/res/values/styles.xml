@@ -5,39 +5,38 @@
     <!-- Base application theme. -->
     <style name="AppTheme.Main" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/mainPrimary</item>
-        <item name="colorPrimaryDark">@color/mainPrimaryDark</item>
-        <item name="colorAccent">@color/mainAccent</item>
+        <item name="colorPrimary">@color/color_main_700</item>
+        <item name="colorPrimaryDark">@color/color_main_900</item>
+        <item name="colorAccent">@color/color_main_accent</item>
     </style>
 
     <style name="AppTheme.Login" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/loginPrimaryDarker</item>
+        <item name="android:statusBarColor">@color/color_login_900</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
 
-        <item name="colorPrimary">@color/loginPrimary</item>
-        <item name="colorPrimaryDark">@color/loginPrimaryDark</item>
-        <item name="colorAccent">@color/loginAccent</item>
+        <item name="colorPrimary">@color/color_login_700</item>
+        <item name="colorAccent">@color/color_login_accent</item>
 
-        <item name="android:windowBackground">@color/loginPrimary</item>
+        <item name="android:windowBackground">@color/color_login_700</item>
 
-        <item name="colorControlNormal">@color/iron</item>
-        <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlHighlight">@color/white</item>
-        <item name="android:textColorHint">@color/iron</item>
+        <item name="colorControlNormal">@color/color_login_inactive</item>
+        <item name="colorControlActivated">@color/color_login_accent</item>
+        <item name="colorControlHighlight">@color/color_login_accent</item>
+        <item name="android:textColorHint">@color/color_login_inactive</item>
 
-        <item name="colorButtonNormal">@color/loginPrimaryDarker</item>
-        <item name="android:colorButtonNormal">@color/loginPrimaryDarker</item>
+        <item name="colorButtonNormal">@color/color_login_900</item>
+        <item name="android:colorButtonNormal">@color/color_login_900</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/white</item>
-        <item name="android:textColorPrimary">@color/iron</item>
-        <item name="android:background">@color/loginPrimary</item>
+        <item name="colorAccent">@color/color_login_accent</item>
+        <item name="android:textColorPrimary">@color/color_login_inactive</item>
+        <item name="android:background">@color/color_login_700</item>
     </style>
 
 </resources>

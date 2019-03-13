@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO: verify these colors to make it more 300-500-700? -->
-<!-- TODO: change names to color_500 and keep mainXXX in styles.xml -->
 <resources>
-    <color name="mainPrimary">#616161</color>
-    <color name="mainPrimaryDark">#212121</color>
-    <color name="mainAccent">#FF4081</color>
+    <!-- Login screen -->
+    <color name="color_login_700">#0288d1</color>
+    <color name="color_login_900">#01579b</color>
+    <color name="color_login_accent">#ffffff</color>
+    <color name="color_login_inactive">#e0e0e0</color>
 
-    <color name="loginPrimary">#0288D1</color>
-    <color name="loginPrimaryDark">#0277BD</color>
-    <color name="loginPrimaryDarker">#01579B</color>
-    <color name="loginAccent">#FFFFFF</color>
-    <color name="iron">#CCCCCC</color>
-    <color name="white">#FFFFFF</color>
+    <!-- Main screen -->
+    <color name="color_main_700">#616161</color>
+    <color name="color_main_900">#212121</color>
+    <color name="color_main_accent">#ff4081</color>
 </resources>
