@@ -78,7 +78,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 app:cardCornerRadius="10dp"
-                app:cardUseCompatPadding="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

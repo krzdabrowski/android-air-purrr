@@ -41,10 +41,10 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     private ActivityLoginBinding activityLoginBinding;
 
     String getEmail() {
-        return activityLoginBinding.inputEmail.getText().toString().trim();
+        return activityLoginBinding.partialLoginManual.inputEmail.getText().toString().trim();
     }
     String getPassword() {
-        return activityLoginBinding.inputPassword.getText().toString().trim();
+        return activityLoginBinding.partialLoginManual.inputPassword.getText().toString().trim();
     }
 
     @Override
@@ -53,9 +53,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         FirebaseApp.initializeApp(this);
 
-        activityLoginBinding.buttonLogin.setOnClickListener((view) -> manualLogin(getEmail(), getPassword()));
-        activityLoginBinding.fingerprintIcon.setVisibility(View.GONE);
-        activityLoginBinding.fingerprintMessage.setVisibility(View.GONE);
+        activityLoginBinding.partialLoginManual.buttonLogin.setOnClickListener((view) -> manualLogin(getEmail(), getPassword()));
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -83,11 +81,8 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     public void onResume() {
         super.onResume();
         if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted() && mHashedEmail != null) {
-            activityLoginBinding.inputEmail.setVisibility(View.GONE);
-            activityLoginBinding.inputPassword.setVisibility(View.GONE);
-            activityLoginBinding.buttonLogin.setVisibility(View.GONE);
-            activityLoginBinding.fingerprintIcon.setVisibility(View.VISIBLE);
-            activityLoginBinding.fingerprintMessage.setVisibility(View.VISIBLE);
+            activityLoginBinding.partialLoginManual.layoutLoginManual.setVisibility(View.GONE);
+            activityLoginBinding.partialLoginFingerprint.layoutLoginFingerprint.setVisibility(View.VISIBLE);
 
             mLoginHelper.startListening();
         } else {
@@ -112,16 +107,16 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
 
         if (TextUtils.isEmpty(email)) {
             valid = false;
-            activityLoginBinding.inputEmail.setError(getString(R.string.login_required));
+            activityLoginBinding.partialLoginManual.inputEmail.setError(getString(R.string.login_required));
         } else {
-            activityLoginBinding.inputEmail.setError(null);
+            activityLoginBinding.partialLoginManual.inputEmail.setError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
             valid = false;
-            activityLoginBinding.inputPassword.setError(getString(R.string.login_required));
+            activityLoginBinding.partialLoginManual.inputPassword.setError(getString(R.string.login_required));
         } else {
-            activityLoginBinding.inputPassword.setError(null);
+            activityLoginBinding.partialLoginManual.inputPassword.setError(null);
         }
 
         return valid;
@@ -168,15 +163,15 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     }
 
     private void activateKeyboard() {
-        activityLoginBinding.inputPassword.requestFocus();
-        activityLoginBinding.inputPassword.postDelayed(mShowKeyboardRunnable, 500);  // show the keyboard
+        activityLoginBinding.partialLoginManual.inputPassword.requestFocus();
+        activityLoginBinding.partialLoginManual.inputPassword.postDelayed(mShowKeyboardRunnable, 500);  // show the keyboard
         mLoginHelper.stopListening();
     }
 
     private final Runnable mShowKeyboardRunnable = new Runnable() {
         @Override
         public void run() {
-            mInputMethodManager.showSoftInput(activityLoginBinding.inputEmail, 0);
+            mInputMethodManager.showSoftInput(activityLoginBinding.partialLoginManual.inputEmail, 0);
         }
     };
 
