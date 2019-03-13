@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 // TODO: Timber library instead of log.x
-// TODO: migrate to AndroidX and deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
+// TODO: deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
 public class MainActivity extends AppCompatActivity implements // SwipeListener.SwipeCallback,
         SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {

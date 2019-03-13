@@ -11,16 +11,18 @@
 
     <application
         android:allowBackup="false"
-        tools:replace="android:allowBackup"
         android:icon="@mipmap/icon_livin"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_livin_round"
-        android:supportsRtl="true"
+        android:theme="@style/AppTheme.Main"
         android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme.Main">
-        <activity android:name=".LoginActivity"
-            android:theme="@style/AppTheme.Login"
-            android:process=":location" >
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity
+            android:name=".LoginActivity"
+            android:process=":location"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,15 +30,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"
-            android:theme="@style/AppTheme.Main"
-            android:process=":location"/>
-
-        <service android:name=".LocationService"
+        <activity
+            android:name=".MainActivity"
             android:process=":location"
-            android:enabled="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Main" />
 
+        <service
+            android:name=".LocationService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:process=":location" />
     </application>
 
 </manifest>
