@@ -1,10 +1,11 @@
 package com.example.trubul.airpurrr;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.util.Log;
 
 import java.util.Arrays;
+
+import androidx.loader.content.AsyncTaskLoader;
 
 class DetectorHelper {
     private static final String TAG = "DetectorHelper";
@@ -80,7 +81,7 @@ class DetectorHelper {
         return pmDoublesPerc;
     }
 
-    static class Loader extends android.support.v4.content.AsyncTaskLoader<Double[]> {
+    static class Loader extends AsyncTaskLoader<Double[]> {
         Loader(Context context) {
             super(context);
         }

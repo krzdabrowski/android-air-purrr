@@ -1,9 +1,10 @@
 package com.example.trubul.airpurrr;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.location.Location;
-import android.support.v4.content.Loader;
+
+import androidx.loader.content.AsyncTaskLoader;
+
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -218,7 +219,7 @@ class APIHelper {
         return pmDoublesPerc;
     }
 
-    static class PMLoader extends android.support.v4.content.AsyncTaskLoader<List<Object>> {
+    static class PMLoader extends AsyncTaskLoader<List<Object>> {
         PMLoader(Context context) {
             super(context);
         }
