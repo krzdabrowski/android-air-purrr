@@ -38,13 +38,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     // TODO: Snackbars instead of Toasts
     private static final String TAG = "MainActivity";
     static final String DETECTOR_URL = "http://airpurrr.ga/pm_data.txt";
-    private static final String STATE_DETECTOR_PM25 = "DetectorPM25";
-    private static final String STATE_DETECTOR_PM10 = "DetectorPM10";
-    private static final String STATE_API_PM25 = "APIPM25";
-    private static final String STATE_API_PM10 = "APIPM10";
-    private static final String STATE_API_DATES = "APIDates";
-    private static final String STATE_THRESHOLD = "Threshold";
-    private static final String STATE_FLAGTRISTATEAUTO = "FlagTriStateAuto";
 
     private static final int LOADER_DETECTOR = 1;
     private static final int LOADER_API_PM = 2;
@@ -514,35 +507,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             stopService(LoginActivity.mLocationIntent);
             unbindService(LoginActivity.connection);
         }
-    }
-
-    // TODO: consider removing rotation
-    @Override  // logic has to be BEFORE super() because it saves
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putDouble(STATE_DETECTOR_PM25, pmValuesDetector[0]);
-        outState.putDouble(STATE_DETECTOR_PM10, pmValuesDetector[1]);
-        outState.putDouble(STATE_API_PM25, pmValuesAPI[0]);
-        outState.putDouble(STATE_API_PM10, pmValuesAPI[1]);
-        outState.putStringArray(STATE_API_DATES, pmDatesAPI);
-        if (threshold != 100) {
-            outState.putInt(STATE_THRESHOLD, threshold);
-        }
-        outState.putInt(STATE_FLAGTRISTATEAUTO, flagTriStateAuto);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override  // logic has to be AFTER super() because it restores
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        pmValuesDetector[0] = savedInstanceState.getDouble(STATE_DETECTOR_PM25);
-        pmValuesDetector[1] = savedInstanceState.getDouble(STATE_DETECTOR_PM10);
-        pmValuesAPI[0] = savedInstanceState.getDouble(STATE_API_PM25);
-        pmValuesAPI[1] = savedInstanceState.getDouble(STATE_API_PM10);
-        pmDatesAPI = savedInstanceState.getStringArray(STATE_API_DATES);
-        threshold = savedInstanceState.getInt(STATE_THRESHOLD, threshold);
-        flagTriStateAuto = savedInstanceState.getInt(STATE_FLAGTRISTATEAUTO);
-
-        updateDetector();
     }
 
     // TODO: remove loaders while implementing MVVM with LiveData
