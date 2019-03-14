@@ -68,7 +68,7 @@ class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
 
             switch (workStates) {
                 case "WorkStates.Sleeping\n":
-                    Toast.makeText(mContext, R.string.switch_processing_the_request, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, R.string.main_message_switch_processing, Toast.LENGTH_LONG).show();
                     if (state) {  // send request if it was switch -> ON
                         switchOn.execute(mMode + "=1");  // it will be POST: req = params[0]
 
@@ -77,18 +77,18 @@ class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
                     }
                     break;
                 case "WorkStates.Measuring\n":
-                    Toast.makeText(mContext, R.string.switch_cannot_process, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, R.string.main_message_error_measuring, Toast.LENGTH_LONG).show();
                     keepState();
                     break;
                 default:
-                    Toast.makeText(mContext, R.string.switch_error_detector + "NoWorkStates)", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, R.string.main_message_error + "NoWorkStates)", Toast.LENGTH_LONG).show();
                     keepState();
                     break;
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
-            Toast.makeText(mContext, mContext.getString(R.string.switch_error_server) + "NullPointer)", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getString(R.string.main_message_error_server) + "NullPointer)", Toast.LENGTH_LONG).show();
             keepState();
         }
     }
@@ -121,7 +121,7 @@ class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
             } else if (MainActivity.flagTriStateAuto == 1 && !isWorking) {
                 // It does not exceed the threshold
             } else if (MainActivity.flagTriStateAuto == 0) {  // if null
-                Toast.makeText(mContext, R.string.switch_error_server, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, R.string.main_message_error_server, Toast.LENGTH_LONG).show();
                 mCallback.setSwitchAuto(false);
             }
         } else {

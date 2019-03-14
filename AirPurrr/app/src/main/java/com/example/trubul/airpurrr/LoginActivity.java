@@ -1,19 +1,15 @@
 package com.example.trubul.airpurrr;
 
 import android.app.KeyguardManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import androidx.databinding.DataBindingUtil;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 import androidx.core.app.ActivityCompat;
@@ -69,10 +65,10 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         if (mLoginHelper.isFingerprintAuthAvailable() && isFingerprintPermissionGranted()) {
 
             if (!keyguardManager.isKeyguardSecure()) {  // show a message that the user hasn't set up a fingerprint or lock screen
-                Toast.makeText(this, R.string.login_no_secure_screen, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.login_message_error_no_secure_screen, Toast.LENGTH_LONG).show();
             }
             if (!fingerprintManager.hasEnrolledFingerprints()) {  // this happens when no fingerprints are registered
-                Toast.makeText(this, R.string.login_no_saved_fingerprints, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.login_message_error_no_saved_fingerprint, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -107,14 +103,14 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
 
         if (TextUtils.isEmpty(email)) {
             valid = false;
-            activityLoginBinding.partialLoginManual.inputEmail.setError(getString(R.string.login_required));
+            activityLoginBinding.partialLoginManual.inputEmail.setError(getString(R.string.login_message_error_empty_field));
         } else {
             activityLoginBinding.partialLoginManual.inputEmail.setError(null);
         }
 
         if (TextUtils.isEmpty(password)) {
             valid = false;
-            activityLoginBinding.partialLoginManual.inputPassword.setError(getString(R.string.login_required));
+            activityLoginBinding.partialLoginManual.inputPassword.setError(getString(R.string.login_message_error_empty_field));
         } else {
             activityLoginBinding.partialLoginManual.inputPassword.setError(null);
         }
@@ -129,7 +125,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo == null || !networkInfo.isConnected() || (networkInfo.getType() != ConnectivityManager.TYPE_WIFI && networkInfo.getType() != ConnectivityManager.TYPE_MOBILE)) {
             valid = false;
-            Toast.makeText(this, R.string.login_internet_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.login_message_error_no_internet, Toast.LENGTH_SHORT).show();
         }
 
         return valid;
@@ -155,7 +151,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
                 startActivity(intent);
             } else {
                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                Toast.makeText(LoginActivity.this, R.string.login_auth_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, R.string.login_message_error_auth, Toast.LENGTH_SHORT).show();
             }
 
             hideProgressDialog();
@@ -190,7 +186,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     @Override
     public void onFailed() {
         Log.d(TAG, "onFailed: ");
-        Toast.makeText(this, R.string.login_fingerprint_not_recognized, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.login_message_error_fingerprint_not_recognized, Toast.LENGTH_SHORT).show();
     }
 
     @Override

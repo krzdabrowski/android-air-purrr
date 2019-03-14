@@ -2,11 +2,9 @@ package com.example.trubul.airpurrr;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,15 +47,15 @@ class CustomDialog {
             lManager.showSoftInput(editText, 0);
         });
 
-        title.setText(R.string.menu_enter_a_value);
+        title.setText(R.string.menu_threshold_dialog_text);
         title.setPadding(16, 16, 16, 16);
         title.setGravity(Gravity.CENTER);
         title.setTextSize(24);
 
         builder.setCustomTitle(title);
         builder.setCancelable(true);  // with BACK button
-        builder.setPositiveButton(R.string.menu_ok, (dialog, id) -> {});
-        builder.setNegativeButton(R.string.menu_cancel, (dialog, id) -> dialog.dismiss());
+        builder.setPositiveButton(R.string.menu_threshold_btn_ok, (dialog, id) -> {});
+        builder.setNegativeButton(R.string.menu_threshold_btn_cancel, (dialog, id) -> dialog.dismiss());
 
         final AlertDialog dialog = builder.create();
         float dpi = mContext.getResources().getDisplayMetrics().density;
@@ -82,7 +80,7 @@ class CustomDialog {
         }
         else {
             isCorrectInput = false;
-            Toast.makeText(mContext, R.string.menu_enter_the_correct_value, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.menu_message_error_incorrect_value, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/login_padding_small"
-            android:text="@string/login_authenticate_with_your_fingerprint"
+            android:text="@string/login_fingerprint_text"
             android:textAppearance="?android:textAppearanceMedium" />
     </LinearLayout>
 

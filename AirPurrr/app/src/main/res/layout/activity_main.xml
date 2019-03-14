@@ -31,7 +31,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/UI_auto_mode"
+                android:text="@string/main_switch_automatic"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textSize="@dimen/main_text_size_switch"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="40dp"
-                android:text="@string/UI_manual_mode"
+                android:text="@string/main_switch_manual"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textSize="@dimen/main_text_size_switch"
                 app:layout_constraintStart_toStartOf="@+id/auto_mode"
@@ -100,7 +100,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:elevation="2dp"
-                            android:text="@string/UI_pm25"
+                            android:text="@string/main_data_info_pm25"
                             android:textSize="@dimen/main_text_size_data_info"
                             app:layout_constraintStart_toStartOf="@+id/PM25_data"
                             app:layout_constraintTop_toTopOf="@+id/PM25_data" />
@@ -111,7 +111,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:elevation="2dp"
-                            android:text="@string/UI_indoors"
+                            android:text="@string/main_data_info_indoors"
                             android:textSize="@dimen/main_text_size_data_info"
                             app:layout_constraintBaseline_toBaselineOf="@+id/PM25"
                             app:layout_constraintEnd_toEndOf="@+id/PM25_data" />
@@ -165,7 +165,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:elevation="2dp"
-                            android:text="@string/UI_pm10"
+                            android:text="@string/main_data_info_pm10"
                             android:textSize="@dimen/main_text_size_data_info"
                             app:layout_constraintStart_toStartOf="@+id/PM10_data"
                             app:layout_constraintTop_toTopOf="@+id/PM10_data" />
@@ -176,7 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:elevation="2dp"
-                            android:text="@string/UI_indoors"
+                            android:text="@string/main_data_info_indoors"
                             android:textSize="@dimen/main_text_size_data_info"
                             app:layout_constraintBaseline_toBaselineOf="@+id/PM10"
                             app:layout_constraintEnd_toEndOf="@+id/PM10_data" />

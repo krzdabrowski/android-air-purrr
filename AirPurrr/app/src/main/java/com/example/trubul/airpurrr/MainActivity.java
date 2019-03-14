@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         // TODO: xml-data-bind these
         pmValuesDetector = new Double[]{0.0, 0.0};
         pmValuesAPI = new Double[]{0.0, 0.0};
-        pmDatesAPI = new String[]{getString(R.string.UI_no_api_data), getString(R.string.UI_no_api_data)};
+        pmDatesAPI = new String[]{getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty)};
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -536,17 +536,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.set_auto_threshold:
+            case R.id.menu_threshold:
                 alertDialog.createDialog();
-                return true;
-            case R.id.refresh_detector:
-                LoaderManager.getInstance(this).initLoader(LOADER_DETECTOR, null, this).forceLoad();
-                setSwipeRefreshing(false);
-                return true;
-            case R.id.refresh_api:
-                LoaderManager.getInstance(this).initLoader(LOADER_API_PM, null, this).forceLoad();
-                updateAPI();
-                setSwipeRefreshing(false);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -593,18 +584,18 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         }
 
         // Set TextView PM values
-        activityMainBinding.PM25Data.setText(getString(R.string.UI_data_perc, pmValues[0]));
-        activityMainBinding.PM10Data.setText(getString(R.string.UI_data_perc, pmValues[1]));
-        activityMainBinding.PM25DataUgm3.setText(getString(R.string.UI_data_ugm3, pmValues[0] / 4));
-        activityMainBinding.PM10DataUgm3.setText(getString(R.string.UI_data_ugm3, pmValues[1] / 2));
+        activityMainBinding.PM25Data.setText(getString(R.string.main_data_percentage, pmValues[0]));
+        activityMainBinding.PM10Data.setText(getString(R.string.main_data_percentage, pmValues[1]));
+        activityMainBinding.PM25DataUgm3.setText(getString(R.string.main_data_ugm3, pmValues[0] / 4));
+        activityMainBinding.PM10DataUgm3.setText(getString(R.string.main_data_ugm3, pmValues[1] / 2));
 
         // Set TextView mode
         if (!flagDetectorAPI) {  // if detector
-            activityMainBinding.PM25Mode.setText(R.string.UI_indoors);
-            activityMainBinding.PM10Mode.setText(R.string.UI_indoors);
+            activityMainBinding.PM25Mode.setText(R.string.main_data_info_indoors);
+            activityMainBinding.PM10Mode.setText(R.string.main_data_info_indoors);
         } else {  // if APIHelper
-            activityMainBinding.PM25Mode.setText(getString(R.string.UI_api, pmDatesAPI[0]));
-            activityMainBinding.PM10Mode.setText(getString(R.string.UI_api, pmDatesAPI[1]));
+            activityMainBinding.PM25Mode.setText(getString(R.string.main_data_info_api, pmDatesAPI[0]));
+            activityMainBinding.PM10Mode.setText(getString(R.string.main_data_info_api, pmDatesAPI[1]));
         }
     }
 }
