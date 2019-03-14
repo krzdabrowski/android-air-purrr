@@ -3,7 +3,7 @@
 
     <string name="app_name">Air Purrr</string>
 
-    <string name="login_email" translatable="false">E-mail</string>
+    <string name="login_email">E-mail</string>
     <string name="login_password">Password</string>
     <string name="login_log_in">Login</string>
     <string name="login_authenticating">Authenticating…</string>
@@ -19,17 +19,17 @@
 
     <string name="UI_auto_mode">Automatic mode</string>
     <string name="UI_manual_mode">Manual mode</string>
-    <string name="UI_pm25" translatable="false">PM2.5</string>
-    <string name="UI_pm10" translatable="false">PM10</string>
-    <string name="UI_data_perc" translatable="false">%.1f%%</string>
-    <string name="UI_data_ugm3" translatable="false">(%.1f)</string>
+    <string name="UI_pm25">PM2.5</string>
+    <string name="UI_pm10">PM10</string>
+    <string name="UI_data_perc">%.1f%%</string>
+    <string name="UI_data_ugm3">(%.1f)</string>
     <string name="UI_indoors">Indoors</string>
-    <string name="UI_api" translatable="false">API (%s)</string>
+    <string name="UI_api">API (%s)</string>
     <string name="UI_no_api_data">no data</string>
 
     <string name="menu_set_auto_threshold">Set threshold for auto mode</string>
     <string name="menu_enter_a_value">Enter a value in percentage (%)</string>
-    <string name="menu_ok" translatable="false">OK</string>
+    <string name="menu_ok">OK</string>
     <string name="menu_cancel">Cancel</string>
     <string name="menu_refresh_data_from_detector">Refresh data from detector</string>
     <string name="menu_refresh_data_from_api">Refresh data from API</string>
