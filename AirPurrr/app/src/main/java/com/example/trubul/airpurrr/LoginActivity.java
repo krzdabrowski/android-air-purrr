@@ -186,7 +186,7 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
     @Override
     public void onFailed() {
         Log.d(TAG, "onFailed: ");
-        Toast.makeText(this, R.string.login_message_error_fingerprint_not_recognized, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.login_message_error_fingerprint_not_recognized, Toast.LENGTH_SHORT).show(); // TODO: czemu pokazuje sie inny msg?
     }
 
     @Override

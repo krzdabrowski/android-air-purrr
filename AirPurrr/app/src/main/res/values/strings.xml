@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Air Purrr</string>
 
+    <!-- TODO: przetestowac wszystkie case'y czy te wszystkie stringi sa potrzebne -->
     <!-- Login screen -->
     <string name="login_hint_email">E-mail</string>
     <string name="login_hint_password">Password</string>

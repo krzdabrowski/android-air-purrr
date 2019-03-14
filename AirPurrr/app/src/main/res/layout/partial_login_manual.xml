@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!-- TODO: import to styles -->
     <LinearLayout
         android:id="@+id/layout_login_manual"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingStart="@dimen/login_padding_medium"
-        android:paddingTop="@dimen/login_padding_large"
-        android:paddingEnd="@dimen/login_padding_medium">
+        style="@style/Login.Manual">
 
         <ImageView
             android:id="@+id/ic_logo"

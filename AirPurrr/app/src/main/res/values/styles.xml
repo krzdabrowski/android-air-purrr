@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Login screen -->
+    <style name="Login" />
+
     <style name="AppTheme.Login" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/color_login_primary</item>
         <item name="colorPrimaryDark">@color/color_login_dark</item>
@@ -10,6 +12,17 @@
         <item name="android:colorButtonNormal">@color/color_login_dark</item>
         <item name="android:textColorHint">@color/color_login_inactive</item>
     </style>
+
+    <style name="Login.Manual">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingStart">@dimen/login_padding_medium</item>
+        <item name="android:paddingTop">@dimen/login_padding_large</item>
+        <item name="android:paddingEnd">@dimen/login_padding_medium</item>
+    </style>
+
 
     <!-- Main screen -->
     <style name="AppTheme.Main" parent="Theme.AppCompat">
