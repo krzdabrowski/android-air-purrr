@@ -1,48 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- TODO: import to styles -->
+
     <LinearLayout
         android:id="@+id/layout_login_manual"
-        style="@style/Login.Manual">
+        style="@style/Login.Layout.Manual">
 
         <ImageView
             android:id="@+id/ic_logo"
-            android:layout_width="@dimen/login_logo_size"
-            android:layout_height="@dimen/login_logo_size"
+            style="@style/Login.Manual.Logo"
             android:contentDescription="@string/login_description_logo"
             android:src="@drawable/ic_logo" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_padding_medium">
+        <com.google.android.material.textfield.TextInputLayout style="@style/Login.Manual.TextInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Login.Manual.TextInputEditText"
                 android:hint="@string/login_hint_email"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_padding_small">
+        <com.google.android.material.textfield.TextInputLayout style="@style/Login.Manual.TextInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/Login.Manual.TextInputEditText"
                 android:hint="@string/login_hint_password"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_padding_medium"
+            style="@style/Login.Manual.Button"
             android:text="@string/login_btn_text" />
     </LinearLayout>
 

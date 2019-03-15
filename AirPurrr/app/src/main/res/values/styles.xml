@@ -3,7 +3,7 @@
     <!-- Login screen -->
     <style name="Login" />
 
-    <style name="AppTheme.Login" parent="Theme.AppCompat.NoActionBar">
+    <style name="Login.AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/color_login_primary</item>
         <item name="colorPrimaryDark">@color/color_login_dark</item>
         <item name="colorAccent">@color/color_login_accent</item>
@@ -13,7 +13,9 @@
         <item name="android:textColorHint">@color/color_login_inactive</item>
     </style>
 
-    <style name="Login.Manual">
+    <style name="Login.Layout" />
+
+    <style name="Login.Layout.Manual">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center_horizontal</item>
@@ -23,9 +25,61 @@
         <item name="android:paddingEnd">@dimen/login_padding_medium</item>
     </style>
 
+    <style name="Login.Layout.Fingerprint">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingBottom">@dimen/login_padding_extra_large</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="Login.Manual" />
+
+    <style name="Login.Manual.Logo">
+        <item name="android:layout_width">@dimen/login_logo_size</item>
+        <item name="android:layout_height">@dimen/login_logo_size</item>
+        <item name="android:layout_marginBottom">@dimen/login_padding_tiny</item>
+    </style>
+
+    <style name="Login.Manual.TextInputLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/login_padding_small</item>
+    </style>
+
+    <style name="Login.Manual.TextInputEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Login.Manual.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/login_padding_medium</item>
+    </style>
+
+    <style name="Login.Fingerprint" />
+
+    <style name="Login.Fingerprint.Icon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/login_padding_tiny</item>
+    </style>
+
+    <style name="Login.Fingerprint.Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/login_padding_small</item>
+        <item name="android:textColor">@color/color_login_accent</item>
+        <item name="android:textSize">@dimen/login_text_size_auth</item>
+    </style>
+
 
     <!-- Main screen -->
-    <style name="AppTheme.Main" parent="Theme.AppCompat">
+    <style name="Main" />
+
+    <style name="Main.AppTheme" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/color_main_primary</item>
         <item name="colorPrimaryDark">@color/color_main_dark</item>
         <item name="colorAccent">@color/color_main_accent</item>

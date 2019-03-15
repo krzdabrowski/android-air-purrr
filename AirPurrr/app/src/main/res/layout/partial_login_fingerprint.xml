@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- TODO: import to styles -->
+
     <LinearLayout
         android:id="@+id/layout_login_fingerprint"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/login_padding_extra_large"
-        android:visibility="gone"
+        style="@style/Login.Layout.Fingerprint"
         tools:ignore="UseCompoundDrawables"
         tools:visibility="visible">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Login.Fingerprint.Icon"
             android:background="@drawable/ic_fingerprint_background"
             android:contentDescription="@string/login_description_fingerprint_icon"
-            android:padding="@dimen/login_padding_tiny"
             android:src="@drawable/ic_fingerprint_foreground" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_padding_small"
-            android:text="@string/login_fingerprint_text"
-            android:textAppearance="?android:textAppearanceMedium" />
+            style="@style/Login.Fingerprint.Text"
+            android:text="@string/login_fingerprint_text" />
     </LinearLayout>
 
 </layout>
