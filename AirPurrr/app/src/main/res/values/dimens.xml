@@ -12,6 +12,6 @@
     <!-- Main screen -->
     <dimen name="main_text_size_switch">18sp</dimen>
     <dimen name="main_text_size_data_percentage">80sp</dimen>
-    <dimen name="main_text_size_data_ugm3">18sp</dimen>
+    <dimen name="main_text_size_data_ugm3">20sp</dimen>
     <dimen name="main_text_size_data_info">14sp</dimen>
 </resources>

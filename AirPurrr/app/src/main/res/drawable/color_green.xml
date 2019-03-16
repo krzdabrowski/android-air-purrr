@@ -9,10 +9,5 @@
     <!--light green 700-->
     <solid android:color="#689F38" />
 
-    <padding
-        android:left="1dp"
-        android:right="1dp"
-        android:top="24dp" />
-
     <corners android:radius="10dp" />
 </shape>

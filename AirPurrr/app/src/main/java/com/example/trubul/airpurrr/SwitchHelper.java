@@ -23,7 +23,7 @@ class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
     }
 
     interface SwitchCallback {
-        void setSwitchAuto(boolean state);
+//        void setSwitchAuto(boolean state);
         void setSwitchManual(boolean state);
     }
 
@@ -96,7 +96,7 @@ class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
     private void keepState() {
         if (isLastUseAuto) {
             stateAuto = !stateAuto;
-            mCallback.setSwitchAuto(stateAuto);
+//            mCallback.setSwitchAuto(stateAuto);
         } else {
             stateManual = !stateManual;
             mCallback.setSwitchManual(stateManual);
@@ -122,7 +122,7 @@ class SwitchHelper implements CompoundButton.OnCheckedChangeListener {
                 // It does not exceed the threshold
             } else if (MainActivity.flagTriStateAuto == 0) {  // if null
                 Toast.makeText(mContext, R.string.main_message_error_server, Toast.LENGTH_LONG).show();
-                mCallback.setSwitchAuto(false);
+//                mCallback.setSwitchAuto(false);
             }
         } else {
             stateAuto = false;

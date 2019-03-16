@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.annotation.NonNull;
 import androidx.loader.app.LoaderManager;
@@ -46,14 +47,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     static int flagTriStateAuto = 0;
 
     // TODO: remove as much butterknife as possible & implement more .XML databinding
-    @BindView(R.id.switch_auto) Switch switchAuto;
     @BindView(R.id.switch_manual) Switch switchManual;
-    @BindView(R.id.PM25_data) TextView pm25Data;
-    @BindView(R.id.PM10_data) TextView pm10Data;
-    @BindView(R.id.PM25_data_ugm3) TextView pm25DataUgm3;
-    @BindView(R.id.PM10_data_ugm3) TextView pm10DataUgm3;
-    @BindView(R.id.PM25_mode) TextView pm25Mode;
-    @BindView(R.id.PM10_mode) TextView pm10Mode;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
     private static SharedPreferences mSharedPreferences;
@@ -78,10 +72,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private ActivityMainBinding activityMainBinding;
 
     // TODO: consider to do something with getters/setters -> Observable variables?
-    @Override
-    public void setSwitchAuto(boolean state) {
-        switchAuto.setChecked(state);
-    }
+//    @Override
+//    public void setSwitchAuto(boolean state) {
+//        switchAuto.setChecked(state);
+//    }
 
     @Override
     public void setSwitchManual(boolean state) {
@@ -463,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 //        switchManual.setOnCheckedChangeListener(manualListener);
         mySwipeRefreshLayout.setOnRefreshListener(this);
 
-        activityMainBinding.switchAuto.setOnCheckedChangeListener(autoListener);
+//        activityMainBinding.switchAuto.setOnCheckedChangeListener(autoListener);
         activityMainBinding.switchManual.setOnCheckedChangeListener(manualListener);
 
         View.OnClickListener textViewListener = (view) -> {
@@ -476,8 +470,8 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
 //        pm25Data.setOnClickListener(textViewListener);
 //        pm10Data.setOnClickListener(textViewListener);
-        activityMainBinding.PM25Data.setOnClickListener(textViewListener);
-        activityMainBinding.PM10Data.setOnClickListener(textViewListener);
+        activityMainBinding.partialMainDataPm25.layoutMainData.setOnClickListener(textViewListener);
+        activityMainBinding.partialMainDataPm10.layoutMainData.setOnClickListener(textViewListener);
 
         // ChangeListeners
         detector.setListener(() -> {
@@ -557,45 +551,45 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     }
 
     private void setUI(Double[] pmValues) {
-        TextView textView;
+        ConstraintLayout layout;
 
         // Set TextView colors
         for (int i = 0; i < 2; i++) {
             // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
-                textView = activityMainBinding.PM25Data;
+                layout = activityMainBinding.partialMainDataPm25.layoutMainData;
             } else {
-                textView = activityMainBinding.PM10Data;
+                layout = activityMainBinding.partialMainDataPm10.layoutMainData;
             }
 
             // Update colors
             if (pmValues[i] == 0) {  // connection error
-                textView.setBackgroundResource(R.drawable.color_default);
+                layout.setBackgroundResource(R.drawable.color_default);
                 flagTriStateAuto = 0;
             } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
-                textView.setBackgroundResource(R.drawable.color_green);
+                layout.setBackgroundResource(R.drawable.color_green);
             } else if (pmValues[i] > 50 && pmValues[i] <= 100) {
-                textView.setBackgroundResource(R.drawable.color_lime);
+                layout.setBackgroundResource(R.drawable.color_lime);
             } else if (pmValues[i] > 100 && pmValues[i] <= 200) {
-                textView.setBackgroundResource(R.drawable.color_yellow);
+                layout.setBackgroundResource(R.drawable.color_yellow);
             } else {
-                textView.setBackgroundResource(R.drawable.color_red);
+                layout.setBackgroundResource(R.drawable.color_red);
             }
         }
 
         // Set TextView PM values
-        activityMainBinding.PM25Data.setText(getString(R.string.main_data_percentage, pmValues[0]));
-        activityMainBinding.PM10Data.setText(getString(R.string.main_data_percentage, pmValues[1]));
-        activityMainBinding.PM25DataUgm3.setText(getString(R.string.main_data_ugm3, pmValues[0] / 4));
-        activityMainBinding.PM10DataUgm3.setText(getString(R.string.main_data_ugm3, pmValues[1] / 2));
+        activityMainBinding.partialMainDataPm25.dataPercentage.setText(getString(R.string.main_data_percentage, pmValues[0]));
+        activityMainBinding.partialMainDataPm10.dataPercentage.setText(getString(R.string.main_data_percentage, pmValues[1]));
+        activityMainBinding.partialMainDataPm25.dataUgm3.setText(getString(R.string.main_data_ugm3, pmValues[0] / 4));
+        activityMainBinding.partialMainDataPm10.dataUgm3.setText(getString(R.string.main_data_ugm3, pmValues[1] / 2));
 
         // Set TextView mode
         if (!flagDetectorAPI) {  // if detector
-            activityMainBinding.PM25Mode.setText(R.string.main_data_info_indoors);
-            activityMainBinding.PM10Mode.setText(R.string.main_data_info_indoors);
+            activityMainBinding.partialMainDataPm25.dataSource.setText(R.string.main_data_info_indoors);
+            activityMainBinding.partialMainDataPm10.dataSource.setText(R.string.main_data_info_indoors);
         } else {  // if APIHelper
-            activityMainBinding.PM25Mode.setText(getString(R.string.main_data_info_api, pmDatesAPI[0]));
-            activityMainBinding.PM10Mode.setText(getString(R.string.main_data_info_api, pmDatesAPI[1]));
+            activityMainBinding.partialMainDataPm25.dataSource.setText(getString(R.string.main_data_info_api, pmDatesAPI[0]));
+            activityMainBinding.partialMainDataPm10.dataSource.setText(getString(R.string.main_data_info_api, pmDatesAPI[1]));
         }
     }
 }
