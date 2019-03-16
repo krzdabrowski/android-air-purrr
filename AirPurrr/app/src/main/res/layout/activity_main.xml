@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- TODO: elevation (https://material.io/design/environment/elevation.html#elevation-in-material-design) -->
-<!-- TODO: surface reaction (ripple, selector?) -->
-<!-- TODO: Navigation Component -->
-<!-- TODO: animations -->
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 

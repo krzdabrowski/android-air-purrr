@@ -70,7 +70,7 @@
     <style name="Login.Fingerprint.Text">
         <item name="android:layout_marginTop">@dimen/margin_small</item>
         <item name="android:textColor">@color/color_login_accent</item>
-        <item name="android:textSize">@dimen/login_text_size_auth</item>
+        <item name="android:textSize">@dimen/login_auth_text_size</item>
     </style>
 
 
@@ -97,7 +97,7 @@
         <item name="android:layout_marginTop">@dimen/margin_large</item>
         <item name="android:layout_marginStart">@dimen/margin_medium</item>
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
-        <item name="android:textSize">@dimen/main_text_size_switch</item>
+        <item name="android:textSize">@dimen/main_switch_text_size</item>
         <item name="layout_constraintTop_toTopOf">parent</item>
         <item name="layout_constraintStart_toStartOf">parent</item>
         <item name="layout_constraintEnd_toStartOf">@id/switch_manual</item>
@@ -119,7 +119,7 @@
         <item name="android:layout_marginTop">@dimen/margin_large</item>
         <item name="android:layout_marginEnd">@dimen/margin_small</item>
         <item name="android:layout_marginBottom">@dimen/margin_large</item>
-        <item name="cardCornerRadius">@dimen/main_corner_data</item>
+        <item name="cardCornerRadius">@dimen/main_data_corner_radius</item>
         <item name="layout_constraintEnd_toEndOf">parent</item>
         <item name="layout_constraintBottom_toBottomOf">parent</item>
         <item name="layout_constraintTop_toBottomOf">@+id/text_manual_control</item>
@@ -148,11 +148,12 @@
     </style>
 
     <style name="Main.Data.Layout">
+        <item name="android:elevation">@dimen/main_data_elevation</item>
         <item name="android:foreground">?selectableItemBackground</item>
     </style>
 
     <style name="Main.Data.Percentage">
-        <item name="android:textSize">@dimen/main_text_size_data_percentage</item>
+        <item name="android:textSize">@dimen/main_data_text_size_percentage</item>
         <item name="android:textAppearance">?android:textAppearanceLarge</item>
         <item name="layout_constraintBottom_toBottomOf">parent</item>
         <item name="layout_constraintEnd_toEndOf">parent</item>
@@ -162,7 +163,7 @@
 
     <style name="Main.Data.Ugm3">
         <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
-        <item name="android:textSize">@dimen/main_text_size_data_ugm3</item>
+        <item name="android:textSize">@dimen/main_data_text_size_ugm3</item>
         <item name="layout_constraintBottom_toBottomOf">parent</item>
         <item name="layout_constraintEnd_toEndOf">parent</item>
         <item name="layout_constraintStart_toStartOf">parent</item>
@@ -170,7 +171,7 @@
 
     <style name="Main.Data.Info">
         <item name="android:layout_margin">@dimen/margin_tiny</item>
-        <item name="android:textSize">@dimen/main_text_size_data_info</item>
+        <item name="android:textSize">@dimen/main_data_text_size_info</item>
     </style>
 
     <style name="Main.Data.Info.Type">
