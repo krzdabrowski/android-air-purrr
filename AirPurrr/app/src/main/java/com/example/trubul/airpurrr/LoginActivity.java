@@ -150,7 +150,6 @@ public class LoginActivity extends BaseActivity implements LoginHelper.Fingerpri
 
                 startActivity(intent);
             } else {
-                Log.w(TAG, "signInWithEmail:failure", task.getException());
                 Toast.makeText(LoginActivity.this, R.string.login_message_error_auth, Toast.LENGTH_SHORT).show();
             }
 

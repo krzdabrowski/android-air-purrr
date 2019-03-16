@@ -10,20 +10,10 @@ import androidx.loader.content.AsyncTaskLoader;
 class DetectorHelper {
     private static final String TAG = "DetectorHelper";
     private static DetectorCallback mCallback;
-    private static ChangeListener listener;
 
 
     interface DetectorCallback {
-        Double[] getPMValuesDetector();
         void setPMValuesDetector(Double[] pmValuesDetector);
-    }
-
-    interface ChangeListener {
-        void onChange();
-    }
-
-    void setListener(ChangeListener listener) {
-        this.listener = listener;
     }
 
     DetectorHelper(DetectorCallback callback) {
@@ -53,15 +43,6 @@ class DetectorHelper {
             pmDoubles = convertToPercent(pmDoubles);
 
             Log.d(TAG, "downloadPMValues: PMDOUBLES ARE " + Arrays.toString(pmDoubles));
-            Log.d(TAG, "downloadPMValues: GETPMVALUESDETECTOR ARE " + Arrays.toString(mCallback.getPMValuesDetector()));
-
-            // If values have changed
-            if (!Arrays.equals(pmDoubles, mCallback.getPMValuesDetector())) {
-                mCallback.setPMValuesDetector(pmDoubles);
-                listener.onChange();
-            }
-
-            // If not
             mCallback.setPMValuesDetector(pmDoubles);
 
             return pmDoubles;

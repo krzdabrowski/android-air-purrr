@@ -28,18 +28,22 @@ import butterknife.ButterKnife;
 
 // TODO: Navigation Component
 // TODO: animations
-
 // TODO: Timber library instead of log.x
 // TODO: deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
+// TODO: sprawdzic wszystkie id czy sa potrzebne i czy przestrzegaja zasad dobrego id
+// TODO: implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
+// TODO: (for future) implement TabLayout with current and predicted results/data in fragments & remove automatic switch (only manual left)
+// TODO: export these strings somewhere
+// TODO: Snackbars instead of Toasts
+// TODO: remove as much butterknife as possible & implement more .XML databinding
+// TODO: create model (Data: DetectorData, ApiData or so), viewmodel, view, helpers, ... packages
+// TODO: consider to do something with getters/setters -> Observable variables?
+// TODO: remove loaders while implementing MVVM with LiveData
+
 public class MainActivity extends AppCompatActivity implements // SwipeListener.SwipeCallback,
         SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
-    // TODO: sprawdzic wszystkie id czy sa potrzebne i czy przestrzegaja zasad dobrego id
-    // TODO: implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
-    // TODO: (for future) implement TabLayout with current and predicted results/data in fragments & remove automatic switch (only manual left)
-    // TODO: export these strings somewhere
-    // TODO: Snackbars instead of Toasts
     private static final String TAG = "MainActivity";
     static final String DETECTOR_URL = "http://airpurrr.ga/pm_data.txt";
 
@@ -47,15 +51,12 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private static final int LOADER_API_PM = 2;
 
     static boolean flagDetectorAPI = false;  // false = DetectorMode, true = APIMode
-    static int flagTriStateAuto = 0;
 
-    // TODO: remove as much butterknife as possible & implement more .XML databinding
     @BindView(R.id.switch_manual) Switch switchManual;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout mySwipeRefreshLayout;
 
     private static SharedPreferences mSharedPreferences;
 
-    // TODO: create model (Data: DetectorData, ApiData or so), viewmodel, view, helpers, ... packages
     private DetectorHelper detector = new DetectorHelper(this);
     private APIHelper api = new APIHelper(this);  // must-be instance to make mCallback work
 
@@ -63,22 +64,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     private List<Object> pmValuesAndDatesAPI;
     private Double[] pmValuesAPI;
     private String[] pmDatesAPI;
-////    private List<List<Object>> stationLocations;
-//    private Integer[] stationSensors;
 
-    private CustomDialog alertDialog = new CustomDialog(this);
-    private int threshold = 100;
-
-    private SwitchHelper autoListener;
     private SwitchHelper manualListener;
 
     private ActivityMainBinding activityMainBinding;
-
-    // TODO: consider to do something with getters/setters -> Observable variables?
-//    @Override
-//    public void setSwitchAuto(boolean state) {
-//        switchAuto.setChecked(state);
-//    }
 
     @Override
     public void setSwitchManual(boolean state) {
@@ -97,11 +86,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
     private void setSwipeRefreshing(final boolean value) {
         mySwipeRefreshLayout.post(() -> mySwipeRefreshLayout.setRefreshing(value));
-    }
-
-    @Override
-    public Double[] getPMValuesDetector() {
-        return pmValuesDetector;
     }
 
     // Get login_email and login_password from LoginActivity
@@ -128,14 +112,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         setUI(pmValuesAPI);
     }
 
-    private void updateAutoMode() {
-        if (pmValuesDetector[0] > threshold || pmValuesDetector[1] > threshold) {
-            flagTriStateAuto = 2;
-        } else {
-            flagTriStateAuto = 1;
-        }
-    }
-
     private void automaticDownload() {
         Timer timer = new Timer();
         TimerTask minuteTask = new TimerTask() {
@@ -143,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             public void run() {
                 runOnUiThread(() -> {
                     LoaderManager.getInstance(MainActivity.this).initLoader(LOADER_DETECTOR, null, MainActivity.this).forceLoad();
-                    Log.d(TAG, "percentages are: " + Arrays.toString(getPMValuesDetector()));
-                    Log.d(TAG, "runOnUiThread flagTriStateAuto is: " + flagTriStateAuto);
                 });
             }
         };
@@ -152,13 +126,11 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         timer.schedule(minuteTask, 0, 1000 * 60);  // 1000*60*1 every 1 minute
     }
 
-    // TODO: re-design xml (ConstraintLayout is fine, but big tile of PM2.5/10 is a bad idea
-    // TODO: -> create empty TextView with color and data will be shown in another TextView with gravity.CENTER or so
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-//        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -408,7 +380,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 >>>>>>> 885e77f... First try of fingerprint authentication's implementation
 
-        // TODO: xml-data-bind these
         pmValuesDetector = new Double[]{0.0, 0.0};
         pmValuesAPI = new Double[]{0.0, 0.0};
         pmDatesAPI = new String[]{getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty)};
@@ -441,6 +412,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 =======
         LoaderManager.getInstance(this).initLoader(LOADER_DETECTOR, null, this).forceLoad();  // Loader for Detector PM data
         LoaderManager.getInstance(this).initLoader(LOADER_API_PM, null, this).forceLoad();  // Loader for API PM data
+<<<<<<< HEAD
 >>>>>>> 97ce4c1... update codebase to Java 8 & update libraries
 //        getLoaderManager().initLoader(LOADER_API_STATIONS, null, this).forceLoad();  // Loader for API Station Locations
         automaticDownload();  // downloadPMValues DetectorHelper values every 1 minute
@@ -458,9 +430,13 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 //        switchAuto.setOnCheckedChangeListener();
         manualListener = new SwitchHelper(this, this, SwitchHelper.WorkingMode.MANUAL);
 //        switchManual.setOnCheckedChangeListener(manualListener);
+=======
+        automaticDownload();  // downloadPMValues DetectorHelper values every 1 minute
+
+        manualListener = new SwitchHelper(this, this);
+>>>>>>> 90b3c31... unimplement: Automatic Mode (logic), Dialog for setting threshold for auto mode, (before) Location Service
         mySwipeRefreshLayout.setOnRefreshListener(this);
 
-//        activityMainBinding.switchAuto.setOnCheckedChangeListener(autoListener);
         activityMainBinding.switchManual.setOnCheckedChangeListener(manualListener);
 
         View.OnClickListener textViewListener = (view) -> {
@@ -471,32 +447,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             }
         };
 
-//        pm25Data.setOnClickListener(textViewListener);
-//        pm10Data.setOnClickListener(textViewListener);
         activityMainBinding.partialMainDataPm25.layoutMainData.setOnClickListener(textViewListener);
         activityMainBinding.partialMainDataPm10.layoutMainData.setOnClickListener(textViewListener);
-
-        // ChangeListeners
-        detector.setListener(() -> {
-            Log.d(TAG, "onChange detector: CHANGE");
-
-            updateAutoMode();  // update auto mode flags = default threshold is 100%
-            autoListener.autoMode(autoListener.stateAuto);  // control the fan
-        });
-
-        alertDialog.setListener(() -> {
-            Log.d(TAG, "onChange alertDialog: CHANGE");
-            int getThreshold = alertDialog.getThreshold();
-            if (getThreshold != 0) {
-                threshold = getThreshold;
-            }
-            Log.d(TAG, "THRESHOLD IS: " + threshold);
-
-            updateAutoMode();  // update auto mode flags = default threshold is 100%
-        });
     }
 
-    // TODO: remove loaders while implementing MVVM with LiveData
     @Override
     public @NonNull Loader onCreateLoader(int id, Bundle args) {
         if (id == LOADER_DETECTOR) {
@@ -534,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_threshold:
-                alertDialog.createDialog();
+//                alertDialog.createDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -570,7 +524,6 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             // Update colors
             if (pmValues[i] == 0) {  // connection error
                 layout.setBackgroundResource(R.drawable.data_unavailable);
-                flagTriStateAuto = 0;
             } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
                 layout.setBackgroundResource(R.drawable.data_green);
             } else if (pmValues[i] > 50 && pmValues[i] <= 100) {
