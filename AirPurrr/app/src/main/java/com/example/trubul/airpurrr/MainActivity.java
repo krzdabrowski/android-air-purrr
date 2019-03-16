@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
         SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback,
         LoaderManager.LoaderCallbacks, SwipeRefreshLayout.OnRefreshListener {
 
+    // TODO: sprawdzic wszystkie id czy sa potrzebne i czy przestrzegaja zasad dobrego id
     // TODO: implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
     // TODO: (for future) implement TabLayout with current and predicted results/data in fragments & remove automatic switch (only manual left)
     // TODO: export these strings somewhere
@@ -557,8 +558,10 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
             // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
                 layout = activityMainBinding.partialMainDataPm25.layoutMainData;
+                activityMainBinding.partialMainDataPm25.dataType.setText(getString(R.string.main_data_info_pm25));
             } else {
                 layout = activityMainBinding.partialMainDataPm10.layoutMainData;
+                activityMainBinding.partialMainDataPm10.dataType.setText(getString(R.string.main_data_info_pm10));
             }
 
             // Update colors

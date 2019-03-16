@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!-- TODO: android id dla linearlayout tymczasowe? -->
     <LinearLayout
         android:id="@+id/layout_login_manual"
         style="@style/Login.Layout.Manual">
@@ -33,6 +33,6 @@
             android:id="@+id/btn_login"
             style="@style/Login.Manual.Button"
             android:text="@string/login_btn_text" />
-    </LinearLayout>
 
+    </LinearLayout>
 </layout>

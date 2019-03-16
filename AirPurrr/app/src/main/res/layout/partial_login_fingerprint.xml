@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- TODO: android id dla linearlayout tymczasowe? -->
 
     <LinearLayout
         android:id="@+id/layout_login_fingerprint"
@@ -17,6 +18,6 @@
         <TextView
             style="@style/Login.Fingerprint.Text"
             android:text="@string/login_fingerprint_text" />
-    </LinearLayout>
 
+    </LinearLayout>
 </layout>

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Login screen -->
-    <dimen name="login_padding_tiny">8dp</dimen>
-    <dimen name="login_padding_small">16dp</dimen>
-    <dimen name="login_padding_medium">24dp</dimen>
-    <dimen name="login_padding_large">64dp</dimen>
-    <dimen name="login_padding_extra_large">96dp</dimen>
     <dimen name="login_logo_size">96dp</dimen>
     <dimen name="login_text_size_auth">18sp</dimen>
 
@@ -15,4 +10,12 @@
     <dimen name="main_text_size_data_ugm3">20sp</dimen>
     <dimen name="main_text_size_data_info">14sp</dimen>
     <dimen name="main_corner_data">10dp</dimen>
+
+    <!-- Margins -->
+    <dimen name="margin_tiny">8dp</dimen>
+    <dimen name="margin_small">16dp</dimen>
+    <dimen name="margin_medium">24dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_extra_large">64dp</dimen>
+    <dimen name="margin_extra_extra_large">96dp</dimen>
 </resources>

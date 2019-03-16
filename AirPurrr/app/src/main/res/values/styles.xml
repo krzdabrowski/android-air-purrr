@@ -13,24 +13,23 @@
         <item name="android:textColorHint">@color/color_login_inactive</item>
     </style>
 
-    <style name="Login.Layout" />
-
-    <style name="Login.Layout.Manual">
+    <style name="Login.Layout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Login.Layout.Manual">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:paddingStart">@dimen/login_padding_medium</item>
-        <item name="android:paddingTop">@dimen/login_padding_large</item>
-        <item name="android:paddingEnd">@dimen/login_padding_medium</item>
+        <item name="android:paddingStart">@dimen/margin_medium</item>
+        <item name="android:paddingTop">@dimen/margin_extra_large</item>
+        <item name="android:paddingEnd">@dimen/margin_medium</item>
     </style>
 
     <style name="Login.Layout.Fingerprint">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:paddingBottom">@dimen/login_padding_extra_large</item>
+        <item name="android:paddingBottom">@dimen/margin_extra_extra_large</item>
         <item name="android:visibility">gone</item>
     </style>
 
@@ -39,13 +38,13 @@
     <style name="Login.Manual.Logo">
         <item name="android:layout_width">@dimen/login_logo_size</item>
         <item name="android:layout_height">@dimen/login_logo_size</item>
-        <item name="android:layout_marginBottom">@dimen/login_padding_tiny</item>
+        <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
     </style>
 
     <style name="Login.Manual.TextInputLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/login_padding_small</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
     </style>
 
     <style name="Login.Manual.TextInputEditText">
@@ -56,21 +55,20 @@
     <style name="Login.Manual.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/login_padding_medium</item>
+        <item name="android:layout_marginTop">@dimen/margin_medium</item>
     </style>
 
-    <style name="Login.Fingerprint" />
-
-    <style name="Login.Fingerprint.Icon">
+    <style name="Login.Fingerprint">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/login_padding_tiny</item>
+    </style>
+
+    <style name="Login.Fingerprint.Icon">
+        <item name="android:padding">@dimen/margin_tiny</item>
     </style>
 
     <style name="Login.Fingerprint.Text">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/login_padding_small</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
         <item name="android:textColor">@color/color_login_accent</item>
         <item name="android:textSize">@dimen/login_text_size_auth</item>
     </style>
@@ -84,4 +82,105 @@
         <item name="colorPrimaryDark">@color/color_main_dark</item>
         <item name="colorAccent">@color/color_main_accent</item>
     </style>
+
+    <style name="Main.Layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Main.Switch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Main.Switch.Text">
+        <item name="android:layout_marginTop">@dimen/margin_large</item>
+        <item name="android:layout_marginStart">@dimen/margin_medium</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textSize">@dimen/main_text_size_switch</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toStartOf">@id/switch_manual</item>
+        <item name="layout_constraintBottom_toTopOf">@id/cardView</item>
+        <item name="layout_constraintHorizontal_chainStyle">spread_inside</item>
+    </style>
+
+    <style name="Main.Switch.Button">
+        <item name="android:layout_marginEnd">@dimen/margin_medium</item>
+        <item name="layout_constraintBaseline_toBaselineOf">@id/text_manual_control</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintStart_toEndOf">@id/text_manual_control</item>
+    </style>
+
+    <style name="Main.CardView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_marginStart">@dimen/margin_small</item>
+        <item name="android:layout_marginTop">@dimen/margin_large</item>
+        <item name="android:layout_marginEnd">@dimen/margin_small</item>
+        <item name="android:layout_marginBottom">@dimen/margin_large</item>
+        <item name="cardCornerRadius">@dimen/main_corner_data</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintTop_toBottomOf">@+id/text_manual_control</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+
+    <style name="Main.DataContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="Main.DataContainer.LinearLayout">
+        <item name="android:baselineAligned">false</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:weightSum">2</item>
+    </style>
+
+    <style name="Main.DataContainer.LinearView">
+        <item name="android:layout_margin">@dimen/margin_tiny</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Main.Data">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Main.Data.Layout">
+        <item name="android:foreground">?selectableItemBackground</item>
+    </style>
+
+    <style name="Main.Data.Percentage">
+        <item name="android:textSize">@dimen/main_text_size_data_percentage</item>
+        <item name="android:textAppearance">?android:textAppearanceLarge</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+    </style>
+
+    <style name="Main.Data.Ugm3">
+        <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
+        <item name="android:textSize">@dimen/main_text_size_data_ugm3</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+    </style>
+
+    <style name="Main.Data.Info">
+        <item name="android:layout_margin">@dimen/margin_tiny</item>
+        <item name="android:textSize">@dimen/main_text_size_data_info</item>
+    </style>
+
+    <style name="Main.Data.Info.Type">
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+    </style>
+
+    <style name="Main.Data.Info.Source">
+        <item name="layout_constraintBaseline_toBaselineOf">@id/data_type</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+    </style>
+
 </resources>
