@@ -10,7 +10,7 @@
         android:foreground="?selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        tools:background="@drawable/color_green">
+        tools:background="@drawable/data_green">
 
         <TextView
             android:id="@+id/data_type"

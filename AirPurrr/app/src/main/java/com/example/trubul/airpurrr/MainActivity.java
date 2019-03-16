@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import com.example.trubul.airpurrr.databinding.ActivityMainBinding;
 
@@ -564,16 +563,16 @@ public class MainActivity extends AppCompatActivity implements // SwipeListener.
 
             // Update colors
             if (pmValues[i] == 0) {  // connection error
-                layout.setBackgroundResource(R.drawable.color_default);
+                layout.setBackgroundResource(R.drawable.data_unavailable);
                 flagTriStateAuto = 0;
             } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
-                layout.setBackgroundResource(R.drawable.color_green);
+                layout.setBackgroundResource(R.drawable.data_green);
             } else if (pmValues[i] > 50 && pmValues[i] <= 100) {
-                layout.setBackgroundResource(R.drawable.color_lime);
+                layout.setBackgroundResource(R.drawable.data_lime);
             } else if (pmValues[i] > 100 && pmValues[i] <= 200) {
-                layout.setBackgroundResource(R.drawable.color_yellow);
+                layout.setBackgroundResource(R.drawable.data_yellow);
             } else {
-                layout.setBackgroundResource(R.drawable.color_red);
+                layout.setBackgroundResource(R.drawable.data_red);
             }
         }
 
