@@ -22,17 +22,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.partial_main_data.view.*
 import timber.log.Timber
 
+// TODO: export these strings somewhere
+// TODO: sprawdzic wszystkie id czy sa potrzebne i czy przestrzegaja zasad dobrego id
+
 // TODO: Navigation Component
 // TODO: animations
 // TODO: deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
-// TODO: sprawdzic wszystkie id czy sa potrzebne i czy przestrzegaja zasad dobrego id
 // TODO: implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
-// TODO: (for future) implement TabLayout with current and predicted results/data in fragments & remove automatic switch (only manual left)
-// TODO: export these strings somewhere
-// TODO: Snackbars instead of Toasts
+// TODO: (for future) implement TabLayout with current and predicted results/data in fragments
 // TODO: implement more .XML databinding
 // TODO: create model (Data: DetectorData, ApiData or so), viewmodel, view, helpers, ... packages
-// TODO: consider to do something with getters/setters -> Observable variables?
 // TODO: remove loaders while implementing MVVM with LiveData
 
 private const val LOADER_DETECTOR = 1
@@ -45,8 +44,7 @@ class MainActivity : AppCompatActivity(),
     private var pmValuesAPI = listOf(0.0, 0.0)
     private lateinit var pmDatesAPI: List<String>
     private lateinit var pmValuesAndDatesAPI: List<Any>
-
-    private var manualListener = SwitchHelper(this, this)
+    private lateinit var manualListener: SwitchHelper
 
     override fun setSwitchManual(state: Boolean) {
         switch_manual.isChecked = state
@@ -86,6 +84,7 @@ class MainActivity : AppCompatActivity(),
         Timber.plant(Timber.DebugTree())
 
         pmDatesAPI = listOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
+        manualListener = SwitchHelper(swipe_refresh, this)
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()  // Loader for Detector PM data

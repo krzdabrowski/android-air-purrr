@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import androidx.databinding.DataBindingUtil
 import android.hardware.fingerprint.FingerprintManager
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -13,14 +12,12 @@ import android.preference.PreferenceManager
 
 import androidx.core.app.ActivityCompat
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import com.example.trubul.airpurrr.LoginHelper
 import com.example.trubul.airpurrr.R
 
-import com.example.trubul.airpurrr.databinding.ActivityLoginBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
@@ -52,7 +49,7 @@ class LoginActivity : BaseActivity(),
             val networkInfo = connectivityManager.activeNetworkInfo
             if (networkInfo == null || !networkInfo.isConnected || networkInfo.type != ConnectivityManager.TYPE_WIFI && networkInfo.type != ConnectivityManager.TYPE_MOBILE) {
                 valid = false
-                Toast.makeText(this, R.string.login_message_error_no_internet, Toast.LENGTH_SHORT).show()
+                Snackbar.make(layout_login, R.string.login_message_error_no_internet, Snackbar.LENGTH_SHORT).show()
             }
 
             return valid
@@ -81,10 +78,10 @@ class LoginActivity : BaseActivity(),
         if (mLoginHelper.isFingerprintAuthAvailable && isFingerprintPermissionGranted) {
 
             if (!keyguardManager.isKeyguardSecure) {  // show a message that the user hasn't set up a fingerprint or lock screen
-                Toast.makeText(this, R.string.login_message_error_no_secure_screen, Toast.LENGTH_LONG).show()
+                Snackbar.make(layout_login, R.string.login_message_error_no_secure_screen, Snackbar.LENGTH_SHORT).show()
             }
             if (!fingerprintManager.hasEnrolledFingerprints()) {  // this happens when no fingerprints are registered
-                Toast.makeText(this, R.string.login_message_error_no_saved_fingerprint, Toast.LENGTH_LONG).show()
+                Snackbar.make(layout_login, R.string.login_message_error_no_saved_fingerprint, Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -132,10 +129,11 @@ class LoginActivity : BaseActivity(),
             return
         }
 
+        mInputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         showProgressDialog()
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 val editor = mSharedPreferences.edit()
 
                 mHashedEmail = LoginHelper.sha512Hash(email)
@@ -146,7 +144,7 @@ class LoginActivity : BaseActivity(),
 
                 startActivity(intent)
             } else {
-                Toast.makeText(this@LoginActivity, R.string.login_message_error_auth, Toast.LENGTH_SHORT).show()
+                Snackbar.make(layout_login, R.string.login_message_error_auth, Snackbar.LENGTH_SHORT).show()
             }
 
             hideProgressDialog()
@@ -154,8 +152,8 @@ class LoginActivity : BaseActivity(),
     }
 
     private fun activateKeyboard() {
-        partial_login_manual.input_password.requestFocus()
-        partial_login_manual.input_password.postDelayed(mShowKeyboardRunnable, 500)  // show the keyboard
+        partial_login_manual.input_email.requestFocus()
+        partial_login_manual.input_email.postDelayed(mShowKeyboardRunnable, 500)  // show the keyboard
         mLoginHelper.stopListening()
     }
 
@@ -166,7 +164,7 @@ class LoginActivity : BaseActivity(),
 
     override fun onHelp(helpString: CharSequence) {
         Timber.d("onHelp: ")
-        Toast.makeText(this, helpString, Toast.LENGTH_SHORT).show()
+        Snackbar.make(layout_login, helpString, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onFailed() {
@@ -176,7 +174,7 @@ class LoginActivity : BaseActivity(),
     override fun onAuthenticated() {
         Timber.d("onAuthenticated: ")
         showProgressDialog()
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         hideProgressDialog()
     }

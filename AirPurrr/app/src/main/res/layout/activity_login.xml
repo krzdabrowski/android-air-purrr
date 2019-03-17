@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout style="@style/Login.Layout">
+    <LinearLayout
+        android:id="@+id/layout_login"
+        style="@style/Login.Layout">
 
         <include
             android:id="@+id/partial_login_manual"

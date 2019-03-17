@@ -1,14 +1,14 @@
 package com.example.trubul.airpurrr
 
-import android.content.Context
+import android.view.View
 import android.widget.CompoundButton
-import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 
 import java.util.concurrent.ExecutionException
 
 private const val WORKSTATE_URL = "http://airpurrr.ga/workstate.txt"
 
-internal class SwitchHelper(private val mContext: Context, private val mCallback: SwitchCallback) : CompoundButton.OnCheckedChangeListener {
+internal class SwitchHelper(private val mParentLayout: View, private val mCallback: SwitchCallback) : CompoundButton.OnCheckedChangeListener {
     private var stateManual = false
 
     internal interface SwitchCallback {
@@ -31,7 +31,7 @@ internal class SwitchHelper(private val mContext: Context, private val mCallback
 
             when (workStates) {
                 "WorkStates.Sleeping\n" -> {
-                    Toast.makeText(mContext, R.string.main_message_switch_processing, Toast.LENGTH_LONG).show()
+                    Snackbar.make(mParentLayout, R.string.main_message_switch_processing, Snackbar.LENGTH_LONG).show()
                     if (state) {  // send request if it was switch -> ON
                         switchOn.execute("MANUAL=1")  // it will be POST: req = params[0]
 
@@ -40,11 +40,11 @@ internal class SwitchHelper(private val mContext: Context, private val mCallback
                     }
                 }
                 "WorkStates.Measuring\n" -> {
-                    Toast.makeText(mContext, R.string.main_message_error_measuring, Toast.LENGTH_LONG).show()
+                    Snackbar.make(mParentLayout, R.string.main_message_error_measuring, Snackbar.LENGTH_LONG).show()
                     keepState()
                 }
                 else -> {
-                    Toast.makeText(mContext, R.string.main_message_error.toString() + "NoWorkStates)", Toast.LENGTH_LONG).show()
+                    Snackbar.make(mParentLayout, R.string.main_message_error, Snackbar.LENGTH_LONG).show()
                     keepState()
                 }
             }
@@ -53,7 +53,7 @@ internal class SwitchHelper(private val mContext: Context, private val mCallback
         } catch (e: ExecutionException) {
             e.printStackTrace()
         } catch (e: NullPointerException) {
-            Toast.makeText(mContext, mContext.getString(R.string.main_message_error_server) + "NullPointer)", Toast.LENGTH_LONG).show()
+            Snackbar.make(mParentLayout, R.string.main_message_error_server, Snackbar.LENGTH_LONG).show()
             keepState()
         }
 
