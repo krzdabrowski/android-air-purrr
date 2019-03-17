@@ -6,6 +6,8 @@ import android.widget.Toast
 
 import java.util.concurrent.ExecutionException
 
+private const val WORKSTATE_URL = "http://airpurrr.ga/workstate.txt"
+
 internal class SwitchHelper(private val mContext: Context, private val mCallback: SwitchCallback) : CompoundButton.OnCheckedChangeListener {
     private var stateManual = false
 
@@ -61,9 +63,4 @@ internal class SwitchHelper(private val mContext: Context, private val mCallback
         stateManual = !stateManual
         mCallback.setSwitchManual(stateManual)
     }
-
-    companion object {
-        const val WORKSTATE_URL = "http://airpurrr.ga/workstate.txt"
-    }
-
 }

@@ -2,12 +2,11 @@ package com.example.trubul.airpurrr
 
 import android.hardware.fingerprint.FingerprintManager
 import android.os.CancellationSignal
-import android.util.Log
+import timber.log.Timber
 
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import kotlin.experimental.and
 
 internal class LoginHelper(private val mFingerprintManager: FingerprintManager, private val mCallback: FingerprintCallback) : FingerprintManager.AuthenticationCallback() {
     private var mCancellationSignal: CancellationSignal? = null
@@ -42,30 +41,28 @@ internal class LoginHelper(private val mFingerprintManager: FingerprintManager, 
 
     // FingerprintManager.AuthenticationCallback
     override fun onAuthenticationError(errMsgId: Int, errString: CharSequence) {
-        Log.d(TAG, "onAuthenticationError: ")
+        Timber.d("onAuthenticationError: ")
         if (!mSelfCancelled) {
             mCallback.onError()
         }
     }
 
     override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence) {
-        Log.d(TAG, "onAuthenticationHelp: ")
+        Timber.d("onAuthenticationHelp: ")
         mCallback.onHelp(helpString)
     }
 
     override fun onAuthenticationFailed() {
-        Log.d(TAG, "onAuthenticationFailed: ")
+        Timber.d("onAuthenticationFailed: ")
         mCallback.onFailed()
     }
 
     override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult) {
-        Log.d(TAG, "onAuthenticationSucceeded: ")
+        Timber.d("onAuthenticationSucceeded: ")
         mCallback.onAuthenticated()
     }
 
     companion object {
-        private const val TAG = "LoginHelper"
-
         fun sha512Hash(toHash: String): String? {
             var hash: String? = null
             try {

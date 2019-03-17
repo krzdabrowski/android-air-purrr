@@ -13,7 +13,6 @@
     <string name="login_message_dialog">Authenticating…</string>
     <string name="login_message_error_empty_field">Required</string>
     <string name="login_message_error_auth">Authentication error!</string>
-    <string name="login_message_error_fingerprint_not_recognized">Fingerprint not recognized. Try again</string>
     <string name="login_message_error_no_internet">No Internet connection!</string>
     <string name="login_message_error_no_secure_screen">You need lock screen secured to continue</string>
     <string name="login_message_error_no_saved_fingerprint">You need at least one fingerprint registered to continue</string>

@@ -15,7 +15,7 @@ internal class DataReader {
             val stringBuilder = StringBuilder()
 
             //Check if the line we are reading is not null
-            while ({inputLine = reader.readLine(); inputLine }() != null) {
+            while ({ inputLine = reader.readLine(); inputLine }() != null) {
                 stringBuilder.append(inputLine).append('\n')
             }
 

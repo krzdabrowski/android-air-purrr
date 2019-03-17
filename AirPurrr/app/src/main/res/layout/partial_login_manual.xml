@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- TODO: android id dla linearlayout tymczasowe? -->
-    <LinearLayout
-        android:id="@+id/layout_login_manual"
-        style="@style/Login.Layout.Manual">
+    <LinearLayout style="@style/Login.Layout.Manual">
 
         <ImageView
             android:id="@+id/ic_logo"

@@ -2,12 +2,10 @@ package com.example.trubul.airpurrr
 
 import android.os.AsyncTask
 import android.util.Base64
-import android.util.Log
-import org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT
+import com.example.trubul.airpurrr.activity.MainActivity
 
 import java.io.IOException
 import java.io.InputStreamReader
-import java.io.OutputStream
 import java.net.URL
 
 import javax.net.ssl.HttpsURLConnection

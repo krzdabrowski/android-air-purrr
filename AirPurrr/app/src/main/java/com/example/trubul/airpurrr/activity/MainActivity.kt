@@ -1,7 +1,5 @@
-package com.example.trubul.airpurrr
+package com.example.trubul.airpurrr.activity
 
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.DataBindingUtil
 import androidx.loader.app.LoaderManager
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -10,15 +8,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.loader.content.Loader
-
-import com.example.trubul.airpurrr.databinding.ActivityMainBinding
+import com.example.trubul.airpurrr.APIHelper
+import com.example.trubul.airpurrr.DetectorHelper
+import com.example.trubul.airpurrr.R
+import com.example.trubul.airpurrr.SwitchHelper
 
 import java.util.Timer
 import java.util.TimerTask
 
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.partial_main_data.*
+import kotlinx.android.synthetic.main.partial_main_data.view.*
 import timber.log.Timber
 
 // TODO: Navigation Component
@@ -29,7 +30,7 @@ import timber.log.Timber
 // TODO: (for future) implement TabLayout with current and predicted results/data in fragments & remove automatic switch (only manual left)
 // TODO: export these strings somewhere
 // TODO: Snackbars instead of Toasts
-// TODO: remove as much butterknife as possible & implement more .XML databinding
+// TODO: implement more .XML databinding
 // TODO: create model (Data: DetectorData, ApiData or so), viewmodel, view, helpers, ... packages
 // TODO: consider to do something with getters/setters -> Observable variables?
 // TODO: remove loaders while implementing MVVM with LiveData
@@ -37,16 +38,15 @@ import timber.log.Timber
 private const val LOADER_DETECTOR = 1
 private const val LOADER_API_PM = 2
 
-class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
+class MainActivity : AppCompatActivity(),
         SwitchHelper.SwitchCallback, LoaderManager.LoaderCallbacks<Any>, SwipeRefreshLayout.OnRefreshListener {
 
-    private lateinit var pmValuesDetector: List<Double>
-    private lateinit var pmValuesAndDatesAPI: List<Any>
-    private lateinit var pmValuesAPI: List<Double>
+    private var pmValuesDetector = listOf(0.0, 0.0)
+    private var pmValuesAPI = listOf(0.0, 0.0)
     private lateinit var pmDatesAPI: List<String>
+    private lateinit var pmValuesAndDatesAPI: List<Any>
 
-    private lateinit var manualListener: SwitchHelper
-    private lateinit var activityMainBinding: ActivityMainBinding
+    private var manualListener = SwitchHelper(this, this)
 
     override fun setSwitchManual(state: Boolean) {
         switch_manual.isChecked = state
@@ -64,10 +64,8 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
 
     private fun updateAPI() {
         flagDetectorAPI = true
-        if (pmValuesAndDatesAPI != null) {
-            pmValuesAPI = pmValuesAndDatesAPI[0] as List<Double>
-            pmDatesAPI = pmValuesAndDatesAPI[1] as List<String>
-        }
+        pmValuesAPI = pmValuesAndDatesAPI[0] as List<Double>
+        pmDatesAPI = pmValuesAndDatesAPI[1] as List<String>
         setUI(pmValuesAPI)
     }
 
@@ -78,29 +76,23 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
                 runOnUiThread { LoaderManager.getInstance(this@MainActivity).initLoader<Any>(LOADER_DETECTOR, null, this@MainActivity).forceLoad() }
             }
         }
-
         timer.schedule(minuteTask, 0, (1000 * 60).toLong())  // 1000*60*1 every 1 minute
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
         Timber.plant(Timber.DebugTree())
 
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-
-        pmValuesDetector = listOf(0.0, 0.0)
-        pmValuesAPI = listOf(0.0, 0.0)
         pmDatesAPI = listOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()  // Loader for Detector PM data
         LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()  // Loader for API PM data
         automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
 
-        manualListener = SwitchHelper(this, this)
         swipe_refresh.setOnRefreshListener(this)
-
         switch_manual.setOnCheckedChangeListener(manualListener)
 
         val textViewListener = {
@@ -123,7 +115,6 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
         }
     }
 
-
     override fun onLoadFinished(loader: Loader<Any>, data: Any) {
         val id = loader.id
 
@@ -143,11 +134,9 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_threshold ->
-                //                alertDialog.createDialog();
-                return true
-            else -> return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.menu_threshold -> true
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -162,17 +151,17 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
     }
 
     private fun setUI(pmValues: List<Double>?) {
-        var layout: ConstraintLayout
+        var layout: View
 
         // Set TextView colors
         for (i in 0..1) {
             // First iteration = update PM2.5, second iteration = update PM10
             if (i == 0) {
-                layout = activityMainBinding.partialMainDataPm25.layoutMainData
-                activityMainBinding.partialMainDataPm25.dataType.text = getString(R.string.main_data_info_pm25)
+                layout = partial_main_data_pm25
+                layout.data_type.text = getString(R.string.main_data_info_pm25)
             } else {
-                layout = activityMainBinding.partialMainDataPm10.layoutMainData
-                activityMainBinding.partialMainDataPm10.dataType.text = getString(R.string.main_data_info_pm10)
+                layout = partial_main_data_pm10
+                layout.data_type.text = getString(R.string.main_data_info_pm10)
             }
 
             // Update colors
@@ -190,32 +179,30 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
         }
 
         // Set TextView PM values
-        activityMainBinding.partialMainDataPm25.dataPercentage.text = getString(R.string.main_data_percentage, pmValues!![0])
-        activityMainBinding.partialMainDataPm10.dataPercentage.text = getString(R.string.main_data_percentage, pmValues[1])
-        activityMainBinding.partialMainDataPm25.dataUgm3.text = getString(R.string.main_data_ugm3, pmValues[0] / 4)
-        activityMainBinding.partialMainDataPm10.dataUgm3.text = getString(R.string.main_data_ugm3, pmValues[1] / 2)
+        partial_main_data_pm25.data_percentage.text = getString(R.string.main_data_percentage, pmValues!![0])
+        partial_main_data_pm10.data_percentage.text = getString(R.string.main_data_percentage, pmValues[1])
+        partial_main_data_pm25.data_ugm3.text = getString(R.string.main_data_ugm3, pmValues[0] / 4)
+        partial_main_data_pm10.data_ugm3.text = getString(R.string.main_data_ugm3, pmValues[1] / 2)
 
         // Set TextView mode
         if (!flagDetectorAPI) {  // if detector
-            activityMainBinding.partialMainDataPm25.dataSource.setText(R.string.main_data_info_indoors)
-            activityMainBinding.partialMainDataPm10.dataSource.setText(R.string.main_data_info_indoors)
+            partial_main_data_pm25.data_source.setText(R.string.main_data_info_indoors)
+            partial_main_data_pm10.data_source.setText(R.string.main_data_info_indoors)
         } else {  // if APIHelper
-            activityMainBinding.partialMainDataPm25.dataSource.text = getString(R.string.main_data_info_api, pmDatesAPI!![0])
-            activityMainBinding.partialMainDataPm10.dataSource.text = getString(R.string.main_data_info_api, pmDatesAPI!![1])
+            partial_main_data_pm25.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI[0])
+            partial_main_data_pm10.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI[1])
         }
     }
 
     companion object {
         internal const val DETECTOR_URL = "http://airpurrr.ga/pm_data.txt"
         internal var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
+        private lateinit var mSharedPreferences: SharedPreferences
 
-        private var mSharedPreferences: SharedPreferences? = null
-
-        // Get login_email and login_password from LoginActivity
         internal val hashedEmail: String?
-            get() = mSharedPreferences!!.getString(LoginActivity.SAVED_HASH_EMAIL_KEY, null)
+            get() = mSharedPreferences.getString(LoginActivity.SAVED_HASH_EMAIL_KEY, null)
 
         internal val hashedPassword: String?
-            get() = mSharedPreferences!!.getString(LoginActivity.SAVED_HASH_PASSWORD_KEY, null)
+            get() = mSharedPreferences.getString(LoginActivity.SAVED_HASH_PASSWORD_KEY, null)
     }
 }

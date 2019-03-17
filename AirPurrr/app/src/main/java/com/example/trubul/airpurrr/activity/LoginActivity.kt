@@ -1,4 +1,4 @@
-package com.example.trubul.airpurrr
+package com.example.trubul.airpurrr.activity
 
 import android.app.KeyguardManager
 import android.content.Context
@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import androidx.databinding.DataBindingUtil
 import android.hardware.fingerprint.FingerprintManager
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.preference.PreferenceManager
 
@@ -18,28 +17,29 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.example.trubul.airpurrr.LoginHelper
+import com.example.trubul.airpurrr.R
 
 import com.example.trubul.airpurrr.databinding.ActivityLoginBinding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.partial_login_manual.view.*
 import timber.log.Timber.DebugTree
 import timber.log.Timber
 
-private const val TAG = "LoginActivity"
-
-class LoginActivity : BaseActivity(), LoginHelper.FingerprintCallback {
-    private var mHashedEmail: String? = null
-
+class LoginActivity : BaseActivity(),
+        LoginHelper.FingerprintCallback {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mLoginHelper: LoginHelper
     private lateinit var mInputMethodManager: InputMethodManager
     private lateinit var mSharedPreferences: SharedPreferences
-    private lateinit var activityLoginBinding: ActivityLoginBinding
+    private var mHashedEmail: String? = null
 
     private val email: String
-        get() = activityLoginBinding.partialLoginManual.inputEmail.text!!.toString().trim { it <= ' ' }
+        get() = partial_login_manual.input_email.text!!.toString().trim { it <= ' ' }
     private val password: String
-        get() = activityLoginBinding.partialLoginManual.inputPassword.text!!.toString().trim { it <= ' ' }
+        get() = partial_login_manual.input_password.text!!.toString().trim { it <= ' ' }
 
     private val isFingerprintPermissionGranted: Boolean
         get() = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
@@ -58,26 +58,24 @@ class LoginActivity : BaseActivity(), LoginHelper.FingerprintCallback {
             return valid
         }
 
-    private val mShowKeyboardRunnable = Runnable { mInputMethodManager.showSoftInput(activityLoginBinding.partialLoginManual.inputEmail, 0) }
+    private val mShowKeyboardRunnable = Runnable { mInputMethodManager.showSoftInput(partial_login_manual.input_email, 0) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.plant(DebugTree())
+        setContentView(R.layout.activity_login)
 
-        activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         FirebaseApp.initializeApp(this)
-
-        activityLoginBinding.partialLoginManual.btnLogin.setOnClickListener { manualLogin(email, password) }
-
         mAuth = FirebaseAuth.getInstance()
+        Timber.plant(DebugTree())
 
         val keyguardManager = getSystemService(KeyguardManager::class.java)
         val fingerprintManager = getSystemService(FingerprintManager::class.java)
         mLoginHelper = LoginHelper(fingerprintManager, this)
         mInputMethodManager = getSystemService(InputMethodManager::class.java)
-
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null)
+
+        partial_login_manual.btn_login.setOnClickListener { manualLogin(email, password) }
 
         // If phone has fingerprint reader and user has granted permission for an app
         if (mLoginHelper.isFingerprintAuthAvailable && isFingerprintPermissionGranted) {
@@ -94,9 +92,8 @@ class LoginActivity : BaseActivity(), LoginHelper.FingerprintCallback {
     public override fun onResume() {
         super.onResume()
         if (mLoginHelper.isFingerprintAuthAvailable && isFingerprintPermissionGranted && mHashedEmail != null) {
-            activityLoginBinding.partialLoginManual.layoutLoginManual.visibility = View.GONE
-            activityLoginBinding.partialLoginFingerprint.layoutLoginFingerprint.visibility = View.VISIBLE
-
+            partial_login_manual.visibility = View.GONE
+            partial_login_fingerprint.visibility = View.VISIBLE
             mLoginHelper.startListening()
         } else {
             activateKeyboard()
@@ -115,16 +112,16 @@ class LoginActivity : BaseActivity(), LoginHelper.FingerprintCallback {
 
         if (TextUtils.isEmpty(email)) {
             valid = false
-            activityLoginBinding.partialLoginManual.inputEmail.error = getString(R.string.login_message_error_empty_field)
+            partial_login_manual.input_email.error = getString(R.string.login_message_error_empty_field)
         } else {
-            activityLoginBinding.partialLoginManual.inputEmail.error = null
+            partial_login_manual.input_email.error = null
         }
 
         if (TextUtils.isEmpty(password)) {
             valid = false
-            activityLoginBinding.partialLoginManual.inputPassword.error = getString(R.string.login_message_error_empty_field)
+            partial_login_manual.input_password.error = getString(R.string.login_message_error_empty_field)
         } else {
-            activityLoginBinding.partialLoginManual.inputPassword.error = null
+            partial_login_manual.input_password.error = null
         }
 
         return valid
@@ -157,28 +154,27 @@ class LoginActivity : BaseActivity(), LoginHelper.FingerprintCallback {
     }
 
     private fun activateKeyboard() {
-        activityLoginBinding.partialLoginManual.inputPassword.requestFocus()
-        activityLoginBinding.partialLoginManual.inputPassword.postDelayed(mShowKeyboardRunnable, 500)  // show the keyboard
+        partial_login_manual.input_password.requestFocus()
+        partial_login_manual.input_password.postDelayed(mShowKeyboardRunnable, 500)  // show the keyboard
         mLoginHelper.stopListening()
     }
 
     override fun onError() {
-        Log.d(TAG, "onError: ")
+        Timber.d("onError: ")
         activateKeyboard()
     }
 
     override fun onHelp(helpString: CharSequence) {
-        Log.d(TAG, "onHelp: ")
+        Timber.d("onHelp: ")
         Toast.makeText(this, helpString, Toast.LENGTH_SHORT).show()
     }
 
     override fun onFailed() {
-        Log.d(TAG, "onFailed: ")
-        Toast.makeText(this, R.string.login_message_error_fingerprint_not_recognized, Toast.LENGTH_SHORT).show() // TODO: czemu pokazuje sie inny msg?
+        Timber.d("onFailed: ")
     }
 
     override fun onAuthenticated() {
-        Log.d(TAG, "onAuthenticated: ")
+        Timber.d("onAuthenticated: ")
         showProgressDialog()
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
         startActivity(intent)
@@ -190,4 +186,3 @@ class LoginActivity : BaseActivity(), LoginHelper.FingerprintCallback {
         const val SAVED_HASH_PASSWORD_KEY = "login_password"
     }
 }
-

@@ -1,8 +1,9 @@
-package com.example.trubul.airpurrr
+package com.example.trubul.airpurrr.activity
 
 import android.app.ProgressDialog
 
 import androidx.appcompat.app.AppCompatActivity
+import com.example.trubul.airpurrr.R
 
 abstract class BaseActivity : AppCompatActivity() {
 
