@@ -1,67 +1,53 @@
 package com.example.trubul.airpurrr
 
 import android.content.Context
-import android.util.Log
-
-import java.util.Arrays
-
 import androidx.loader.content.AsyncTaskLoader
+import timber.log.Timber
 
-internal class DetectorHelper(callback: DetectorCallback) {
+internal class DetectorHelper {
 
-    internal interface DetectorCallback {
-        fun setPMValuesDetector(pmValuesDetector: Array<Double>)
-    }
-
-    init {
-        mCallback = callback
-    }
-
-    internal class Loader(context: Context) : AsyncTaskLoader<Array<Double>>(context) {
-        override fun loadInBackground(): Array<Double>? {
-            return download()
+    class Loader(context: Context) : AsyncTaskLoader<MutableList<Double>>(context) {
+        override fun loadInBackground(): MutableList<Double> {
+            val helper = DetectorHelper()
+            return helper.download()
         }
     }
 
-    companion object {
-        private lateinit var mCallback: DetectorCallback
-
-        fun download(): Array<Double> {
+        fun download(): MutableList<Double> {
             val rawData: String?
 
             try {
                 val getRequest = HttpGetRequest()
                 rawData = getRequest.doHttpRequest(MainActivity.DETECTOR_URL)
+                Timber.d(rawData)
 
                 val pmStrings = rawData!!.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
-                var pmDoubles = arrayOf<Double>()
+                var pmDoubles = mutableListOf<Double>()
 
                 for (i in pmStrings.indices) {
                     try {
-                        pmDoubles[i] = pmStrings[i].toDouble()
+                        pmDoubles.add(pmStrings[i].toDouble())
                     } catch (e: NumberFormatException) { }
                 }
 
                 // Convert results to percentages (to ease handling with auto mode)
                 pmDoubles = convertToPercent(pmDoubles)
-                mCallback.setPMValuesDetector(pmDoubles)
 
                 return pmDoubles
             } catch (e: NullPointerException) {
-                val empty = arrayOf(0.0, 0.0)
-                mCallback.setPMValuesDetector(empty)
+                val empty = mutableListOf(0.0, 0.0)
                 return empty
             }
 
         }
 
-        private fun convertToPercent(pmDoubles: Array<Double>): Array<Double> {
-            val pmDoublesPerc = arrayOf<Double>()
+        private fun convertToPercent(pmDoubles: List<Double>): MutableList<Double> {
+            val pmDoublesPerc = mutableListOf<Double>()
 
-            pmDoublesPerc[0] = 4 * pmDoubles[0]  // PM2.5
-            pmDoublesPerc[1] = 2 * pmDoubles[1]  // PM10
+            pmDoublesPerc.add(4 * pmDoubles[0])  // PM2.5
+            pmDoublesPerc.add(2 * pmDoubles[1])  // PM10
 
             return pmDoublesPerc
         }
-    }
+
 }

@@ -22,6 +22,8 @@ import android.widget.Toast
 import com.example.trubul.airpurrr.databinding.ActivityLoginBinding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import timber.log.Timber.DebugTree
+import timber.log.Timber
 
 private const val TAG = "LoginActivity"
 
@@ -60,6 +62,8 @@ class LoginActivity : BaseActivity(), LoginHelper.FingerprintCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.plant(DebugTree())
+
         activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         FirebaseApp.initializeApp(this)
 

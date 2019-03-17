@@ -6,29 +6,20 @@ import androidx.loader.content.AsyncTaskLoader
 
 import org.json.JSONException
 import org.json.JSONObject
+import timber.log.Timber
 
 import java.util.ArrayList
 
 private const val STATION_DATA_URL = "http://api.gios.gov.pl/pjp-api/rest/data/getData"
 
-internal class APIHelper(callback: APICallback) {
-
-    internal interface APICallback {
-        fun setPMValuesAndDatesAPI(pmValuesAndDatesAPI: List<Any>)
-    }
-
-    init {
-        mCallback = callback
-    }
+internal class APIHelper {
 
     internal class PMLoader(context: Context) : AsyncTaskLoader<List<Any>>(context) {
         override fun loadInBackground(): List<Any>? {
-            return downloadPMValues(3731, 3730)
+            val helper = APIHelper()
+            return helper.downloadPMValues(3731, 3730)
         }
     }
-
-    companion object {
-        private lateinit var mCallback: APICallback
 
         private fun downloadPMValues(pm25Sensor: Int, pm10Sensor: Int): List<Any>? {
             var rawData: String?
@@ -73,8 +64,8 @@ internal class APIHelper(callback: APICallback) {
                 val pm10LatestDoubleValue = pm10LatestStringValue.toDouble()
 
                 // Create Double[] and String[]
-                var pmDoubles = arrayOf(pm25LatestDoubleValue, pm10LatestDoubleValue)
-                val pmDates = arrayOf(pm25LatestStringDate, pm10LatestStringDate)
+                var pmDoubles = listOf(pm25LatestDoubleValue, pm10LatestDoubleValue)
+                val pmDates = listOf(pm25LatestStringDate, pm10LatestStringDate)
 
                 // Convert results to percentages (to ease handling with auto mode)
                 pmDoubles = convertToPercent(pmDoubles)
@@ -84,7 +75,6 @@ internal class APIHelper(callback: APICallback) {
                 pmDoublesDates.add(pmDoubles)
                 pmDoublesDates.add(pmDates)
 
-                mCallback.setPMValuesAndDatesAPI(pmDoublesDates)
                 return pmDoublesDates
 
             } catch (e: NullPointerException) {
@@ -96,11 +86,11 @@ internal class APIHelper(callback: APICallback) {
             return null
         }
 
-        private fun convertToPercent(pmDoubles: Array<Double>): Array<Double> {
-            val pmDoublesPerc = arrayOf<Double>()
+        private fun convertToPercent(pmDoubles: List<Double>): List<Double> {
+            val pmDoublesPerc = mutableListOf<Double>()
 
-            pmDoublesPerc[0] = 4 * pmDoubles[0]  // PM2.5
-            pmDoublesPerc[1] = 2 * pmDoubles[1]  // PM10
+            pmDoublesPerc.add(4 * pmDoubles[0])  // PM2.5
+            pmDoublesPerc.add(2 * pmDoubles[1])  // PM10
 
             return pmDoublesPerc
         }
@@ -113,8 +103,7 @@ internal class APIHelper(callback: APICallback) {
             empty.add(emptyDouble)
             empty.add(emptyString)
 
-            mCallback.setPMValuesAndDatesAPI(empty)
             return empty
         }
-    }
+
 }

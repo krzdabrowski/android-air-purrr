@@ -6,27 +6,23 @@ import androidx.loader.app.LoaderManager
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import androidx.loader.content.Loader
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Switch
+import androidx.loader.content.Loader
 
 import com.example.trubul.airpurrr.databinding.ActivityMainBinding
 
-import java.util.Arrays
 import java.util.Timer
 import java.util.TimerTask
 
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.partial_main_data.*
+import timber.log.Timber
 
 // TODO: Navigation Component
 // TODO: animations
-// TODO: Timber library instead of log.x
 // TODO: deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
 // TODO: sprawdzic wszystkie id czy sa potrzebne i czy przestrzegaja zasad dobrego id
 // TODO: implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
@@ -38,45 +34,26 @@ import butterknife.ButterKnife
 // TODO: consider to do something with getters/setters -> Observable variables?
 // TODO: remove loaders while implementing MVVM with LiveData
 
-private const val TAG = "MainActivity"
-internal const val DETECTOR_URL = "http://airpurrr.ga/pm_data.txt"
-
 private const val LOADER_DETECTOR = 1
 private const val LOADER_API_PM = 2
 
 class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
-        SwitchHelper.SwitchCallback, DetectorHelper.DetectorCallback, APIHelper.APICallback, LoaderManager.LoaderCallbacks<*>, SwipeRefreshLayout.OnRefreshListener {
+        SwitchHelper.SwitchCallback, LoaderManager.LoaderCallbacks<Any>, SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.switch_manual)
-    internal var switchManual: Switch? = null
-    @BindView(R.id.swipe_refresh)
-    internal lateinit var mySwipeRefreshLayout: SwipeRefreshLayout
-
-    private val detector = DetectorHelper(this)
-    private val api = APIHelper(this)  // must-be instance to make mCallback work
-
-    private lateinit var pmValuesDetector: Array<Double>
+    private lateinit var pmValuesDetector: List<Double>
     private lateinit var pmValuesAndDatesAPI: List<Any>
-    private lateinit var pmValuesAPI: Array<Double>
-    private lateinit var pmDatesAPI: Array<String>
+    private lateinit var pmValuesAPI: List<Double>
+    private lateinit var pmDatesAPI: List<String>
 
     private lateinit var manualListener: SwitchHelper
     private lateinit var activityMainBinding: ActivityMainBinding
 
     override fun setSwitchManual(state: Boolean) {
-        switchManual!!.isChecked = state
-    }
-
-    override fun setPMValuesAndDatesAPI(pmValuesAndDatesAPI: List<Any>) {
-        this.pmValuesAndDatesAPI = pmValuesAndDatesAPI
-    }
-
-    override fun setPMValuesDetector(pmValuesDetector: Array<Double>) {
-        this.pmValuesDetector = pmValuesDetector
+        switch_manual.isChecked = state
     }
 
     private fun setSwipeRefreshing(value: Boolean) {
-        mySwipeRefreshLayout.post { mySwipeRefreshLayout.isRefreshing = value }
+        swipe_refresh.post { swipe_refresh.isRefreshing = value }
     }
 
     // Update UI
@@ -88,8 +65,8 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
     private fun updateAPI() {
         flagDetectorAPI = true
         if (pmValuesAndDatesAPI != null) {
-            pmValuesAPI = pmValuesAndDatesAPI[0] as Array<Double>
-            pmDatesAPI = pmValuesAndDatesAPI[1] as Array<String>
+            pmValuesAPI = pmValuesAndDatesAPI[0] as List<Double>
+            pmDatesAPI = pmValuesAndDatesAPI[1] as List<String>
         }
         setUI(pmValuesAPI)
     }
@@ -108,22 +85,23 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.plant(Timber.DebugTree())
+
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        ButterKnife.bind(this)
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
-        pmValuesDetector = arrayOf(0.0, 0.0)
-        pmValuesAPI = arrayOf(0.0, 0.0)
-        pmDatesAPI = arrayOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
+        pmValuesDetector = listOf(0.0, 0.0)
+        pmValuesAPI = listOf(0.0, 0.0)
+        pmDatesAPI = listOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
 
         LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()  // Loader for Detector PM data
         LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()  // Loader for API PM data
         automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
 
         manualListener = SwitchHelper(this, this)
-        mySwipeRefreshLayout.setOnRefreshListener(this)
+        swipe_refresh.setOnRefreshListener(this)
 
-        activityMainBinding.switchManual.setOnCheckedChangeListener(manualListener)
+        switch_manual.setOnCheckedChangeListener(manualListener)
 
         val textViewListener = {
             if (flagDetectorAPI) {
@@ -133,31 +111,31 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
             }
         }
 
-        activityMainBinding.partialMainDataPm25.layoutMainData.setOnClickListener(textViewListener)
-        activityMainBinding.partialMainDataPm10.layoutMainData.setOnClickListener(textViewListener)
+        partial_main_data_pm25.setOnClickListener { textViewListener() }
+        partial_main_data_pm10.setOnClickListener { textViewListener() }
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<*> {
-        if (id == LOADER_DETECTOR) {
-            return DetectorHelper.Loader(this)
-        } else if (id == LOADER_API_PM) {
-            return APIHelper.PMLoader(this)
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Any> {
+        return if (id == LOADER_DETECTOR) {
+            DetectorHelper.Loader(this) as Loader<Any>
+        } else {
+            APIHelper.PMLoader(this) as Loader<Any>
         }
-        return null
     }
 
-    override fun onLoadFinished(loader: Loader<*>, data: Any) {
+
+    override fun onLoadFinished(loader: Loader<Any>, data: Any) {
         val id = loader.id
 
         if (id == LOADER_DETECTOR) {
-            pmValuesDetector = data as Array<Double>
+            pmValuesDetector = data as List<Double>
             updateDetector()
         } else if (id == LOADER_API_PM) {
             pmValuesAndDatesAPI = data as List<Any>
         }
     }
 
-    override fun onLoaderReset(loader: Loader<*>) {}
+    override fun onLoaderReset(loader: Loader<Any>) {}
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
@@ -183,7 +161,7 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
         moveTaskToBack(true)  // disable going back to the LoginActivity
     }
 
-    private fun setUI(pmValues: Array<Double>?) {
+    private fun setUI(pmValues: List<Double>?) {
         var layout: ConstraintLayout
 
         // Set TextView colors
@@ -198,7 +176,7 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
             }
 
             // Update colors
-            if (pmValues!![i] == 0) {  // connection error
+            if (pmValues!![i] == 0.0) {  // connection error
                 layout.setBackgroundResource(R.drawable.data_unavailable)
             } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
                 layout.setBackgroundResource(R.drawable.data_green)
@@ -228,7 +206,7 @@ class MainActivity : AppCompatActivity(), // SwipeListener.SwipeCallback,
     }
 
     companion object {
-
+        internal const val DETECTOR_URL = "http://airpurrr.ga/pm_data.txt"
         internal var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
 
         private var mSharedPreferences: SharedPreferences? = null
