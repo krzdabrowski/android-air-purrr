@@ -15,7 +15,7 @@ private const val REQUESTED_METHOD = "POST"
 private const val READ_TIMEOUT = 7000
 private const val CONN_TIMEOUT = 3000
 
-internal class HttpsPostRequest : AsyncTask<String, Void, String>() {
+internal class HttpsPostRequest(private val hashedEmail: String, private val hashedPassword: String) : AsyncTask<String, Void, String>() {
 
     override fun doInBackground(vararg params: String): String? {
         var streamReader: InputStreamReader? = null
@@ -29,7 +29,7 @@ internal class HttpsPostRequest : AsyncTask<String, Void, String>() {
             connection.requestMethod = REQUESTED_METHOD
 
             // Set username and login_password
-            val hash = MainActivity.hashedEmail + ":" + MainActivity.hashedPassword
+            val hash = "$hashedEmail:$hashedPassword"
             val basicAuth = "Basic " + Base64.encodeToString(hash.toByteArray(), Base64.NO_WRAP)
             connection.setRequestProperty("Authorization", basicAuth)
 

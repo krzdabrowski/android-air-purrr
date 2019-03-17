@@ -8,7 +8,9 @@ import java.util.concurrent.ExecutionException
 
 private const val WORKSTATE_URL = "http://airpurrr.ga/workstate.txt"
 
-internal class SwitchHelper(private val mParentLayout: View, private val mCallback: SwitchCallback) : CompoundButton.OnCheckedChangeListener {
+internal class SwitchHelper(private val mParentLayout: View, private val hashedEmail: String,
+                            private val hashedPassword: String, private val mCallback: SwitchCallback) : CompoundButton.OnCheckedChangeListener {
+
     private var stateManual = false
 
     internal interface SwitchCallback {
@@ -22,8 +24,8 @@ internal class SwitchHelper(private val mParentLayout: View, private val mCallba
 
     private fun controlRequests(state: Boolean) {
         val workStates: String
-        val switchOn = HttpsPostRequest()
-        val switchOff = HttpsPostRequest()
+        val switchOn = HttpsPostRequest(hashedEmail, hashedPassword)
+        val switchOff = HttpsPostRequest(hashedEmail, hashedPassword)
 
         try {
             val getRequest = HttpGetRequest()

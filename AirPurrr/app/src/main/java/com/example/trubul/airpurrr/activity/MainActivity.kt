@@ -1,7 +1,6 @@
 package com.example.trubul.airpurrr.activity
 
 import androidx.loader.app.LoaderManager
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -22,7 +21,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.partial_main_data.view.*
 import timber.log.Timber
 
-// TODO: export these strings somewhere
 // TODO: sprawdzic wszystkie id czy sa potrzebne i czy przestrzegaja zasad dobrego id
 
 // TODO: Navigation Component
@@ -40,6 +38,7 @@ private const val LOADER_API_PM = 2
 class MainActivity : AppCompatActivity(),
         SwitchHelper.SwitchCallback, LoaderManager.LoaderCallbacks<Any>, SwipeRefreshLayout.OnRefreshListener {
 
+    private var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
     private var pmValuesDetector = listOf(0.0, 0.0)
     private var pmValuesAPI = listOf(0.0, 0.0)
     private lateinit var pmDatesAPI: List<String>
@@ -83,9 +82,12 @@ class MainActivity : AppCompatActivity(),
 
         Timber.plant(Timber.DebugTree())
 
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), null)
+        val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), null)
+
         pmDatesAPI = listOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
-        manualListener = SwitchHelper(swipe_refresh, this)
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        manualListener = SwitchHelper(swipe_refresh, hashedEmail, hashedPassword, this)
 
         LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()  // Loader for Detector PM data
         LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()  // Loader for API PM data
@@ -191,17 +193,5 @@ class MainActivity : AppCompatActivity(),
             partial_main_data_pm25.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI[0])
             partial_main_data_pm10.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI[1])
         }
-    }
-
-    companion object {
-        internal const val DETECTOR_URL = "http://airpurrr.ga/pm_data.txt"
-        internal var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
-        private lateinit var mSharedPreferences: SharedPreferences
-
-        internal val hashedEmail: String?
-            get() = mSharedPreferences.getString(LoginActivity.SAVED_HASH_EMAIL_KEY, null)
-
-        internal val hashedPassword: String?
-            get() = mSharedPreferences.getString(LoginActivity.SAVED_HASH_PASSWORD_KEY, null)
     }
 }

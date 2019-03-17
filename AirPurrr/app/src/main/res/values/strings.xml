@@ -8,6 +8,8 @@
     <string name="login_fingerprint_text">Authenticate with your fingerprint</string>
     <string name="login_description_fingerprint_icon">Fingerprint icon</string>
     <string name="login_description_logo">Application logo</string>
+    <string name="login_pref_email">login_email</string>
+    <string name="login_pref_password">login_password</string>
 
     <string name="login_message_dialog">Authenticating…</string>
     <string name="login_message_error_empty_field">Required</string>

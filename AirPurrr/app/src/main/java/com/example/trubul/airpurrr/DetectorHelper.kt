@@ -2,8 +2,8 @@ package com.example.trubul.airpurrr
 
 import android.content.Context
 import androidx.loader.content.AsyncTaskLoader
-import com.example.trubul.airpurrr.activity.MainActivity
-import timber.log.Timber
+
+private const val DETECTOR_URL = "http://airpurrr.ga/pm_data.txt"
 
 internal class DetectorHelper {
 
@@ -19,7 +19,7 @@ internal class DetectorHelper {
 
         try {
             val getRequest = HttpGetRequest()
-            rawData = getRequest.doHttpRequest(MainActivity.DETECTOR_URL)
+            rawData = getRequest.doHttpRequest(DETECTOR_URL)
 
             val pmStrings = rawData!!.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
             var pmDoubles = mutableListOf<Double>()

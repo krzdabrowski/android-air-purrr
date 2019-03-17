@@ -70,7 +70,7 @@ class LoginActivity : BaseActivity(),
         mLoginHelper = LoginHelper(fingerprintManager, this)
         mInputMethodManager = getSystemService(InputMethodManager::class.java)
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        mHashedEmail = mSharedPreferences.getString(SAVED_HASH_EMAIL_KEY, null)
+        mHashedEmail = mSharedPreferences.getString(getString(R.string.login_pref_email), null)
 
         partial_login_manual.btn_login.setOnClickListener { manualLogin(email, password) }
 
@@ -138,8 +138,8 @@ class LoginActivity : BaseActivity(),
 
                 mHashedEmail = LoginHelper.sha512Hash(email)
                 val hashedPassword = LoginHelper.sha512Hash(password)
-                editor.putString(SAVED_HASH_EMAIL_KEY, mHashedEmail)
-                editor.putString(SAVED_HASH_PASSWORD_KEY, hashedPassword)
+                editor.putString(getString(R.string.login_pref_email), mHashedEmail)
+                editor.putString(getString(R.string.login_pref_password), hashedPassword)
                 editor.apply()
 
                 startActivity(intent)
@@ -177,10 +177,5 @@ class LoginActivity : BaseActivity(),
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         hideProgressDialog()
-    }
-
-    companion object {
-        const val SAVED_HASH_EMAIL_KEY = "login_email"
-        const val SAVED_HASH_PASSWORD_KEY = "login_password"
     }
 }
