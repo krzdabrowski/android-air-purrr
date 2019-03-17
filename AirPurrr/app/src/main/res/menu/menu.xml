@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-<!-- TODO: switch manual control tez wrzucic na toolbar, alwaysOn i usunac switcha -->
-<!-- TODO: (for future) Preferences instead of menu + settings menu with alwaysOn state (dialogs inflated from new file instead on making everything in Java code (lecture 255 on Udemy))
--->
-<!-- TODO: selectory na kliki menu -->
     <item
         android:id="@+id/menu_threshold"
         android:title="@string/menu_threshold" />

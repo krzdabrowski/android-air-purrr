@@ -21,16 +21,21 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.partial_main_data.view.*
 import timber.log.Timber
 
-// TODO: sprawdzic wszystkie id czy sa potrzebne i czy przestrzegaja zasad dobrego id
-
-// TODO: Navigation Component
-// TODO: animations
-// TODO: deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
-// TODO: implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
-// TODO: (for future) implement TabLayout with current and predicted results/data in fragments
+// TODO: implement retrofit
 // TODO: implement more .XML databinding
 // TODO: create model (Data: DetectorData, ApiData or so), viewmodel, view, helpers, ... packages
 // TODO: remove loaders while implementing MVVM with LiveData
+
+// TODO: (later) DEPRECATIONS - deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
+// TODO: (later) UI REWORK - implement TabLayout with current and predicted results/data in fragments
+// TODO: (later) UI REWORK - switch manual control on toolbar, alwaysOn & remove switch with logic
+// TODO: (later) UI REWORK - Preferences instead of menu + settings menu with alwaysOn state (dialogs inflated from new file instead on making everything in Java code (lecture 255 on Udemy))
+// TODO: (later) UI REWORK - selectors for menu items on toolbar
+
+// TODO: (if time) Navigation Component
+// TODO: (if time) animations
+// TODO: (at the end) implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
+// TODO: (at the end) check if all ids are needed and are correct with good practices
 
 private const val LOADER_DETECTOR = 1
 private const val LOADER_API_PM = 2
