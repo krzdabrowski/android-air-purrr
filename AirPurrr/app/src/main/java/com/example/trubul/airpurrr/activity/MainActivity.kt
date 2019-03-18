@@ -1,6 +1,5 @@
 package com.example.trubul.airpurrr.activity
 
-import androidx.loader.app.LoaderManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -8,9 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.loader.content.Loader
-import com.example.trubul.airpurrr.APIHelper
-import com.example.trubul.airpurrr.DetectorHelper
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.SwitchHelper
 import com.example.trubul.airpurrr.helper.ConversionHelper
@@ -29,10 +25,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-// TODO: implement retrofit
+// TODO: implement coroutines
 // TODO: implement more .XML databinding
-// TODO: create model (Data: DetectorData, ApiData or so), viewmodel, view, helpers, ... packages
-// TODO: remove loaders while implementing MVVM with LiveData
+// TODO: implement MVVM with LiveData
 // TODO: airly API instead of public
 
 // TODO: (later) DEPRECATIONS - deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
@@ -46,20 +41,16 @@ import timber.log.Timber
 // TODO: (at the end) implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
 // TODO: (at the end) check if all ids are needed and are correct with good practices
 
-private const val LOADER_DETECTOR = 1
-private const val LOADER_API_PM = 2
-
 class MainActivity : AppCompatActivity(),
-        SwitchHelper.SwitchCallback, LoaderManager.LoaderCallbacks<Any>, SwipeRefreshLayout.OnRefreshListener {
+        SwitchHelper.SwitchCallback, SwipeRefreshLayout.OnRefreshListener {
+
+    private lateinit var manualListener: SwitchHelper
 
     private var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
     private var pmValuesDetector = mutableListOf(0.0, 0.0)
     private var pmValuesAPI = mutableListOf(0.0, 0.0)
     private var pmDatesAPI = ""
 
-    private var workstate = ""
-    private lateinit var pmValuesAndDatesAPI: List<Any>
-    private lateinit var manualListener: SwitchHelper
 
     override fun setSwitchManual(state: Boolean) {
         switch_manual.isChecked = state
@@ -77,8 +68,6 @@ class MainActivity : AppCompatActivity(),
 
     private fun updateAPI() {
         flagDetectorAPI = true
-//        pmValuesAPI = pmValuesAndDatesAPI[0] as MutableList<Double>
-//        pmDatesAPI = pmValuesAndDatesAPI[1] as List<String>
         setUI(pmValuesAPI)
     }
 
@@ -86,7 +75,10 @@ class MainActivity : AppCompatActivity(),
         val timer = Timer()
         val minuteTask = object : TimerTask() {
             override fun run() {
-                runOnUiThread { LoaderManager.getInstance(this@MainActivity).initLoader<Any>(LOADER_DETECTOR, null, this@MainActivity).forceLoad() }
+                runOnUiThread {
+                    retrofitDetector()
+                    retrofitApi()
+                }
             }
         }
         timer.schedule(minuteTask, 0, (1000 * 60).toLong())  // 1000*60*1 every 1 minute
@@ -102,13 +94,8 @@ class MainActivity : AppCompatActivity(),
         val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), null)
         val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), null)
 
-//        pmDatesAPI = listOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
         manualListener = SwitchHelper(swipe_refresh, hashedEmail, hashedPassword, this)
-
-//        LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()  // Loader for Detector PM data
-//        LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()  // Loader for API PM data
-//        automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
-
+        automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
         swipe_refresh.setOnRefreshListener(this)
         switch_manual.setOnCheckedChangeListener(manualListener)
 
@@ -122,9 +109,6 @@ class MainActivity : AppCompatActivity(),
 
         partial_main_data_pm25.setOnClickListener { textViewListener() }
         partial_main_data_pm10.setOnClickListener { textViewListener() }
-
-        retrofitDetector()
-        retrofitApi()
     }
 
     fun retrofitDetector() {
@@ -134,15 +118,18 @@ class MainActivity : AppCompatActivity(),
         call.enqueue(object : Callback<Detector.Result> {
             override fun onResponse(call: Call<Detector.Result>, response: Response<Detector.Result>) {
                 val data = response.body()
-                if (data != null) {
+                if (data != null && data.values != null) {
                     pmValuesDetector[0] = ConversionHelper.pm25ToPercent(data.values.pm25)
                     pmValuesDetector[1] = ConversionHelper.pm10ToPercent(data.values.pm10)
-                    workstate = data.workstate
                     updateDetector()
                 }
             }
 
-            override fun onFailure(call: Call<Detector.Result>, t: Throwable) {}
+            override fun onFailure(call: Call<Detector.Result>, t: Throwable) {
+                pmValuesDetector[0] = 0.0
+                pmValuesDetector[1] = 0.0
+                updateDetector()
+            }
         })
     }
 
@@ -166,7 +153,10 @@ class MainActivity : AppCompatActivity(),
                 }
             }
 
-            override fun onFailure(call: Call<Api.Result>, t: Throwable) {}
+            override fun onFailure(call: Call<Api.Result>, t: Throwable) {
+                pmValuesAPI[0] = 0.0
+                pmDatesAPI = getString(R.string.main_data_info_api_empty)
+            }
         })
 
         callPm10.enqueue(object : Callback<Api.Result> {
@@ -183,30 +173,12 @@ class MainActivity : AppCompatActivity(),
                 }
             }
 
-            override fun onFailure(call: Call<Api.Result>, t: Throwable) {}
+            override fun onFailure(call: Call<Api.Result>, t: Throwable) {
+                pmValuesAPI[1] = 0.0
+                pmDatesAPI = getString(R.string.main_data_info_api_empty)
+            }
         })
     }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Any> {
-        return if (id == LOADER_DETECTOR) {
-            DetectorHelper.Loader(this) as Loader<Any>
-        } else {
-            APIHelper.PMLoader(this) as Loader<Any>
-        }
-    }
-
-    override fun onLoadFinished(loader: Loader<Any>, data: Any) {
-        val id = loader.id
-
-        if (id == LOADER_DETECTOR) {
-            pmValuesDetector = data as MutableList<Double>
-            updateDetector()
-        } else if (id == LOADER_API_PM) {
-            pmValuesAndDatesAPI = data as List<Any>
-        }
-    }
-
-    override fun onLoaderReset(loader: Loader<Any>) {}
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
@@ -223,8 +195,6 @@ class MainActivity : AppCompatActivity(),
     override fun onRefresh() {
         retrofitDetector()
         retrofitApi()
-//        LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()
-//        LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()
         setSwipeRefreshing(false)
     }
 

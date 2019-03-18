@@ -2,16 +2,20 @@ package com.example.trubul.airpurrr
 
 import android.view.View
 import android.widget.CompoundButton
+import com.example.trubul.airpurrr.model.Detector
+import com.example.trubul.airpurrr.retrofit.DetectorService
 import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 import java.util.concurrent.ExecutionException
-
-private const val WORKSTATE_URL = "http://airpurrr.ga/workstate.txt"
 
 internal class SwitchHelper(private val mParentLayout: View, private val hashedEmail: String,
                             private val hashedPassword: String, private val mCallback: SwitchCallback) : CompoundButton.OnCheckedChangeListener {
 
     private var stateManual = false
+    var workStates = ""
 
     internal interface SwitchCallback {
         fun setSwitchManual(state: Boolean)
@@ -19,20 +23,16 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         stateManual = isChecked
-        controlRequests(stateManual)
+        retrofitSwitch()
     }
 
     private fun controlRequests(state: Boolean) {
-        val workStates: String
         val switchOn = HttpsPostRequest(hashedEmail, hashedPassword)
         val switchOff = HttpsPostRequest(hashedEmail, hashedPassword)
 
         try {
-            val getRequest = HttpGetRequest()
-            workStates = getRequest.execute(WORKSTATE_URL).get()
-
             when (workStates) {
-                "WorkStates.Sleeping\n" -> {
+                "WorkStates.Sleeping" -> {
                     Snackbar.make(mParentLayout, R.string.main_message_switch_processing, Snackbar.LENGTH_LONG).show()
                     if (state) {  // send request if it was switch -> ON
                         switchOn.execute("MANUAL=1")  // it will be POST: req = params[0]
@@ -41,7 +41,7 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
                         switchOff.execute("MANUAL=0")
                     }
                 }
-                "WorkStates.Measuring\n" -> {
+                "WorkStates.Measuring" -> {
                     Snackbar.make(mParentLayout, R.string.main_message_error_measuring, Snackbar.LENGTH_LONG).show()
                     keepState()
                 }
@@ -64,5 +64,24 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
     private fun keepState() {
         stateManual = !stateManual
         mCallback.setSwitchManual(stateManual)
+    }
+
+    fun retrofitSwitch() {
+        val service by lazy { DetectorService.create() }
+
+        val call = service.getDetectorData()
+        call.enqueue(object : Callback<Detector.Result> {
+            override fun onResponse(call: Call<Detector.Result>, response: Response<Detector.Result>) {
+                val data = response.body()
+                if (data != null) {
+                    workStates = data.workstate
+                    controlRequests(stateManual)
+                }
+            }
+
+            override fun onFailure(call: Call<Detector.Result>, t: Throwable) {
+                workStates = "error"
+            }
+        })
     }
 }
