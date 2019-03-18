@@ -14,7 +14,9 @@ import com.example.trubul.airpurrr.DetectorHelper
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.SwitchHelper
 import com.example.trubul.airpurrr.helper.ConversionHelper
+import com.example.trubul.airpurrr.model.Api
 import com.example.trubul.airpurrr.model.Detector
+import com.example.trubul.airpurrr.retrofit.ApiService
 import com.example.trubul.airpurrr.retrofit.DetectorService
 
 import java.util.Timer
@@ -53,8 +55,9 @@ class MainActivity : AppCompatActivity(),
     private var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
     private var pmValuesDetector = mutableListOf(0.0, 0.0)
     private var pmValuesAPI = mutableListOf(0.0, 0.0)
+    private var pmDatesAPI = ""
+
     private var workstate = ""
-    private lateinit var pmDatesAPI: List<String>
     private lateinit var pmValuesAndDatesAPI: List<Any>
     private lateinit var manualListener: SwitchHelper
 
@@ -74,8 +77,8 @@ class MainActivity : AppCompatActivity(),
 
     private fun updateAPI() {
         flagDetectorAPI = true
-        pmValuesAPI = pmValuesAndDatesAPI[0] as MutableList<Double>
-        pmDatesAPI = pmValuesAndDatesAPI[1] as List<String>
+//        pmValuesAPI = pmValuesAndDatesAPI[0] as MutableList<Double>
+//        pmDatesAPI = pmValuesAndDatesAPI[1] as List<String>
         setUI(pmValuesAPI)
     }
 
@@ -99,7 +102,7 @@ class MainActivity : AppCompatActivity(),
         val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), null)
         val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), null)
 
-        pmDatesAPI = listOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
+//        pmDatesAPI = listOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
         manualListener = SwitchHelper(swipe_refresh, hashedEmail, hashedPassword, this)
 
 //        LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()  // Loader for Detector PM data
@@ -121,6 +124,7 @@ class MainActivity : AppCompatActivity(),
         partial_main_data_pm10.setOnClickListener { textViewListener() }
 
         retrofitDetector()
+        retrofitApi()
     }
 
     fun retrofitDetector() {
@@ -131,16 +135,55 @@ class MainActivity : AppCompatActivity(),
             override fun onResponse(call: Call<Detector.Result>, response: Response<Detector.Result>) {
                 val data = response.body()
                 if (data != null) {
-                    pmValuesDetector[0] = data.values.pm25
-                    pmValuesDetector[1] = data.values.pm10
+                    pmValuesDetector[0] = ConversionHelper.pm25ToPercent(data.values.pm25)
+                    pmValuesDetector[1] = ConversionHelper.pm10ToPercent(data.values.pm10)
                     workstate = data.workstate
-                    setUI(ConversionHelper.toPercent(pmValuesDetector))
+                    updateDetector()
                 }
             }
 
-            override fun onFailure(call: Call<Detector.Result>, t: Throwable) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onFailure(call: Call<Detector.Result>, t: Throwable) {}
+        })
+    }
+
+    fun retrofitApi() {
+        val service by lazy { ApiService.create() }
+
+        val callPm25 = service.getApiPm25Data()
+        val callPm10 = service.getApiPm10Data()
+
+        callPm25.enqueue(object : Callback<Api.Result> {
+            override fun onResponse(call: Call<Api.Result>, response: Response<Api.Result>) {
+                val data = response.body()
+                if (data != null) {
+                    for (i in data.values.indices) {
+                        if (data.values[i].value != null) {
+                            pmValuesAPI[0] = ConversionHelper.pm25ToPercent(data.values[i].value.toDouble())
+                            pmDatesAPI = data.values[i].date
+                            break
+                        } else continue
+                    }
+                }
             }
+
+            override fun onFailure(call: Call<Api.Result>, t: Throwable) {}
+        })
+
+        callPm10.enqueue(object : Callback<Api.Result> {
+            override fun onResponse(call: Call<Api.Result>, response: Response<Api.Result>) {
+                val data = response.body()
+                if (data != null) {
+                    for (i in data.values.indices) {
+                        if (data.values[i].value != null) {
+                            pmValuesAPI[1] = ConversionHelper.pm10ToPercent(data.values[i].value.toDouble())
+                            pmDatesAPI = data.values[i].date
+                            break
+                        } else continue
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Api.Result>, t: Throwable) {}
         })
     }
 
@@ -178,8 +221,10 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onRefresh() {
-        LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()
-        LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()
+        retrofitDetector()
+        retrofitApi()
+//        LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()
+//        LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()
         setSwipeRefreshing(false)
     }
 
@@ -226,8 +271,8 @@ class MainActivity : AppCompatActivity(),
             partial_main_data_pm25.data_source.setText(R.string.main_data_info_indoors)
             partial_main_data_pm10.data_source.setText(R.string.main_data_info_indoors)
         } else {  // if APIHelper
-            partial_main_data_pm25.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI[0])
-            partial_main_data_pm10.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI[1])
+            partial_main_data_pm25.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI)
+            partial_main_data_pm10.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI)
         }
     }
 }
