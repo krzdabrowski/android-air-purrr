@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.example.trubul.airpurrr.R
-import com.example.trubul.airpurrr.SwitchHelper
+import com.example.trubul.airpurrr.helper.SwitchHelper
 import com.example.trubul.airpurrr.helper.ConversionHelper
 import com.example.trubul.airpurrr.model.Api
 import com.example.trubul.airpurrr.model.Detector
@@ -25,7 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-// TODO: implement coroutines
+// TODO: implement coroutines & POST login with retrofit
 // TODO: implement more .XML databinding
 // TODO: implement MVVM with LiveData
 // TODO: airly API instead of public

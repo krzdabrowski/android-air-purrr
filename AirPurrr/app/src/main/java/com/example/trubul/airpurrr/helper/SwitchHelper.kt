@@ -1,7 +1,9 @@
-package com.example.trubul.airpurrr
+package com.example.trubul.airpurrr.helper
 
 import android.view.View
 import android.widget.CompoundButton
+import com.example.trubul.airpurrr.HttpsPostRequest
+import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.model.Detector
 import com.example.trubul.airpurrr.retrofit.DetectorService
 import com.google.android.material.snackbar.Snackbar

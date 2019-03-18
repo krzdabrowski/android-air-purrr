@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.example.trubul.airpurrr.LoginHelper
+import com.example.trubul.airpurrr.helper.LoginHelper
 import com.example.trubul.airpurrr.R
 
 import com.google.android.material.snackbar.Snackbar

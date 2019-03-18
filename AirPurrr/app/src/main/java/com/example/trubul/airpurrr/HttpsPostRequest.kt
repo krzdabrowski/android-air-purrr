@@ -44,10 +44,6 @@ internal class HttpsPostRequest(private val hashedEmail: String, private val has
 
             // Create a new InputStreamReader to read output info from webserver
             streamReader = InputStreamReader(connection.inputStream)
-            // Do the data-read
-            val dataReader = DataReader()
-            dataReader.getData(streamReader)
-
         } catch (e: IOException) {
             e.printStackTrace()
         } catch (e: SecurityException) {

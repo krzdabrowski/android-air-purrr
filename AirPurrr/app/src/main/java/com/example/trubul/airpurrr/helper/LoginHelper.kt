@@ -1,4 +1,4 @@
-package com.example.trubul.airpurrr
+package com.example.trubul.airpurrr.helper
 
 import android.hardware.fingerprint.FingerprintManager
 import android.os.CancellationSignal
