@@ -13,18 +13,25 @@ import com.example.trubul.airpurrr.APIHelper
 import com.example.trubul.airpurrr.DetectorHelper
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.SwitchHelper
+import com.example.trubul.airpurrr.helper.ConversionHelper
+import com.example.trubul.airpurrr.model.Detector
+import com.example.trubul.airpurrr.retrofit.DetectorService
 
 import java.util.Timer
 import java.util.TimerTask
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.partial_main_data.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import timber.log.Timber
 
 // TODO: implement retrofit
 // TODO: implement more .XML databinding
 // TODO: create model (Data: DetectorData, ApiData or so), viewmodel, view, helpers, ... packages
 // TODO: remove loaders while implementing MVVM with LiveData
+// TODO: airly API instead of public
 
 // TODO: (later) DEPRECATIONS - deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
 // TODO: (later) UI REWORK - implement TabLayout with current and predicted results/data in fragments
@@ -44,8 +51,9 @@ class MainActivity : AppCompatActivity(),
         SwitchHelper.SwitchCallback, LoaderManager.LoaderCallbacks<Any>, SwipeRefreshLayout.OnRefreshListener {
 
     private var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
-    private var pmValuesDetector = listOf(0.0, 0.0)
-    private var pmValuesAPI = listOf(0.0, 0.0)
+    private var pmValuesDetector = mutableListOf(0.0, 0.0)
+    private var pmValuesAPI = mutableListOf(0.0, 0.0)
+    private var workstate = ""
     private lateinit var pmDatesAPI: List<String>
     private lateinit var pmValuesAndDatesAPI: List<Any>
     private lateinit var manualListener: SwitchHelper
@@ -66,7 +74,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun updateAPI() {
         flagDetectorAPI = true
-        pmValuesAPI = pmValuesAndDatesAPI[0] as List<Double>
+        pmValuesAPI = pmValuesAndDatesAPI[0] as MutableList<Double>
         pmDatesAPI = pmValuesAndDatesAPI[1] as List<String>
         setUI(pmValuesAPI)
     }
@@ -94,9 +102,9 @@ class MainActivity : AppCompatActivity(),
         pmDatesAPI = listOf(getString(R.string.main_data_info_api_empty), getString(R.string.main_data_info_api_empty))
         manualListener = SwitchHelper(swipe_refresh, hashedEmail, hashedPassword, this)
 
-        LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()  // Loader for Detector PM data
-        LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()  // Loader for API PM data
-        automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
+//        LoaderManager.getInstance(this).initLoader<Any>(LOADER_DETECTOR, null, this).forceLoad()  // Loader for Detector PM data
+//        LoaderManager.getInstance(this).initLoader<Any>(LOADER_API_PM, null, this).forceLoad()  // Loader for API PM data
+//        automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
 
         swipe_refresh.setOnRefreshListener(this)
         switch_manual.setOnCheckedChangeListener(manualListener)
@@ -111,6 +119,29 @@ class MainActivity : AppCompatActivity(),
 
         partial_main_data_pm25.setOnClickListener { textViewListener() }
         partial_main_data_pm10.setOnClickListener { textViewListener() }
+
+        retrofitDetector()
+    }
+
+    fun retrofitDetector() {
+        val service by lazy { DetectorService.create() }
+
+        val call = service.getDetectorData()
+        call.enqueue(object : Callback<Detector.Result> {
+            override fun onResponse(call: Call<Detector.Result>, response: Response<Detector.Result>) {
+                val data = response.body()
+                if (data != null) {
+                    pmValuesDetector[0] = data.values.pm25
+                    pmValuesDetector[1] = data.values.pm10
+                    workstate = data.workstate
+                    setUI(ConversionHelper.toPercent(pmValuesDetector))
+                }
+            }
+
+            override fun onFailure(call: Call<Detector.Result>, t: Throwable) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Any> {
@@ -125,7 +156,7 @@ class MainActivity : AppCompatActivity(),
         val id = loader.id
 
         if (id == LOADER_DETECTOR) {
-            pmValuesDetector = data as List<Double>
+            pmValuesDetector = data as MutableList<Double>
             updateDetector()
         } else if (id == LOADER_API_PM) {
             pmValuesAndDatesAPI = data as List<Any>
