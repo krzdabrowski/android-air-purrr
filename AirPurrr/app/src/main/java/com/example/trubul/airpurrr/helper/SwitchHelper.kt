@@ -4,12 +4,13 @@ import android.view.View
 import android.widget.CompoundButton
 import com.example.trubul.airpurrr.HttpsPostRequest
 import com.example.trubul.airpurrr.R
-import com.example.trubul.airpurrr.model.Detector
 import com.example.trubul.airpurrr.retrofit.DetectorService
 import com.google.android.material.snackbar.Snackbar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 import java.util.concurrent.ExecutionException
 
@@ -68,22 +69,26 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
         mCallback.setSwitchManual(stateManual)
     }
 
-    fun retrofitSwitch() {
+    private fun retrofitSwitch() {
         val service by lazy { DetectorService.create() }
 
-        val call = service.getDetectorData()
-        call.enqueue(object : Callback<Detector.Result> {
-            override fun onResponse(call: Call<Detector.Result>, response: Response<Detector.Result>) {
-                val data = response.body()
-                if (data != null) {
-                    workStates = data.workstate
-                    controlRequests(stateManual)
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = service.getDetectorDataAsync()
+            withContext(Dispatchers.Main) {
+                try {
+                    val response = request.await()
+                    if (response.isSuccessful && response.body() != null) {
+                        workStates = response.body()!!.workstate
+                        controlRequests(stateManual)
+                    } else {
+                        workStates = "error"
+                    }
+                } catch (e: HttpException) {
+                    workStates = "error"
+                } catch (e: Throwable) {
+                    workStates = "error"
                 }
             }
-
-            override fun onFailure(call: Call<Detector.Result>, t: Throwable) {
-                workStates = "error"
-            }
-        })
+        }
     }
 }

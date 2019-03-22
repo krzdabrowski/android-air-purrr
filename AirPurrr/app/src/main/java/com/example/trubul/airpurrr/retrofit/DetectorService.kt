@@ -1,7 +1,9 @@
 package com.example.trubul.airpurrr.retrofit
 
 import com.example.trubul.airpurrr.model.Detector
-import retrofit2.Call
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import kotlinx.coroutines.Deferred
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -9,16 +11,18 @@ import retrofit2.http.GET
 interface DetectorService {
 
     @GET("/data.json")
-    fun getDetectorData(): Call<Detector.Result>
+    fun getDetectorDataAsync(): Deferred<Response<Detector.Result>>
 
     companion object {
-        fun create(): DetectorService {
-            val retrofit = Retrofit.Builder()
-                    .baseUrl("http://airpurrr.ga")
-                    .addConverterFactory(MoshiConverterFactory.create())
-                    .build()
+        private const val BASE_URL = "http://airpurrr.ga"
 
-            return retrofit.create(DetectorService::class.java)
+        fun create(): DetectorService {
+            return Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(MoshiConverterFactory.create())
+                    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                    .build()
+                    .create(DetectorService::class.java)
         }
     }
 }

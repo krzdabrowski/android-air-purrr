@@ -10,8 +10,6 @@ import android.view.View
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.helper.SwitchHelper
 import com.example.trubul.airpurrr.helper.ConversionHelper
-import com.example.trubul.airpurrr.model.Api
-import com.example.trubul.airpurrr.model.Detector
 import com.example.trubul.airpurrr.retrofit.ApiService
 import com.example.trubul.airpurrr.retrofit.DetectorService
 
@@ -20,13 +18,15 @@ import java.util.TimerTask
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.partial_main_data.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import timber.log.Timber
 
-// TODO: implement coroutines & POST login with retrofit
-// TODO: implement more .XML databinding
+// TODO: implement POST login with retrofit
+// TODO: implement databinding
 // TODO: implement MVVM with LiveData
 // TODO: airly API instead of public
 
@@ -114,70 +114,74 @@ class MainActivity : AppCompatActivity(),
     fun retrofitDetector() {
         val service by lazy { DetectorService.create() }
 
-        val call = service.getDetectorData()
-        call.enqueue(object : Callback<Detector.Result> {
-            override fun onResponse(call: Call<Detector.Result>, response: Response<Detector.Result>) {
-                val data = response.body()
-                if (data != null && data.values != null) {
-                    pmValuesDetector[0] = ConversionHelper.pm25ToPercent(data.values.pm25)
-                    pmValuesDetector[1] = ConversionHelper.pm10ToPercent(data.values.pm10)
-                    updateDetector()
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = service.getDetectorDataAsync()
+            withContext(Dispatchers.Main) {
+                try {
+                    val response = request.await()
+                    if (response.isSuccessful && response.body() != null && response.body()!!.values != null) {
+                        pmValuesDetector[0] = ConversionHelper.pm25ToPercent(response.body()!!.values.pm25)
+                        pmValuesDetector[1] = ConversionHelper.pm10ToPercent(response.body()!!.values.pm10)
+                        updateDetector()
+                    } else {
+                        setDetectorEmptyState()
+                    }
+                } catch (e: HttpException) {
+                    setDetectorEmptyState()
+                } catch (e: Throwable) {
+                    setDetectorEmptyState()
                 }
             }
+        }
+    }
 
-            override fun onFailure(call: Call<Detector.Result>, t: Throwable) {
-                pmValuesDetector[0] = 0.0
-                pmValuesDetector[1] = 0.0
-                updateDetector()
-            }
-        })
+    private fun setDetectorEmptyState() {
+        pmValuesDetector[0] = 0.0
+        pmValuesDetector[1] = 0.0
+        updateDetector()
+    }
+
+    private fun setApiEmptyState() {
+        pmValuesAPI[0] = 0.0
+        pmValuesAPI[1] = 0.0
+        pmDatesAPI = getString(R.string.main_data_info_api_empty)
     }
 
     fun retrofitApi() {
         val service by lazy { ApiService.create() }
 
-        val callPm25 = service.getApiPm25Data()
-        val callPm10 = service.getApiPm10Data()
-
-        callPm25.enqueue(object : Callback<Api.Result> {
-            override fun onResponse(call: Call<Api.Result>, response: Response<Api.Result>) {
-                val data = response.body()
-                if (data != null) {
-                    for (i in data.values.indices) {
-                        if (data.values[i].value != null) {
-                            pmValuesAPI[0] = ConversionHelper.pm25ToPercent(data.values[i].value.toDouble())
-                            pmDatesAPI = data.values[i].date
-                            break
-                        } else continue
+        CoroutineScope(Dispatchers.IO).launch {
+            val requestPm25 = service.getApiPm25DataAsync()
+            val requestPm10 = service.getApiPm10DataAsync()
+            withContext(Dispatchers.Main) {
+                try {
+                    val responsePm25 = requestPm25.await()
+                    val responsePm10 = requestPm10.await()
+                    if (responsePm25.isSuccessful && responsePm25.body() != null) {
+                        for (i in responsePm25.body()!!.values.indices) {
+                            if (responsePm25.body()!!.values[i].value != null) {
+                                pmValuesAPI[0] = ConversionHelper.pm25ToPercent(responsePm25.body()!!.values[i].value.toDouble())
+                                break
+                            } else continue
+                        }
                     }
+
+                    if (responsePm10.isSuccessful && responsePm10.body() != null) {
+                        for (i in responsePm10.body()!!.values.indices) {
+                            if (responsePm10.body()!!.values[i].value != null) {
+                                pmValuesAPI[1] = ConversionHelper.pm10ToPercent(responsePm10.body()!!.values[i].value.toDouble())
+                                pmDatesAPI = responsePm10.body()!!.values[i].date
+                                break
+                            } else continue
+                        }
+                    }
+                } catch (e: HttpException) {
+                    setApiEmptyState()
+                } catch (e: Throwable) {
+                    setApiEmptyState()
                 }
             }
-
-            override fun onFailure(call: Call<Api.Result>, t: Throwable) {
-                pmValuesAPI[0] = 0.0
-                pmDatesAPI = getString(R.string.main_data_info_api_empty)
-            }
-        })
-
-        callPm10.enqueue(object : Callback<Api.Result> {
-            override fun onResponse(call: Call<Api.Result>, response: Response<Api.Result>) {
-                val data = response.body()
-                if (data != null) {
-                    for (i in data.values.indices) {
-                        if (data.values[i].value != null) {
-                            pmValuesAPI[1] = ConversionHelper.pm10ToPercent(data.values[i].value.toDouble())
-                            pmDatesAPI = data.values[i].date
-                            break
-                        } else continue
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<Api.Result>, t: Throwable) {
-                pmValuesAPI[1] = 0.0
-                pmDatesAPI = getString(R.string.main_data_info_api_empty)
-            }
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
