@@ -3,23 +3,37 @@ package com.example.trubul.airpurrr.retrofit
 import com.example.trubul.airpurrr.model.Detector
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
+import retrofit2.http.*
 
 interface DetectorService {
 
     @GET("/data.json")
     fun getDetectorDataAsync(): Deferred<Response<Detector.Result>>
 
-    companion object {
-        private const val BASE_URL = "http://airpurrr.ga"
+    @FormUrlEncoded
+    @POST("/login")
+    fun controlFanAsync(@Header("Authorization") authorization: String, @Field("req") requestKey: String): Deferred<ResponseBody>
 
-        fun create(): DetectorService {
+    companion object {
+        private const val BASE_URL_HTTP = "http://airpurrr.ga"
+        private const val BASE_URL_HTTPS = "https://airpurrr.ga"
+
+        fun createHttp(): DetectorService {
             return Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(BASE_URL_HTTP)
                     .addConverterFactory(MoshiConverterFactory.create())
+                    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                    .build()
+                    .create(DetectorService::class.java)
+        }
+
+        fun createHttps(): DetectorService {
+            return Retrofit.Builder()
+                    .baseUrl(BASE_URL_HTTPS)
                     .addCallAdapterFactory(CoroutineCallAdapterFactory())
                     .build()
                     .create(DetectorService::class.java)

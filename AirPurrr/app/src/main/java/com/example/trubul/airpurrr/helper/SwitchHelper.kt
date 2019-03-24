@@ -1,8 +1,8 @@
 package com.example.trubul.airpurrr.helper
 
+import android.util.Base64
 import android.view.View
 import android.widget.CompoundButton
-import com.example.trubul.airpurrr.HttpsPostRequest
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.retrofit.DetectorService
 import com.google.android.material.snackbar.Snackbar
@@ -30,18 +30,14 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
     }
 
     private fun controlRequests(state: Boolean) {
-        val switchOn = HttpsPostRequest(hashedEmail, hashedPassword)
-        val switchOff = HttpsPostRequest(hashedEmail, hashedPassword)
-
         try {
             when (workStates) {
                 "WorkStates.Sleeping" -> {
                     Snackbar.make(mParentLayout, R.string.main_message_switch_processing, Snackbar.LENGTH_LONG).show()
                     if (state) {  // send request if it was switch -> ON
-                        switchOn.execute("MANUAL=1")  // it will be POST: req = params[0]
-
+                        controlFan(true)
                     } else {
-                        switchOff.execute("MANUAL=0")
+                        controlFan(false)
                     }
                 }
                 "WorkStates.Measuring" -> {
@@ -53,15 +49,31 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
                     keepState()
                 }
             }
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-        } catch (e: NullPointerException) {
+        } catch (e: Throwable) {
             Snackbar.make(mParentLayout, R.string.main_message_error_server, Snackbar.LENGTH_LONG).show()
             keepState()
         }
+    }
 
+    private fun controlFan(turnOn: Boolean) {
+        val service by lazy { DetectorService.createHttps() }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = if (turnOn) {
+                service.controlFanAsync("Basic " + Base64.encodeToString("$hashedEmail:$hashedPassword".toByteArray(), Base64.NO_WRAP), "MANUAL=1")
+            } else {
+                service.controlFanAsync("Basic " + Base64.encodeToString("$hashedEmail:$hashedPassword".toByteArray(), Base64.NO_WRAP), "MANUAL=0")
+            }
+            withContext(Dispatchers.Main) {
+                try {
+                    request.await()
+                } catch (e: HttpException) {
+                    e.printStackTrace()
+                } catch (e: Throwable) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 
     private fun keepState() {
@@ -70,7 +82,7 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
     }
 
     private fun retrofitSwitch() {
-        val service by lazy { DetectorService.create() }
+        val service by lazy { DetectorService.createHttp() }
 
         CoroutineScope(Dispatchers.IO).launch {
             val request = service.getDetectorDataAsync()

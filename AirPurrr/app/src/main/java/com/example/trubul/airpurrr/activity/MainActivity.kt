@@ -25,7 +25,6 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 
-// TODO: implement POST login with retrofit
 // TODO: implement databinding
 // TODO: implement MVVM with LiveData
 // TODO: airly API instead of public
@@ -112,7 +111,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun retrofitDetector() {
-        val service by lazy { DetectorService.create() }
+        val service by lazy { DetectorService.createHttp() }
 
         CoroutineScope(Dispatchers.IO).launch {
             val request = service.getDetectorDataAsync()
