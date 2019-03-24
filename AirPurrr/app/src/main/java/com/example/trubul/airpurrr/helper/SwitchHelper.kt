@@ -12,8 +12,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
-import java.util.concurrent.ExecutionException
-
 internal class SwitchHelper(private val mParentLayout: View, private val hashedEmail: String,
                             private val hashedPassword: String, private val mCallback: SwitchCallback) : CompoundButton.OnCheckedChangeListener {
 
@@ -25,8 +23,31 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        stateManual = isChecked
         retrofitSwitch()
+        stateManual = isChecked
+    }
+
+    private fun retrofitSwitch() {
+        val service by lazy { DetectorService.createHttp() }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = service.getDetectorDataAsync()
+            withContext(Dispatchers.Main) {
+                try {
+                    val response = request.await()
+                    if (response.isSuccessful && response.body() != null) {
+                        workStates = response.body()!!.workstate
+                        controlRequests(stateManual)
+                    } else {
+                        workStates = "error"
+                    }
+                } catch (e: HttpException) {
+                    workStates = "error"
+                } catch (e: Throwable) {
+                    workStates = "error"
+                }
+            }
+        }
     }
 
     private fun controlRequests(state: Boolean) {
@@ -77,30 +98,7 @@ internal class SwitchHelper(private val mParentLayout: View, private val hashedE
     }
 
     private fun keepState() {
+        mCallback.setSwitchManual(!stateManual)
         stateManual = !stateManual
-        mCallback.setSwitchManual(stateManual)
-    }
-
-    private fun retrofitSwitch() {
-        val service by lazy { DetectorService.createHttp() }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val request = service.getDetectorDataAsync()
-            withContext(Dispatchers.Main) {
-                try {
-                    val response = request.await()
-                    if (response.isSuccessful && response.body() != null) {
-                        workStates = response.body()!!.workstate
-                        controlRequests(stateManual)
-                    } else {
-                        workStates = "error"
-                    }
-                } catch (e: HttpException) {
-                    workStates = "error"
-                } catch (e: Throwable) {
-                    workStates = "error"
-                }
-            }
-        }
     }
 }

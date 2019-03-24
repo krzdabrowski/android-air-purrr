@@ -3,11 +3,13 @@ package com.example.trubul.airpurrr.retrofit
 import com.example.trubul.airpurrr.model.Detector
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
+import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+import java.util.concurrent.TimeUnit
 
 interface DetectorService {
 
@@ -32,7 +34,13 @@ interface DetectorService {
         }
 
         fun createHttps(): DetectorService {
+            val client = OkHttpClient.Builder()
+                    .connectTimeout(5, TimeUnit.SECONDS)
+                    .readTimeout(7, TimeUnit.SECONDS)
+                    .build()
+
             return Retrofit.Builder()
+                    .client(client)
                     .baseUrl(BASE_URL_HTTPS)
                     .addCallAdapterFactory(CoroutineCallAdapterFactory())
                     .build()
