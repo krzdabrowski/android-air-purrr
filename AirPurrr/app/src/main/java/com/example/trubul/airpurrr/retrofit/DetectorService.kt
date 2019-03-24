@@ -24,8 +24,14 @@ interface DetectorService {
         private const val BASE_URL_HTTP = "http://airpurrr.ga"
         private const val BASE_URL_HTTPS = "https://airpurrr.ga"
 
+        private val client = OkHttpClient.Builder()
+                .connectTimeout(3, TimeUnit.SECONDS)
+                .readTimeout(3, TimeUnit.SECONDS)
+                .build()
+
         fun createHttp(): DetectorService {
             return Retrofit.Builder()
+                    .client(client)
                     .baseUrl(BASE_URL_HTTP)
                     .addConverterFactory(MoshiConverterFactory.create())
                     .addCallAdapterFactory(CoroutineCallAdapterFactory())
@@ -34,11 +40,6 @@ interface DetectorService {
         }
 
         fun createHttps(): DetectorService {
-            val client = OkHttpClient.Builder()
-                    .connectTimeout(5, TimeUnit.SECONDS)
-                    .readTimeout(7, TimeUnit.SECONDS)
-                    .build()
-
             return Retrofit.Builder()
                     .client(client)
                     .baseUrl(BASE_URL_HTTPS)
