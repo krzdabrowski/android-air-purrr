@@ -2,6 +2,20 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="type"
+            type="String" />
+
+        <variable
+            name="source"
+            type="Boolean" />
+
+        <variable
+            name="value"
+            type="Double" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_main_data"
         style="@style/Main.Data.Layout">
@@ -9,24 +23,28 @@
         <TextView
             android:id="@+id/data_type"
             style="@style/Main.Data.Info.Type"
+            android:text="@{type}"
             tools:ignore="MissingConstraints"
             tools:text="@string/main_data_info_pm25" />
 
         <TextView
             android:id="@+id/data_source"
             style="@style/Main.Data.Info.Source"
+            android:text="@{source ? @string/main_data_info_api(1) : @string/main_data_info_indoors}"
             tools:ignore="MissingConstraints"
             tools:text="@string/main_data_info_indoors" />
 
         <TextView
             android:id="@+id/data_percentage"
             style="@style/Main.Data.Percentage"
+            android:text="@{type == @string/main_data_info_pm25 ? @string/main_data_percentage(value * 4) : @string/main_data_percentage(value * 2), default=`0.0%` }"
             tools:ignore="MissingConstraints"
             tools:text="40.0%" />
 
         <TextView
             android:id="@+id/data_ugm3"
             style="@style/Main.Data.Ugm3"
+            android:text="@{@string/main_data_ugm3(value), default=`0.0`}"
             tools:ignore="MissingConstraints"
             tools:text="(10.0)" />
 

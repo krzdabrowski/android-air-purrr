@@ -6,10 +6,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import androidx.databinding.DataBindingUtil
 import com.example.trubul.airpurrr.R
+import com.example.trubul.airpurrr.databinding.ActivityMainBinding
 import com.example.trubul.airpurrr.helper.SwitchHelper
-import com.example.trubul.airpurrr.helper.ConversionHelper
 import com.example.trubul.airpurrr.retrofit.ApiService
 import com.example.trubul.airpurrr.retrofit.DetectorService
 
@@ -17,7 +17,6 @@ import java.util.Timer
 import java.util.TimerTask
 
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.partial_main_data.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,9 +45,9 @@ class MainActivity : AppCompatActivity(),
     private lateinit var manualListener: SwitchHelper
 
     private var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
-    private var pmValuesDetector = mutableListOf(0.0, 0.0)
-    private var pmValuesAPI = mutableListOf(0.0, 0.0)
-    private var pmDatesAPI = ""
+//    private var pmValuesDetector = mutableListOf(0.0, 0.0)
+//    private var pmValuesAPI = mutableListOf(0.0, 0.0)
+//    private var pmDatesAPI = ""
 
 
     override fun setSwitchManual(state: Boolean) {
@@ -60,15 +59,15 @@ class MainActivity : AppCompatActivity(),
     }
 
     // Update UI
-    private fun updateDetector() {
-        flagDetectorAPI = false
-        setUI(pmValuesDetector)
-    }
-
-    private fun updateAPI() {
-        flagDetectorAPI = true
-        setUI(pmValuesAPI)
-    }
+//    private fun updateDetector() {
+//        flagDetectorAPI = false
+//        setUI(pmValuesDetector)
+//    }
+//
+//    private fun updateAPI() {
+//        flagDetectorAPI = true
+//        setUI(pmValuesAPI)
+//    }
 
     private fun automaticDownload() {
         val timer = Timer()
@@ -83,9 +82,13 @@ class MainActivity : AppCompatActivity(),
         timer.schedule(minuteTask, 0, (1000 * 60).toLong())  // 1000*60*1 every 1 minute
     }
 
+    lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+//        binding.partialMainDataPm25.
 
         Timber.plant(Timber.DebugTree())
 
@@ -98,16 +101,16 @@ class MainActivity : AppCompatActivity(),
         swipe_refresh.setOnRefreshListener(this)
         switch_manual.setOnCheckedChangeListener(manualListener)
 
-        val textViewListener = {
-            if (flagDetectorAPI) {
-                updateDetector()
-            } else {
-                updateAPI()
-            }
-        }
+//        val textViewListener = {
+//            if (flagDetectorAPI) {
+//                updateDetector()
+//            } else {
+//                updateAPI()
+//            }
+//        }
 
-        partial_main_data_pm25.setOnClickListener { textViewListener() }
-        partial_main_data_pm10.setOnClickListener { textViewListener() }
+//        partial_main_data_pm25.setOnClickListener { textViewListener() }
+//        partial_main_data_pm10.setOnClickListener { textViewListener() }
     }
 
     fun retrofitDetector() {
@@ -119,32 +122,35 @@ class MainActivity : AppCompatActivity(),
                 try {
                     val response = request.await()
                     if (response.isSuccessful && response.body() != null && response.body()!!.values != null) {
-                        pmValuesDetector[0] = ConversionHelper.pm25ToPercent(response.body()!!.values.pm25)
-                        pmValuesDetector[1] = ConversionHelper.pm10ToPercent(response.body()!!.values.pm10)
-                        updateDetector()
+                        binding.detector = response.body()!!.values
+                        binding.flagDetectorApi = false
+
+//                        pmValuesDetector[0] = ConversionHelper.pm25ToPercent(response.body()!!.values.pm25)
+//                        pmValuesDetector[1] = ConversionHelper.pm10ToPercent(response.body()!!.values.pm10)
+//                        updateDetector()
                     } else {
-                        setDetectorEmptyState()
+//                        setDetectorEmptyState()
                     }
                 } catch (e: HttpException) {
-                    setDetectorEmptyState()
+//                    setDetectorEmptyState()
                 } catch (e: Throwable) {
-                    setDetectorEmptyState()
+//                    setDetectorEmptyState()
                 }
             }
         }
     }
 
-    private fun setDetectorEmptyState() {
-        pmValuesDetector[0] = 0.0
-        pmValuesDetector[1] = 0.0
-        updateDetector()
-    }
-
-    private fun setApiEmptyState() {
-        pmValuesAPI[0] = 0.0
-        pmValuesAPI[1] = 0.0
-        pmDatesAPI = getString(R.string.main_data_info_api_empty)
-    }
+//    private fun setDetectorEmptyState() {
+//        pmValuesDetector[0] = 0.0
+//        pmValuesDetector[1] = 0.0
+////        updateDetector()
+//    }
+//
+//    private fun setApiEmptyState() {
+//        pmValuesAPI[0] = 0.0
+//        pmValuesAPI[1] = 0.0
+//        pmDatesAPI = getString(R.string.main_data_info_api_empty)
+//    }
 
     fun retrofitApi() {
         val service by lazy { ApiService.create() }
@@ -159,7 +165,7 @@ class MainActivity : AppCompatActivity(),
                     if (responsePm25.isSuccessful && responsePm25.body() != null) {
                         for (i in responsePm25.body()!!.values.indices) {
                             if (responsePm25.body()!!.values[i].value != null) {
-                                pmValuesAPI[0] = ConversionHelper.pm25ToPercent(responsePm25.body()!!.values[i].value.toDouble())
+//                                pmValuesAPI[0] = ConversionHelper.pm25ToPercent(responsePm25.body()!!.values[i].value.toDouble())
                                 break
                             } else continue
                         }
@@ -168,16 +174,16 @@ class MainActivity : AppCompatActivity(),
                     if (responsePm10.isSuccessful && responsePm10.body() != null) {
                         for (i in responsePm10.body()!!.values.indices) {
                             if (responsePm10.body()!!.values[i].value != null) {
-                                pmValuesAPI[1] = ConversionHelper.pm10ToPercent(responsePm10.body()!!.values[i].value.toDouble())
-                                pmDatesAPI = responsePm10.body()!!.values[i].date
+//                                pmValuesAPI[1] = ConversionHelper.pm10ToPercent(responsePm10.body()!!.values[i].value.toDouble())
+//                                pmDatesAPI = responsePm10.body()!!.values[i].date
                                 break
                             } else continue
                         }
                     }
                 } catch (e: HttpException) {
-                    setApiEmptyState()
+//                    setApiEmptyState()
                 } catch (e: Throwable) {
-                    setApiEmptyState()
+//                    setApiEmptyState()
                 }
             }
         }
@@ -205,47 +211,47 @@ class MainActivity : AppCompatActivity(),
         moveTaskToBack(true)  // disable going back to the LoginActivity
     }
 
-    private fun setUI(pmValues: List<Double>?) {
-        var layout: View
-
-        // Set TextView colors
-        for (i in 0..1) {
-            // First iteration = update PM2.5, second iteration = update PM10
-            if (i == 0) {
-                layout = partial_main_data_pm25
-                layout.data_type.text = getString(R.string.main_data_info_pm25)
-            } else {
-                layout = partial_main_data_pm10
-                layout.data_type.text = getString(R.string.main_data_info_pm10)
-            }
-
-            // Update colors
-            if (pmValues!![i] == 0.0) {  // connection error
-                layout.setBackgroundResource(R.drawable.data_unavailable)
-            } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
-                layout.setBackgroundResource(R.drawable.data_green)
-            } else if (pmValues[i] > 50 && pmValues[i] <= 100) {
-                layout.setBackgroundResource(R.drawable.data_lime)
-            } else if (pmValues[i] > 100 && pmValues[i] <= 200) {
-                layout.setBackgroundResource(R.drawable.data_yellow)
-            } else {
-                layout.setBackgroundResource(R.drawable.data_red)
-            }
-        }
-
-        // Set TextView PM values
-        partial_main_data_pm25.data_percentage.text = getString(R.string.main_data_percentage, pmValues!![0])
-        partial_main_data_pm10.data_percentage.text = getString(R.string.main_data_percentage, pmValues[1])
-        partial_main_data_pm25.data_ugm3.text = getString(R.string.main_data_ugm3, pmValues[0] / 4)
-        partial_main_data_pm10.data_ugm3.text = getString(R.string.main_data_ugm3, pmValues[1] / 2)
-
-        // Set TextView mode
-        if (!flagDetectorAPI) {  // if detector
-            partial_main_data_pm25.data_source.setText(R.string.main_data_info_indoors)
-            partial_main_data_pm10.data_source.setText(R.string.main_data_info_indoors)
-        } else {  // if APIHelper
-            partial_main_data_pm25.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI)
-            partial_main_data_pm10.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI)
-        }
-    }
+//    private fun setUI(pmValues: List<Double>?) {
+//        var layout: View
+//
+//        // Set TextView colors
+//        for (i in 0..1) {
+//            // First iteration = update PM2.5, second iteration = update PM10
+//            if (i == 0) {
+//                layout = partial_main_data_pm25
+//                layout.data_type.text = getString(R.string.main_data_info_pm25)
+//            } else {
+//                layout = partial_main_data_pm10
+//                layout.data_type.text = getString(R.string.main_data_info_pm10)
+//            }
+//
+//            // Update colors
+//            if (pmValues!![i] == 0.0) {  // connection error
+//                layout.setBackgroundResource(R.drawable.data_unavailable)
+//            } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
+//                layout.setBackgroundResource(R.drawable.data_green)
+//            } else if (pmValues[i] > 50 && pmValues[i] <= 100) {
+//                layout.setBackgroundResource(R.drawable.data_lime)
+//            } else if (pmValues[i] > 100 && pmValues[i] <= 200) {
+//                layout.setBackgroundResource(R.drawable.data_yellow)
+//            } else {
+//                layout.setBackgroundResource(R.drawable.data_red)
+//            }
+//        }
+//
+//        // Set TextView PM values
+//        partial_main_data_pm25.data_percentage.text = getString(R.string.main_data_percentage, pmValues!![0])
+//        partial_main_data_pm10.data_percentage.text = getString(R.string.main_data_percentage, pmValues[1])
+//        partial_main_data_pm25.data_ugm3.text = getString(R.string.main_data_ugm3, pmValues[0] / 4)
+//        partial_main_data_pm10.data_ugm3.text = getString(R.string.main_data_ugm3, pmValues[1] / 2)
+//
+//        // Set TextView mode
+//        if (!flagDetectorAPI) {  // if detector
+//            partial_main_data_pm25.data_source.setText(R.string.main_data_info_indoors)
+//            partial_main_data_pm10.data_source.setText(R.string.main_data_info_indoors)
+//        } else {  // if APIHelper
+//            partial_main_data_pm25.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI)
+//            partial_main_data_pm10.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI)
+//        }
+//    }
 }
