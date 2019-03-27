@@ -4,18 +4,15 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.databinding.ActivityMainBinding
 import com.example.trubul.airpurrr.helper.SwitchHelper
+import com.example.trubul.airpurrr.model.Api
 import com.example.trubul.airpurrr.retrofit.ApiService
 import com.example.trubul.airpurrr.retrofit.DetectorService
-
 import java.util.Timer
 import java.util.TimerTask
-
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,12 +41,6 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var manualListener: SwitchHelper
 
-    private var flagDetectorAPI = false  // false = DetectorMode, true = APIMode
-//    private var pmValuesDetector = mutableListOf(0.0, 0.0)
-//    private var pmValuesAPI = mutableListOf(0.0, 0.0)
-//    private var pmDatesAPI = ""
-
-
     override fun setSwitchManual(state: Boolean) {
         switch_manual.isChecked = state
     }
@@ -58,24 +49,13 @@ class MainActivity : AppCompatActivity(),
         swipe_refresh.post { swipe_refresh.isRefreshing = value }
     }
 
-    // Update UI
-//    private fun updateDetector() {
-//        flagDetectorAPI = false
-//        setUI(pmValuesDetector)
-//    }
-//
-//    private fun updateAPI() {
-//        flagDetectorAPI = true
-//        setUI(pmValuesAPI)
-//    }
-
     private fun automaticDownload() {
         val timer = Timer()
         val minuteTask = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
-                    retrofitDetector()
                     retrofitApi()
+                    retrofitDetector()
                 }
             }
         }
@@ -86,10 +66,9 @@ class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        binding.partialMainDataPm25.
-
+        binding.activity = this
+        binding.api = Api.Result(mutableListOf())
         Timber.plant(Timber.DebugTree())
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -100,17 +79,20 @@ class MainActivity : AppCompatActivity(),
         automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
         swipe_refresh.setOnRefreshListener(this)
         switch_manual.setOnCheckedChangeListener(manualListener)
+    }
 
-//        val textViewListener = {
-//            if (flagDetectorAPI) {
-//                updateDetector()
-//            } else {
-//                updateAPI()
-//            }
-//        }
-
-//        partial_main_data_pm25.setOnClickListener { textViewListener() }
-//        partial_main_data_pm10.setOnClickListener { textViewListener() }
+    fun updateData(flagDetectorApi: Boolean) {
+        if (binding.detector != null && binding.api!!.values.size != 0) {
+            if (flagDetectorApi) {
+                binding.flagDetectorApi = false
+                binding.partialMainDataPm25.value = binding.detector?.pm25
+                binding.partialMainDataPm10.value = binding.detector?.pm10
+            } else {
+                binding.flagDetectorApi = true
+                binding.partialMainDataPm25.value = binding.api?.values?.get(0)?.value?.toDouble()
+                binding.partialMainDataPm10.value = binding.api?.values?.get(1)?.value?.toDouble()
+            }
+        }
     }
 
     fun retrofitDetector() {
@@ -122,35 +104,19 @@ class MainActivity : AppCompatActivity(),
                 try {
                     val response = request.await()
                     if (response.isSuccessful && response.body() != null && response.body()!!.values != null) {
-                        binding.detector = response.body()!!.values
                         binding.flagDetectorApi = false
-
-//                        pmValuesDetector[0] = ConversionHelper.pm25ToPercent(response.body()!!.values.pm25)
-//                        pmValuesDetector[1] = ConversionHelper.pm10ToPercent(response.body()!!.values.pm10)
-//                        updateDetector()
+                        binding.detector = response.body()!!.values
                     } else {
-//                        setDetectorEmptyState()
+                        Timber.d("Detector error: ${response.code()}")
                     }
                 } catch (e: HttpException) {
-//                    setDetectorEmptyState()
+                    Timber.d("Detector error: $e")
                 } catch (e: Throwable) {
-//                    setDetectorEmptyState()
+                    Timber.d("Detector error: $e")
                 }
             }
         }
     }
-
-//    private fun setDetectorEmptyState() {
-//        pmValuesDetector[0] = 0.0
-//        pmValuesDetector[1] = 0.0
-////        updateDetector()
-//    }
-//
-//    private fun setApiEmptyState() {
-//        pmValuesAPI[0] = 0.0
-//        pmValuesAPI[1] = 0.0
-//        pmDatesAPI = getString(R.string.main_data_info_api_empty)
-//    }
 
     fun retrofitApi() {
         val service by lazy { ApiService.create() }
@@ -165,7 +131,7 @@ class MainActivity : AppCompatActivity(),
                     if (responsePm25.isSuccessful && responsePm25.body() != null) {
                         for (i in responsePm25.body()!!.values.indices) {
                             if (responsePm25.body()!!.values[i].value != null) {
-//                                pmValuesAPI[0] = ConversionHelper.pm25ToPercent(responsePm25.body()!!.values[i].value.toDouble())
+                                binding.api?.values?.add(0, Api.Values(responsePm25.body()!!.values[i].value, responsePm25.body()!!.values[i].date))
                                 break
                             } else continue
                         }
@@ -174,30 +140,17 @@ class MainActivity : AppCompatActivity(),
                     if (responsePm10.isSuccessful && responsePm10.body() != null) {
                         for (i in responsePm10.body()!!.values.indices) {
                             if (responsePm10.body()!!.values[i].value != null) {
-//                                pmValuesAPI[1] = ConversionHelper.pm10ToPercent(responsePm10.body()!!.values[i].value.toDouble())
-//                                pmDatesAPI = responsePm10.body()!!.values[i].date
+                                binding.api?.values?.add(1, Api.Values(responsePm10.body()!!.values[i].value, responsePm10.body()!!.values[i].date))
                                 break
                             } else continue
                         }
                     }
                 } catch (e: HttpException) {
-//                    setApiEmptyState()
+                    Timber.d("API error: $e")
                 } catch (e: Throwable) {
-//                    setApiEmptyState()
+                    Timber.d("API error: $e")
                 }
             }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.menu_threshold -> true
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -210,48 +163,4 @@ class MainActivity : AppCompatActivity(),
     override fun onBackPressed() {
         moveTaskToBack(true)  // disable going back to the LoginActivity
     }
-
-//    private fun setUI(pmValues: List<Double>?) {
-//        var layout: View
-//
-//        // Set TextView colors
-//        for (i in 0..1) {
-//            // First iteration = update PM2.5, second iteration = update PM10
-//            if (i == 0) {
-//                layout = partial_main_data_pm25
-//                layout.data_type.text = getString(R.string.main_data_info_pm25)
-//            } else {
-//                layout = partial_main_data_pm10
-//                layout.data_type.text = getString(R.string.main_data_info_pm10)
-//            }
-//
-//            // Update colors
-//            if (pmValues!![i] == 0.0) {  // connection error
-//                layout.setBackgroundResource(R.drawable.data_unavailable)
-//            } else if (pmValues[i] > 0 && pmValues[i] <= 50) {
-//                layout.setBackgroundResource(R.drawable.data_green)
-//            } else if (pmValues[i] > 50 && pmValues[i] <= 100) {
-//                layout.setBackgroundResource(R.drawable.data_lime)
-//            } else if (pmValues[i] > 100 && pmValues[i] <= 200) {
-//                layout.setBackgroundResource(R.drawable.data_yellow)
-//            } else {
-//                layout.setBackgroundResource(R.drawable.data_red)
-//            }
-//        }
-//
-//        // Set TextView PM values
-//        partial_main_data_pm25.data_percentage.text = getString(R.string.main_data_percentage, pmValues!![0])
-//        partial_main_data_pm10.data_percentage.text = getString(R.string.main_data_percentage, pmValues[1])
-//        partial_main_data_pm25.data_ugm3.text = getString(R.string.main_data_ugm3, pmValues[0] / 4)
-//        partial_main_data_pm10.data_ugm3.text = getString(R.string.main_data_ugm3, pmValues[1] / 2)
-//
-//        // Set TextView mode
-//        if (!flagDetectorAPI) {  // if detector
-//            partial_main_data_pm25.data_source.setText(R.string.main_data_info_indoors)
-//            partial_main_data_pm10.data_source.setText(R.string.main_data_info_indoors)
-//        } else {  // if APIHelper
-//            partial_main_data_pm25.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI)
-//            partial_main_data_pm10.data_source.text = getString(R.string.main_data_info_api, pmDatesAPI)
-//        }
-//    }
 }
