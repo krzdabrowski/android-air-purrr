@@ -15,20 +15,11 @@
         <variable
             name="value"
             type="Double" />
-
-        <variable
-            name="date"
-            type="String" />
-
-        <variable
-            name="activity"
-            type="com.example.trubul.airpurrr.activity.MainActivity"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_main_data"
         style="@style/Main.Data.Layout"
-        android:onClick="@{() -> activity.updateData(source)}"
         bind:dataType="@{type}"
         bind:dataValue="@{value}">
 

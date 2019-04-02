@@ -1,4 +1,4 @@
-package com.example.trubul.airpurrr.activity
+package com.example.trubul.airpurrr.view
 
 import android.app.ProgressDialog
 

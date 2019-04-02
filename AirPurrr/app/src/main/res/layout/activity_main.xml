@@ -5,20 +5,16 @@
 
     <data>
         <variable
-            name="detector"
-            type="com.example.trubul.airpurrr.model.Detector.Values" />
+            name="detectorVm"
+            type="com.example.trubul.airpurrr.viewmodel.DetectorViewModel"/>
 
         <variable
-            name="api"
-            type="com.example.trubul.airpurrr.model.Api.Result" />
+            name="apiVm"
+            type="com.example.trubul.airpurrr.viewmodel.ApiViewModel"/>
 
         <variable
             name="flagDetectorApi"
             type="Boolean"/>
-
-        <variable
-            name="activity"
-            type="com.example.trubul.airpurrr.activity.MainActivity"/>
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -51,8 +47,7 @@
                         layout="@layout/partial_main_data"
                         bind:type="@{@string/main_data_info_pm25}"
                         bind:source="@{flagDetectorApi}"
-                        bind:value="@{detector.pm25}"
-                        bind:activity="@{activity}" />
+                        bind:value="@{detectorVm.detectorResult.value.values.pm25}" />
 
                     <include
                         android:id="@+id/partial_main_data_pm10"
@@ -60,8 +55,7 @@
                         layout="@layout/partial_main_data"
                         bind:type="@{@string/main_data_info_pm10}"
                         bind:source="@{flagDetectorApi}"
-                        bind:value="@{detector.pm10}"
-                        bind:activity="@{activity}" />
+                        bind:value="@{detectorVm.detectorResult.value.values.pm10}" />
 
                 </LinearLayout>
 
