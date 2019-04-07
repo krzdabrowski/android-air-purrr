@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -13,15 +13,19 @@
             type="Boolean" />
 
         <variable
-            name="value"
-            type="Double" />
+            name="viewModel"
+            type="com.example.trubul.airpurrr.viewmodel.DetectorViewModel" />
+
+        <variable
+            name="data"
+            type="com.example.trubul.airpurrr.model.Detector.Result" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_main_data"
         style="@style/Main.Data.Layout"
-        bind:dataType="@{type}"
-        bind:dataValue="@{value}">
+        app:type="@{type}"
+        app:dataColor="@{data}">
 
         <TextView
             android:id="@+id/data_type"
@@ -40,14 +44,16 @@
         <TextView
             android:id="@+id/data_percentage"
             style="@style/Main.Data.Percentage"
-            android:text="@{type == @string/main_data_info_pm25 ? @string/main_data_percentage(value * 4) : @string/main_data_percentage(value * 2), default=`0.0%` }"
+            app:type="@{type}"
+            app:dataPercentage="@{data}"
             tools:ignore="MissingConstraints"
             tools:text="40.0%" />
 
         <TextView
             android:id="@+id/data_ugm3"
             style="@style/Main.Data.Ugm3"
-            android:text="@{@string/main_data_ugm3(value), default=`0.0`}"
+            app:type="@{type}"
+            app:dataUgm3="@{data}"
             tools:ignore="MissingConstraints"
             tools:text="(10.0)" />
 
