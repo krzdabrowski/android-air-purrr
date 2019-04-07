@@ -13,4 +13,8 @@ class DetectorViewModel(private val repository: DetectorRepository) : ViewModel(
         detectorLiveData = repository.fetchData()
         return detectorLiveData
     }
+
+    fun controlFan(turnOn: Boolean, login: String, password: String) {
+        repository.controlFan(turnOn, login, password)
+    }
 }

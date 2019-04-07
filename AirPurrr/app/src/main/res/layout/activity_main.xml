@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="onSwitchChange"
+            type="android.widget.CompoundButton.OnCheckedChangeListener"/>
+
         <variable
             name="detectorData"
             type="com.example.trubul.airpurrr.model.DetectorModel"/>
@@ -36,6 +39,7 @@
             <Switch
                 android:id="@+id/switch_manual"
                 style="@style/Main.Switch.Button"
+                android:onCheckedChanged="@{onSwitchChange}"
                 app:layout_constraintBaseline_toBaselineOf="@id/text_manual_control"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/text_manual_control" />

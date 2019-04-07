@@ -2,7 +2,7 @@ package com.example.trubul.airpurrr.view
 
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.widget.Toast
+import android.widget.CompoundButton
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -12,9 +12,10 @@ import com.example.trubul.airpurrr.databinding.ActivityMainBinding
 import com.example.trubul.airpurrr.di.networkModule
 import com.example.trubul.airpurrr.di.repositoryModule
 import com.example.trubul.airpurrr.di.viewModelModule
-import com.example.trubul.airpurrr.helper.SwitchHelper
+import com.example.trubul.airpurrr.model.DetectorModel
 import com.example.trubul.airpurrr.viewmodel.ApiViewModel
 import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
+import com.google.android.material.snackbar.Snackbar
 import java.util.Timer
 import java.util.TimerTask
 import kotlinx.android.synthetic.main.activity_main.*
@@ -39,21 +40,13 @@ import timber.log.Timber
 // TODO: (at the end) implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
 // TODO: (at the end) check if all ids are needed and are correct with good practices
 
-class MainActivity : AppCompatActivity(),
-        SwitchHelper.SwitchCallback, SwipeRefreshLayout.OnRefreshListener {
-
+class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
-//    private lateinit var manualListener: SwitchHelper
 
-    override fun setSwitchManual(state: Boolean) {
-        switch_manual.isChecked = state
-    }
-
-    private fun setSwipeRefreshing(value: Boolean) {
-        swipe_refresh.post { swipe_refresh.isRefreshing = value }
-    }
+    private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
+    private fun getApiData() = apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
 
     private fun automaticDownload() {
         val timer = Timer()
@@ -68,6 +61,9 @@ class MainActivity : AppCompatActivity(),
         timer.schedule(minuteTask, 0, (1000 * 60).toLong())  // 1000*60*1 every 1 minute
     }
 
+    private lateinit var hashedEmail: String
+    private lateinit var hashedPassword: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -81,34 +77,62 @@ class MainActivity : AppCompatActivity(),
         binding.lifecycleOwner = this
         binding.flagDetectorApi = false
 
-        partial_main_data_pm25.setOnClickListener { binding.flagDetectorApi = !binding.flagDetectorApi!! }
-        partial_main_data_pm10.setOnClickListener { binding.flagDetectorApi = !binding.flagDetectorApi!! }
+        partial_main_data_pm25.setOnClickListener { onDataClick() }
+        partial_main_data_pm10.setOnClickListener { onDataClick() }
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), null)
-        val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), null)
+        hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
+        hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")
 
-//        manualListener = SwitchHelper(swipe_refresh, hashedEmail, hashedPassword, this)
+        binding.setOnSwitchChange { buttonView, isChecked -> onSwitchClick(buttonView, isChecked) }
+
         automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
         swipe_refresh.setOnRefreshListener(this)
-//        switch_manual.setOnCheckedChangeListener(manualListener)
     }
 
-    private fun getDetectorData() {
-        detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
+    private fun onDataClick() {
+        binding.flagDetectorApi = !binding.flagDetectorApi!!
     }
 
-    private fun getApiData() {
-        apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
+    private fun onSwitchClick(switch: CompoundButton, isChecked: Boolean) {
+        if (oldSwitchState != isChecked) {
+            detectorViewModel.getLiveData().observe(this, Observer { value -> handleSwitch(value, switch, isChecked) })
+        }
+    }
+
+    private var oldSwitchState = false
+
+    private fun handleSwitch(value: DetectorModel, switch: CompoundButton, isChecked: Boolean) {
+        when (value.workstate) {
+            "WorkStates.Sleeping" -> {
+                Snackbar.make(swipe_refresh, R.string.main_message_switch_processing, Snackbar.LENGTH_LONG).show()
+                oldSwitchState = isChecked
+                if (isChecked) {
+                    detectorViewModel.controlFan(true, hashedEmail, hashedPassword)
+                } else {
+                    detectorViewModel.controlFan(false, hashedEmail, hashedPassword)
+                }
+            }
+            "WorkStates.Measuring" -> {
+                Snackbar.make(swipe_refresh, R.string.main_message_error_measuring, Snackbar.LENGTH_LONG).show()
+                oldSwitchState = !isChecked
+                switch.isChecked = !isChecked
+            }
+            else -> {
+                Snackbar.make(swipe_refresh, R.string.main_message_error, Snackbar.LENGTH_LONG).show()
+                oldSwitchState = !isChecked
+                switch.isChecked = !isChecked
+            }
+        }
     }
 
     override fun onRefresh() {
         getApiData()
         getDetectorData()
-        setSwipeRefreshing(false)
+        swipe_refresh.isRefreshing = false
     }
 
     override fun onBackPressed() {
-        moveTaskToBack(true)  // disable going back to the LoginActivity
+        moveTaskToBack(true)
     }
 }
