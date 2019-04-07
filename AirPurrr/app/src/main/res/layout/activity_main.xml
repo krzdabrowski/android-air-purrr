@@ -6,11 +6,11 @@
     <data>
         <variable
             name="detectorResult"
-            type="com.example.trubul.airpurrr.model.Detector"/>
+            type="com.example.trubul.airpurrr.model.DetectorModel"/>
 
         <variable
             name="apiResult"
-            type="com.example.trubul.airpurrr.model.Api"/>
+            type="com.example.trubul.airpurrr.model.ApiModel"/>
 
         <variable
             name="flagDetectorApi"

@@ -1,3 +1,3 @@
 package com.example.trubul.airpurrr.model
 
-open class BaseModel
+abstract class BaseModel

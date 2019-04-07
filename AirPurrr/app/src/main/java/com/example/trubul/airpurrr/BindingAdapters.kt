@@ -4,56 +4,61 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.example.trubul.airpurrr.helper.ConversionHelper
-import com.example.trubul.airpurrr.model.Api
+import com.example.trubul.airpurrr.model.ApiModel
 import com.example.trubul.airpurrr.model.BaseModel
-import com.example.trubul.airpurrr.model.Detector
+import com.example.trubul.airpurrr.model.DetectorModel
+
+@BindingAdapter(value = ["app:source", "app:date"])
+fun TextView.bindDate(source: Boolean, data: BaseModel?) {
+    if (source) {
+        if (data == null) {
+            text = resources.getString(R.string.main_data_info_api_empty)
+        } else if (data is ApiModel){
+            text = resources.getString(R.string.main_data_info_api, data.values[0].date)
+        }
+    } else {
+        text = resources.getString(R.string.main_data_info_indoors)
+    }
+}
 
 @BindingAdapter(value = ["app:type", "app:dataPercentage"])
 fun TextView.bindDataPercentage(type: String, data: BaseModel?) {
-    if (data is Detector) {
-        if (data?.values != null) {
+    text = resources.getString(R.string.main_data_percentage, 0.0)
+
+    if (data is DetectorModel) {
+        if (data.values != null) {
             if (type == "PM2.5") {
                 text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.values.pm25))
             } else if (type == "PM10") {
                 text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.values.pm10))
             }
-        } else {
-            text = resources.getString(R.string.main_data_percentage, 0.0)
         }
-    } else if (data is Api) {
-        if (data?.values != null) {
-            if (type == "PM2.5") {
-                text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.values[0].value.toDouble()))
-            } else if (type == "PM10") {
-                text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.values[1].value.toDouble()))
-            }
-        } else {
-            text = resources.getString(R.string.main_data_percentage, 0.0)
+    } else if (data is ApiModel) {
+        if (type == "PM2.5") {
+            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.values[0].value.toDouble()))
+        } else if (type == "PM10") {
+            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.values[1].value.toDouble()))
         }
     }
 }
 
 @BindingAdapter(value = ["app:type", "app:dataUgm3"])
 fun TextView.bindDataUgm3(type: String, data: BaseModel?) {
-    if (data is Detector) {
-        if (data?.values != null) {
+    text = resources.getString(R.string.main_data_ugm3, 0.0)
+
+    if (data is DetectorModel) {
+        if (data.values != null) {
             if (type == "PM2.5") {
                 text = resources.getString(R.string.main_data_ugm3, data.values.pm25)
             } else if (type == "PM10") {
                 text = resources.getString(R.string.main_data_ugm3, data.values.pm10)
             }
-        } else {
-            text = resources.getString(R.string.main_data_ugm3, 0.0)
         }
-    } else if (data is Api) {
-        if (data?.values != null) {
-            if (type == "PM2.5") {
-                text = resources.getString(R.string.main_data_ugm3, data.values[0].value.toDouble())
-            } else if (type == "PM10") {
-                text = resources.getString(R.string.main_data_ugm3, data.values[1].value.toDouble())
-            }
-        } else {
-            text = resources.getString(R.string.main_data_ugm3, 0.0)
+    } else if (data is ApiModel) {
+        if (type == "PM2.5") {
+            text = resources.getString(R.string.main_data_ugm3, data.values[0].value.toDouble())
+        } else if (type == "PM10") {
+            text = resources.getString(R.string.main_data_ugm3, data.values[1].value.toDouble())
         }
     }
 }
@@ -62,15 +67,15 @@ fun TextView.bindDataUgm3(type: String, data: BaseModel?) {
 fun ConstraintLayout.bindBackgroundColor(type: String, data: BaseModel?) {
     var valuePerc = 0.0
 
-    if (data is Detector) {
-        val values = data?.values
+    if (data is DetectorModel) {
+        val values = data.values
         valuePerc = if (type == "PM2.5") {
             ConversionHelper.pm25ToPercent(values?.pm25)
         } else {
             ConversionHelper.pm10ToPercent(values?.pm10)
         }
-    } else if (data is Api) {
-        val values = data?.values
+    } else if (data is ApiModel) {
+        val values = data.values
         valuePerc = if (type == "PM2.5") {
             ConversionHelper.pm25ToPercent(values[0].value.toDouble())
         } else {

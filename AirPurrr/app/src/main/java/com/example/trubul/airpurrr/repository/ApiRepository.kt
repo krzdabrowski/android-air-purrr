@@ -2,7 +2,7 @@ package com.example.trubul.airpurrr.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.trubul.airpurrr.model.Api
+import com.example.trubul.airpurrr.model.ApiModel
 import com.example.trubul.airpurrr.retrofit.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,9 +13,9 @@ import timber.log.Timber
 
 class ApiRepository(private val service: ApiService) {
 
-    fun fetchData(): LiveData<Api> {
-        val result = MutableLiveData<Api>()
-        val values = mutableListOf<Api.Values>()
+    fun fetchData(): LiveData<ApiModel> {
+        val result = MutableLiveData<ApiModel>()
+        val values = mutableListOf<ApiModel.Values>()
 
         CoroutineScope(Dispatchers.IO).launch {
             val requestPm25 = service.getApiPm25DataAsync()
@@ -27,8 +27,8 @@ class ApiRepository(private val service: ApiService) {
                     if (responsePm25.isSuccessful && responsePm25.body() != null) {
                         for (i in responsePm25.body()!!.values.indices) {
                             if (responsePm25.body()!!.values[i].value != null) {
-                                values.add(0, Api.Values(responsePm25.body()!!.values[i].value, responsePm25.body()!!.values[i].date))
-                                result.value = Api(values)
+                                values.add(0, ApiModel.Values(responsePm25.body()!!.values[i].value, responsePm25.body()!!.values[i].date))
+                                result.value = ApiModel(values)
                                 break
                             } else continue
                         }
@@ -37,8 +37,8 @@ class ApiRepository(private val service: ApiService) {
                     if (responsePm10.isSuccessful && responsePm10.body() != null) {
                         for (i in responsePm10.body()!!.values.indices) {
                             if (responsePm10.body()!!.values[i].value != null) {
-                                values.add(1, Api.Values(responsePm10.body()!!.values[i].value, responsePm10.body()!!.values[i].date))
-                                result.value = Api(values)
+                                values.add(1, ApiModel.Values(responsePm10.body()!!.values[i].value, responsePm10.body()!!.values[i].date))
+                                result.value = ApiModel(values)
                                 break
                             } else continue
                         }

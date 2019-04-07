@@ -1,6 +1,6 @@
 package com.example.trubul.airpurrr.retrofit
 
-import com.example.trubul.airpurrr.model.Detector
+import com.example.trubul.airpurrr.model.DetectorModel
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 interface DetectorService {
 
     @GET("/data.json")
-    fun getDetectorDataAsync(): Deferred<Response<Detector>>
+    fun getDetectorDataAsync(): Deferred<Response<DetectorModel>>
 
     @FormUrlEncoded
     @POST("/login")
