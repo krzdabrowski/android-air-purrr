@@ -13,12 +13,8 @@
             type="Boolean" />
 
         <variable
-            name="viewModel"
-            type="com.example.trubul.airpurrr.viewmodel.DetectorViewModel" />
-
-        <variable
             name="data"
-            type="com.example.trubul.airpurrr.model.Detector.Result" />
+            type="com.example.trubul.airpurrr.model.BaseModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -11,10 +11,10 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("/pjp-api/rest/data/getData/3731")
-    fun getApiPm25DataAsync(): Deferred<Response<Api.Result>>
+    fun getApiPm25DataAsync(): Deferred<Response<Api>>
 
     @GET("/pjp-api/rest/data/getData/3730")
-    fun getApiPm10DataAsync(): Deferred<Response<Api.Result>>
+    fun getApiPm10DataAsync(): Deferred<Response<Api>>
 
     companion object {
         private const val BASE_URL = "http://api.gios.gov.pl"

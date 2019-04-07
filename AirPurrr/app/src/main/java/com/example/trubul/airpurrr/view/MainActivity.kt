@@ -2,6 +2,7 @@ package com.example.trubul.airpurrr.view
 
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.widget.Toast
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -17,6 +18,7 @@ import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
 import java.util.Timer
 import java.util.TimerTask
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.partial_main_data.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity(),
         val minuteTask = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
-//                    downloadApi()
+                    downloadApi()
                     downloadDetector()
                 }
             }
@@ -78,9 +80,10 @@ class MainActivity : AppCompatActivity(),
         }
 
         binding.lifecycleOwner = this
-        binding.detectorVm = detectorViewModel
-        binding.apiVm = apiViewModel
         binding.flagDetectorApi = false
+
+        partial_main_data_pm25.setOnClickListener { binding.flagDetectorApi = !binding.flagDetectorApi!! }
+        partial_main_data_pm10.setOnClickListener { binding.flagDetectorApi = !binding.flagDetectorApi!! }
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), null)
@@ -96,13 +99,12 @@ class MainActivity : AppCompatActivity(),
         detectorViewModel.getData().observe(this, Observer { value -> binding.detectorResult = value })
     }
 
-//    private fun downloadApi() {
-//        val liveData = apiViewModel.getData()
-//        liveData.observe(this, Observer { Toast.makeText(this@MainActivity, "API download finished", Toast.LENGTH_SHORT).show() })
-//    }
+    private fun downloadApi() {
+        apiViewModel.getData().observe(this, Observer { value -> binding.apiResult = value })
+    }
 
     override fun onRefresh() {
-//        downloadApi()
+        downloadApi()
         downloadDetector()
         setSwipeRefreshing(false)
     }

@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 interface DetectorService {
 
     @GET("/data.json")
-    fun getDetectorDataAsync(): Deferred<Response<Detector.Result>>
+    fun getDetectorDataAsync(): Deferred<Response<Detector>>
 
     @FormUrlEncoded
     @POST("/login")

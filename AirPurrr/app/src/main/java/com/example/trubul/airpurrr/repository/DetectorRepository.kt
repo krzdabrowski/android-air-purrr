@@ -13,8 +13,8 @@ import timber.log.Timber
 
 class DetectorRepository(private val service: DetectorService) {
 
-    fun fetchData(): LiveData<Detector.Result> {
-        val result = MutableLiveData<Detector.Result>()
+    fun fetchData(): LiveData<Detector> {
+        val result = MutableLiveData<Detector>()
 
         CoroutineScope(Dispatchers.IO).launch {
             val request = service.getDetectorDataAsync()

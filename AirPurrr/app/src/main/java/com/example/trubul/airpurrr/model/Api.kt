@@ -1,6 +1,5 @@
 package com.example.trubul.airpurrr.model
 
-object Api {
-    data class Result(val values: MutableList<Values>)
+data class Api(val values: MutableList<Values>) : BaseModel() {
     data class Values(var value: String, var date: String)
 }

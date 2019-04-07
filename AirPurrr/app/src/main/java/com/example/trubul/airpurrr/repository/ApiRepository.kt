@@ -13,8 +13,9 @@ import timber.log.Timber
 
 class ApiRepository(private val service: ApiService) {
 
-    fun fetchData(): LiveData<Api.Result> {
-        val result = MutableLiveData<Api.Result>()
+    fun fetchData(): LiveData<Api> {
+        val result = MutableLiveData<Api>()
+        val values = mutableListOf<Api.Values>()
 
         CoroutineScope(Dispatchers.IO).launch {
             val requestPm25 = service.getApiPm25DataAsync()
@@ -26,7 +27,8 @@ class ApiRepository(private val service: ApiService) {
                     if (responsePm25.isSuccessful && responsePm25.body() != null) {
                         for (i in responsePm25.body()!!.values.indices) {
                             if (responsePm25.body()!!.values[i].value != null) {
-                                result.value?.values?.add(0, Api.Values(responsePm25.body()!!.values[i].value, responsePm25.body()!!.values[i].date))
+                                values.add(0, Api.Values(responsePm25.body()!!.values[i].value, responsePm25.body()!!.values[i].date))
+                                result.value = Api(values)
                                 break
                             } else continue
                         }
@@ -35,7 +37,8 @@ class ApiRepository(private val service: ApiService) {
                     if (responsePm10.isSuccessful && responsePm10.body() != null) {
                         for (i in responsePm10.body()!!.values.indices) {
                             if (responsePm10.body()!!.values[i].value != null) {
-                                result.value?.values?.add(1, Api.Values(responsePm10.body()!!.values[i].value, responsePm10.body()!!.values[i].date))
+                                values.add(1, Api.Values(responsePm10.body()!!.values[i].value, responsePm10.body()!!.values[i].date))
+                                result.value = Api(values)
                                 break
                             } else continue
                         }

@@ -7,9 +7,9 @@ import com.example.trubul.airpurrr.repository.ApiRepository
 
 class ApiViewModel(private val repository: ApiRepository) : ViewModel() {
 
-    lateinit var apiResult: LiveData<Api.Result>
+    lateinit var apiResult: LiveData<Api>
 
-    fun getData(): LiveData<Api.Result> {
+    fun getData(): LiveData<Api> {
         apiResult = repository.fetchData()
         return apiResult
     }
