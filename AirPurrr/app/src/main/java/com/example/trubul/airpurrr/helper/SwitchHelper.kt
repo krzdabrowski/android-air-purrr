@@ -1,49 +1,37 @@
 package com.example.trubul.airpurrr.helper
 
-import android.util.Base64
-import android.view.View
 import android.widget.CompoundButton
-import com.example.trubul.airpurrr.retrofit.DetectorDataService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.HttpException
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.trubul.airpurrr.R
+import com.example.trubul.airpurrr.model.DetectorModel
+import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
+import com.google.android.material.snackbar.Snackbar
 
-internal class SwitchHelper(private val mParentLayout: View, private val hashedEmail: String,
-                            private val hashedPassword: String, private val mCallback: SwitchCallback) : CompoundButton.OnCheckedChangeListener {
+internal class SwitchHelper(private val detectorViewModel: DetectorViewModel) {
 
-    private var stateManual = false
+    internal var oldSwitchState = false
 
-    internal interface SwitchCallback {
-        fun setSwitchManual(state: Boolean)
+    internal fun handleFanStates(value: DetectorModel, switchView: CompoundButton, rootView: SwipeRefreshLayout, login: String, password: String, isChecked: Boolean) {
+        when (value.workstate) {
+            "WorkStates.Sleeping" -> {
+                Snackbar.make(rootView, R.string.main_message_switch_processing, Snackbar.LENGTH_LONG).show()
+                oldSwitchState = isChecked
+                if (isChecked) {
+                    detectorViewModel.controlFan(true, login, password)
+                } else {
+                    detectorViewModel.controlFan(false, login, password)
+                }
+            }
+            "WorkStates.Measuring" -> {
+                Snackbar.make(rootView, R.string.main_message_error_measuring, Snackbar.LENGTH_LONG).show()
+                oldSwitchState = !isChecked
+                switchView.isChecked = !isChecked
+            }
+            else -> {
+                Snackbar.make(rootView, R.string.main_message_error, Snackbar.LENGTH_LONG).show()
+                oldSwitchState = !isChecked
+                switchView.isChecked = !isChecked
+            }
+        }
     }
-
-    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
-//        retrofitSwitch()
-        stateManual = isChecked
-    }
-
-
-//    private fun controlFan(turnOn: Boolean) {
-//        val service by lazy { DetectorDataService.createHttps() }
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val request = if (turnOn) {
-//                service.controlFanAsync("Basic " + Base64.encodeToString("$hashedEmail:$hashedPassword".toByteArray(), Base64.NO_WRAP), "MANUAL=1")
-//            } else {
-//                service.controlFanAsync("Basic " + Base64.encodeToString("$hashedEmail:$hashedPassword".toByteArray(), Base64.NO_WRAP), "MANUAL=0")
-//            }
-//            withContext(Dispatchers.Main) {
-//                try {
-//                    request.await()
-//                } catch (e: HttpException) {
-//                    e.printStackTrace()
-//                } catch (e: Throwable) {
-//                    e.printStackTrace()
-//                }
-//            }
-//        }
-//    }
-
 }

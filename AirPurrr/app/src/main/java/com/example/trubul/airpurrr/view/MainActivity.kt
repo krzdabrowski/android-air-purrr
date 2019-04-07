@@ -9,16 +9,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.databinding.ActivityMainBinding
+import com.example.trubul.airpurrr.di.helperModule
 import com.example.trubul.airpurrr.di.networkModule
 import com.example.trubul.airpurrr.di.repositoryModule
 import com.example.trubul.airpurrr.di.viewModelModule
-import com.example.trubul.airpurrr.model.DetectorModel
+import com.example.trubul.airpurrr.helper.SwitchHelper
 import com.example.trubul.airpurrr.viewmodel.ApiViewModel
 import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
-import com.google.android.material.snackbar.Snackbar
 import java.util.Timer
 import java.util.TimerTask
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,6 +44,7 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val apiViewModel: ApiViewModel by viewModel()
+    private val switchHelper: SwitchHelper by inject()
     private lateinit var binding: ActivityMainBinding
 
     private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
@@ -61,9 +63,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         timer.schedule(minuteTask, 0, (1000 * 60).toLong())  // 1000*60*1 every 1 minute
     }
 
-    private lateinit var hashedEmail: String
-    private lateinit var hashedPassword: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -71,7 +70,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         startKoin {
             androidLogger()
             androidContext(this@MainActivity)
-            modules(listOf(networkModule, repositoryModule, viewModelModule))
+            modules(listOf(networkModule, helperModule, repositoryModule, viewModelModule))
         }
 
         binding.lifecycleOwner = this
@@ -81,10 +80,10 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         partial_main_data_pm10.setOnClickListener { onDataClick() }
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
-        hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")
+        val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
+        val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")
 
-        binding.setOnSwitchChange { buttonView, isChecked -> onSwitchClick(buttonView, isChecked) }
+        binding.setOnSwitchChange { switchView, isChecked -> onSwitchClick(switchView, isChecked, hashedEmail!!, hashedPassword!!) }
 
         automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
         swipe_refresh.setOnRefreshListener(this)
@@ -94,35 +93,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         binding.flagDetectorApi = !binding.flagDetectorApi!!
     }
 
-    private fun onSwitchClick(switch: CompoundButton, isChecked: Boolean) {
-        if (oldSwitchState != isChecked) {
-            detectorViewModel.getLiveData().observe(this, Observer { value -> handleSwitch(value, switch, isChecked) })
-        }
-    }
-
-    private var oldSwitchState = false
-
-    private fun handleSwitch(value: DetectorModel, switch: CompoundButton, isChecked: Boolean) {
-        when (value.workstate) {
-            "WorkStates.Sleeping" -> {
-                Snackbar.make(swipe_refresh, R.string.main_message_switch_processing, Snackbar.LENGTH_LONG).show()
-                oldSwitchState = isChecked
-                if (isChecked) {
-                    detectorViewModel.controlFan(true, hashedEmail, hashedPassword)
-                } else {
-                    detectorViewModel.controlFan(false, hashedEmail, hashedPassword)
-                }
-            }
-            "WorkStates.Measuring" -> {
-                Snackbar.make(swipe_refresh, R.string.main_message_error_measuring, Snackbar.LENGTH_LONG).show()
-                oldSwitchState = !isChecked
-                switch.isChecked = !isChecked
-            }
-            else -> {
-                Snackbar.make(swipe_refresh, R.string.main_message_error, Snackbar.LENGTH_LONG).show()
-                oldSwitchState = !isChecked
-                switch.isChecked = !isChecked
-            }
+    private fun onSwitchClick(switchView: CompoundButton, isChecked: Boolean, email: String, password: String) {
+        if (switchHelper.oldSwitchState != isChecked) {
+            detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
+                switchHelper.handleFanStates(workstateValue, switchView, swipe_refresh, email, password, isChecked)
+            })
         }
     }
 

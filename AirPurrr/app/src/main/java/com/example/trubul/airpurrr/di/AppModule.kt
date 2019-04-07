@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr.di
 
+import com.example.trubul.airpurrr.helper.SwitchHelper
 import com.example.trubul.airpurrr.repository.ApiRepository
 import com.example.trubul.airpurrr.repository.DetectorRepository
 import com.example.trubul.airpurrr.retrofit.ApiService
@@ -10,12 +11,14 @@ import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-
-
 val networkModule = module {
     single { DetectorDataService.create() }
     single { DetectorControlService.create() }
     single { ApiService.create() }
+}
+
+val helperModule = module {
+    single { SwitchHelper(get()) }
 }
 
 val repositoryModule = module {
