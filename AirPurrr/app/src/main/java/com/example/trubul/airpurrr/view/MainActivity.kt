@@ -18,7 +18,6 @@ import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
 import java.util.Timer
 import java.util.TimerTask
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.partial_main_data.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -61,8 +60,8 @@ class MainActivity : AppCompatActivity(),
         val minuteTask = object : TimerTask() {
             override fun run() {
                 runOnUiThread {
-                    downloadApi()
-                    downloadDetector()
+                    getApiData()
+                    getDetectorData()
                 }
             }
         }
@@ -95,17 +94,17 @@ class MainActivity : AppCompatActivity(),
 //        switch_manual.setOnCheckedChangeListener(manualListener)
     }
 
-    private fun downloadDetector() {
-        detectorViewModel.getData().observe(this, Observer { value -> binding.detectorResult = value })
+    private fun getDetectorData() {
+        detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
     }
 
-    private fun downloadApi() {
-        apiViewModel.getData().observe(this, Observer { value -> binding.apiResult = value })
+    private fun getApiData() {
+        apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
     }
 
     override fun onRefresh() {
-        downloadApi()
-        downloadDetector()
+        getApiData()
+        getDetectorData()
         setSwipeRefreshing(false)
     }
 

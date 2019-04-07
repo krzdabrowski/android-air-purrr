@@ -25,17 +25,19 @@
 
         <TextView
             android:id="@+id/data_type"
-            style="@style/Main.Data.Info.Type"
+            style="@style/Main.Data.Info"
             android:text="@{type}"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:text="@string/main_data_info_pm25" />
 
         <TextView
             android:id="@+id/data_source"
-            style="@style/Main.Data.Info.Source"
+            style="@style/Main.Data.Info"
             app:source="@{source}"
             app:date="@{data}"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/data_type"
             tools:text="@string/main_data_info_indoors" />
 
         <TextView
@@ -43,7 +45,10 @@
             style="@style/Main.Data.Percentage"
             app:type="@{type}"
             app:dataPercentage="@{data}"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="40.0%" />
 
         <TextView
@@ -51,7 +56,9 @@
             style="@style/Main.Data.Ugm3"
             app:type="@{type}"
             app:dataUgm3="@{data}"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="(10.0)" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

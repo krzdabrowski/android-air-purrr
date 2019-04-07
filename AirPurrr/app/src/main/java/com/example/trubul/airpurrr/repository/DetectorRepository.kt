@@ -23,9 +23,6 @@ class DetectorRepository(private val service: DetectorService) {
                     val response = request.await()
                     if (response.isSuccessful && response.body() != null) {
                         result.value = response.body()
-                        Timber.d("start value is: ${result.value}")
-//                        binding.flagDetectorApi = false
-//                        binding.detector = response.body()!!.values
                     } else {
                         Timber.e("DetectorModel error: ${response.code()}")
                     }

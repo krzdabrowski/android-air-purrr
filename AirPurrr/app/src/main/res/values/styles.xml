@@ -98,18 +98,10 @@
         <item name="android:layout_marginStart">@dimen/margin_medium</item>
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
         <item name="android:textSize">@dimen/main_switch_text_size</item>
-        <item name="layout_constraintTop_toTopOf">parent</item>
-        <item name="layout_constraintStart_toStartOf">parent</item>
-        <item name="layout_constraintEnd_toStartOf">@id/switch_manual</item>
-        <item name="layout_constraintBottom_toTopOf">@id/cardView</item>
-        <item name="layout_constraintHorizontal_chainStyle">spread_inside</item>
     </style>
 
     <style name="Main.Switch.Button">
         <item name="android:layout_marginEnd">@dimen/margin_medium</item>
-        <item name="layout_constraintBaseline_toBaselineOf">@id/text_manual_control</item>
-        <item name="layout_constraintEnd_toEndOf">parent</item>
-        <item name="layout_constraintStart_toEndOf">@id/text_manual_control</item>
     </style>
 
     <style name="Main.CardView">
@@ -120,10 +112,7 @@
         <item name="android:layout_marginEnd">@dimen/margin_small</item>
         <item name="android:layout_marginBottom">@dimen/margin_large</item>
         <item name="cardCornerRadius">@dimen/main_data_corner_radius</item>
-        <item name="layout_constraintEnd_toEndOf">parent</item>
-        <item name="layout_constraintBottom_toBottomOf">parent</item>
-        <item name="layout_constraintTop_toBottomOf">@+id/text_manual_control</item>
-        <item name="layout_constraintStart_toStartOf">parent</item>
+
     </style>
 
     <style name="Main.DataContainer">
@@ -155,33 +144,15 @@
     <style name="Main.Data.Percentage">
         <item name="android:textSize">@dimen/main_data_text_size_percentage</item>
         <item name="android:textAppearance">?android:textAppearanceLarge</item>
-        <item name="layout_constraintBottom_toBottomOf">parent</item>
-        <item name="layout_constraintEnd_toEndOf">parent</item>
-        <item name="layout_constraintStart_toStartOf">parent</item>
-        <item name="layout_constraintTop_toTopOf">parent</item>
     </style>
 
     <style name="Main.Data.Ugm3">
         <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
         <item name="android:textSize">@dimen/main_data_text_size_ugm3</item>
-        <item name="layout_constraintBottom_toBottomOf">parent</item>
-        <item name="layout_constraintEnd_toEndOf">parent</item>
-        <item name="layout_constraintStart_toStartOf">parent</item>
     </style>
 
     <style name="Main.Data.Info">
         <item name="android:layout_margin">@dimen/margin_tiny</item>
         <item name="android:textSize">@dimen/main_data_text_size_info</item>
     </style>
-
-    <style name="Main.Data.Info.Type">
-        <item name="layout_constraintStart_toStartOf">parent</item>
-        <item name="layout_constraintTop_toTopOf">parent</item>
-    </style>
-
-    <style name="Main.Data.Info.Source">
-        <item name="layout_constraintBaseline_toBaselineOf">@id/data_type</item>
-        <item name="layout_constraintEnd_toEndOf">parent</item>
-    </style>
-
 </resources>

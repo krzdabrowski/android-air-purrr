@@ -50,7 +50,6 @@ class ApiRepository(private val service: ApiService) {
                 }
             }
         }
-
         return result
     }
 }

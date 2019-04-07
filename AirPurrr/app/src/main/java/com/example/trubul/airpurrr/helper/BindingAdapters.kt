@@ -1,9 +1,9 @@
-package com.example.trubul.airpurrr
+package com.example.trubul.airpurrr.helper
 
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
-import com.example.trubul.airpurrr.helper.ConversionHelper
+import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.model.ApiModel
 import com.example.trubul.airpurrr.model.BaseModel
 import com.example.trubul.airpurrr.model.DetectorModel
@@ -69,17 +69,17 @@ fun ConstraintLayout.bindBackgroundColor(type: String, data: BaseModel?) {
 
     if (data is DetectorModel) {
         val values = data.values
-        valuePerc = if (type == "PM2.5") {
-            ConversionHelper.pm25ToPercent(values?.pm25)
-        } else {
-            ConversionHelper.pm10ToPercent(values?.pm10)
+        if (type == "PM2.5") {
+            valuePerc = ConversionHelper.pm25ToPercent(values?.pm25)
+        } else if (type == "PM10"){
+            valuePerc = ConversionHelper.pm10ToPercent(values?.pm10)
         }
     } else if (data is ApiModel) {
         val values = data.values
-        valuePerc = if (type == "PM2.5") {
-            ConversionHelper.pm25ToPercent(values[0].value.toDouble())
-        } else {
-            ConversionHelper.pm10ToPercent(values[1].value.toDouble())
+        if (type == "PM2.5") {
+            valuePerc = ConversionHelper.pm25ToPercent(values[0].value.toDouble())
+        } else if (type == "PM10") {
+            valuePerc = ConversionHelper.pm10ToPercent(values[1].value.toDouble())
         }
     }
 
