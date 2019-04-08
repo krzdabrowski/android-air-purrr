@@ -1,7 +1,6 @@
 package com.example.trubul.airpurrr.helper
 
 object ConversionHelper {
-
     fun pm25ToPercent(pm25: Double?): Double {
         return pm25?.times(4) ?: 0.0
     }

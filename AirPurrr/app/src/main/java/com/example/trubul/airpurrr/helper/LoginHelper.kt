@@ -8,14 +8,14 @@ import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
-internal class LoginHelper(private val mFingerprintManager: FingerprintManager, private val mCallback: FingerprintCallback) : FingerprintManager.AuthenticationCallback() {
+class LoginHelper(private val mFingerprintManager: FingerprintManager, private val mCallback: FingerprintCallback) : FingerprintManager.AuthenticationCallback() {
     private var mCancellationSignal: CancellationSignal? = null
     private var mSelfCancelled: Boolean = false
 
     val isFingerprintAuthAvailable: Boolean
         get() = mFingerprintManager.isHardwareDetected && mFingerprintManager.hasEnrolledFingerprints()
 
-    internal interface FingerprintCallback {
+    interface FingerprintCallback {
         fun onError()
         fun onHelp(helpString: CharSequence)
         fun onFailed()

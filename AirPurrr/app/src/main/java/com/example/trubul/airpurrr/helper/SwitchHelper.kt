@@ -7,11 +7,11 @@ import com.example.trubul.airpurrr.model.DetectorModel
 import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
 import com.google.android.material.snackbar.Snackbar
 
-internal class SwitchHelper(private val detectorViewModel: DetectorViewModel) {
+class SwitchHelper(private val detectorViewModel: DetectorViewModel) {
 
-    internal var oldSwitchState = false
+    var oldSwitchState = false
 
-    internal fun handleFanStates(value: DetectorModel, switchView: CompoundButton, rootView: SwipeRefreshLayout, login: String, password: String, isChecked: Boolean) {
+    fun handleFanStates(value: DetectorModel, switchView: CompoundButton, rootView: SwipeRefreshLayout, login: String, password: String, isChecked: Boolean) {
         when (value.workstate) {
             "WorkStates.Sleeping" -> {
                 Snackbar.make(rootView, R.string.main_message_switch_processing, Snackbar.LENGTH_LONG).show()
