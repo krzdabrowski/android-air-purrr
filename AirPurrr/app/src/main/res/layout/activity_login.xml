@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="loginVm"
+            type="com.example.trubul.airpurrr.viewmodel.LoginViewModel"/>
+    </data>
 
     <LinearLayout
         android:id="@+id/layout_login"
@@ -7,11 +14,11 @@
 
         <include
             android:id="@+id/partial_login_manual"
-            layout="@layout/partial_login_manual" />
+            layout="@layout/partial_login_manual"
+            app:vm="@{loginVm}"/>
 
         <include
             android:id="@+id/partial_login_fingerprint"
             layout="@layout/partial_login_fingerprint" />
-
     </LinearLayout>
 </layout>

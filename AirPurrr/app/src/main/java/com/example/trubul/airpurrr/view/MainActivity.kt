@@ -28,7 +28,7 @@ import timber.log.Timber
 // TODO: implement MVVM with LiveData
 // TODO: airly API instead of public
 
-// TODO: (later) DEPRECATIONS - deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog)
+// TODO: (later) DEPRECATIONS - deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog, AuthCallback)
 // TODO: (later) UI REWORK - implement TabLayout with current and predicted results/data in fragments
 // TODO: (later) UI REWORK - switch manual control on toolbar, alwaysOn & remove switch with logic
 // TODO: (later) UI REWORK - Preferences instead of menu + settings menu with alwaysOn state (dialogs inflated from new file instead on making everything in Java code (lecture 255 on Udemy))

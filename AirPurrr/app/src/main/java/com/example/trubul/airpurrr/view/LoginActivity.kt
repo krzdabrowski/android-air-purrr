@@ -16,18 +16,25 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.trubul.airpurrr.helper.LoginHelper
 import com.example.trubul.airpurrr.R
+import com.example.trubul.airpurrr.di.viewModelModule
+import com.example.trubul.airpurrr.viewmodel.LoginViewModel
 
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.partial_login_manual.view.*
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 import timber.log.Timber.DebugTree
 import timber.log.Timber
 
-class LoginActivity : BaseActivity(),
-        LoginHelper.FingerprintCallback {
-    private lateinit var mAuth: FirebaseAuth
+class LoginActivity : BaseActivity(), LoginHelper.FingerprintCallback {
+    private val loginViewModel: LoginViewModel by inject()
+
+    private lateinit var auth: FirebaseAuth
     private lateinit var mLoginHelper: LoginHelper
     private lateinit var mInputMethodManager: InputMethodManager
     private lateinit var mSharedPreferences: SharedPreferences
@@ -61,9 +68,14 @@ class LoginActivity : BaseActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        FirebaseApp.initializeApp(this)
-        mAuth = FirebaseAuth.getInstance()
         Timber.plant(DebugTree())
+        startKoin {
+            androidLogger()
+            androidContext(this@LoginActivity)
+            modules(viewModelModule)
+        }
+        FirebaseApp.initializeApp(this)
+        auth = FirebaseAuth.getInstance()
 
         val keyguardManager = getSystemService(KeyguardManager::class.java)
         val fingerprintManager = getSystemService(FingerprintManager::class.java)
@@ -131,7 +143,7 @@ class LoginActivity : BaseActivity(),
 
         mInputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         showProgressDialog()
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 val intent = Intent(this, MainActivity::class.java)
                 val editor = mSharedPreferences.edit()

@@ -8,6 +8,7 @@ import com.example.trubul.airpurrr.retrofit.DetectorControlService
 import com.example.trubul.airpurrr.retrofit.DetectorDataService
 import com.example.trubul.airpurrr.viewmodel.ApiViewModel
 import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
+import com.example.trubul.airpurrr.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -27,6 +28,7 @@ val repositoryModule = module {
 }
 
 val viewModelModule = module {
+    viewModel { LoginViewModel() }
     viewModel { DetectorViewModel(get()) }
     viewModel { ApiViewModel(get()) }
 }

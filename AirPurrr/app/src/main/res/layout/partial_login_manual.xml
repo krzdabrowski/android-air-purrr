@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout style="@style/Login.Layout.Manual">
 
+    <data>
+        <variable
+            name="vm"
+            type="com.example.trubul.airpurrr.viewmodel.LoginViewModel"/>
+    </data>
+
+    <LinearLayout style="@style/Login.Layout.Manual">
         <ImageView
             android:id="@+id/ic_logo"
             style="@style/Login.Manual.Logo"
@@ -13,6 +19,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_email"
                 style="@style/Login.Manual.TextInputEditText"
+                android:text="@={vm.email}"
                 android:hint="@string/login_hint_email"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -22,6 +29,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_password"
                 style="@style/Login.Manual.TextInputEditText"
+                android:text="@={vm.password}"
                 android:hint="@string/login_hint_password"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -30,6 +38,5 @@
             android:id="@+id/btn_login"
             style="@style/Login.Manual.Button"
             android:text="@string/login_btn_text" />
-
     </LinearLayout>
 </layout>
