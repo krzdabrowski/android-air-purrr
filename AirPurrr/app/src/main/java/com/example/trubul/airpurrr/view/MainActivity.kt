@@ -3,8 +3,6 @@ package com.example.trubul.airpurrr.view
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.widget.CompoundButton
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.trubul.airpurrr.R
@@ -41,7 +39,7 @@ import timber.log.Timber
 // TODO: (at the end) implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
 // TODO: (at the end) check if all ids are needed and are correct with good practices
 
-class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+class MainActivity : BaseActivity() {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private val switchHelper: SwitchHelper by inject()
@@ -49,6 +47,31 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
     private fun getApiData() = apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
+        binding.flagDetectorApi = false
+
+        Timber.plant(Timber.DebugTree())
+        startKoin {
+            androidLogger()
+            androidContext(this@MainActivity)
+            modules(listOf(networkModule, helperModule, repositoryModule, viewModelModule))
+        }
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
+        val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")
+
+        partial_main_data_pm25.setOnClickListener { onDataClick() }
+        partial_main_data_pm10.setOnClickListener { onDataClick() }
+        binding.setOnSwitchChange { switchView, isChecked -> onSwitchClick(switchView, isChecked, hashedEmail!!, hashedPassword!!) }
+        swipe_refresh.setOnRefreshListener { onRefresh() }
+
+        automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
+    }
 
     private fun automaticDownload() {
         val timer = Timer()
@@ -63,32 +86,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         timer.schedule(minuteTask, 0, (1000 * 60).toLong())  // 1000*60*1 every 1 minute
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        Timber.plant(Timber.DebugTree())
-        startKoin {
-            androidLogger()
-            androidContext(this@MainActivity)
-            modules(listOf(networkModule, helperModule, repositoryModule, viewModelModule))
-        }
-
-        binding.lifecycleOwner = this
-        binding.flagDetectorApi = false
-
-        partial_main_data_pm25.setOnClickListener { onDataClick() }
-        partial_main_data_pm10.setOnClickListener { onDataClick() }
-
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
-        val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")
-
-        binding.setOnSwitchChange { switchView, isChecked -> onSwitchClick(switchView, isChecked, hashedEmail!!, hashedPassword!!) }
-
-        automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
-        swipe_refresh.setOnRefreshListener(this)
-    }
-
     private fun onDataClick() {
         binding.flagDetectorApi = !binding.flagDetectorApi!!
     }
@@ -101,7 +98,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    override fun onRefresh() {
+    private fun onRefresh() {
         getApiData()
         getDetectorData()
         swipe_refresh.isRefreshing = false
