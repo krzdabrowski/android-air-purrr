@@ -54,13 +54,6 @@ class MainActivity : BaseActivity() {
         binding.lifecycleOwner = this
         binding.flagDetectorApi = false
 
-        Timber.plant(Timber.DebugTree())
-        startKoin {
-            androidLogger()
-            androidContext(this@MainActivity)
-            modules(listOf(networkModule, helperModule, repositoryModule, viewModelModule))
-        }
-
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
         val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")

@@ -1,67 +1,10 @@
 package com.example.trubul.airpurrr.helper
 
-import android.hardware.fingerprint.FingerprintManager
-import android.os.CancellationSignal
-import timber.log.Timber
-
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
-class LoginHelper(private val mFingerprintManager: FingerprintManager, private val mCallback: FingerprintCallback) : FingerprintManager.AuthenticationCallback() {
-    private var mCancellationSignal: CancellationSignal? = null
-    private var mSelfCancelled: Boolean = false
-
-    val isFingerprintAuthAvailable: Boolean
-        get() = mFingerprintManager.isHardwareDetected && mFingerprintManager.hasEnrolledFingerprints()
-
-    interface FingerprintCallback {
-        fun onError()
-        fun onHelp(helpString: CharSequence)
-        fun onFailed()
-        fun onAuthenticated()
-    }
-
-    fun startListening() {
-        if (!isFingerprintAuthAvailable) {
-            return
-        }
-        mCancellationSignal = CancellationSignal()
-        mSelfCancelled = false
-        mFingerprintManager.authenticate(null, mCancellationSignal, 0 /* flags */, this, null)
-    }
-
-    fun stopListening() {
-        if (mCancellationSignal != null) {
-            mSelfCancelled = true
-            mCancellationSignal!!.cancel()
-            mCancellationSignal = null
-        }
-    }
-
-    // FingerprintManager.AuthenticationCallback
-    override fun onAuthenticationError(errMsgId: Int, errString: CharSequence) {
-        Timber.d("onAuthenticationError: ")
-        if (!mSelfCancelled) {
-            mCallback.onError()
-        }
-    }
-
-    override fun onAuthenticationHelp(helpMsgId: Int, helpString: CharSequence) {
-        Timber.d("onAuthenticationHelp: ")
-        mCallback.onHelp(helpString)
-    }
-
-    override fun onAuthenticationFailed() {
-        Timber.d("onAuthenticationFailed: ")
-        mCallback.onFailed()
-    }
-
-    override fun onAuthenticationSucceeded(result: FingerprintManager.AuthenticationResult) {
-        Timber.d("onAuthenticationSucceeded: ")
-        mCallback.onAuthenticated()
-    }
-
+class LoginHelper {
     companion object {
         fun sha512Hash(toHash: String): String? {
             var hash: String? = null
