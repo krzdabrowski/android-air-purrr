@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -14,14 +15,16 @@
             android:contentDescription="@string/login_description_logo"
             android:src="@drawable/ic_logo" />
 
-        <com.google.android.material.textfield.TextInputLayout style="@style/Login.Manual.TextInputLayout">
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Login.Manual.TextInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_email"
                 style="@style/Login.Manual.TextInputEditText"
                 android:text="@={vm.email}"
                 android:hint="@string/login_hint_email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                app:errorValidationEmail="@{vm.isEmailError}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout style="@style/Login.Manual.TextInputLayout">
@@ -31,12 +34,14 @@
                 style="@style/Login.Manual.TextInputEditText"
                 android:text="@={vm.password}"
                 android:hint="@string/login_hint_password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                app:errorValidationPassword="@{vm.isPasswordError}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_login"
             style="@style/Login.Manual.Button"
+            android:onClick="@{() -> vm.onLoginButtonClick()}"
             android:text="@string/login_btn_text" />
     </LinearLayout>
 </layout>

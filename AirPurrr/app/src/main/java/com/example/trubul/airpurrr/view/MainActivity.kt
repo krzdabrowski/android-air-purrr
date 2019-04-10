@@ -55,7 +55,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.lifecycleOwner = this
+//        binding.lifecycleOwner = this IS NEEDED???
         binding.flagDetectorApi = false
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
