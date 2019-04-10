@@ -7,10 +7,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.databinding.ActivityMainBinding
-import com.example.trubul.airpurrr.di.helperModule
-import com.example.trubul.airpurrr.di.networkModule
-import com.example.trubul.airpurrr.di.repositoryModule
-import com.example.trubul.airpurrr.di.viewModelModule
 import com.example.trubul.airpurrr.helper.SwitchHelper
 import com.example.trubul.airpurrr.viewmodel.ApiViewModel
 import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
@@ -18,14 +14,8 @@ import java.util.Timer
 import java.util.TimerTask
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.context.startKoin
-import timber.log.Timber
 
-// TODO: implement databinding
-// TODO: implement MVVM with LiveData
 // TODO: airly API instead of public
 // TODO: DEPRECATIONS - deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog, AuthCallback)
 
@@ -38,7 +28,7 @@ import timber.log.Timber
 
 // TODO: (RE-IMPLEMENT) Automatic Mode logic & threshold dialog
 // TODO: (RE-IMPLEMENT) Location
-// TODO: (RE-IMPLEMENT) Fingerprint Reader logic & network/fingerprint checks and permissions
+// TODO: (RE-IMPLEMENT) Fingerprint Reader logic & network/fingerprint checks and permissions & sha512 impl from some library
 
 // TODO: (at the end) implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
 // TODO: (at the end) check if all ids are needed and are correct with good practices
@@ -55,7 +45,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        binding.lifecycleOwner = this IS NEEDED???
         binding.flagDetectorApi = false
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)

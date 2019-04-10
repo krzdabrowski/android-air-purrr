@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.trubul.airpurrr.R
 
 abstract class BaseActivity : AppCompatActivity() {
-
     private var mProgressDialog: ProgressDialog? = null
 
     fun showProgressDialog() {
