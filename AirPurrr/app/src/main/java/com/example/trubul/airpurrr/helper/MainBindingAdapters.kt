@@ -14,7 +14,7 @@ fun TextView.bindDate(source: Boolean, data: BaseModel?) {
         if (data == null) {
             text = resources.getString(R.string.main_data_info_api_empty)
         } else if (data is ApiModel){
-            text = resources.getString(R.string.main_data_info_api, data.values[0].date)
+            text = resources.getString(R.string.main_data_info_api)
         }
     } else {
         text = resources.getString(R.string.main_data_info_indoors)
@@ -35,9 +35,9 @@ fun TextView.bindDataPercentage(type: String, data: BaseModel?) {
         }
     } else if (data is ApiModel) {
         if (type == "PM2.5") {
-            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.values[0].value.toDouble()))
+            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.data.first))
         } else if (type == "PM10") {
-            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.values[1].value.toDouble()))
+            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.data.second))
         }
     }
 }
@@ -56,9 +56,9 @@ fun TextView.bindDataUgm3(type: String, data: BaseModel?) {
         }
     } else if (data is ApiModel) {
         if (type == "PM2.5") {
-            text = resources.getString(R.string.main_data_ugm3, data.values[0].value.toDouble())
+            text = resources.getString(R.string.main_data_ugm3, data.data.first)
         } else if (type == "PM10") {
-            text = resources.getString(R.string.main_data_ugm3, data.values[1].value.toDouble())
+            text = resources.getString(R.string.main_data_ugm3, data.data.second)
         }
     }
 }
@@ -75,11 +75,11 @@ fun ConstraintLayout.bindBackgroundColor(type: String, data: BaseModel?) {
             valuePerc = ConversionHelper.pm10ToPercent(values?.pm10)
         }
     } else if (data is ApiModel) {
-        val values = data.values
+        val values = data.data
         if (type == "PM2.5") {
-            valuePerc = ConversionHelper.pm25ToPercent(values[0].value.toDouble())
+            valuePerc = ConversionHelper.pm25ToPercent(values.first)
         } else if (type == "PM10") {
-            valuePerc = ConversionHelper.pm10ToPercent(values[1].value.toDouble())
+            valuePerc = ConversionHelper.pm10ToPercent(values.second)
         }
     }
 

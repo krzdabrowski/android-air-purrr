@@ -2,6 +2,7 @@ package com.example.trubul.airpurrr.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.trubul.airpurrr.BuildConfig
 import com.example.trubul.airpurrr.model.ApiModel
 import com.example.trubul.airpurrr.retrofit.ApiService
 import kotlinx.coroutines.CoroutineScope
@@ -15,33 +16,21 @@ class ApiRepository(private val service: ApiService) {
 
     fun fetchData(): LiveData<ApiModel> {
         val result = MutableLiveData<ApiModel>()
-        val values = mutableListOf<ApiModel.Values>()
 
         CoroutineScope(Dispatchers.IO).launch {
-            val requestPm25 = service.getApiPm25DataAsync()
-            val requestPm10 = service.getApiPm10DataAsync()
+            val request = service.getApiDataAsync(BuildConfig.ApiKey)
             withContext(Dispatchers.Main) {
                 try {
-                    val responsePm25 = requestPm25.await()
-                    val responsePm10 = requestPm10.await()
-                    if (responsePm25.isSuccessful && responsePm25.body() != null) {
-                        for (i in responsePm25.body()!!.values.indices) {
-                            if (responsePm25.body()!!.values[i].value != null) {
-                                values.add(0, ApiModel.Values(responsePm25.body()!!.values[i].value, responsePm25.body()!!.values[i].date))
-                                result.value = ApiModel(values)
-                                break
-                            } else continue
+                    val response = request.await()
+                    if (response.isSuccessful && response.body() != null) {
+                        val currentValues = response.body()?.current?.values
+                        if (currentValues?.get(1)?.get("name") == "PM25" && currentValues[2]?.get("name") == "PM10") {
+                            val pm25 = currentValues[1]?.get("value") as Double
+                            val pm10 = currentValues[2]?.get("value") as Double
+                            result.value = ApiModel(null, Pair(pm25, pm10))
                         }
-                    }
-
-                    if (responsePm10.isSuccessful && responsePm10.body() != null) {
-                        for (i in responsePm10.body()!!.values.indices) {
-                            if (responsePm10.body()!!.values[i].value != null) {
-                                values.add(1, ApiModel.Values(responsePm10.body()!!.values[i].value, responsePm10.body()!!.values[i].date))
-                                result.value = ApiModel(values)
-                                break
-                            } else continue
-                        }
+                    } else {
+                        Timber.e("ApiModel error: ${response.code()}")
                     }
                 } catch (e: HttpException) {
                     Timber.e("API error: $e")

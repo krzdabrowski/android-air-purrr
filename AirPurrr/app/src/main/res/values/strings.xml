@@ -25,7 +25,7 @@
     <string name="main_data_info_pm25">PM2.5</string>
     <string name="main_data_info_pm10">PM10</string>
     <string name="main_data_info_indoors">Indoors</string>
-    <string name="main_data_info_api">API (%s)</string>
+    <string name="main_data_info_api">API</string>
     <string name="main_data_info_api_empty">no data</string>
 
     <string name="main_message_switch_processing">Processing the request…</string>
