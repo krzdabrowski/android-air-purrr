@@ -1,10 +1,10 @@
 # Air Purrr
 
-An app that handles controlling of self-made air purifier (consists of 230V fan and filter mats) and reading PM2.5/10 values from air quality detector and the nearest GIOS station (using smogAPI and location coordinates). App is currently in alpha release.
+An app that handles controlling of self-made air purifier (consists of 230V fan and filter mats) and reading PM2.5/10 values from air quality detector and closest location (using Airly API). App is currently in alpha release.
 
 ### Getting Started
 
-This is my first own project ever created so bugs are more than likely.
+This is my first own project ever created so bugs are more than likely. Also, keep in mind that app is currently in development, including vast code refactoring.
 
 ### Self-Made Air Purifier
 
@@ -23,6 +23,10 @@ It uses:
 ### SDS011 PM2.5/10 Results
 
 I use ThingSpeak to show data from my device. Here's the [link](https://thingspeak.com/channels/462987) to charts.
+
+### Airly API
+
+From now, app uses Airly API instead of GIOS's one. You need to register your account [here](https://developer.airly.eu) (free), obtain an API key and then add it to `gradle.properties` file in your .gradle home directory. More instructions [here](https://medium.com/code-better/hiding-api-keys-from-your-android-repository-b23f5598b906)
 
 ## Screenshots
 
