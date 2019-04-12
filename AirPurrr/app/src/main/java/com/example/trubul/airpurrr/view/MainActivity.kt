@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: airly API instead of public
 // TODO: DEPRECATIONS - deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog, AuthCallback)
 
 // TODO: (later) UI REWORK - implement TabLayout with current and predicted results/data in fragments

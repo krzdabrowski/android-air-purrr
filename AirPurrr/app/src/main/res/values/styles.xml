@@ -154,4 +154,11 @@
         <item name="android:layout_margin">@dimen/margin_tiny</item>
         <item name="android:textSize">@dimen/main_data_text_size_info</item>
     </style>
+
+    <style name="Main.Logo">
+        <item name="android:layout_width">@dimen/main_data_logo_width</item>
+        <item name="android:layout_height">@dimen/main_data_logo_height</item>
+        <item name="android:layout_marginTop">@dimen/main_data_logo_margin_top</item>
+        <item name="android:layout_marginEnd">@dimen/main_data_logo_margin_end</item>
+    </style>
 </resources>

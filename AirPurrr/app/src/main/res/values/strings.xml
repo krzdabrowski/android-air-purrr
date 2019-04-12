@@ -27,6 +27,7 @@
     <string name="main_data_info_indoors">Indoors</string>
     <string name="main_data_info_api">API</string>
     <string name="main_data_info_api_empty">no data</string>
+    <string name="main_data_description_logo">Airly logo</string>
 
     <string name="main_message_switch_processing">Processing the request…</string>
     <string name="main_message_error">Detector error occurred</string>
