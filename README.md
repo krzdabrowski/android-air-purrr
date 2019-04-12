@@ -26,7 +26,7 @@ I use ThingSpeak to show data from my device. Here's the [link](https://thingspe
 
 ### Airly API
 
-From now, app uses Airly API instead of GIOS's one. You need to register your account [here](https://developer.airly.eu) (free), obtain an API key and then add it to `gradle.properties` file in your .gradle home directory. More instructions [here](https://medium.com/code-better/hiding-api-keys-from-your-android-repository-b23f5598b906)
+From now, app uses Airly API instead of GIOS's one. You need to register your account [here](https://developer.airly.eu) (free), obtain an API key and add it to `gradle.properties` file in your .gradle home directory. More instructions [here](https://medium.com/code-better/hiding-api-keys-from-your-android-repository-b23f5598b906).
 
 ## Screenshots
 
