@@ -15,21 +15,20 @@
 
     <style name="Login.Layout">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
     </style>
 
     <style name="Login.Layout.Manual">
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:orientation">vertical</item>
         <item name="android:paddingStart">@dimen/margin_medium</item>
-        <item name="android:paddingTop">@dimen/margin_extra_large</item>
+        <item name="android:paddingTop">@dimen/margin_xl</item>
         <item name="android:paddingEnd">@dimen/margin_medium</item>
     </style>
 
     <style name="Login.Layout.Fingerprint">
         <item name="android:gravity">center</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:paddingBottom">@dimen/margin_extra_extra_large</item>
+        <item name="android:paddingBottom">@dimen/margin_xxxl</item>
         <item name="android:visibility">gone</item>
     </style>
 
@@ -71,6 +70,13 @@
         <item name="android:layout_marginTop">@dimen/margin_small</item>
         <item name="android:textColor">@color/color_login_accent</item>
         <item name="android:textSize">@dimen/login_auth_text_size</item>
+    </style>
+
+    <style name="Login.ProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/login_progress_bar_size</item>
+        <item name="android:maxHeight">@dimen/login_progress_bar_size</item>
     </style>
 
 

@@ -3,6 +3,7 @@ package com.example.trubul.airpurrr.view
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.widget.CompoundButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.trubul.airpurrr.R
@@ -16,23 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: DEPRECATIONS - deal with every single deprecated library to use AndroidX version (or alternative other library -> for ex. ProgressDialog, AuthCallback)
-
-// TODO: (later) UI REWORK - implement TabLayout with current and predicted results/data in fragments
-// TODO: (later) UI REWORK - switch manual control on toolbar, alwaysOn & remove switch with logic
-// TODO: (later) UI REWORK - Preferences instead of menu + settings menu with alwaysOn state (dialogs inflated from new file instead on making everything in Java code (lecture 255 on Udemy))
-// TODO: (later) UI REWORK - selectors for menu items on toolbar
-// TODO: (later) UI REWORK - Navigation Component
-// TODO: (later) UI REWORK - animations
-
-// TODO: (RE-IMPLEMENT) Automatic Mode logic & threshold dialog
-// TODO: (RE-IMPLEMENT) Location
-// TODO: (RE-IMPLEMENT) Fingerprint Reader logic & network/fingerprint checks and permissions & sha512 impl from some library
-
-// TODO: (at the end) implement good practices (https://github.com/ribot/android-guidelines/blob/master/project_and_code_guidelines.md)
-// TODO: (at the end) check if all ids are needed and are correct with good practices
-
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private val switchHelper: SwitchHelper by inject()
@@ -55,7 +40,7 @@ class MainActivity : BaseActivity() {
         binding.setOnSwitchChange { switchView, isChecked -> onSwitchClick(switchView, isChecked, hashedEmail!!, hashedPassword!!) }
         swipe_refresh.setOnRefreshListener { onRefresh() }
 
-        automaticDownload()  // downloadPMValues DetectorHelper values every 1 minute
+        automaticDownload()
     }
 
     private fun automaticDownload() {

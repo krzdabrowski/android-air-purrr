@@ -27,7 +27,7 @@ interface DetectorControlService {
 
         fun create(): DetectorControlService {
             return Retrofit.Builder()
-                    .client(DetectorControlService.client)
+                    .client(client)
                     .baseUrl(BASE_URL_HTTPS)
                     .addCallAdapterFactory(CoroutineCallAdapterFactory())
                     .build()

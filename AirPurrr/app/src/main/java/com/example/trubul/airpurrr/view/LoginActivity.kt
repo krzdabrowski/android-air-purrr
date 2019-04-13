@@ -2,6 +2,7 @@ package com.example.trubul.airpurrr.view
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -24,12 +25,13 @@ import org.koin.core.context.startKoin
 import timber.log.Timber.DebugTree
 import timber.log.Timber
 
-class LoginActivity : BaseActivity() {
+class LoginActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by inject()
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding: ActivityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         Timber.plant(DebugTree())
         FirebaseApp.initializeApp(this)
         startKoin {
@@ -39,6 +41,7 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.loginVm = loginViewModel
+        binding.isLoggingIn = false
 
         loginViewModel.email.observe(this, Observer { email -> loginViewModel.isEmailValid(email) })
         loginViewModel.password.observe(this, Observer { password -> loginViewModel.isPasswordValid(password) })
@@ -46,7 +49,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun manualLogin() {
-        showProgressDialog()
+        binding.isLoggingIn = true
         FirebaseAuth.getInstance().signInWithEmailAndPassword(loginViewModel.email.value!!, loginViewModel.password.value!!).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
 //                PreferenceManager.getDefaultSharedPreferences(this).edit {
@@ -55,9 +58,9 @@ class LoginActivity : BaseActivity() {
 //                }
                 startActivity(Intent(this, MainActivity::class.java))
             } else {
+                binding.isLoggingIn = false
                 Snackbar.make(layout_login, R.string.login_message_error_auth, Snackbar.LENGTH_SHORT).show()
             }
-            hideProgressDialog()
         }
     }
 }
