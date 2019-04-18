@@ -19,7 +19,6 @@
     <string name="login_message_error_no_saved_fingerprint">You need at least one fingerprint registered to continue</string>
 
     <!-- Main screen -->
-    <string name="main_switch_manual">Manual control</string>
     <string name="main_data_percentage">%.1f%%</string>
     <string name="main_data_ugm3">(%.1f)</string>
     <string name="main_data_info_pm25">PM2.5</string>
@@ -35,5 +34,6 @@
     <string name="main_message_error_server">Server isn\'t responding, try again later</string>
 
     <!-- Menu -->
+    <string name="menu_manual_mode">Control fan manually</string>
     <string name="menu_threshold">Set threshold in auto mode</string>
 </resources>

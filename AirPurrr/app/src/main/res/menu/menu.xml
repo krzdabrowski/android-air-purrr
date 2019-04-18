@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_manual_mode"
+        android:icon="@drawable/ic_logo"
+        android:title="@string/menu_manual_mode"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/menu_threshold"
         android:title="@string/menu_threshold" />

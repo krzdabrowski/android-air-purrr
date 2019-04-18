@@ -2,7 +2,8 @@ package com.example.trubul.airpurrr.view
 
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.widget.CompoundButton
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -23,6 +24,10 @@ class MainActivity : AppCompatActivity() {
     private val switchHelper: SwitchHelper by inject()
     private lateinit var binding: ActivityMainBinding
 
+    private var hashedEmail: String? = ""
+    private var hashedPassword: String? = ""
+    private var manualModeState = false
+
     private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
     private fun getApiData() = apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
 
@@ -32,12 +37,11 @@ class MainActivity : AppCompatActivity() {
         binding.flagDetectorApi = false
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
-        val hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")
+        hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
+        hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")
 
         partial_main_data_pm25.setOnClickListener { onDataClick() }
         partial_main_data_pm10.setOnClickListener { onDataClick() }
-        binding.setOnSwitchChange { switchView, isChecked -> onSwitchClick(switchView, isChecked, hashedEmail!!, hashedPassword!!) }
         swipe_refresh.setOnRefreshListener { onRefresh() }
 
         automaticDownload()
@@ -60,12 +64,10 @@ class MainActivity : AppCompatActivity() {
         binding.flagDetectorApi = !binding.flagDetectorApi!!
     }
 
-    private fun onSwitchClick(switchView: CompoundButton, isChecked: Boolean, email: String, password: String) {
-        if (switchHelper.oldSwitchState != isChecked) {
-            detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-                switchHelper.handleFanStates(workstateValue, switchView, swipe_refresh, email, password, isChecked)
-            })
-        }
+    private fun onManualModeClick(email: String, password: String, state: Boolean) {
+        detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
+            switchHelper.handleFanStates(workstateValue, email, password, state, swipe_refresh) }
+        )
     }
 
     private fun onRefresh() {
@@ -76,5 +78,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         moveTaskToBack(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.menu_manual_mode -> {
+                onManualModeClick(hashedEmail!!, hashedPassword!!, manualModeState)
+                manualModeState = switchHelper.state
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

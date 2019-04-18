@@ -25,31 +25,12 @@
         style="@style/Main.Layout">
 
         <androidx.constraintlayout.widget.ConstraintLayout style="@style/Main.Layout">
-
-            <TextView
-                android:id="@+id/text_manual_control"
-                style="@style/Main.Switch.Text"
-                android:text="@string/main_switch_manual"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/switch_manual"
-                app:layout_constraintBottom_toTopOf="@id/cardView"
-                app:layout_constraintHorizontal_chainStyle="spread_inside" />
-
-            <Switch
-                android:id="@+id/switch_manual"
-                style="@style/Main.Switch.Button"
-                android:onCheckedChanged="@{onSwitchChange}"
-                app:layout_constraintBaseline_toBaselineOf="@id/text_manual_control"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/text_manual_control" />
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 style="@style/Main.CardView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_manual_control"
+                app:layout_constraintTop_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout style="@style/Main.DataContainer.LinearLayout">

@@ -1,9 +1,7 @@
 package com.example.trubul.airpurrr.helper
 
 // TODO: (UI REWORK) implement TabLayout with current and predicted results/data in fragments
-// TODO: (UI REWORK) switch manual control on toolbar, alwaysOn & remove switch with logic
 // TODO: (UI REWORK) Preferences instead of menu + settings menu with alwaysOn state (dialogs inflated from new file instead on making everything in Java code (lecture 255 on Udemy))
-// TODO: (UI REWORK) selectors for menu items on toolbar
 // TODO: (UI REWORK) Navigation Component
 // TODO: (UI REWORK) animations
 
