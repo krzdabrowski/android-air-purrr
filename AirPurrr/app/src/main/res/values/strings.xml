@@ -28,12 +28,12 @@
     <string name="main_data_info_api_empty">no data</string>
     <string name="main_data_description_logo">Airly logo</string>
 
-    <string name="main_message_switch_processing">Processing the request…</string>
+    <string name="main_message_turn_on">Processing the request…</string>
     <string name="main_message_error">Detector error occurred</string>
     <string name="main_message_error_measuring">Cannot process the request - detector in measuring mode</string>
     <string name="main_message_error_server">Server isn\'t responding, try again later</string>
 
     <!-- Menu -->
-    <string name="menu_manual_mode">Control fan manually</string>
-    <string name="menu_threshold">Set threshold in auto mode</string>
+    <string name="mnu_manual_mode">Control fan manually</string>
+    <string name="mnu_threshold">Set threshold in auto mode</string>
 </resources>

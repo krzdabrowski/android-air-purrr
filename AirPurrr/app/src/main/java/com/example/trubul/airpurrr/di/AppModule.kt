@@ -1,6 +1,6 @@
 package com.example.trubul.airpurrr.di
 
-import com.example.trubul.airpurrr.helper.SwitchHelper
+import com.example.trubul.airpurrr.helper.PurifierHelper
 import com.example.trubul.airpurrr.repository.ApiRepository
 import com.example.trubul.airpurrr.repository.DetectorRepository
 import com.example.trubul.airpurrr.retrofit.ApiService
@@ -19,7 +19,7 @@ val networkModule = module {
 }
 
 val helperModule = module {
-    single { SwitchHelper(get()) }
+    single { PurifierHelper(get()) }
 }
 
 val repositoryModule = module {

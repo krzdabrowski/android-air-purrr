@@ -4,10 +4,6 @@
 
     <data>
         <variable
-            name="onSwitchChange"
-            type="android.widget.CompoundButton.OnCheckedChangeListener"/>
-
-        <variable
             name="detectorData"
             type="com.example.trubul.airpurrr.model.DetectorModel"/>
 

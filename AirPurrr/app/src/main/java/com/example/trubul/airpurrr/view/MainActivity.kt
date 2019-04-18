@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.trubul.airpurrr.R
 import com.example.trubul.airpurrr.databinding.ActivityMainBinding
-import com.example.trubul.airpurrr.helper.SwitchHelper
+import com.example.trubul.airpurrr.helper.PurifierHelper
 import com.example.trubul.airpurrr.viewmodel.ApiViewModel
 import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
 import java.util.Timer
@@ -21,7 +21,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val apiViewModel: ApiViewModel by viewModel()
-    private val switchHelper: SwitchHelper by inject()
+    private val purifierHelper: PurifierHelper by inject()
     private lateinit var binding: ActivityMainBinding
 
     private var hashedEmail: String? = ""
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onManualModeClick(email: String, password: String, state: Boolean) {
         detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-            switchHelper.handleFanStates(workstateValue, email, password, state, swipe_refresh) }
+            purifierHelper.handlePurifierStates(workstateValue, email, password, state, swipe_refresh) }
         )
     }
 
@@ -87,9 +87,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.menu_manual_mode -> {
+            R.id.mnu_manual_mode -> {
                 onManualModeClick(hashedEmail!!, hashedPassword!!, manualModeState)
-                manualModeState = switchHelper.state
+                manualModeState = purifierHelper.state
                 true
             }
             else -> super.onOptionsItemSelected(item)
