@@ -7,26 +7,22 @@ import com.example.trubul.airpurrr.viewmodel.DetectorViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class PurifierHelper(private val detectorViewModel: DetectorViewModel) {
-    var state = false
+    var currentState = false
 
     fun handlePurifierStates(value: DetectorModel, login: String, password: String, previousState: Boolean, rootView: SwipeRefreshLayout) {
         when (value.workstate) {
             "WorkStates.Sleeping" -> {
                 Snackbar.make(rootView, R.string.main_message_turn_on, Snackbar.LENGTH_LONG).show()
-                state = !previousState
-                if (state) {
-                    detectorViewModel.controlFan(true, login, password)
-                } else {
-                    detectorViewModel.controlFan(false, login, password)
-                }
+                currentState = !previousState
+                detectorViewModel.controlFan(currentState, login, password)
             }
             "WorkStates.Measuring" -> {
                 Snackbar.make(rootView, R.string.main_message_error_measuring, Snackbar.LENGTH_LONG).show()
-                state = previousState
+                currentState = previousState
             }
             else -> {
                 Snackbar.make(rootView, R.string.main_message_error, Snackbar.LENGTH_LONG).show()
-                state = previousState
+                currentState = previousState
             }
         }
     }

@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         return when (item?.itemId) {
             R.id.mnu_manual_mode -> {
                 onManualModeClick(hashedEmail!!, hashedPassword!!, manualModeState)
-                manualModeState = purifierHelper.state
+                manualModeState = purifierHelper.currentState
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -5,48 +5,60 @@
     <data>
         <variable
             name="detectorData"
-            type="com.example.trubul.airpurrr.model.DetectorModel"/>
+            type="com.example.trubul.airpurrr.model.DetectorModel" />
 
         <variable
             name="apiData"
-            type="com.example.trubul.airpurrr.model.ApiModel"/>
+            type="com.example.trubul.airpurrr.model.ApiModel" />
 
         <variable
             name="flagDetectorApi"
-            type="Boolean"/>
+            type="Boolean" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
-        style="@style/Main.Layout">
+        style="@style/Main.RootLayout">
 
-        <androidx.constraintlayout.widget.ConstraintLayout style="@style/Main.Layout">
+        <LinearLayout style="@style/Main.RootLayout">
+
+            <com.google.android.material.tabs.TabLayout style="@style/Main.TabLayout">
+                <com.google.android.material.tabs.TabItem
+                    style="@style/Main.Tab"
+                    android:text="@string/main_tab_current" />
+
+                <com.google.android.material.tabs.TabItem
+                    style="@style/Main.Tab"
+                    android:text="@string/main_tab_forecast" />
+            </com.google.android.material.tabs.TabLayout>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 style="@style/Main.CardView"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent">
 
                 <LinearLayout style="@style/Main.DataContainer.LinearLayout">
                     <include
                         android:id="@+id/partial_main_data_pm25"
                         style="@style/Main.DataContainer.LinearView"
                         layout="@layout/partial_main_data"
-                        app:type="@{@string/main_data_info_pm25}"
+                        app:data="@{flagDetectorApi ? apiData : detectorData}"
                         app:source="@{flagDetectorApi}"
-                        app:data="@{flagDetectorApi ? apiData : detectorData}" />
+                        app:type="@{@string/main_data_info_pm25}" />
 
                     <include
                         android:id="@+id/partial_main_data_pm10"
                         style="@style/Main.DataContainer.LinearView"
                         layout="@layout/partial_main_data"
-                        app:type="@{@string/main_data_info_pm10}"
+                        app:data="@{flagDetectorApi ? apiData : detectorData}"
                         app:source="@{flagDetectorApi}"
-                        app:data="@{flagDetectorApi ? apiData : detectorData}" />
+                        app:type="@{@string/main_data_info_pm10}" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

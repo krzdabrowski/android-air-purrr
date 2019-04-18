@@ -89,18 +89,29 @@
         <item name="colorAccent">@color/color_main_accent</item>
     </style>
 
-    <style name="Main.Layout">
+    <style name="Main.RootLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Main.TabLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Main.Tab">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="Main.CardView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginStart">@dimen/margin_small</item>
-        <item name="android:layout_marginTop">@dimen/margin_large</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
         <item name="android:layout_marginEnd">@dimen/margin_small</item>
-        <item name="android:layout_marginBottom">@dimen/margin_large</item>
+        <item name="android:layout_marginBottom">@dimen/margin_small</item>
         <item name="cardCornerRadius">@dimen/main_data_corner_radius</item>
     </style>
 

@@ -19,6 +19,9 @@
     <string name="login_message_error_no_saved_fingerprint">You need at least one fingerprint registered to continue</string>
 
     <!-- Main screen -->
+    <string name="main_tab_current">Current</string>
+    <string name="main_tab_forecast">Forecast</string>
+
     <string name="main_data_percentage">%.1f%%</string>
     <string name="main_data_ugm3">(%.1f)</string>
     <string name="main_data_info_pm25">PM2.5</string>
