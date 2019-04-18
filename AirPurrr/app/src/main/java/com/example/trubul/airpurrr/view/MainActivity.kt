@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onManualModeClick(email: String, password: String, state: Boolean) {
         detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-            purifierHelper.handlePurifierStates(workstateValue, email, password, state, swipe_refresh) }
+            manualModeState = purifierHelper.getPurifierState(workstateValue, email, password, state, swipe_refresh) }
         )
     }
 
@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity() {
         return when (item?.itemId) {
             R.id.mnu_manual_mode -> {
                 onManualModeClick(hashedEmail!!, hashedPassword!!, manualModeState)
-                manualModeState = purifierHelper.currentState
                 true
             }
             else -> super.onOptionsItemSelected(item)
