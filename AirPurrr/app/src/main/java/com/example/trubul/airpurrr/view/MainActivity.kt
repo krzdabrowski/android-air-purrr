@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.Menu
@@ -48,6 +49,10 @@ class MainActivity : AppCompatActivity() {
         return when (item?.itemId) {
             R.id.mnu_manual_mode -> {
                 onManualModeClick(hashedEmail!!, hashedPassword!!, manualModeState)
+                true
+            }
+            R.id.mnu_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)

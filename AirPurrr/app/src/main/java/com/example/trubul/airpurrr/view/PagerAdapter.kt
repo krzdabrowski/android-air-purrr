@@ -11,8 +11,8 @@ private const val TAB_SIZE = 2
 class PagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> CurrentDataFragment()
-            else -> ForecastDataFragment()
+            0 -> DataCurrentFragment()
+            else -> DataForecastFragment()
         }
     }
 

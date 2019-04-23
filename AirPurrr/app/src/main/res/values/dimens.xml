@@ -3,7 +3,6 @@
     <!-- Login screen -->
     <dimen name="login_logo_size">96dp</dimen>
     <dimen name="login_auth_text_size">18sp</dimen>
-    <dimen name="login_progress_bar_size">16dp</dimen>
 
     <!-- Main screen -->
     <dimen name="main_data_text_size_percentage">80sp</dimen>

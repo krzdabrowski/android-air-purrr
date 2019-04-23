@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Air Purrr</string>
+    <!-- Labels -->
+    <string name="label_app">Air Purrr</string>
+    <string name="label_settings">Settings</string>
 
     <!-- Login screen -->
     <string name="login_hint_email">E-mail</string>
@@ -39,4 +41,19 @@
     <!-- Menu -->
     <string name="mnu_manual_mode">Control fan manually</string>
     <string name="mnu_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="settings_category_auto_mode">Automatic mode</string>
+    <string name="settings_category_fan_control">Performance</string>
+
+    <string name="settings_title_auto_mode">Enable self-purifying</string>
+    <string name="settings_title_threshold">Set threshold</string>
+    <string name="settings_title_fan_speed">Fan speed</string>
+
+    <string name="settings_summary_auto_mode_off">Auto mode stopped</string>
+    <string name="settings_summary_auto_mode_on">Auto mode currently running</string>
+    <string name="settings_summary_fan_speed">Set purifier speed from 1000 to 2000RPM</string>
+
+    <string name="settings_dialog_title_threshold">Enter a value in percentage</string>
+    <string name="settings_dialog_no_data">Not set</string>
 </resources>

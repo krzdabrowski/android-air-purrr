@@ -75,8 +75,6 @@
     <style name="Login.ProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">@dimen/login_progress_bar_size</item>
-        <item name="android:maxHeight">@dimen/login_progress_bar_size</item>
     </style>
 
 

@@ -14,7 +14,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class CurrentDataFragment : Fragment() {
+class DataCurrentFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private lateinit var binding: FragmentCurrentDataBinding
