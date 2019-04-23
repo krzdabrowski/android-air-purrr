@@ -3,6 +3,7 @@
     <string name="label_app">Air Purrr</string>
     <string name="label_settings">Settings</string>
 
+
     <!-- Login screen -->
     <string name="login_hint_email">E-mail</string>
     <string name="login_hint_password">Password</string>
@@ -19,6 +20,7 @@
     <string name="login_message_error_no_internet">No Internet connection!</string>
     <string name="login_message_error_no_secure_screen">You need lock screen secured to continue</string>
     <string name="login_message_error_no_saved_fingerprint">You need at least one fingerprint registered to continue</string>
+
 
     <!-- Main screen -->
     <string name="main_tab_current">Current</string>
@@ -38,9 +40,11 @@
     <string name="main_message_error_measuring">Cannot process the request - detector in measuring mode</string>
     <string name="main_message_error_server">Server isn\'t responding, try again later</string>
 
+
     <!-- Menu -->
     <string name="mnu_manual_mode">Control fan manually</string>
     <string name="mnu_settings">Settings</string>
+
 
     <!-- Settings -->
     <string name="settings_category_auto_mode">Automatic mode</string>

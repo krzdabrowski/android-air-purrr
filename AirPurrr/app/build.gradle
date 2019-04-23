@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    flavorDimensions "default"
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
@@ -24,6 +25,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "ApiKey", AirPurrr_ApiKey
+        }
+    }
+    productFlavors {
+        dev {
+            buildConfigField "String", "DETECTOR_HTTP_URL", "\"http://airpurrr.ga/\""
+            buildConfigField "String", "DETECTOR_HTTPS_URL", "\"https://airpurrr.ga/\""
+            buildConfigField "String", "BASE_API_URL", "\"https://airapi.airly.eu/\""
         }
     }
     packagingOptions {

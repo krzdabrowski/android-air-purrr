@@ -1,5 +1,6 @@
 package com.example.trubul.airpurrr.helper
 
+// TODO: refactor app name to 3-component ("Template is com.[company | division name].[app name])")
 // TODO: (UI REWORK) Navigation Component
 // TODO: (UI REWORK) animations
 
