@@ -38,5 +38,5 @@
 
     <!-- Menu -->
     <string name="mnu_manual_mode">Control fan manually</string>
-    <string name="mnu_threshold">Set threshold in auto mode</string>
+    <string name="mnu_settings">Settings</string>
 </resources>

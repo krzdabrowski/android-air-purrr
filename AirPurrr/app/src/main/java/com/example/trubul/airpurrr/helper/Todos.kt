@@ -1,6 +1,6 @@
 package com.example.trubul.airpurrr.helper
 
-// TODO: (UI REWORK) Preferences instead of menu + settings menu with alwaysOn currentState (dialogs inflated from new file instead on making everything in Java code (lecture 255 on Udemy))
+// TODO: (UI REWORK) Preferences instead of menu + settings menu with alwaysOn currentState
 // TODO: (UI REWORK) Navigation Component
 // TODO: (UI REWORK) animations
 
