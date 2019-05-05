@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Login screen -->
+    <color name="color_login_primary">#0288d1</color>
+    <color name="color_login_dark">#01579b</color>
+    <color name="color_login_accent">#ffffff</color>
+    <color name="color_login_inactive">#e0e0e0</color>
+
+    <!-- Main screen -->
+    <color name="color_main_primary">#616161</color>
+    <color name="color_main_dark">#212121</color>
+    <color name="color_main_accent">#ff4081</color>
+
+    <color name="color_main_data_green">#689f38</color>
+    <color name="color_main_data_lime">#afb42b</color>
+    <color name="color_main_data_yellow">#fbc02d</color>
+    <color name="color_main_data_red">#d32f2f</color>
+</resources>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+
+        <variable
+            name="type"
+            type="String" />
+
+        <variable
+            name="source"
+            type="Boolean" />
+
+        <variable
+            name="data"
+            type="com.example.trubul.airpurrr.model.BaseModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_main_data"
+        style="@style/Main.Data.Layout"
+        app:type="@{type}"
+        app:dataColor="@{data}">
+
+        <TextView
+            android:id="@+id/data_type"
+            style="@style/Main.Data.Info"
+            android:text="@{type}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/main_data_info_pm25" />
+
+        <ImageView
+            android:id="@+id/airly_logo"
+            style="@style/Main.Logo"
+            android:contentDescription="@string/main_data_description_logo"
+            android:visibility="@{source ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_airly" />
+
+        <TextView
+            android:id="@+id/data_source"
+            style="@style/Main.Data.Info"
+            app:date="@{data}"
+            app:source="@{source}"
+            app:layout_constraintBaseline_toBaselineOf="@+id/data_type"
+            app:layout_constraintEnd_toStartOf="@+id/airly_logo"
+            tools:text="@string/main_data_info_indoors" />
+
+        <TextView
+            android:id="@+id/data_percentage"
+            style="@style/Main.Data.Percentage"
+            app:type="@{type}"
+            app:dataPercentage="@{data}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="40.0%" />
+
+        <TextView
+            android:id="@+id/data_ugm3"
+            style="@style/Main.Data.Ugm3"
+            app:type="@{type}"
+            app:dataUgm3="@{data}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="(10.0)" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        style="@style/Login.Layout.Fingerprint"
+        tools:ignore="UseCompoundDrawables"
+        tools:visibility="visible">
+
+        <ImageView
+            style="@style/Login.Fingerprint.Icon"
+            android:background="@drawable/ic_fingerprint_background"
+            android:contentDescription="@string/login_description_fingerprint_icon"
+            android:src="@drawable/ic_fingerprint_foreground" />
+
+        <TextView
+            style="@style/Login.Fingerprint.Text"
+            android:text="@string/login_fingerprint_text" />
+
+    </LinearLayout>
+</layout>
