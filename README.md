@@ -1,6 +1,6 @@
-# Air Purrr - app
+# Air Purrr - Android app
 
-This Android app controls self-made air purifier and reads PM2.5/10 values from air quality detector and closest location (using Airly API).
+This app written in Kotlin controls self-made air purifier and reads PM2.5/10 values from air quality detector and closest location (using Airly API).
 
 ### Getting Started
 
@@ -8,7 +8,7 @@ This is my first own project ever created so bugs are more than likely. Also, ke
 
 ### Self-Made Air Purifier
 
-See [back-end README.md](https://github.com/krzdabrowski/back-end-air-purrr) for more details.
+See back-end [README.md](https://github.com/krzdabrowski/back-end-air-purrr) for more details.
 
 ### Airly API
 
