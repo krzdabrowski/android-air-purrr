@@ -41,7 +41,7 @@ android {
 }
 
 ext {
-    coroutinesVersion = '1.2.0'
+    coroutinesVersion = '1.2.1'
     ktxCoreVersion = '1.0.1'
     ktxFragmentVersion = '1.0.0'
     appCompatVersion = '1.0.2'
@@ -58,7 +58,7 @@ ext {
     retrofitVersion = '2.5.0'
     retrofitCoroutinesAdapterVersion = '0.9.2'
     timberVersion = '4.7.1'
-    koinVersion = '2.0.0-rc-2'
+    koinVersion = '2.0.0-GA'
 
     testJunitVersion = '4.12'
     testRunnerVersion = '1.1.1'
