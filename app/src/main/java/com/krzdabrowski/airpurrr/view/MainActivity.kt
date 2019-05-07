@@ -11,7 +11,7 @@ import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.helper.PurifierHelper
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_current_data.*
+import kotlinx.android.synthetic.main.fragment_data_current.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

@@ -2,7 +2,6 @@ package com.krzdabrowski.airpurrr.view
 
 import android.os.Bundle
 import android.text.InputType
-import android.text.TextUtils
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.transaction
@@ -40,7 +39,7 @@ class SettingsActivity : AppCompatActivity() {
             val thresholdPreference = findPreference<EditTextPreference>(KEY_THRESHOLD)
             thresholdPreference?.summaryProvider = SummaryProvider<EditTextPreference> { preference ->
                 val text = preference.text
-                if (!TextUtils.isEmpty(text)) {
+                if (!text.isNullOrEmpty()) {
                     "$text%"
                 } else {
                     getString(R.string.settings_dialog_no_data)
