@@ -29,8 +29,8 @@ class DataCurrentFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         partial_main_data_pm25.setOnClickListener { onDataClick() }
         partial_main_data_pm10.setOnClickListener { onDataClick() }
@@ -59,6 +59,6 @@ class DataCurrentFragment : Fragment() {
                 }
             }
         }
-        timer.schedule(minuteTask, 0, (1000 * 60).toLong())  // 1000*60*1 every 1 minute
+        timer.schedule(minuteTask, 0, (1000 * 60 * 2).toLong())  // 1000*60*2 every 2 minutes
     }
 }

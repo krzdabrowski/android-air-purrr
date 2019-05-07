@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Login.Layout">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Login.RootLayout">
 
     <fragment
-        android:id="@+id/login_fragment"
+        android:id="@+id/login_fragment_host"
         style="@style/Login.Fragment"
-        android:name="com.krzdabrowski.airpurrr.view.LoginFragment" />
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_login">
+    </fragment>
 
-</LinearLayout>
+</FrameLayout>

@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        supportFragmentManager.transaction { replace(R.id.settings, SettingsFragment()) }
+//        supportFragmentManager.transaction { replace(R.id.settings, SettingsFragment()) }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -32,23 +32,4 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    class SettingsFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.preferences, rootKey)
-
-            val thresholdPreference = findPreference<EditTextPreference>(KEY_THRESHOLD)
-            thresholdPreference?.summaryProvider = SummaryProvider<EditTextPreference> { preference ->
-                val text = preference.text
-                if (!text.isNullOrEmpty()) {
-                    "$text%"
-                } else {
-                    getString(R.string.settings_dialog_no_data)
-                }
-            }
-            thresholdPreference?.setOnBindEditTextListener { editText ->
-                editText.inputType = InputType.TYPE_CLASS_NUMBER
-                editText.setSelection(editText.text.length)
-            }
-        }
-    }
 }

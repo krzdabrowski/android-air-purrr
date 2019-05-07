@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:id="@+id/layout_login"
-        style="@style/Login.Layout">
+        style="@style/Login.RootLayout">
 
         <ProgressBar
             android:id="@+id/progress_bar"

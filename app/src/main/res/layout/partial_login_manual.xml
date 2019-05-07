@@ -8,7 +8,7 @@
             type="com.krzdabrowski.airpurrr.viewmodel.LoginViewModel"/>
     </data>
 
-    <LinearLayout style="@style/Login.Layout.Manual">
+    <LinearLayout style="@style/Login.RootLayout.Manual">
         <ImageView
             android:id="@+id/ic_logo"
             style="@style/Login.Manual.Logo"

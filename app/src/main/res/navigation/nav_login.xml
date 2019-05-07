@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/login_fragment">
+
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="com.krzdabrowski.airpurrr.view.LoginFragment" >
+        <action
+            android:id="@+id/navigate_to_main_screen"
+            app:destination="@id/main_activity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/main_activity"
+        android:name="com.krzdabrowski.airpurrr.view.MainActivity" />
+
+</navigation>

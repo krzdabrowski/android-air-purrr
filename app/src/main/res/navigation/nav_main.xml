@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/main_fragment">
+
+    <fragment
+        android:id="@+id/main_fragment"
+        android:name="com.krzdabrowski.airpurrr.view.MainFragment">
+        <action
+            android:id="@+id/navigate_to_settings_screen"
+            app:destination="@id/settings_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settings_fragment"
+        android:name="com.krzdabrowski.airpurrr.view.SettingsFragment" />
+
+</navigation>

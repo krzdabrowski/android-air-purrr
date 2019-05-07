@@ -1,13 +1,13 @@
 package com.krzdabrowski.airpurrr.view
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
@@ -43,7 +43,8 @@ class LoginFragment : Fragment() {
 //                    putString(getString(R.string.login_pref_email), LoginHelper.sha512Hash(email))
 //                    putString(getString(R.string.login_pref_password), LoginHelper.sha512Hash(password))
 //                }
-                startActivity(Intent(activity, MainActivity::class.java))
+                val directions = LoginFragmentDirections.navigateToMainScreen()  // add hashed login and password as args here
+                findNavController().navigate(directions)
             } else {
                 binding.isLoggingIn = false
                 Snackbar.make(view as View, R.string.login_message_error_auth, Snackbar.LENGTH_SHORT).show()

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        style="@style/Login.Layout.Fingerprint"
+        style="@style/Login.RootLayout.Fingerprint"
         tools:ignore="UseCompoundDrawables"
         tools:visibility="visible">
 

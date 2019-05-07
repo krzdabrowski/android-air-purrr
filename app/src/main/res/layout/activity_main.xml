@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Main.RootLayout">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        style="@style/Main.TabLayout" />
+    <fragment
+        android:id="@+id/main_fragment_host"
+        style="@style/Main.Fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_main">
+    </fragment>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
-        style="@style/Main.DataContainer" />
-
-</LinearLayout>
+</FrameLayout>

@@ -1,7 +1,7 @@
 package com.krzdabrowski.airpurrr.view
 
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.di.helperModule
@@ -14,7 +14,7 @@ import org.koin.core.context.startKoin
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-class LoginActivity : FragmentActivity() {
+class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

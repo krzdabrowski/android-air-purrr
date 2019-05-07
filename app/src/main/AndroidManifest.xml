@@ -19,30 +19,19 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Login.AppTheme">
-            <intent-filter>
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name="com.krzdabrowski.airpurrr.view.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Main.AppTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.krzdabrowski.airpurrr.view.SettingsActivity"
             android:screenOrientation="portrait"
-            android:label="@string/label_settings"
-            android:theme="@style/Main.AppTheme">
-        </activity>
-
+            android:label="@string/label_settings" />
     </application>
 </manifest>

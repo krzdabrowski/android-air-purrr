@@ -13,20 +13,20 @@
         <item name="android:textColorHint">@color/color_login_inactive</item>
     </style>
 
-    <style name="Login.Layout">
+    <style name="Login.RootLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="Login.Layout.Manual">
+    <style name="Login.RootLayout.Manual">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:paddingStart">@dimen/margin_medium</item>
         <item name="android:paddingTop">@dimen/margin_xl</item>
         <item name="android:paddingEnd">@dimen/margin_medium</item>
     </style>
 
-    <style name="Login.Layout.Fingerprint">
+    <style name="Login.RootLayout.Fingerprint">
         <item name="android:gravity">center</item>
         <item name="android:paddingBottom">@dimen/margin_xxxl</item>
         <item name="android:visibility">gone</item>
@@ -96,6 +96,11 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Main.Fragment">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="Main.TabLayout">
