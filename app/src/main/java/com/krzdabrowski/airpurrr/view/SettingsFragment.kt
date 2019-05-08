@@ -7,15 +7,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.krzdabrowski.airpurrr.R
 
-private const val KEY_THRESHOLD = "autoModeThreshold"
-
 // to read later: https://developer.android.com/guide/topics/ui/settings/use-saved-values
 class SettingsFragment : PreferenceFragmentCompat() {
+    private val keyThreshold = "autoModeThreshold"
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
-        val thresholdPreference = findPreference<EditTextPreference>(KEY_THRESHOLD)
+        val thresholdPreference = findPreference<EditTextPreference>(keyThreshold)
         thresholdPreference?.summaryProvider = Preference.SummaryProvider<EditTextPreference> { preference ->
             val text = preference.text
             if (!text.isNullOrEmpty()) {

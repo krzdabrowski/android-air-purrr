@@ -46,7 +46,7 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(directions)
             } else {
                 binding.isLoggingIn = false
-                Snackbar.make(view as View, R.string.login_message_error_auth, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(view!!, R.string.login_message_error_auth, Snackbar.LENGTH_SHORT).show()
             }
         }
     }
