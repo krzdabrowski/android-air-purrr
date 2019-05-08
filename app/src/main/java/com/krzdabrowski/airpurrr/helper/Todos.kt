@@ -1,6 +1,5 @@
 package com.krzdabrowski.airpurrr.helper
 
-// TODO: (UI REWORK) Navigation Component
 // TODO: (UI REWORK) animations
 
 // TODO: (RE-IMPLEMENT) Automatic Mode logic & threshold dialog

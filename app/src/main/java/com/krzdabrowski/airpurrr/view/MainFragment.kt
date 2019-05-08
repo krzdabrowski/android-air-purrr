@@ -27,10 +27,9 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        view_pager.adapter = PagerAdapter(context!!, fragmentManager!!)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view_pager.adapter = PagerAdapter(context!!, childFragmentManager)
         tab_layout.setupWithViewPager(view_pager)
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)

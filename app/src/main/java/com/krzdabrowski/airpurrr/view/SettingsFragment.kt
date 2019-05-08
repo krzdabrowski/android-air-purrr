@@ -7,8 +7,11 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.krzdabrowski.airpurrr.R
 
+private const val KEY_THRESHOLD = "autoModeThreshold"
 
+// to read later: https://developer.android.com/guide/topics/ui/settings/use-saved-values
 class SettingsFragment : PreferenceFragmentCompat() {
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 

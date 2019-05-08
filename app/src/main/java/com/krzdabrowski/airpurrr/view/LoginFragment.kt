@@ -1,6 +1,5 @@
 package com.krzdabrowski.airpurrr.view
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +36,7 @@ class LoginFragment : Fragment() {
 
     private fun manualLogin() {
         binding.isLoggingIn = true
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(loginViewModel.email.value!!, loginViewModel.password.value!!).addOnCompleteListener(activity as Activity) { task ->
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(loginViewModel.email.value!!, loginViewModel.password.value!!).addOnCompleteListener(activity!!) { task ->
             if (task.isSuccessful) {
 //                PreferenceManager.getDefaultSharedPreferences(this).edit {
 //                    putString(getString(R.string.login_pref_email), LoginHelper.sha512Hash(email))

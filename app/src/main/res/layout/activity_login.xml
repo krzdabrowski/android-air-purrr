@@ -7,6 +7,7 @@
         android:id="@+id/login_fragment_host"
         style="@style/Login.Fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
         app:navGraph="@navigation/nav_login">
     </fragment>
 

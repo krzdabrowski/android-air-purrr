@@ -6,6 +6,7 @@
 
     <fragment
         android:id="@+id/main_fragment"
+        android:label="@string/label_app"
         android:name="com.krzdabrowski.airpurrr.view.MainFragment">
         <action
             android:id="@+id/navigate_to_settings_screen"
@@ -14,6 +15,7 @@
 
     <fragment
         android:id="@+id/settings_fragment"
+        android:label="@string/label_settings"
         android:name="com.krzdabrowski.airpurrr.view.SettingsFragment" />
 
 </navigation>
