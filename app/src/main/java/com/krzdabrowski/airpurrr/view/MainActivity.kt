@@ -16,11 +16,12 @@ class MainActivity : AppCompatActivity() {
 
         navController = findNavController(R.id.main_fragment_host)
         setupActionBarWithNavController(navController)
+
+        addOnBackPressedCallback {
+            if (!navController.navigateUp()) moveTaskToBack(true)
+            true
+        }
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()
-
-    override fun onBackPressed() {
-        if (!navController.navigateUp()) moveTaskToBack(true)
-    }
 }
