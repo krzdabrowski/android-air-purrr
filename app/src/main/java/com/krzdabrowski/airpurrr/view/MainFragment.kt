@@ -17,9 +17,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val purifierHelper: PurifierHelper by inject()
-
-    private var hashedEmail: String? = ""
-    private var hashedPassword: String? = ""
+    private val sharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(context) }
+    private val hashedEmail by lazy { sharedPreferences.getString(getString(R.string.login_pref_email), "") }
+    private val hashedPassword by lazy { sharedPreferences.getString(getString(R.string.login_pref_password), "") }
     private var manualModeState = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,10 +31,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         view_pager.adapter = PagerAdapter(context!!, childFragmentManager)
         tab_layout.setupWithViewPager(view_pager)
-
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        hashedEmail = sharedPreferences.getString(getString(R.string.login_pref_email), "")
-        hashedPassword = sharedPreferences.getString(getString(R.string.login_pref_password), "")
     }
 
     private fun onManualModeClick(email: String, password: String, state: Boolean) {
