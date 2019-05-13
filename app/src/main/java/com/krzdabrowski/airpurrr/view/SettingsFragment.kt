@@ -9,6 +9,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.lang.NumberFormatException
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
@@ -20,10 +21,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
         if (key == keySwitch) {
             detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keySwitch, false))
         } else if (key == keyThreshold) {
-            detectorViewModel.autoModeThreshold.set(sharedPreferences.getString(keyThreshold, "").toInt())
+            detectorViewModel.autoModeThreshold.set(
+                try {
+                    sharedPreferences.getString(keyThreshold, "0").toInt()
+                } catch (_: NumberFormatException) {
+                    0
+                })
+
+            if (!sharedPreferences.getBoolean(keySwitch, false)) {
+                break  // case 5
+            }
         }
 
-        if (sharedPreferences.getBoolean(keySwitch, false)) {
+        if (sharedPreferences.getInt(keyThreshold, 0) != 0) {
             detectorViewModel.checkAutoMode()
         }
     }
