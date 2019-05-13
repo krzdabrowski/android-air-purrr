@@ -7,10 +7,10 @@ import com.krzdabrowski.airpurrr.repository.ApiRepository
 
 class ApiViewModel(private val repository: ApiRepository) : ViewModel() {
 
-    private lateinit var apiLiveData: LiveData<ApiModel>
+    private lateinit var liveData: LiveData<ApiModel>
 
     fun getLiveData(): LiveData<ApiModel> {
-        apiLiveData = repository.fetchData()
-        return apiLiveData
+        liveData = repository.fetchData()
+        return liveData
     }
 }

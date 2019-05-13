@@ -7,16 +7,24 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
-    private val keySwitch = "autoModeSwitch"
-    private val keyThreshold = "autoModeThreshold"
+    private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val thresholdPreference by lazy { findPreference<EditTextPreference>(keyThreshold) }
+    private val keyThreshold = "autoModeThreshold"
+    private val keySwitch = "autoModeSwitch"
+
     private val preferenceListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         if (key == keySwitch) {
-            val valueSwitch = sharedPreferences.getBoolean(keySwitch, false)
-        } else if (key == "autoModeThreshold") {
-            val valueThreshold = sharedPreferences.getString(keyThreshold, "")
+            detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keySwitch, false))
+        } else if (key == keyThreshold) {
+            detectorViewModel.autoModeThreshold.set(sharedPreferences.getString(keyThreshold, "").toInt())
+        }
+
+        if (sharedPreferences.getBoolean(keySwitch, false)) {
+            detectorViewModel.checkAutoMode()
         }
     }
 

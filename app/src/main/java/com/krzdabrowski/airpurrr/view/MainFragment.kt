@@ -3,6 +3,7 @@ package com.krzdabrowski.airpurrr.view
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.*
+import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -12,15 +13,14 @@ import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MainFragment : Fragment() {
-    private val detectorViewModel: DetectorViewModel by viewModel()
+    private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val purifierHelper: PurifierHelper by inject()
     private val sharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(context) }
     private val hashedEmail by lazy { sharedPreferences.getString(getString(R.string.login_pref_email), "") }
     private val hashedPassword by lazy { sharedPreferences.getString(getString(R.string.login_pref_password), "") }
-    private var manualModeState = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -31,11 +31,15 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         view_pager.adapter = PagerAdapter(context!!, childFragmentManager)
         tab_layout.setupWithViewPager(view_pager)
+
+        detectorViewModel.purifierState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) = controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState.get())
+        })
     }
 
-    private fun onManualModeClick(email: String, password: String, state: Boolean) {
+    private fun controlPurifier(email: String, password: String, state: Boolean) {
         detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-            manualModeState = purifierHelper.getPurifierState(workstateValue, email, password, state, swipe_refresh) }
+            detectorViewModel.purifierState.set(purifierHelper.getPurifierState(workstateValue, email, password, state, swipe_refresh)) }
         )
     }
 
@@ -46,7 +50,7 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.mnu_manual_mode -> {
-                onManualModeClick(hashedEmail!!, hashedPassword!!, manualModeState)
+                controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState.get())
                 true
             }
             R.id.mnu_settings -> {

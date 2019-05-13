@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class LoginViewModel : ViewModel() {
-    var email = MutableLiveData<String>()
-    var password = MutableLiveData<String>()
-    var isFormValid = MutableLiveData<Boolean>()
-
-    var isEmailError = ObservableBoolean()
-    var isPasswordError = ObservableBoolean()
+    val email = MutableLiveData<String>()
+    val password = MutableLiveData<String>()
+    val isFormValid = MutableLiveData<Boolean>()
+    val isEmailError = ObservableBoolean()
+    val isPasswordError = ObservableBoolean()
 
     fun isEmailValid(login: String) = isEmailError.set(login.isBlank())
     fun isPasswordValid(password: String) = isPasswordError.set(password.isBlank())
