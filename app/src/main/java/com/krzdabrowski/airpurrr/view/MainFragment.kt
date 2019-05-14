@@ -33,14 +33,16 @@ class MainFragment : Fragment() {
         tab_layout.setupWithViewPager(view_pager)
 
         detectorViewModel.purifierState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) = controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState.get())
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState.get())  // TODO: reactive hell: controlPurifier() -> set with notifyChange() -> callback -> controlPurifier() (for manual and auto mode)
+            }
         })
     }
 
     private fun controlPurifier(email: String, password: String, state: Boolean) {
         detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-            detectorViewModel.purifierState.set(purifierHelper.getPurifierState(workstateValue, email, password, state, swipe_refresh)) }
-        )
+            detectorViewModel.purifierState.set(purifierHelper.getPurifierState(workstateValue, email, password, state, swipe_refresh))
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
