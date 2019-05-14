@@ -26,11 +26,11 @@ class DetectorViewModel(private val repository: DetectorRepository) : ViewModel(
         if (liveData.value != null && liveData.value?.values != null) {
             if (!purifierState.get() && autoModeSwitch.get() && autoModeThreshold.get() < liveData.value?.values!!.pm25 || autoModeThreshold.get() < liveData.value?.values!!.pm10) {
                 purifierState.set(true)
+                purifierState.notifyChange()
             } else if (purifierState.get() && !autoModeSwitch.get()) {
                 purifierState.set(false)
+                purifierState.notifyChange()
             }
-
-            purifierState.notifyChange()
         }
     }
 }
