@@ -9,9 +9,10 @@ import com.krzdabrowski.airpurrr.repository.DetectorRepository
 
 class DetectorViewModel(private val repository: DetectorRepository) : ViewModel() {
     private lateinit var liveData: LiveData<DetectorModel>
-    val purifierState = ObservableBoolean()
     val autoModeSwitch = ObservableBoolean()
     val autoModeThreshold = ObservableInt()
+    val purifierObservableState = ObservableBoolean()
+    var purifierState = purifierObservableState.get()
 
     fun getLiveData(): LiveData<DetectorModel> {
         liveData = repository.fetchData()
@@ -24,11 +25,13 @@ class DetectorViewModel(private val repository: DetectorRepository) : ViewModel(
 
     fun checkAutoMode() {
         if (liveData.value != null && liveData.value?.values != null) {
-            if (!purifierState.get() && autoModeSwitch.get() &&
+            if (!purifierState && autoModeSwitch.get() &&
                     autoModeThreshold.get() < liveData.value?.values!!.pm25 || autoModeThreshold.get() < liveData.value?.values!!.pm10) {
-                purifierState.set(true)
-            } else if (purifierState.get() && !autoModeSwitch.get()) {
-                purifierState.set(false)
+                purifierState = true
+                purifierObservableState.set(purifierState)
+            } else if (purifierState && !autoModeSwitch.get()) {
+                purifierState = false
+                purifierObservableState.set(purifierState)
             }
         }
     }

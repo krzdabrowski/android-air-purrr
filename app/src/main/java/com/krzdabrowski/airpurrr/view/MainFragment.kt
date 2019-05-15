@@ -32,16 +32,16 @@ class MainFragment : Fragment() {
         view_pager.adapter = PagerAdapter(context!!, childFragmentManager)
         tab_layout.setupWithViewPager(view_pager)
 
-        detectorViewModel.purifierState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+        detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState.get())  // TODO: reactive hell: controlPurifier() -> set with notifyChange() -> callback -> controlPurifier() (for manual and auto mode)
+                controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState)
             }
         })
     }
 
     private fun controlPurifier(email: String, password: String, state: Boolean) {
         detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-            detectorViewModel.purifierState.set(purifierHelper.getPurifierState(workstateValue, email, password, state, swipe_refresh))
+            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, email, password, state, swipe_refresh)
         })
     }
 
@@ -52,7 +52,7 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.mnu_manual_mode -> {
-                controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState.get())
+                controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState)
                 true
             }
             R.id.mnu_settings -> {
