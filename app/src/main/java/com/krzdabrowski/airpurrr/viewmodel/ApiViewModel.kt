@@ -1,16 +1,27 @@
 package com.krzdabrowski.airpurrr.viewmodel
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.krzdabrowski.airpurrr.helper.GPS_DEFAULT_LATITUDE
+import com.krzdabrowski.airpurrr.helper.GPS_DEFAULT_LONGITUDE
 import com.krzdabrowski.airpurrr.model.ApiModel
 import com.krzdabrowski.airpurrr.repository.ApiRepository
 
 class ApiViewModel(private val repository: ApiRepository) : ViewModel() {
 
     private lateinit var liveData: LiveData<ApiModel>
+    lateinit var userLocation: Location
 
     fun getLiveData(): LiveData<ApiModel> {
-        liveData = repository.fetchData()
+        liveData = repository.fetchData(userLocation)
         return liveData
+    }
+
+    fun getDefaultLocation(): Location {
+        val defaultLocation = Location("")
+        defaultLocation.latitude = GPS_DEFAULT_LATITUDE
+        defaultLocation.longitude = GPS_DEFAULT_LONGITUDE
+        return defaultLocation
     }
 }

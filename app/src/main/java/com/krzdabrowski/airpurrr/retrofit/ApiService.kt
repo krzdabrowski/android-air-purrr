@@ -9,11 +9,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("v2/measurements/point?lat=52.16198&lng=21.02762")
-    fun getApiDataAsync(@Header("apikey") apikey: String): Deferred<Response<ApiModel>>
+    @GET("v2/measurements/point")
+    fun getApiDataAsync(@Header("apikey") apikey: String, @Query("lat") userLat: Double, @Query("lng") userLon: Double): Deferred<Response<ApiModel>>
 
     companion object {
         fun create(): ApiService {

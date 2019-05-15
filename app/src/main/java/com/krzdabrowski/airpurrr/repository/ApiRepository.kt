@@ -1,5 +1,6 @@
 package com.krzdabrowski.airpurrr.repository
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.krzdabrowski.airpurrr.BuildConfig
@@ -14,11 +15,11 @@ import timber.log.Timber
 
 class ApiRepository(private val service: ApiService) {
 
-    fun fetchData(): LiveData<ApiModel> {
+    fun fetchData(userLocation: Location): LiveData<ApiModel> {
         val result = MutableLiveData<ApiModel>()
 
         CoroutineScope(Dispatchers.IO).launch {
-            val request = service.getApiDataAsync(BuildConfig.ApiKey)
+            val request = service.getApiDataAsync(BuildConfig.ApiKey, userLocation.latitude, userLocation.longitude)
             withContext(Dispatchers.Main) {
                 try {
                     val response = request.await()

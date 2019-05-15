@@ -11,12 +11,11 @@ import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class DataCurrentFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
-    private val apiViewModel: ApiViewModel by viewModel()
+    private val apiViewModel: ApiViewModel by sharedViewModel()
     private lateinit var binding: FragmentDataCurrentBinding
 
     private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
