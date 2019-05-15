@@ -44,7 +44,7 @@ android {
 
 ext {
     coroutinesVersion = '1.2.1'
-    ktxCoreVersion = '1.0.1'
+    ktxCoreVersion = '1.0.2'
     ktxFragmentVersion = '1.0.0'
     appCompatVersion = '1.0.2'
     lifecycleExtensionsVersion = '2.0.0'
@@ -54,8 +54,9 @@ ext {
     navigationVersion = '2.0.0'
 
     materialVersion = '1.0.0'
-    firebaseCoreVersion = '16.0.8'
-    firebaseAuthVersion = '16.2.1'
+    locationVersion = '16.0.0'
+    firebaseCoreVersion = '16.0.9'
+    firebaseAuthVersion = '17.0.0'
     databindingVersion = '3.1.4'
 
     retrofitVersion = '2.5.0'
@@ -84,6 +85,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     implementation "com.google.android.material:material:$materialVersion"
+    implementation "com.google.android.gms:play-services-location:$locationVersion"
     implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
     implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
     kapt "com.android.databinding:compiler:$databindingVersion"
