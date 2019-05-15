@@ -8,40 +8,40 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.helper.PREFS_SETTINGS_KEY_SWITCH
+import com.krzdabrowski.airpurrr.helper.PREFS_SETTINGS_KEY_THRESHOLD
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.lang.NumberFormatException
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
-    private val switchPreference by lazy { findPreference<SwitchPreferenceCompat>(keySwitch) }
-    private val thresholdPreference by lazy { findPreference<EditTextPreference>(keyThreshold) }
-    private val keySwitch = "autoModeSwitch"
-    private val keyThreshold = "autoModeThreshold"
+    private val switchPreference by lazy { findPreference<SwitchPreferenceCompat>(PREFS_SETTINGS_KEY_SWITCH) }
+    private val thresholdPreference by lazy { findPreference<EditTextPreference>(PREFS_SETTINGS_KEY_THRESHOLD) }
 
     private val preferenceListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-        if (key == keySwitch) {
-            detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keySwitch, false))
-        } else if (key == keyThreshold) {
+        if (key == PREFS_SETTINGS_KEY_SWITCH) {
+            detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false))
+        } else if (key == PREFS_SETTINGS_KEY_THRESHOLD) {
             detectorViewModel.autoModeThreshold.set(
                 try {
-                    sharedPreferences.getString(keyThreshold, "").toInt()
+                    sharedPreferences.getString(PREFS_SETTINGS_KEY_THRESHOLD, "").toInt()
                 } catch (_: NumberFormatException) {
                     0
                 })
         }
 
         // to use auto-mode: threshold MUST NOT be empty (must be set)
-        if (!sharedPreferences.getString(keyThreshold, "").isNullOrEmpty() &&
+        if (!sharedPreferences.getString(PREFS_SETTINGS_KEY_THRESHOLD, "").isNullOrEmpty() &&
         // it should not use edge-case when: threshold has been clicked and set && switch is off (case #5)
-                !(key == keyThreshold && !sharedPreferences.getBoolean(keySwitch, false))) {
+                !(key == PREFS_SETTINGS_KEY_THRESHOLD && !sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false))) {
             detectorViewModel.checkAutoMode()
 
         // it should block edge-case when: threshold has been clicked and NOT set && switch is on (case #8)
-        } else if (sharedPreferences.getString(keyThreshold, "").isNullOrEmpty() &&
-                key == keyThreshold && sharedPreferences.getBoolean(keySwitch, false)) {
+        } else if (sharedPreferences.getString(PREFS_SETTINGS_KEY_THRESHOLD, "").isNullOrEmpty() &&
+                key == PREFS_SETTINGS_KEY_THRESHOLD && sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false)) {
             switchPreference?.isChecked = false
-            detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keySwitch, false))
+            detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false))
         }
     }
 
