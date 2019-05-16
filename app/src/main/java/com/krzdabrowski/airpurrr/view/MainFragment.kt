@@ -1,7 +1,6 @@
 package com.krzdabrowski.airpurrr.view
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -49,18 +48,6 @@ class MainFragment : Fragment() {
     }
 
     // region Location permissions
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            PERMISSION_REQUEST_CODE_LOCATION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getLastKnownLocation()
-                } else {
-                    apiViewModel.userLocation.value = apiViewModel.getDefaultLocation()
-                }
-            }
-        }
-    }
-
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE_LOCATION)
@@ -69,15 +56,18 @@ class MainFragment : Fragment() {
         }
     }
 
-    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE_LOCATION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) getLastKnownLocation()
+            }
+        }
+    }
+
     private fun getLastKnownLocation() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                apiViewModel.userLocation.value = location
-            } else {
-                apiViewModel.userLocation.value = apiViewModel.getDefaultLocation()
-            }
+            if (location != null) apiViewModel.userLocation.value = location
         }
     }
     // endregion

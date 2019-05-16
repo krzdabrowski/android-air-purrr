@@ -12,14 +12,14 @@ import com.krzdabrowski.airpurrr.repository.ApiRepository
 class ApiViewModel(private val repository: ApiRepository) : ViewModel() {
 
     private lateinit var liveData: LiveData<ApiModel>
-    var userLocation = MutableLiveData<Location>()
+    var userLocation = MutableLiveData<Location>().apply { value = getDefaultLocation() }
 
     fun getLiveData(): LiveData<ApiModel> {
         liveData = repository.fetchData(userLocation.value!!)
         return liveData
     }
 
-    fun getDefaultLocation(): Location {
+    private fun getDefaultLocation(): Location {
         val defaultLocation = Location("")
         defaultLocation.latitude = GPS_DEFAULT_LATITUDE
         defaultLocation.longitude = GPS_DEFAULT_LONGITUDE

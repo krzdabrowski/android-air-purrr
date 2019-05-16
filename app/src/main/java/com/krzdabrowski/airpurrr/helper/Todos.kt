@@ -1,6 +1,5 @@
 package com.krzdabrowski.airpurrr.helper
 
-// TODO: (RE-IMPLEMENT) Location
 // TODO: (RE-IMPLEMENT) Fingerprint Reader logic & network/fingerprint checks and permissions & sha512 impl from some library
 
 // TODO: (IDEAS) AAC WorkManager instead of TimerTask()

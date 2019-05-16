@@ -20,7 +20,7 @@ class DataCurrentFragment : Fragment() {
 
     private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
     private fun getApiData() = apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
-    private fun getApiLocation() = apiViewModel.userLocation.observe(this, Observer { location ->
+    private fun getApi() = apiViewModel.userLocation.observe(this, Observer { location ->
         if (location != null) {
             getApiData()
         }
@@ -48,7 +48,7 @@ class DataCurrentFragment : Fragment() {
     }
 
     private fun onRefresh() {
-        getApiLocation()
+        getApi()
         getDetectorData()
         swipe_refresh.isRefreshing = false
     }
@@ -58,7 +58,7 @@ class DataCurrentFragment : Fragment() {
         val minuteTask = object : TimerTask() {
             override fun run() {
                 activity?.runOnUiThread {
-                    getApiLocation()
+                    getApi()
                     getDetectorData()
                 }
             }
