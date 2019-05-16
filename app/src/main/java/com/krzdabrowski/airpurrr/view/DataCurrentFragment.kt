@@ -14,12 +14,17 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
 class DataCurrentFragment : Fragment() {
-    private val detectorViewModel: DetectorViewModel by sharedViewModel()
-    private val apiViewModel: ApiViewModel by sharedViewModel()
+    private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!! })
+    private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
     private lateinit var binding: FragmentDataCurrentBinding
 
     private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
     private fun getApiData() = apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
+    private fun getApiLocation() = apiViewModel.userLocation.observe(this, Observer { location ->
+        if (location != null) {
+            getApiData()
+        }
+    })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDataCurrentBinding.inflate(inflater, container, false)
@@ -43,7 +48,7 @@ class DataCurrentFragment : Fragment() {
     }
 
     private fun onRefresh() {
-        getApiData()
+        getApiLocation()
         getDetectorData()
         swipe_refresh.isRefreshing = false
     }
@@ -53,7 +58,7 @@ class DataCurrentFragment : Fragment() {
         val minuteTask = object : TimerTask() {
             override fun run() {
                 activity?.runOnUiThread {
-                    getApiData()
+                    getApiLocation()
                     getDetectorData()
                 }
             }

@@ -2,6 +2,7 @@ package com.krzdabrowski.airpurrr.viewmodel
 
 import android.location.Location
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.krzdabrowski.airpurrr.helper.GPS_DEFAULT_LATITUDE
 import com.krzdabrowski.airpurrr.helper.GPS_DEFAULT_LONGITUDE
@@ -11,10 +12,10 @@ import com.krzdabrowski.airpurrr.repository.ApiRepository
 class ApiViewModel(private val repository: ApiRepository) : ViewModel() {
 
     private lateinit var liveData: LiveData<ApiModel>
-    lateinit var userLocation: Location
+    var userLocation = MutableLiveData<Location>()
 
     fun getLiveData(): LiveData<ApiModel> {
-        liveData = repository.fetchData(userLocation)
+        liveData = repository.fetchData(userLocation.value!!)
         return liveData
     }
 

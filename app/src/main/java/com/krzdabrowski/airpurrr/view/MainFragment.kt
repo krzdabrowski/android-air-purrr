@@ -55,7 +55,7 @@ class MainFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getLastKnownLocation()
                 } else {
-                    apiViewModel.userLocation = apiViewModel.getDefaultLocation()
+                    apiViewModel.userLocation.value = apiViewModel.getDefaultLocation()
                 }
             }
         }
@@ -74,9 +74,9 @@ class MainFragment : Fragment() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) {
-                apiViewModel.userLocation = location
+                apiViewModel.userLocation.value = location
             } else {
-                apiViewModel.userLocation = apiViewModel.getDefaultLocation()
+                apiViewModel.userLocation.value = apiViewModel.getDefaultLocation()
             }
         }
     }
