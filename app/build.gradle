@@ -39,6 +39,10 @@ android {
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     dataBinding.enabled = true
 }
 
@@ -63,6 +67,7 @@ ext {
     retrofitCoroutinesAdapterVersion = '0.9.2'
     timberVersion = '4.7.1'
     koinVersion = '2.0.0-GA'
+    armadilloVersion = '0.8.0'
 
     testJunitVersion = '4.12'
     testRunnerVersion = '1.1.1'
@@ -96,6 +101,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
+    implementation "at.favre.lib:armadillo:$armadilloVersion"
 
     testImplementation "junit:junit:$testJunitVersion"
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
