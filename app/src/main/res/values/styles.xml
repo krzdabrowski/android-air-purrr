@@ -13,6 +13,11 @@
         <item name="android:textColorHint">@color/color_login_inactive</item>
     </style>
 
+    <style name="Login.Fragment">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
     <style name="Login.RootLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -26,60 +31,40 @@
         <item name="android:paddingEnd">@dimen/margin_medium</item>
     </style>
 
-    <style name="Login.RootLayout.Fingerprint">
+    <style name="Login.RootLayout.Credentials">
         <item name="android:gravity">center</item>
         <item name="android:paddingBottom">@dimen/margin_xxxl</item>
         <item name="android:visibility">gone</item>
     </style>
 
-    <style name="Login.Fragment">
+    <style name="Login.ProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="Login.Manual" />
+    <style name="Login.Credentials" />
 
-    <style name="Login.Manual.Logo">
+    <style name="Login.Credentials.Logo">
         <item name="android:layout_width">@dimen/login_logo_size</item>
         <item name="android:layout_height">@dimen/login_logo_size</item>
         <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
     </style>
 
-    <style name="Login.Manual.TextInputLayout">
+    <style name="Login.Credentials.TextInputLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/margin_small</item>
     </style>
 
-    <style name="Login.Manual.TextInputEditText">
+    <style name="Login.Credentials.TextInputEditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="Login.Manual.Button">
+    <style name="Login.Credentials.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/margin_medium</item>
-    </style>
-
-    <style name="Login.Fingerprint">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="Login.Fingerprint.Icon">
-        <item name="android:padding">@dimen/margin_tiny</item>
-    </style>
-
-    <style name="Login.Fingerprint.Text">
-        <item name="android:layout_marginTop">@dimen/margin_small</item>
-        <item name="android:textColor">@color/color_login_accent</item>
-        <item name="android:textSize">@dimen/login_auth_text_size</item>
-    </style>
-
-    <style name="Login.ProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
     </style>
 
 

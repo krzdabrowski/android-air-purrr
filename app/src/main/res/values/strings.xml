@@ -8,8 +8,6 @@
     <string name="login_hint_email">E-mail</string>
     <string name="login_hint_password">Password</string>
     <string name="login_btn_text">Login</string>
-    <string name="login_fingerprint_text">Authenticate with your fingerprint</string>
-    <string name="login_description_fingerprint_icon">Fingerprint icon</string>
     <string name="login_description_logo">Application logo</string>
     <string name="login_pref_email">login_email</string>
     <string name="login_pref_password">login_password</string>

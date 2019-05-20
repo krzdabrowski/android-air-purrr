@@ -14,6 +14,7 @@ class DetectorViewModel(private val repository: DetectorRepository) : ViewModel(
     val purifierObservableState = ObservableBoolean()
     var purifierState = purifierObservableState.get()
 
+    // possible refactor VMs to use LiveData coroutines with liveData block (until lifecycle v2.2.0 comes out of alpha)
     fun getLiveData(): LiveData<DetectorModel> {
         liveData = repository.fetchData()
         return liveData
