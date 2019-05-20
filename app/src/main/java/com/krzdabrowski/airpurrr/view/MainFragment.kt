@@ -3,13 +3,13 @@ package com.krzdabrowski.airpurrr.view
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import at.favre.lib.armadillo.Armadillo
 import com.google.android.gms.location.LocationServices
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.helper.*
@@ -24,9 +24,9 @@ class MainFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private val purifierHelper: PurifierHelper by inject()
-    private val sharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(context) }
-    private val hashedEmail by lazy { sharedPreferences.getString(getString(R.string.login_pref_email), "") }
-    private val hashedPassword by lazy { sharedPreferences.getString(getString(R.string.login_pref_password), "") }
+    private val credentialPrefs by lazy { Armadillo.create(context, PREFS_LOGIN_KEY_CREDENTIALS).encryptionFingerprint(context).build() }
+    private val email by lazy { credentialPrefs.getString(getString(R.string.login_pref_email), null) }
+    private val password by lazy { credentialPrefs.getString(getString(R.string.login_pref_password), null) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -40,7 +40,7 @@ class MainFragment : Fragment() {
 
         detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState)
+                controlPurifier(email, password, detectorViewModel.purifierState)
             }
         })
 
@@ -88,7 +88,7 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.mnu_manual_mode -> {
-                controlPurifier(hashedEmail!!, hashedPassword!!, detectorViewModel.purifierState)
+                controlPurifier(email, password, detectorViewModel.purifierState)
                 true
             }
             R.id.mnu_settings -> {

@@ -1,6 +1,5 @@
 package com.krzdabrowski.airpurrr.view
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +18,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment() {
     private val loginViewModel: LoginViewModel by viewModel()
+    private val credentialPrefs by lazy { Armadillo.create(context, PREFS_LOGIN_KEY_CREDENTIALS).encryptionFingerprint(context).build() }
     private lateinit var binding: FragmentLoginBinding
-    private lateinit var credentialPrefs: SharedPreferences
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
@@ -29,10 +28,6 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        credentialPrefs = Armadillo.create(context, PREFS_LOGIN_KEY_CREDENTIALS)
-                .encryptionFingerprint(context)
-                .build()
 
         binding.loginVm = loginViewModel
         binding.isLoggingIn = false
@@ -52,7 +47,7 @@ class LoginFragment : Fragment() {
                     apply()
                 }
 
-                val directions = LoginFragmentDirections.navigateToMainScreen()  // add hashed login and password as args here
+                val directions = LoginFragmentDirections.navigateToMainScreen()
                 findNavController().navigate(directions)
             } else {
                 binding.isLoggingIn = false
