@@ -8,6 +8,8 @@
     <string name="login_hint_email">E-mail</string>
     <string name="login_hint_password">Password</string>
     <string name="login_btn_text">Login</string>
+    <string name="login_fingerprint_text">Authenticate with your fingerprint</string>
+    <string name="login_fingerprint_button_cancel">Cancel</string>
     <string name="login_description_logo">Application logo</string>
     <string name="login_pref_email">login_email</string>
     <string name="login_pref_password">login_password</string>
@@ -15,9 +17,8 @@
     <string name="login_message_dialog">Authenticating…</string>
     <string name="login_message_error_empty_field">Required</string>
     <string name="login_message_error_auth">Authentication error!</string>
-    <string name="login_message_error_no_internet">No Internet connection!</string>
-    <string name="login_message_error_no_secure_screen">You need lock screen secured to continue</string>
-    <string name="login_message_error_no_saved_fingerprint">You need at least one fingerprint registered to continue</string>
+    <string name="login_message_error_no_saved_fingerprint">Add at least one fingerprint to login with fingerprint</string>
+    <string name="login_message_error_no_permission">Grant permissions to login with fingerprint</string>
 
 
     <!-- Main screen -->

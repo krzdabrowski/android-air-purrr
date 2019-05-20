@@ -16,12 +16,11 @@ import com.krzdabrowski.airpurrr.databinding.FragmentLoginBinding
 import com.krzdabrowski.airpurrr.helper.BiometricHelper
 import com.krzdabrowski.airpurrr.helper.PREFS_LOGIN_KEY_CREDENTIALS
 import com.krzdabrowski.airpurrr.viewmodel.LoginViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), BiometricHelper.OnSuccessCallback {
     private val loginViewModel: LoginViewModel by viewModel()
-    private val biometricHelper: BiometricHelper by inject()
+    private val biometricHelper by lazy { BiometricHelper(context!!, this) }
     private val credentialPrefs by lazy { Armadillo.create(context, PREFS_LOGIN_KEY_CREDENTIALS).encryptionFingerprint(context).build() }
     private lateinit var binding: FragmentLoginBinding
 
@@ -40,15 +39,8 @@ class LoginFragment : Fragment() {
         loginViewModel.password.observe(this, Observer { password -> loginViewModel.isPasswordValid(password) })
         loginViewModel.isFormValid.observe(this, Observer { manualLogin() })
 
-        if (credentialPrefs.contains(getString(R.string.login_pref_email))) {
-            showFingerprintPrompt()
-        }
-    }
-
-    // bug in biometric-alpha04: https://issuetracker.google.com/issues/131980596
-    private fun showFingerprintPrompt() {
-        val biometricPrompt = BiometricPrompt(activity!!, LoginActivity.MainExecutor(), biometricHelper)
-        biometricPrompt.authenticate(biometricHelper.getPromptInfo())
+        if (credentialPrefs.contains(getString(R.string.login_pref_email)))
+            fingerprintLogin()
     }
 
     private fun manualLogin() {
@@ -60,13 +52,29 @@ class LoginFragment : Fragment() {
                     putString(getString(R.string.login_pref_password), loginViewModel.password.value)
                     apply()
                 }
-
-                val directions = LoginFragmentDirections.navigateToMainScreen()
-                findNavController().navigate(directions)
+                navigateToMainScreen()
             } else {
                 binding.isLoggingIn = false
                 Snackbar.make(view!!, R.string.login_message_error_auth, Snackbar.LENGTH_SHORT).show()
             }
         }
     }
+
+    // bug in biometric-alpha04: https://issuetracker.google.com/issues/131980596
+    private fun fingerprintLogin() {
+        if (biometricHelper.isFingerprintAvailable()) {
+            if (biometricHelper.isPermissionGranted()) {
+                BiometricPrompt(activity!!, LoginActivity.MainExecutor(), biometricHelper)
+                        .authenticate(biometricHelper.getPromptInfo())
+            } else {
+                Snackbar.make(view!!, R.string.login_message_error_no_permission, Snackbar.LENGTH_SHORT).show()
+            }
+        } else {
+            Snackbar.make(view!!, R.string.login_message_error_no_saved_fingerprint, Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun navigateToMainScreen() = findNavController().navigate(LoginFragmentDirections.navigateToMainScreen())
+
+    override fun onSuccess() = navigateToMainScreen()
 }
