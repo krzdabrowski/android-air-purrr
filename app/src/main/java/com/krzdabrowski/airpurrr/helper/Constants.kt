@@ -9,4 +9,5 @@ const val GPS_DEFAULT_LONGITUDE = 21.02762
 
 const val PREFS_SETTINGS_KEY_SWITCH = "autoModeSwitch"
 const val PREFS_SETTINGS_KEY_THRESHOLD = "autoModeThreshold"
+const val PREFS_SETTINGS_KEY_RPM = "fanSpeedRpm"
 const val PREFS_LOGIN_KEY_CREDENTIALS = "credentialsPrefs"
