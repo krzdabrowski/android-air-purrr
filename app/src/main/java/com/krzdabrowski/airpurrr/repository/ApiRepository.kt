@@ -28,7 +28,7 @@ class ApiRepository(private val service: ApiService) {
                         if (currentValues?.get(1)?.get("name") == "PM25" && currentValues[2]?.get("name") == "PM10") {
                             val pm25 = currentValues[1]?.get("value") as Double
                             val pm10 = currentValues[2]?.get("value") as Double
-                            result.value = ApiModel(null, Pair(pm25, pm10))
+                            result.value = ApiModel(null, doubleArrayOf(pm25, pm10))
                         }
                     } else {
                         Timber.e("ApiModel error: ${response.code()}")

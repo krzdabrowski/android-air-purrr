@@ -36,9 +36,9 @@ fun TextView.bindDataPercentage(type: String, data: BaseModel?) {
         }
     } else if (data is ApiModel) {
         if (type == "PM2.5") {
-            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.data.first))
+            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.data[0]))
         } else if (type == "PM10") {
-            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.data.second))
+            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.data[1]))
         }
     }
 }
@@ -57,9 +57,9 @@ fun TextView.bindDataUgm3(type: String, data: BaseModel?) {
         }
     } else if (data is ApiModel) {
         if (type == "PM2.5") {
-            text = resources.getString(R.string.main_data_ugm3, data.data.first)
+            text = resources.getString(R.string.main_data_ugm3, data.data[0])
         } else if (type == "PM10") {
-            text = resources.getString(R.string.main_data_ugm3, data.data.second)
+            text = resources.getString(R.string.main_data_ugm3, data.data[1])
         }
     }
 }
@@ -78,9 +78,9 @@ fun ConstraintLayout.bindBackgroundColor(type: String, data: BaseModel?) {
     } else if (data is ApiModel) {
         val values = data.data
         if (type == "PM2.5") {
-            valuePerc = ConversionHelper.pm25ToPercent(values.first)
+            valuePerc = ConversionHelper.pm25ToPercent(values[0])
         } else if (type == "PM10") {
-            valuePerc = ConversionHelper.pm10ToPercent(values.second)
+            valuePerc = ConversionHelper.pm10ToPercent(values[1])
         }
     }
 

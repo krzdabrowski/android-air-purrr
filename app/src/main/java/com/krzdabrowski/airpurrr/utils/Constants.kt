@@ -12,6 +12,7 @@ const val PREFS_SETTINGS_KEY_THRESHOLD = "autoModeThreshold"
 const val PREFS_SETTINGS_KEY_RPM = "fanSpeedRpm"
 const val PREFS_LOGIN_KEY_CREDENTIALS = "credentialsPrefs"
 
-const val WORKER_KEY_LOCATION_DATA = "locationData"
-const val WORKER_TAG_API_PERIODIC_REQUEST = "periodicApiTag"
+const val WORKER_KEY_LOCATION_DATA = "workerLocationData"
+const val WORKER_KEY_API_RESULT = "workerApiResult"
+const val WORKER_TAG_API_PERIODIC_REQUEST = "workerPeriodicApiTag"
 
