@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.helper
+package com.krzdabrowski.airpurrr.utils
 
 import androidx.databinding.BindingAdapter
 import com.krzdabrowski.airpurrr.R

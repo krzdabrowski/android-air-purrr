@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.helper
+package com.krzdabrowski.airpurrr.utils
 
 const val VIEWPAGER_TAB_SIZE = 2
 
@@ -11,3 +11,7 @@ const val PREFS_SETTINGS_KEY_SWITCH = "autoModeSwitch"
 const val PREFS_SETTINGS_KEY_THRESHOLD = "autoModeThreshold"
 const val PREFS_SETTINGS_KEY_RPM = "fanSpeedRpm"
 const val PREFS_LOGIN_KEY_CREDENTIALS = "credentialsPrefs"
+
+const val WORKER_KEY_LOCATION_DATA = "locationData"
+const val WORKER_TAG_API_PERIODIC_REQUEST = "periodicApiTag"
+

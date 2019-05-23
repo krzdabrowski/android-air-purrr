@@ -11,7 +11,6 @@ import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.util.*
 
 class DataCurrentFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!! })
@@ -23,6 +22,7 @@ class DataCurrentFragment : Fragment() {
     private fun getApi() = apiViewModel.userLocation.observe(this, Observer { location ->
         if (location != null) {
             getApiData()
+            apiViewModel.runPeriodicFetching()
         }
     })
 
@@ -38,31 +38,18 @@ class DataCurrentFragment : Fragment() {
 
         partial_main_data_pm25.setOnClickListener { onDataClick() }
         partial_main_data_pm10.setOnClickListener { onDataClick() }
-        swipe_refresh.setOnRefreshListener { onRefresh() }
+        swipe_refresh.setOnRefreshListener { fetchNewData() }
 
-        automaticDownload()
+        fetchNewData()
     }
 
     private fun onDataClick() {
         binding.flagDetectorApi = !binding.flagDetectorApi!!
     }
 
-    private fun onRefresh() {
-        getApi()
+    private fun fetchNewData() {
         getDetectorData()
+        getApi()
         swipe_refresh.isRefreshing = false
-    }
-
-    private fun automaticDownload() {
-        val timer = Timer()
-        val minuteTask = object : TimerTask() {
-            override fun run() {
-                activity?.runOnUiThread {
-                    getApi()
-                    getDetectorData()
-                }
-            }
-        }
-        timer.schedule(minuteTask, 0, (1000 * 60 * 2).toLong())  // 1000*60*2 every 2 minutes
     }
 }

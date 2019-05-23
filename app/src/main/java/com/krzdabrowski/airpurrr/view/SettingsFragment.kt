@@ -9,8 +9,8 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.helper.PREFS_SETTINGS_KEY_SWITCH
-import com.krzdabrowski.airpurrr.helper.PREFS_SETTINGS_KEY_THRESHOLD
+import com.krzdabrowski.airpurrr.utils.PREFS_SETTINGS_KEY_SWITCH
+import com.krzdabrowski.airpurrr.utils.PREFS_SETTINGS_KEY_THRESHOLD
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.lang.NumberFormatException

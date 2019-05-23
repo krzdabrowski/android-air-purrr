@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.helper
+package com.krzdabrowski.airpurrr.utils
 
 // TODO: (IDEAS) AAC WorkManager instead of TimerTask()
 
