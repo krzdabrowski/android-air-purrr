@@ -16,5 +16,5 @@ From now, app uses Airly API instead of GIOS's one. You need to register your ac
 
 ## Screenshots
 
-<img src="https://i.imgur.com/pW3y7QT.png" width="285"> <img src="https://i.imgur.com/AaJY6o9.png" width="285"> <img src="https://i.imgur.com/mNsNVH2.png" width="285">
-<img src="https://i.imgur.com/wPxHUAN.png" width="285"> <img src="https://i.imgur.com/UaosFkF.png" width="285"> <img src="https://i.imgur.com/xNHDOVQ.png" width="285">
+<img src="https://i.imgur.com/lZLBqAa.png" width="285"> <img src="https://i.imgur.com/b0FFawA.png" width="285"> <img src="https://i.imgur.com/uzgVr9N.png" width="285">
+<img src="https://i.imgur.com/2X70BGf.png" width="285"> <img src="https://i.imgur.com/rFXxdHl.png" width="285"> <img src="https://i.imgur.com/UoCvgJx.png" width="285">
