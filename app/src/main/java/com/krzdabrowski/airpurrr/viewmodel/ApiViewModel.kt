@@ -4,8 +4,8 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.krzdabrowski.airpurrr.helper.GPS_DEFAULT_LATITUDE
-import com.krzdabrowski.airpurrr.helper.GPS_DEFAULT_LONGITUDE
+import com.krzdabrowski.airpurrr.utils.GPS_DEFAULT_LATITUDE
+import com.krzdabrowski.airpurrr.utils.GPS_DEFAULT_LONGITUDE
 import com.krzdabrowski.airpurrr.model.ApiModel
 import com.krzdabrowski.airpurrr.repository.ApiRepository
 

@@ -1,9 +1,10 @@
-package com.krzdabrowski.airpurrr.helper
+package com.krzdabrowski.airpurrr.utils
 
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.helper.ConversionHelper
 import com.krzdabrowski.airpurrr.model.ApiModel
 import com.krzdabrowski.airpurrr.model.BaseModel
 import com.krzdabrowski.airpurrr.model.DetectorModel

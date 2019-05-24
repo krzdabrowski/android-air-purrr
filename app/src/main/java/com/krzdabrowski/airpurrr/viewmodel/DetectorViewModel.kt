@@ -25,7 +25,7 @@ class DetectorViewModel(private val repository: DetectorRepository) : ViewModel(
     }
 
     fun checkAutoMode() {
-        if (liveData.value != null && liveData.value?.values != null) {
+        if (::liveData.isInitialized && liveData.value != null && liveData.value?.values != null) {
             if (!purifierState && autoModeSwitch.get() &&
                     autoModeThreshold.get() < liveData.value?.values!!.pm25 || autoModeThreshold.get() < liveData.value?.values!!.pm10) {
                 purifierState = true

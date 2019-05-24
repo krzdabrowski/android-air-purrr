@@ -13,6 +13,8 @@ import at.favre.lib.armadillo.Armadillo
 import com.google.android.gms.location.LocationServices
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.helper.*
+import com.krzdabrowski.airpurrr.utils.PERMISSION_REQUEST_CODE_LOCATION
+import com.krzdabrowski.airpurrr.utils.PREFS_LOGIN_KEY_CREDENTIALS
 import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*

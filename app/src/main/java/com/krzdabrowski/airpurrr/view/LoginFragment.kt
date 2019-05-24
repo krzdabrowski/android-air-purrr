@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.databinding.FragmentLoginBinding
 import com.krzdabrowski.airpurrr.helper.BiometricHelper
-import com.krzdabrowski.airpurrr.helper.PREFS_LOGIN_KEY_CREDENTIALS
+import com.krzdabrowski.airpurrr.utils.PREFS_LOGIN_KEY_CREDENTIALS
 import com.krzdabrowski.airpurrr.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

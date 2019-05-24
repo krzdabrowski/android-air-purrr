@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.helper
+package com.krzdabrowski.airpurrr.utils
 
 const val VIEWPAGER_TAB_SIZE = 2
 

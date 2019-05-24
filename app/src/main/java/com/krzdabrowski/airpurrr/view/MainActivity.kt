@@ -1,6 +1,7 @@
 package com.krzdabrowski.airpurrr.view
 
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -14,10 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupActionBarWithNavController(navController)
-        addOnBackPressedCallback {
-            if (!navController.navigateUp()) moveTaskToBack(true)
-            true
-        }
+        onBackPressedDispatcher.addCallback { if (!navController.navigateUp()) moveTaskToBack(true) }
     }
 
     override fun onSupportNavigateUp() = navController.navigateUp()
