@@ -19,15 +19,6 @@ class DataCurrentFragment : Fragment() {
     private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
     private lateinit var binding: FragmentDataCurrentBinding
 
-    private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
-    private fun getApiData() = apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
-    private fun getApi() = apiViewModel.userLocation.observe(this, Observer { location ->
-        if (location != null) {
-            getApiData()
-            runPeriodicFetching()
-        }
-    })
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDataCurrentBinding.inflate(inflater, container, false)
         binding.flagDetectorApi = false
@@ -45,20 +36,31 @@ class DataCurrentFragment : Fragment() {
         fetchNewData()
     }
 
+    private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
+
+    private fun getApiData() = apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
+
+    private fun getApi() = apiViewModel.userLocation.observe(this, Observer { location ->
+        if (location != null) {
+            getApiData()
+            runPeriodicFetching()
+        }
+    })
+
     private fun onDataClick() {
         binding.flagDetectorApi = !binding.flagDetectorApi!!
     }
 
     private fun fetchNewData() {
-        getApi()
         getDetectorData()
+        getApi()
         swipe_refresh.isRefreshing = false
     }
 
     private fun runPeriodicFetching() {
         val handler = Handler()
         handler.postDelayed(runnable {
-            getApiData()
+            fetchNewData()
             handler.postDelayed(this, DATA_RECURRENT_FETCHING_INTERVAL)
         }, DATA_RECURRENT_FETCHING_INTERVAL)
     }

@@ -43,9 +43,16 @@ class LoginFragment : Fragment(), BiometricHelper.OnSuccessCallback {
             fingerprintLogin()
     }
 
+    override fun onSuccess() = navigateToMainScreen()
+
+    private fun navigateToMainScreen() = findNavController().navigate(LoginFragmentDirections.navigateToMainScreen())
+
     private fun manualLogin() {
         binding.isLoggingIn = true
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(loginViewModel.email.value!!, loginViewModel.password.value!!).addOnCompleteListener(activity!!) { task ->
+        FirebaseAuth
+                .getInstance()
+                .signInWithEmailAndPassword(loginViewModel.email.value!!, loginViewModel.password.value!!)
+                .addOnCompleteListener(activity!!) { task ->
             if (task.isSuccessful) {
                 with (credentialPrefs.edit()) {
                     putString(getString(R.string.login_pref_email), loginViewModel.email.value)
@@ -55,7 +62,7 @@ class LoginFragment : Fragment(), BiometricHelper.OnSuccessCallback {
                 navigateToMainScreen()
             } else {
                 binding.isLoggingIn = false
-                Snackbar.make(view!!, R.string.login_message_error_auth, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(view!!, R.string.login_error_auth, Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -67,14 +74,10 @@ class LoginFragment : Fragment(), BiometricHelper.OnSuccessCallback {
                 BiometricPrompt(activity!!, LoginActivity.MainExecutor(), biometricHelper)
                         .authenticate(biometricHelper.getPromptInfo())
             } else {
-                Snackbar.make(view!!, R.string.login_message_error_no_permission, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(view!!, R.string.login_error_no_permission, Snackbar.LENGTH_SHORT).show()
             }
         } else {
-            Snackbar.make(view!!, R.string.login_message_error_no_saved_fingerprint, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(view!!, R.string.login_error_no_saved_fingerprint, Snackbar.LENGTH_SHORT).show()
         }
     }
-
-    private fun navigateToMainScreen() = findNavController().navigate(LoginFragmentDirections.navigateToMainScreen())
-
-    override fun onSuccess() = navigateToMainScreen()
 }

@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.utils.VIEWPAGER_TAB_SIZE
 
-class PagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class PagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> DataCurrentFragment()

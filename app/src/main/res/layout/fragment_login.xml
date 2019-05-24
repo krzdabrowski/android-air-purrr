@@ -16,7 +16,6 @@
 
     <LinearLayout style="@style/Login.RootLayout">
         <ProgressBar
-            android:id="@+id/progress_bar"
             style="@style/Login.ProgressBar"
             android:indeterminate="true"
             android:visibility="@{isLoggingIn ? View.VISIBLE : View.INVISIBLE}" />

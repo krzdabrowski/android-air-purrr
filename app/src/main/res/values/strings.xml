@@ -14,11 +14,11 @@
     <string name="login_pref_email">login_email</string>
     <string name="login_pref_password">login_password</string>
 
-    <string name="login_message_dialog">Authenticating…</string>
-    <string name="login_message_error_empty_field">Required</string>
-    <string name="login_message_error_auth">Authentication error!</string>
-    <string name="login_message_error_no_saved_fingerprint">Add at least one fingerprint to login with fingerprint</string>
-    <string name="login_message_error_no_permission">Grant permissions to login with fingerprint</string>
+    <string name="login_msg_dialog">Authenticating…</string>
+    <string name="login_error_empty_field">Required</string>
+    <string name="login_error_auth">Authentication error!</string>
+    <string name="login_error_no_saved_fingerprint">Add at least one fingerprint to login with fingerprint</string>
+    <string name="login_error_no_permission">Grant permissions to login with fingerprint</string>
 
 
     <!-- Main screen -->
@@ -34,15 +34,15 @@
     <string name="main_data_info_api_empty">no data</string>
     <string name="main_data_description_logo">Airly logo</string>
 
-    <string name="main_message_turn_on">Processing the request…</string>
-    <string name="main_message_error">Detector error occurred</string>
-    <string name="main_message_error_measuring">Cannot process the request - detector in measuring mode</string>
-    <string name="main_message_error_server">Server isn\'t responding, try again later</string>
+    <string name="main_msg_turn_on">Processing the request…</string>
+    <string name="main_error_basic">Detector error occurred</string>
+    <string name="main_error_measuring">Cannot process the request - detector in measuring mode</string>
+    <string name="main_error_server">Server isn\'t responding, try again later</string>
 
 
     <!-- Menu -->
-    <string name="mnu_manual_mode">Control fan manually</string>
-    <string name="mnu_settings">Settings</string>
+    <string name="menu_manual_mode">Control fan manually</string>
+    <string name="menu_settings">Settings</string>
 
 
     <!-- Settings -->

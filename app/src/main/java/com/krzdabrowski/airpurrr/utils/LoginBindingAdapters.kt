@@ -15,6 +15,6 @@ fun TextInputEditText.showPasswordValidationError(isPasswordError: Boolean) {
 }
 
 private fun TextInputEditText.setValidationError(errorField: Boolean) {
-    if (errorField) error = context.getString(R.string.login_message_error_empty_field)
+    if (errorField) error = context.getString(R.string.login_error_empty_field)
     else error = null
 }

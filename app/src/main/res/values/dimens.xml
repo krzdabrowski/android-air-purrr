@@ -2,7 +2,6 @@
 <resources>
     <!-- Login screen -->
     <dimen name="login_logo_size">96dp</dimen>
-    <dimen name="login_auth_text_size">18sp</dimen>
 
     <!-- Main screen -->
     <dimen name="main_data_text_size_percentage">88sp</dimen>
@@ -21,6 +20,4 @@
     <dimen name="margin_medium">24dp</dimen>
     <dimen name="margin_large">32dp</dimen>
     <dimen name="margin_xl">48dp</dimen>
-    <dimen name="margin_xxl">64dp</dimen>
-    <dimen name="margin_xxxl">96dp</dimen>
 </resources>

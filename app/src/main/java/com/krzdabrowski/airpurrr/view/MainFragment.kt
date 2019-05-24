@@ -50,19 +50,19 @@ class MainFragment : Fragment() {
     }
 
     // region Location permissions
-    private fun checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE_LOCATION)
-        } else {
-            getLastKnownLocation()
-        }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
             PERMISSION_REQUEST_CODE_LOCATION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) getLastKnownLocation()
             }
+        }
+    }
+
+    private fun checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE_LOCATION)
+        } else {
+            getLastKnownLocation()
         }
     }
 
@@ -84,16 +84,16 @@ class MainFragment : Fragment() {
 
     // region Menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu, menu)
+        inflater.inflate(R.menu.toolbar_settings, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.mnu_manual_mode -> {
+            R.id.menu_manual_mode -> {
                 controlPurifier(email, password, detectorViewModel.purifierState)
                 true
             }
-            R.id.mnu_settings -> {
+            R.id.menu_settings -> {
                 findNavController().navigate(R.id.navigate_to_settings_screen)
                 true
             }
