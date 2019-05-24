@@ -12,7 +12,7 @@
 
         <variable
             name="source"
-            type="Boolean" />
+            type="boolean" />
 
         <variable
             name="data"

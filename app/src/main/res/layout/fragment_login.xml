@@ -11,7 +11,7 @@
 
         <variable
             name="isLoggingIn"
-            type="Boolean" />
+            type="boolean" />
     </data>
 
     <LinearLayout style="@style/Login.RootLayout">

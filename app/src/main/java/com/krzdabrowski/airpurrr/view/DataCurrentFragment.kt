@@ -48,7 +48,7 @@ class DataCurrentFragment : Fragment() {
     })
 
     private fun onDataClick() {
-        binding.flagDetectorApi = !binding.flagDetectorApi!!
+        binding.flagDetectorApi = !binding.flagDetectorApi
     }
 
     private fun fetchNewData() {

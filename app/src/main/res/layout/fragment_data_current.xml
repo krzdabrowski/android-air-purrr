@@ -13,7 +13,7 @@
 
         <variable
             name="flagDetectorApi"
-            type="Boolean" />
+            type="boolean" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
