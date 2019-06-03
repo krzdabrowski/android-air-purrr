@@ -13,8 +13,6 @@ import at.favre.lib.armadillo.Armadillo
 import com.google.android.gms.location.LocationServices
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.helper.*
-import com.krzdabrowski.airpurrr.utils.PERMISSION_REQUEST_CODE_LOCATION
-import com.krzdabrowski.airpurrr.utils.PREFS_LOGIN_KEY_CREDENTIALS
 import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*
@@ -26,9 +24,11 @@ class MainFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private val purifierHelper: PurifierHelper by inject()
-    private val credentialPrefs by lazy { Armadillo.create(context, PREFS_LOGIN_KEY_CREDENTIALS).encryptionFingerprint(context).build() }
+
+    private val credentialPrefs by lazy { Armadillo.create(context, getString(R.string.login_key_credentials)).encryptionFingerprint(context).build() }
     private val email by lazy { credentialPrefs.getString(getString(R.string.login_pref_email), null) }
     private val password by lazy { credentialPrefs.getString(getString(R.string.login_pref_password), null) }
+    private val permissionResultCodeLocation = 100
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -52,7 +52,7 @@ class MainFragment : Fragment() {
     // region Location permissions
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
-            PERMISSION_REQUEST_CODE_LOCATION -> {
+            permissionResultCodeLocation -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) getLastKnownLocation()
             }
         }
@@ -60,7 +60,7 @@ class MainFragment : Fragment() {
 
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE_LOCATION)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionResultCodeLocation)
         } else {
             getLastKnownLocation()
         }

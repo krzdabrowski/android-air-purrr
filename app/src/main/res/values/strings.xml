@@ -20,6 +20,8 @@
     <string name="login_error_no_saved_fingerprint">Add at least one fingerprint to login with fingerprint</string>
     <string name="login_error_no_permission">Grant permissions to login with fingerprint</string>
 
+    <string name="login_key_credentials" translatable="false">credentialsPrefs</string>
+
 
     <!-- Main screen -->
     <string name="main_tab_current">Current</string>
@@ -59,4 +61,7 @@
 
     <string name="settings_dialog_title_threshold">Enter a value in percentage</string>
     <string name="settings_dialog_no_data">Not set</string>
+
+    <string name="settings_key_switch" translatable="false">autoModeSwitch</string>
+    <string name="settings_key_threshold" translatable="false">autoModeThreshold</string>
 </resources>

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.krzdabrowski.airpurrr.databinding.FragmentDataCurrentBinding
-import com.krzdabrowski.airpurrr.utils.DATA_RECURRENT_FETCHING_INTERVAL
 import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*
@@ -17,6 +16,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class DataCurrentFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!! })
     private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
+
+    private val fetchingInterval: Long = 1000 * 60 * 2
     private lateinit var binding: FragmentDataCurrentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,8 +62,8 @@ class DataCurrentFragment : Fragment() {
         val handler = Handler()
         handler.postDelayed(runnable {
             fetchNewData()
-            handler.postDelayed(this, DATA_RECURRENT_FETCHING_INTERVAL)
-        }, DATA_RECURRENT_FETCHING_INTERVAL)
+            handler.postDelayed(this, fetchingInterval)
+        }, fetchingInterval)
     }
 
     private inline fun runnable(crossinline runnableRun: Runnable.() -> Unit) = object : Runnable {

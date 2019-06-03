@@ -14,14 +14,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.databinding.FragmentLoginBinding
 import com.krzdabrowski.airpurrr.helper.BiometricHelper
-import com.krzdabrowski.airpurrr.utils.PREFS_LOGIN_KEY_CREDENTIALS
 import com.krzdabrowski.airpurrr.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment(), BiometricHelper.OnSuccessCallback {
     private val loginViewModel: LoginViewModel by viewModel()
     private val biometricHelper by lazy { BiometricHelper(context!!, this) }
-    private val credentialPrefs by lazy { Armadillo.create(context, PREFS_LOGIN_KEY_CREDENTIALS).encryptionFingerprint(context).build() }
+    private val credentialPrefs by lazy { Armadillo.create(context, getString(R.string.login_key_credentials)).encryptionFingerprint(context).build() }
     private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

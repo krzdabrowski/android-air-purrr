@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.utils
+package com.krzdabrowski.airpurrr.view
 
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout

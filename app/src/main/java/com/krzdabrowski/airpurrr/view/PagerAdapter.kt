@@ -5,9 +5,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.utils.VIEWPAGER_TAB_SIZE
 
 class PagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    private val viewPagerTabSize = 2
+
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> DataCurrentFragment()
@@ -22,5 +23,5 @@ class PagerAdapter(private val context: Context, fm: FragmentManager) : Fragment
         }
     }
 
-    override fun getCount() = VIEWPAGER_TAB_SIZE
+    override fun getCount() = viewPagerTabSize
 }

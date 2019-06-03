@@ -4,10 +4,10 @@ import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.krzdabrowski.airpurrr.utils.GPS_DEFAULT_LATITUDE
-import com.krzdabrowski.airpurrr.utils.GPS_DEFAULT_LONGITUDE
 import com.krzdabrowski.airpurrr.model.ApiModel
 import com.krzdabrowski.airpurrr.repository.ApiRepository
+import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel.GpsDefaultCoordinates.LATITUDE
+import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel.GpsDefaultCoordinates.LONGITUDE
 
 class ApiViewModel(private val repository: ApiRepository) : ViewModel() {
 
@@ -21,8 +21,13 @@ class ApiViewModel(private val repository: ApiRepository) : ViewModel() {
 
     private fun getDefaultLocation(): Location {
         val defaultLocation = Location("")
-        defaultLocation.latitude = GPS_DEFAULT_LATITUDE
-        defaultLocation.longitude = GPS_DEFAULT_LONGITUDE
+        defaultLocation.latitude = LATITUDE
+        defaultLocation.longitude = LONGITUDE
         return defaultLocation
+    }
+
+    object GpsDefaultCoordinates {
+        const val LATITUDE = 52.16194
+        const val LONGITUDE = 21.02762
     }
 }

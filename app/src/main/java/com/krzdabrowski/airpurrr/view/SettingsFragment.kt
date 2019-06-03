@@ -9,23 +9,23 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.utils.PREFS_SETTINGS_KEY_SWITCH
-import com.krzdabrowski.airpurrr.utils.PREFS_SETTINGS_KEY_THRESHOLD
 import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.lang.NumberFormatException
 
 class SettingsFragment : PreferenceFragmentCompat() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
-    private val switchPreference by lazy { findPreference<SwitchPreferenceCompat>(PREFS_SETTINGS_KEY_SWITCH) }
-    private val thresholdPreference by lazy { findPreference<EditTextPreference>(PREFS_SETTINGS_KEY_THRESHOLD) }
+    private val switchPreference by lazy { findPreference<SwitchPreferenceCompat>(keySwitch) }
+    private val thresholdPreference by lazy { findPreference<EditTextPreference>(keyThreshold) }
+    private val keySwitch by lazy { getString(R.string.settings_key_switch) }
+    private val keyThreshold by lazy { getString(R.string.settings_key_threshold) }
 
     private val preferenceListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         when (key) {
-            PREFS_SETTINGS_KEY_SWITCH -> detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false))
-            PREFS_SETTINGS_KEY_THRESHOLD -> detectorViewModel.autoModeThreshold.set(
+            keySwitch -> detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keySwitch, false))
+            keyThreshold -> detectorViewModel.autoModeThreshold.set(
                     try {
-                        sharedPreferences.getString(PREFS_SETTINGS_KEY_THRESHOLD, "").toInt()
+                        sharedPreferences.getString(keyThreshold, "").toInt()
                     } catch (_: NumberFormatException) {
                         0
                     })
@@ -33,15 +33,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 Snackbar.make(view!!, "Will be implemented later in phase 2", Snackbar.LENGTH_SHORT).show()
         }
 
-        val isThresholdSet = !sharedPreferences.getString(PREFS_SETTINGS_KEY_THRESHOLD, "").isNullOrEmpty()
-        val isThresholdClicked = key == PREFS_SETTINGS_KEY_THRESHOLD
-        val isSwitchOn = sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false)
+        val isThresholdSet = !sharedPreferences.getString(keyThreshold, "").isNullOrEmpty()
+        val isThresholdClicked = key == keyThreshold
+        val isSwitchOn = sharedPreferences.getBoolean(keySwitch, false)
 
         if (isThresholdSet && !(isThresholdClicked && !isSwitchOn)) {
             detectorViewModel.checkAutoMode()
         } else if (!isThresholdSet && isThresholdClicked && isSwitchOn) {
             switchPreference?.isChecked = false
-            detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false))
+            detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keySwitch, false))
         }
     }
 
