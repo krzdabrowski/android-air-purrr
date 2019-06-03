@@ -13,12 +13,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.databinding.FragmentLoginBinding
-import com.krzdabrowski.airpurrr.login.helper.BiometricHelper
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LoginFragment : Fragment(), BiometricHelper.OnSuccessCallback {
+class LoginFragment : Fragment(), LoginBiometricHelper.OnSuccessCallback {
     private val loginViewModel: LoginViewModel by viewModel()
-    private val biometricHelper by lazy { BiometricHelper(context!!, this) }
+    private val biometricHelper by lazy { LoginBiometricHelper(context!!, this) }
     private val credentialPrefs by lazy { Armadillo.create(context, getString(R.string.login_key_credentials)).encryptionFingerprint(context).build() }
     private lateinit var binding: FragmentLoginBinding
 

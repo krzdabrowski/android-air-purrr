@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.helper
+package com.krzdabrowski.airpurrr.main
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.krzdabrowski.airpurrr.R

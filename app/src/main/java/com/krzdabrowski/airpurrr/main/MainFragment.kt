@@ -14,7 +14,6 @@ import com.google.android.gms.location.LocationServices
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
-import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import kotlinx.android.synthetic.main.fragment_data_current.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.inject

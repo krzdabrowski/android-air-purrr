@@ -22,12 +22,7 @@ class ApiRepository(private val service: ApiService) {
                 try {
                     val response = request.await()
                     if (response.isSuccessful && response.body() != null) {
-                        val currentValues = response.body()?.current?.values
-                        if (currentValues?.get(1)?.get("name") == "PM25" && currentValues[2]?.get("name") == "PM10") {
-                            val pm25 = currentValues[1]?.get("value") as Double
-                            val pm10 = currentValues[2]?.get("value") as Double
-                            result.value = ApiModel(null, Pair(pm25, pm10))
-                        }
+                        result.value = ApiConverter.getData(response)
                     } else {
                         Timber.e("ApiModel error: ${response.code()}")
                     }

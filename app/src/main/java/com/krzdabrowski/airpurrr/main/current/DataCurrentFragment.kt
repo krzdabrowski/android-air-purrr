@@ -17,7 +17,7 @@ class DataCurrentFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!! })
     private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
 
-    private val fetchingInterval: Long = 1000 * 60 * 2
+    private val fetchingInterval: Long = 1000 * 60 * 10
     private lateinit var binding: FragmentDataCurrentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

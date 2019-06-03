@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.login.helper
+package com.krzdabrowski.airpurrr.login
 
 import android.Manifest
 import android.annotation.TargetApi
@@ -11,7 +11,7 @@ import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import com.krzdabrowski.airpurrr.R
 
 @TargetApi(Build.VERSION_CODES.P)
-class BiometricHelper(private val context: Context, private val callback: OnSuccessCallback) : BiometricPrompt.AuthenticationCallback() {
+class LoginBiometricHelper(private val context: Context, private val callback: OnSuccessCallback) : BiometricPrompt.AuthenticationCallback() {
 
     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
         super.onAuthenticationSucceeded(result)
