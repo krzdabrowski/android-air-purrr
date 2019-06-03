@@ -15,7 +15,8 @@ class LoginViewModel : ViewModel() {
     fun isPasswordValid(password: String) = isPasswordError.set(password.isBlank())
 
     fun onLoginButtonClick() {
-        if (email.value == null || password.value == null || isEmailError.get() || isPasswordError.get()) {
+        val isFormInvalid = email.value == null || password.value == null || isEmailError.get() || isPasswordError.get()
+        if (isFormInvalid) {
             return
         }
         isFormValid.value = true

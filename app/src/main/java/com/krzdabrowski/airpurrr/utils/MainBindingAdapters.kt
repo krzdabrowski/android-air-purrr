@@ -4,7 +4,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.helper.ConversionHelper
+import com.krzdabrowski.airpurrr.helper.Conversion
 import com.krzdabrowski.airpurrr.model.ApiModel
 import com.krzdabrowski.airpurrr.model.BaseModel
 import com.krzdabrowski.airpurrr.model.DetectorModel
@@ -29,16 +29,16 @@ fun TextView.bindDataPercentage(type: String, data: BaseModel?) {
     if (data is DetectorModel) {
         if (data.values != null) {
             if (type == "PM2.5") {
-                text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.values.pm25))
+                text = resources.getString(R.string.main_data_percentage, Conversion.pm25ToPercent(data.values.pm25))
             } else if (type == "PM10") {
-                text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.values.pm10))
+                text = resources.getString(R.string.main_data_percentage, Conversion.pm10ToPercent(data.values.pm10))
             }
         }
     } else if (data is ApiModel) {
         if (type == "PM2.5") {
-            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm25ToPercent(data.data.first))
+            text = resources.getString(R.string.main_data_percentage, Conversion.pm25ToPercent(data.data.first))
         } else if (type == "PM10") {
-            text = resources.getString(R.string.main_data_percentage, ConversionHelper.pm10ToPercent(data.data.second))
+            text = resources.getString(R.string.main_data_percentage, Conversion.pm10ToPercent(data.data.second))
         }
     }
 }
@@ -71,16 +71,16 @@ fun ConstraintLayout.bindBackgroundColor(type: String, data: BaseModel?) {
     if (data is DetectorModel) {
         val values = data.values
         if (type == "PM2.5") {
-            valuePerc = ConversionHelper.pm25ToPercent(values?.pm25)
+            valuePerc = Conversion.pm25ToPercent(values?.pm25)
         } else if (type == "PM10"){
-            valuePerc = ConversionHelper.pm10ToPercent(values?.pm10)
+            valuePerc = Conversion.pm10ToPercent(values?.pm10)
         }
     } else if (data is ApiModel) {
         val values = data.data
         if (type == "PM2.5") {
-            valuePerc = ConversionHelper.pm25ToPercent(values.first)
+            valuePerc = Conversion.pm25ToPercent(values.first)
         } else if (type == "PM10") {
-            valuePerc = ConversionHelper.pm10ToPercent(values.second)
+            valuePerc = Conversion.pm10ToPercent(values.second)
         }
     }
 

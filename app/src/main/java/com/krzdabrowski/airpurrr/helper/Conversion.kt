@@ -1,6 +1,6 @@
 package com.krzdabrowski.airpurrr.helper
 
-object ConversionHelper {
+object Conversion {
     fun pm25ToPercent(pm25: Double?): Double {
         return pm25?.times(4) ?: 0.0
     }

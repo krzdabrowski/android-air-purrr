@@ -39,8 +39,9 @@ class LoginFragment : Fragment(), BiometricHelper.OnSuccessCallback {
         loginViewModel.password.observe(this, Observer { password -> loginViewModel.isPasswordValid(password) })
         loginViewModel.isFormValid.observe(this, Observer { manualLogin() })
 
-        if (credentialPrefs.contains(getString(R.string.login_pref_email)))
+        if (credentialPrefs.contains(getString(R.string.login_pref_email))) {
             fingerprintLogin()
+        }
     }
 
     override fun onSuccess() = navigateToMainScreen()

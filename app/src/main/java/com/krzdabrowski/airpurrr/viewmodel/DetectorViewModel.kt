@@ -25,15 +25,21 @@ class DetectorViewModel(private val repository: DetectorRepository) : ViewModel(
     }
 
     fun checkAutoMode() {
-        if (::liveData.isInitialized && liveData.value != null && liveData.value?.values != null) {
-            if (!purifierState && autoModeSwitch.get() &&
-                    autoModeThreshold.get() < liveData.value?.values!!.pm25 || autoModeThreshold.get() < liveData.value?.values!!.pm10) {
-                purifierState = true
-                purifierObservableState.set(purifierState)
-            } else if (purifierState && !autoModeSwitch.get()) {
-                purifierState = false
-                purifierObservableState.set(purifierState)
-            }
+        val isDataAvailable = ::liveData.isInitialized && liveData.value != null && liveData.value?.values != null
+        if (!isDataAvailable) {
+            return
+        }
+
+        val shouldTurnOn = !purifierState && autoModeSwitch.get() &&
+                autoModeThreshold.get() < liveData.value?.values!!.pm25 || autoModeThreshold.get() < liveData.value?.values!!.pm10
+        val shouldTurnOff = purifierState && !autoModeSwitch.get()
+
+        if (shouldTurnOn) {
+            purifierState = true
+            purifierObservableState.set(purifierState)
+        } else if (shouldTurnOff) {
+            purifierState = false
+            purifierObservableState.set(purifierState)
         }
     }
 }

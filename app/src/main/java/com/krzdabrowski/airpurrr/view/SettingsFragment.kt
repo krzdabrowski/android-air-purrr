@@ -33,15 +33,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 Snackbar.make(view!!, "Will be implemented later in phase 2", Snackbar.LENGTH_SHORT).show()
         }
 
-        // to use auto-mode: threshold MUST NOT be empty (must be set)
-        if (!sharedPreferences.getString(PREFS_SETTINGS_KEY_THRESHOLD, "").isNullOrEmpty() &&
-                // it should not use edge-case when: threshold has been clicked and set && switch is off (case #5)
-                !(key == PREFS_SETTINGS_KEY_THRESHOLD && !sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false))) {
-            detectorViewModel.checkAutoMode()
+        val isThresholdSet = !sharedPreferences.getString(PREFS_SETTINGS_KEY_THRESHOLD, "").isNullOrEmpty()
+        val isThresholdClicked = key == PREFS_SETTINGS_KEY_THRESHOLD
+        val isSwitchOn = sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false)
 
-            // it should block edge-case when: threshold has been clicked and NOT set && switch is on (case #8)
-        } else if (sharedPreferences.getString(PREFS_SETTINGS_KEY_THRESHOLD, "").isNullOrEmpty() &&
-                key == PREFS_SETTINGS_KEY_THRESHOLD && sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false)) {
+        if (isThresholdSet && !(isThresholdClicked && !isSwitchOn)) {
+            detectorViewModel.checkAutoMode()
+        } else if (!isThresholdSet && isThresholdClicked && isSwitchOn) {
             switchPreference?.isChecked = false
             detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(PREFS_SETTINGS_KEY_SWITCH, false))
         }
