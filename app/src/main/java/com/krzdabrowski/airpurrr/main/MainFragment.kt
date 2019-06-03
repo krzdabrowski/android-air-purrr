@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import at.favre.lib.armadillo.Armadillo
 import com.google.android.gms.location.LocationServices
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.common.helper.PurifierHelper
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*

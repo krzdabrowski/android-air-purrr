@@ -8,7 +8,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
-import java.util.concurrent.TimeUnit
 
 interface DetectorDataService {
 
@@ -16,12 +15,7 @@ interface DetectorDataService {
     fun getDetectorDataAsync(): Deferred<Response<DetectorModel>>
 
     companion object {
-        private val client = OkHttpClient.Builder()
-                .connectTimeout(3, TimeUnit.SECONDS)
-                .readTimeout(3, TimeUnit.SECONDS)
-                .build()
-
-        fun create(): DetectorDataService {
+        fun create(client: OkHttpClient): DetectorDataService {
             return Retrofit.Builder()
                     .client(client)
                     .baseUrl(BuildConfig.DETECTOR_HTTP_URL_MOCK)

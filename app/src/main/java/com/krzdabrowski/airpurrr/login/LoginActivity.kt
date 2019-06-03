@@ -6,10 +6,10 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.di.helperModule
-import com.krzdabrowski.airpurrr.di.networkModule
-import com.krzdabrowski.airpurrr.di.repositoryModule
-import com.krzdabrowski.airpurrr.di.viewModelModule
+import com.krzdabrowski.airpurrr.common.di.helperModule
+import com.krzdabrowski.airpurrr.common.di.networkModule
+import com.krzdabrowski.airpurrr.common.di.repositoryModule
+import com.krzdabrowski.airpurrr.common.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
