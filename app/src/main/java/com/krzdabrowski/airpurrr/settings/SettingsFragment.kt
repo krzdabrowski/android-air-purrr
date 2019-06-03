@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.view
+package com.krzdabrowski.airpurrr.settings
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.lang.NumberFormatException
 

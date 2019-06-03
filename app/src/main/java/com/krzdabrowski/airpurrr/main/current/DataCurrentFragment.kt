@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.view
+package com.krzdabrowski.airpurrr.main.current
 
 import android.os.Bundle
 import android.os.Handler
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.krzdabrowski.airpurrr.databinding.FragmentDataCurrentBinding
-import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel
-import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 

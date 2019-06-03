@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.helper
+package com.krzdabrowski.airpurrr.login.helper
 
 import android.Manifest
 import android.annotation.TargetApi

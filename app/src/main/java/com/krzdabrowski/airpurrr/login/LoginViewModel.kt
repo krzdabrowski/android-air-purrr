@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.viewmodel
+package com.krzdabrowski.airpurrr.login
 
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData

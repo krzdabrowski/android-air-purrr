@@ -1,13 +1,11 @@
-package com.krzdabrowski.airpurrr.viewmodel
+package com.krzdabrowski.airpurrr.main.current.api
 
 import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.krzdabrowski.airpurrr.model.ApiModel
-import com.krzdabrowski.airpurrr.repository.ApiRepository
-import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel.GpsDefaultCoordinates.LATITUDE
-import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel.GpsDefaultCoordinates.LONGITUDE
+import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel.GpsDefaultCoordinates.LATITUDE
+import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel.GpsDefaultCoordinates.LONGITUDE
 
 class ApiViewModel(private val repository: ApiRepository) : ViewModel() {
 

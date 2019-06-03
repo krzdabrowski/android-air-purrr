@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.view
+package com.krzdabrowski.airpurrr.main
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -12,9 +12,9 @@ import androidx.navigation.fragment.findNavController
 import at.favre.lib.armadillo.Armadillo
 import com.google.android.gms.location.LocationServices
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.helper.*
-import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel
-import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import kotlinx.android.synthetic.main.fragment_data_current.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.inject

@@ -1,11 +1,9 @@
-package com.krzdabrowski.airpurrr.viewmodel
+package com.krzdabrowski.airpurrr.main.current.detector
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.krzdabrowski.airpurrr.model.DetectorModel
-import com.krzdabrowski.airpurrr.repository.DetectorRepository
 
 class DetectorViewModel(private val repository: DetectorRepository) : ViewModel() {
     private lateinit var liveData: LiveData<DetectorModel>

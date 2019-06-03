@@ -16,7 +16,7 @@
 
         <variable
             name="data"
-            type="com.krzdabrowski.airpurrr.model.BaseModel" />
+            type="com.krzdabrowski.airpurrr.main.current.BaseModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,14 +1,14 @@
 package com.krzdabrowski.airpurrr.di
 
-import com.krzdabrowski.airpurrr.helper.PurifierHelper
-import com.krzdabrowski.airpurrr.repository.ApiRepository
-import com.krzdabrowski.airpurrr.repository.DetectorRepository
-import com.krzdabrowski.airpurrr.retrofit.ApiService
-import com.krzdabrowski.airpurrr.retrofit.DetectorControlService
-import com.krzdabrowski.airpurrr.retrofit.DetectorDataService
-import com.krzdabrowski.airpurrr.viewmodel.ApiViewModel
-import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
-import com.krzdabrowski.airpurrr.viewmodel.LoginViewModel
+import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
+import com.krzdabrowski.airpurrr.main.current.api.ApiRepository
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorRepository
+import com.krzdabrowski.airpurrr.main.current.api.ApiService
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorControlService
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorDataService
+import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.login.LoginViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

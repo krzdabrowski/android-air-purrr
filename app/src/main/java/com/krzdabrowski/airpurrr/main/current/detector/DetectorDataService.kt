@@ -1,7 +1,6 @@
-package com.krzdabrowski.airpurrr.retrofit
+package com.krzdabrowski.airpurrr.main.current.detector
 
 import com.krzdabrowski.airpurrr.BuildConfig
-import com.krzdabrowski.airpurrr.model.DetectorModel
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient

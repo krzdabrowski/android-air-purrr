@@ -1,11 +1,9 @@
-package com.krzdabrowski.airpurrr.repository
+package com.krzdabrowski.airpurrr.main.current.api
 
 import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.krzdabrowski.airpurrr.BuildConfig
-import com.krzdabrowski.airpurrr.model.ApiModel
-import com.krzdabrowski.airpurrr.retrofit.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

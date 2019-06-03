@@ -1,10 +1,12 @@
-package com.krzdabrowski.airpurrr.view
+package com.krzdabrowski.airpurrr.main
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.main.current.DataCurrentFragment
+import com.krzdabrowski.airpurrr.main.forecast.DataForecastFragment
 
 class PagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val viewPagerTabSize = 2

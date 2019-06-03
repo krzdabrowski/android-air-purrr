@@ -1,11 +1,8 @@
-package com.krzdabrowski.airpurrr.repository
+package com.krzdabrowski.airpurrr.main.current.detector
 
 import android.util.Base64
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.krzdabrowski.airpurrr.model.DetectorModel
-import com.krzdabrowski.airpurrr.retrofit.DetectorControlService
-import com.krzdabrowski.airpurrr.retrofit.DetectorDataService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

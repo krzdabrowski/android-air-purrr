@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.view
+package com.krzdabrowski.airpurrr.main
 
 import android.os.Bundle
 import androidx.activity.addCallback

@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.view
+package com.krzdabrowski.airpurrr.main.forecast
 
 import android.os.Bundle
 import android.view.LayoutInflater

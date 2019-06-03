@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/login_fragment"
-        android:name="com.krzdabrowski.airpurrr.view.LoginFragment">
+        android:name="com.krzdabrowski.airpurrr.login.LoginFragment">
         <action
             android:id="@+id/navigate_to_main_screen"
             app:destination="@id/main_activity"
@@ -17,6 +17,6 @@
 
     <activity
         android:id="@+id/main_activity"
-        android:name="com.krzdabrowski.airpurrr.view.MainActivity" />
+        android:name="com.krzdabrowski.airpurrr.main.MainActivity" />
 
 </navigation>

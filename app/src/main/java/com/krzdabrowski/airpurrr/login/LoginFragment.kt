@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.view
+package com.krzdabrowski.airpurrr.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.databinding.FragmentLoginBinding
-import com.krzdabrowski.airpurrr.helper.BiometricHelper
-import com.krzdabrowski.airpurrr.viewmodel.LoginViewModel
+import com.krzdabrowski.airpurrr.login.helper.BiometricHelper
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment(), BiometricHelper.OnSuccessCallback {

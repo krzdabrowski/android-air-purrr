@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.retrofit
+package com.krzdabrowski.airpurrr.main.current.detector
 
 import com.krzdabrowski.airpurrr.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory

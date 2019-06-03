@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.view
+package com.krzdabrowski.airpurrr.login
 
 import android.os.Bundle
 import android.os.Handler

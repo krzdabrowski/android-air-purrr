@@ -1,9 +1,9 @@
-package com.krzdabrowski.airpurrr.helper
+package com.krzdabrowski.airpurrr.main.helper
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.model.DetectorModel
-import com.krzdabrowski.airpurrr.viewmodel.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorModel
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class PurifierHelper(private val detectorViewModel: DetectorViewModel) {
