@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import at.favre.lib.armadillo.Armadillo
 import com.google.android.gms.location.LocationServices
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.common.helper.PurifierHelper
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*
@@ -37,7 +36,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view_pager.adapter = PagerAdapter(context!!, childFragmentManager)
+        view_pager.adapter = ViewPagerAdapter(context!!, childFragmentManager)
         tab_layout.setupWithViewPager(view_pager)
 
         detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {

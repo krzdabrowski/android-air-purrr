@@ -1,6 +1,6 @@
-package com.krzdabrowski.airpurrr.common.di
+package com.krzdabrowski.airpurrr.common
 
-import com.krzdabrowski.airpurrr.common.helper.PurifierHelper
+import com.krzdabrowski.airpurrr.main.PurifierHelper
 import com.krzdabrowski.airpurrr.main.current.api.ApiRepository
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorRepository
 import com.krzdabrowski.airpurrr.main.current.api.ApiService

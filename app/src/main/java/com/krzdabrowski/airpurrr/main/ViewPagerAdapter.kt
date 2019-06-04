@@ -8,7 +8,7 @@ import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.current.DataCurrentFragment
 import com.krzdabrowski.airpurrr.main.forecast.DataForecastFragment
 
-class PagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class ViewPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val viewPagerTabSize = 2
 
     override fun getItem(position: Int): Fragment {

@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.common.helper
+package com.krzdabrowski.airpurrr.common
 
 object Conversion {
     fun pm25ToPercent(pm25: Double?): Double {

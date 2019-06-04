@@ -4,7 +4,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.common.helper.Conversion
+import com.krzdabrowski.airpurrr.common.Conversion
 import com.krzdabrowski.airpurrr.main.current.api.ApiModel
 import com.krzdabrowski.airpurrr.main.current.BaseModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorModel

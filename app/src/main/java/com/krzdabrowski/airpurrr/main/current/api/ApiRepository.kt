@@ -22,7 +22,7 @@ class ApiRepository(private val service: ApiService) {
                 try {
                     val response = request.await()
                     if (response.isSuccessful && response.body() != null) {
-                        result.value = ApiConverter.getData(response)
+                        result.value = ApiAirlyConverter.getData(response)
                     } else {
                         Timber.e("ApiModel error: ${response.code()}")
                     }

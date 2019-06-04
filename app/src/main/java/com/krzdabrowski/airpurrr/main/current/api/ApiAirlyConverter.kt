@@ -2,7 +2,7 @@ package com.krzdabrowski.airpurrr.main.current.api
 
 import retrofit2.Response
 
-object ApiConverter {
+object ApiAirlyConverter {
     fun getData(response: Response<ApiModel>): ApiModel {
         val currentValues = response.body()?.current?.values
         if (currentValues?.get(1)?.get("name") == "PM25" && currentValues[2]?.get("name") == "PM10") {
