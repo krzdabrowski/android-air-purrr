@@ -1,7 +1,7 @@
 package com.krzdabrowski.airpurrr.main
 
+import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.common.Conversion
@@ -65,7 +65,7 @@ fun TextView.bindDataUgm3(type: String, data: BaseModel?) {
 }
 
 @BindingAdapter(value = ["app:type", "app:dataColor"])
-fun ConstraintLayout.bindBackgroundColor(type: String, data: BaseModel?) {
+fun RelativeLayout.bindBackgroundColor(type: String, data: BaseModel?) {
     var valuePerc = 0.0
 
     if (data is DetectorModel) {

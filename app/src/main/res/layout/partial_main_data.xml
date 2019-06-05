@@ -19,47 +19,41 @@
             type="com.krzdabrowski.airpurrr.main.current.BaseModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/layout_main_data"
         style="@style/Main.Data.Layout"
         app:type="@{type}"
         app:dataColor="@{data}">
 
-        <TextView
-            android:id="@+id/text_data_type"
-            style="@style/Main.Data.Info"
-            android:text="@{type}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/main_data_info_pm25" />
+        <LinearLayout style="@style/Main.Data.LayoutTop">
+            <TextView
+                android:id="@+id/text_data_type"
+                style="@style/Main.Data.Info"
+                android:text="@{type}"
+                tools:text="@string/main_data_info_pm25" />
 
-        <ImageView
-            android:id="@+id/ic_airly_logo"
-            style="@style/Main.Logo"
-            android:contentDescription="@string/main_data_description_logo"
-            android:visibility="@{source ? View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_logo_api_airly" />
+            <Space style="@style/Main.Data.LayoutTopGap"/>
 
-        <TextView
-            android:id="@+id/text_data_source"
-            style="@style/Main.Data.Info"
-            app:date="@{data}"
-            app:source="@{source}"
-            app:layout_constraintBaseline_toBaselineOf="@+id/text_data_type"
-            app:layout_constraintEnd_toStartOf="@+id/ic_airly_logo"
-            tools:text="@string/main_data_info_indoors" />
+            <TextView
+                android:id="@+id/text_data_source"
+                style="@style/Main.Data.Info"
+                app:date="@{data}"
+                app:source="@{source}"
+                tools:text="@string/main_data_info_indoors" />
+
+            <ImageView
+                android:id="@+id/ic_airly_logo"
+                style="@style/Main.Logo"
+                android:contentDescription="@string/main_data_description_logo"
+                android:visibility="@{source ? View.VISIBLE : View.GONE}"
+                app:srcCompat="@drawable/ic_logo_api_airly" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/text_data_percentage"
             style="@style/Main.Data.Percentage"
             app:type="@{type}"
             app:dataPercentage="@{data}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="40.0%" />
 
         <TextView
@@ -67,9 +61,6 @@
             style="@style/Main.Data.Ugm3"
             app:type="@{type}"
             app:dataUgm3="@{data}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="(10.0)" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

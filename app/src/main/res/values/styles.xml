@@ -113,27 +113,47 @@
         <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="Main.Data">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
+    <style name="Main.Data"/>
 
     <style name="Main.Data.Layout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:elevation">@dimen/main_data_elevation</item>
         <item name="android:foreground">?selectableItemBackground</item>
     </style>
 
+    <style name="Main.Data.LayoutTop">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="Main.Data.LayoutTopGap">
+        <item name="android:layout_width">@dimen/zero</item>
+        <item name="android:layout_height">@dimen/zero</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
     <style name="Main.Data.Percentage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
         <item name="android:textSize">@dimen/main_data_text_size_percentage</item>
         <item name="android:textAppearance">?android:textAppearanceLarge</item>
     </style>
 
     <style name="Main.Data.Ugm3">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
         <item name="android:textSize">@dimen/main_data_text_size_ugm3</item>
     </style>
 
     <style name="Main.Data.Info">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">@dimen/margin_tiny</item>
         <item name="android:textSize">@dimen/main_data_text_size_info</item>
     </style>
