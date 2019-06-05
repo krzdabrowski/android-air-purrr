@@ -35,7 +35,8 @@
                     android:hint="@string/login_hint_email"
                     android:inputType="textEmailAddress"
                     android:text="@={vm.email}"
-                    app:errorValidationEmail="@{vm.isEmailError}" />
+                    app:errorValidation="@{vm.isEmailError}"
+                    app:errorType="@{vm.emailErrorType}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout style="@style/Login.Credentials.TextInputLayout">
@@ -46,7 +47,8 @@
                     android:hint="@string/login_hint_password"
                     android:inputType="textPassword"
                     android:text="@={vm.password}"
-                    app:errorValidationPassword="@{vm.isPasswordError}" />
+                    app:errorValidation="@{vm.isPasswordError}"
+                    app:errorType="@{vm.passwordErrorType}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
