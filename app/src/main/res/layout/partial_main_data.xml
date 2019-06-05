@@ -23,8 +23,7 @@
     <RelativeLayout
         android:id="@+id/layout_main_data"
         style="@style/Main.Data.Layout"
-        app:type="@{type}"
-        app:dataColor="@{data}">
+        android:background="@{data.getBackgroundColorDrawable(context, data.getPercentageDouble(type)) ?? @drawable/data_unavailable}">
 
         <LinearLayout style="@style/Main.Data.LayoutTop">
             <TextView
@@ -38,7 +37,7 @@
             <TextView
                 android:id="@+id/text_data_source"
                 style="@style/Main.Data.Info"
-                android:text="@{data.getSource(context) ?? source ? context.getString(R.string.main_data_info_api_empty) : context.getString(R.string.main_data_info_indoors)}"
+                android:text="@{data.getSource(context) ?? source ? @string/main_data_info_api_empty : @string/main_data_info_indoors}"
                 tools:text="@string/main_data_info_indoors" />
 
             <ImageView

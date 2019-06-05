@@ -14,11 +14,7 @@ data class DetectorModel(val workstate: String, val values: Values?) : BaseModel
 
     override fun getDataPercentage(context: Context, type: String): String {
         if (values != null) {
-            if (type == "PM2.5") {
-                return context.getString(R.string.main_data_percentage, Conversion.pm25ToPercent(values.pm25))
-            } else if (type == "PM10") {
-                return context.getString(R.string.main_data_percentage, Conversion.pm10ToPercent(values.pm10))
-            }
+            return context.getString(R.string.main_data_percentage, getPercentageDouble(type))
         }
         return ""
     }
@@ -32,5 +28,14 @@ data class DetectorModel(val workstate: String, val values: Values?) : BaseModel
             }
         }
         return ""
+    }
+
+    override fun getPercentageDouble(type: String): Double {
+        if (type == "PM2.5") {
+            return Conversion.pm25ToPercent(values?.pm25)
+        } else if (type == "PM10"){
+            return Conversion.pm10ToPercent(values?.pm10)
+        }
+        return 0.0
     }
 }

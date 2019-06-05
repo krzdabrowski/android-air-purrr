@@ -31,7 +31,8 @@ android {
     productFlavors {
         dev {
             buildConfigField "String", "DETECTOR_HTTP_URL", "\"http://airpurrr.ga/\""
-            buildConfigField "String", "DETECTOR_HTTP_URL_MOCK", "\"https://gist.githubusercontent.com/krzdabrowski/513ecefff8d6f7420bdfa36712dc72e2/raw/485c3e5fbb49facdbecf788820fb1c4e2975dc70/\""
+//            buildConfigField "String", "DETECTOR_HTTP_URL_MOCK", "\"https://gist.githubusercontent.com/krzdabrowski/513ecefff8d6f7420bdfa36712dc72e2/raw/485c3e5fbb49facdbecf788820fb1c4e2975dc70/\""
+            buildConfigField "String", "DETECTOR_HTTP_URL_MOCK", "\"https://gist.githubusercontent.com/krzdabrowski/534e697a86de6ea68e3a2337b6379ddc/raw/8c45d111fd57b377d3530f8385026568d833bf7a/\""
             buildConfigField "String", "DETECTOR_HTTPS_URL", "\"https://airpurrr.ga/\""
             buildConfigField "String", "BASE_API_URL", "\"https://airapi.airly.eu/\""
         }

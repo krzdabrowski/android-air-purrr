@@ -4,7 +4,7 @@
     <dimen name="login_logo_size">96dp</dimen>
 
     <!-- Main screen -->
-    <dimen name="main_data_text_size_percentage">88sp</dimen>
+    <dimen name="main_data_text_size_percentage">84sp</dimen>
     <dimen name="main_data_text_size_ugm3">20sp</dimen>
     <dimen name="main_data_text_size_info">14sp</dimen>
     <dimen name="main_data_corner_radius">12dp</dimen>
