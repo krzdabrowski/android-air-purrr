@@ -1,47 +1,12 @@
 package com.krzdabrowski.airpurrr.main
 
 import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.common.Conversion
 import com.krzdabrowski.airpurrr.main.current.api.ApiModel
 import com.krzdabrowski.airpurrr.main.current.BaseModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorModel
-
-@BindingAdapter(value = ["app:source", "app:model"])
-fun bindSource(textView: TextView, source: Boolean, model: BaseModel?) {
-    if (source) {
-        if (model == null) {
-            textView.text = textView.resources.getString(R.string.main_data_info_api_empty)
-        } else if (model is ApiModel){
-            textView.text = textView.resources.getString(R.string.main_data_info_api)
-        }
-    } else {
-        textView.text = textView.resources.getString(R.string.main_data_info_indoors)
-    }
-}
-
-@BindingAdapter(value = ["app:type", "app:dataUgm3"])
-fun TextView.bindDataUgm3(type: String, data: BaseModel?) {
-    text = resources.getString(R.string.main_data_ugm3, 0.0)
-
-    if (data is DetectorModel) {
-        if (data.values != null) {
-            if (type == "PM2.5") {
-                text = resources.getString(R.string.main_data_ugm3, data.values.pm25)
-            } else if (type == "PM10") {
-                text = resources.getString(R.string.main_data_ugm3, data.values.pm10)
-            }
-        }
-    } else if (data is ApiModel) {
-        if (type == "PM2.5") {
-            text = resources.getString(R.string.main_data_ugm3, data.data.first)
-        } else if (type == "PM10") {
-            text = resources.getString(R.string.main_data_ugm3, data.data.second)
-        }
-    }
-}
 
 @BindingAdapter(value = ["app:type", "app:dataColor"])
 fun RelativeLayout.bindBackgroundColor(type: String, data: BaseModel?) {
