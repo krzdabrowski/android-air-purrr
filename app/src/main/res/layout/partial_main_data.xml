@@ -37,7 +37,7 @@
             <TextView
                 android:id="@+id/text_data_source"
                 style="@style/Main.Data.Info"
-                app:date="@{data}"
+                app:model="@{data}"
                 app:source="@{source}"
                 tools:text="@string/main_data_info_indoors" />
 
@@ -52,8 +52,7 @@
         <TextView
             android:id="@+id/text_data_percentage"
             style="@style/Main.Data.Percentage"
-            app:type="@{type}"
-            app:dataPercentage="@{data}"
+            android:text="@{data.getDataPercentage(context, type)}"
             tools:text="40.0%" />
 
         <TextView

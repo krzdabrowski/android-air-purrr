@@ -9,37 +9,16 @@ import com.krzdabrowski.airpurrr.main.current.api.ApiModel
 import com.krzdabrowski.airpurrr.main.current.BaseModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorModel
 
-@BindingAdapter(value = ["app:source", "app:date"])
-fun TextView.bindDate(source: Boolean, data: BaseModel?) {
+@BindingAdapter(value = ["app:source", "app:model"])
+fun bindSource(textView: TextView, source: Boolean, model: BaseModel?) {
     if (source) {
-        if (data == null) {
-            text = resources.getString(R.string.main_data_info_api_empty)
-        } else if (data is ApiModel){
-            text = resources.getString(R.string.main_data_info_api)
+        if (model == null) {
+            textView.text = textView.resources.getString(R.string.main_data_info_api_empty)
+        } else if (model is ApiModel){
+            textView.text = textView.resources.getString(R.string.main_data_info_api)
         }
     } else {
-        text = resources.getString(R.string.main_data_info_indoors)
-    }
-}
-
-@BindingAdapter(value = ["app:type", "app:dataPercentage"])
-fun TextView.bindDataPercentage(type: String, data: BaseModel?) {
-    text = resources.getString(R.string.main_data_percentage, 0.0)
-
-    if (data is DetectorModel) {
-        if (data.values != null) {
-            if (type == "PM2.5") {
-                text = resources.getString(R.string.main_data_percentage, Conversion.pm25ToPercent(data.values.pm25))
-            } else if (type == "PM10") {
-                text = resources.getString(R.string.main_data_percentage, Conversion.pm10ToPercent(data.values.pm10))
-            }
-        }
-    } else if (data is ApiModel) {
-        if (type == "PM2.5") {
-            text = resources.getString(R.string.main_data_percentage, Conversion.pm25ToPercent(data.data.first))
-        } else if (type == "PM10") {
-            text = resources.getString(R.string.main_data_percentage, Conversion.pm10ToPercent(data.data.second))
-        }
+        textView.text = textView.resources.getString(R.string.main_data_info_indoors)
     }
 }
 

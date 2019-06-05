@@ -1,3 +1,9 @@
 package com.krzdabrowski.airpurrr.main.current
 
-abstract class BaseModel
+import android.content.Context
+
+abstract class BaseModel {
+    open fun getDataPercentage(context: Context, type: String): String {
+        return ""
+    }
+}
