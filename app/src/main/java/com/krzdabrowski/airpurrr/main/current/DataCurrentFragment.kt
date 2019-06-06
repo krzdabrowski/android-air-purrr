@@ -12,17 +12,19 @@ import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_data_current.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DataCurrentFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!! })
     private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
+    private val baseViewModel: BaseViewModel by viewModel()
 
     private val fetchingInterval: Long = 1000 * 60 * 10
     private lateinit var binding: FragmentDataCurrentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDataCurrentBinding.inflate(inflater, container, false)
-        binding.flagDetectorApi = false
+        binding.baseVm = baseViewModel
 
         return binding.root
     }
@@ -30,8 +32,6 @@ class DataCurrentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        partial_main_data_pm25.setOnClickListener { onDataClick() }
-        partial_main_data_pm10.setOnClickListener { onDataClick() }
         swipe_refresh.setOnRefreshListener { fetchNewData() }
 
         fetchNewData()
@@ -47,10 +47,6 @@ class DataCurrentFragment : Fragment() {
             runPeriodicFetching()
         }
     })
-
-    private fun onDataClick() {
-        binding.flagDetectorApi = !binding.flagDetectorApi
-    }
 
     private fun fetchNewData() {
         getDetectorData()

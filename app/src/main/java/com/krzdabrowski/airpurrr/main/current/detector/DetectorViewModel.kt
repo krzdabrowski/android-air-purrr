@@ -3,9 +3,9 @@ package com.krzdabrowski.airpurrr.main.current.detector
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+import com.krzdabrowski.airpurrr.main.current.BaseViewModel
 
-class DetectorViewModel(private val repository: DetectorRepository) : ViewModel() {
+class DetectorViewModel(private val repository: DetectorRepository) : BaseViewModel() {
     private lateinit var liveData: LiveData<DetectorModel>
     val autoModeSwitch = ObservableBoolean()
     val autoModeThreshold = ObservableInt()

@@ -9,6 +9,7 @@ import com.krzdabrowski.airpurrr.main.current.detector.DetectorDataService
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import com.krzdabrowski.airpurrr.login.LoginViewModel
+import com.krzdabrowski.airpurrr.main.current.BaseViewModel
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -31,6 +32,7 @@ val repositoryModule = module {
 
 val viewModelModule = module {
     viewModel { LoginViewModel() }
+    viewModel { BaseViewModel() }
     viewModel { DetectorViewModel(get()) }
     viewModel { ApiViewModel(get()) }
 }

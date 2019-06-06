@@ -8,21 +8,22 @@
         <import type="com.krzdabrowski.airpurrr.R"/>
 
         <variable
-            name="type"
-            type="String" />
-
-        <variable
-            name="source"
-            type="boolean" />
+            name="baseVm"
+            type="com.krzdabrowski.airpurrr.main.current.BaseViewModel" />
 
         <variable
             name="data"
             type="com.krzdabrowski.airpurrr.main.current.BaseModel" />
+
+        <variable
+            name="type"
+            type="String" />
     </data>
 
     <RelativeLayout
         android:id="@+id/layout_main_data"
         style="@style/Main.Data.Layout"
+        android:onClick="@{() -> baseVm.onDataClick()}"
         android:background="@{data.getBackgroundColorDrawable(context, data.getPercentageDouble(type)) ?? @drawable/data_unavailable}">
 
         <LinearLayout style="@style/Main.Data.LayoutTop">
@@ -37,14 +38,14 @@
             <TextView
                 android:id="@+id/text_data_source"
                 style="@style/Main.Data.Info"
-                android:text="@{data.getSource(context) ?? source ? @string/main_data_info_api_empty : @string/main_data_info_indoors}"
+                android:text="@{data.getSource(context) ?? baseVm.flagDetectorApi ? @string/main_data_info_api_empty : @string/main_data_info_indoors}"
                 tools:text="@string/main_data_info_indoors" />
 
             <ImageView
                 android:id="@+id/ic_airly_logo"
                 style="@style/Main.Logo"
                 android:contentDescription="@string/main_data_description_logo"
-                android:visibility="@{source ? View.VISIBLE : View.GONE}"
+                android:visibility="@{baseVm.flagDetectorApi ? View.VISIBLE : View.GONE}"
                 app:srcCompat="@drawable/ic_logo_api_airly" />
         </LinearLayout>
 

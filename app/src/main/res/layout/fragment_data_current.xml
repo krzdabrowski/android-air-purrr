@@ -4,16 +4,16 @@
 
     <data>
         <variable
+            name="baseVm"
+            type="com.krzdabrowski.airpurrr.main.current.BaseViewModel" />
+
+        <variable
             name="detectorData"
             type="com.krzdabrowski.airpurrr.main.current.detector.DetectorModel" />
 
         <variable
             name="apiData"
             type="com.krzdabrowski.airpurrr.main.current.api.ApiModel" />
-
-        <variable
-            name="flagDetectorApi"
-            type="boolean" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -28,16 +28,16 @@
                         android:id="@+id/partial_main_data_pm25"
                         style="@style/Main.DataContainer.LinearView"
                         layout="@layout/partial_main_data"
-                        app:data="@{flagDetectorApi ? apiData : detectorData}"
-                        app:source="@{flagDetectorApi}"
+                        app:baseVm="@{baseVm}"
+                        app:data="@{baseVm.flagDetectorApi ? apiData : detectorData}"
                         app:type="@{@string/main_data_info_pm25}" />
 
                     <include
                         android:id="@+id/partial_main_data_pm10"
                         style="@style/Main.DataContainer.LinearView"
                         layout="@layout/partial_main_data"
-                        app:data="@{flagDetectorApi ? apiData : detectorData}"
-                        app:source="@{flagDetectorApi}"
+                        app:baseVm="@{baseVm}"
+                        app:data="@{baseVm.flagDetectorApi ? apiData : detectorData}"
                         app:type="@{@string/main_data_info_pm10}" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
