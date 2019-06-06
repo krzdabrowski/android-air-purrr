@@ -14,11 +14,21 @@
         <variable
             name="apiData"
             type="com.krzdabrowski.airpurrr.main.current.api.ApiModel" />
+
+        <variable
+            name="refreshListener"
+            type="androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener" />
+
+        <variable
+            name="isRefreshing"
+            type="Boolean" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
-        style="@style/Main.RootLayout">
+        style="@style/Main.RootLayout"
+        app:onRefreshListener="@{refreshListener}"
+        app:refreshing="@{isRefreshing}">
 
         <LinearLayout style="@style/Main.RootLayout">
             <androidx.cardview.widget.CardView style="@style/Main.CardView">

@@ -8,7 +8,6 @@ import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel.GpsDefaultCoordin
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel.GpsDefaultCoordinates.LONGITUDE
 
 class ApiViewModel(private val repository: ApiRepository) : BaseViewModel() {
-
     private lateinit var liveData: LiveData<ApiModel>
     var userLocation = MutableLiveData<Location>().apply { value = getDefaultLocation() }
 

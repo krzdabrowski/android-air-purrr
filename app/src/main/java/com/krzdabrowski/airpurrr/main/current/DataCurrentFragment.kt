@@ -7,33 +7,34 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.krzdabrowski.airpurrr.databinding.FragmentDataCurrentBinding
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
-import kotlinx.android.synthetic.main.fragment_data_current.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DataCurrentFragment : Fragment() {
+class DataCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+    private lateinit var binding: FragmentDataCurrentBinding
+
     private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!! })
     private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
     private val baseViewModel: BaseViewModel by viewModel()
 
+    private var isRefreshing = false
     private val fetchingInterval: Long = 1000 * 60 * 10
-    private lateinit var binding: FragmentDataCurrentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDataCurrentBinding.inflate(inflater, container, false)
         binding.baseVm = baseViewModel
+        binding.refreshListener = this
+        binding.isRefreshing = isRefreshing
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        swipe_refresh.setOnRefreshListener { fetchNewData() }
-
         fetchNewData()
     }
 
@@ -48,10 +49,12 @@ class DataCurrentFragment : Fragment() {
         }
     })
 
+    override fun onRefresh() = fetchNewData()
+
     private fun fetchNewData() {
         getDetectorData()
         getApi()
-        swipe_refresh.isRefreshing = false
+        binding.isRefreshing = false
     }
 
     private fun runPeriodicFetching() {
