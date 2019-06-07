@@ -13,14 +13,7 @@
         <item name="android:textColorHint">@color/color_login_inactive</item>
     </style>
 
-    <style name="Login.Fragment">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
-
     <style name="Login.RootLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
     </style>
 
@@ -31,33 +24,17 @@
         <item name="android:paddingEnd">@dimen/margin_medium</item>
     </style>
 
-    <style name="Login.ProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
     <style name="Login.Credentials" />
 
     <style name="Login.Credentials.Logo">
-        <item name="android:layout_width">@dimen/login_logo_size</item>
-        <item name="android:layout_height">@dimen/login_logo_size</item>
         <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
     </style>
 
     <style name="Login.Credentials.TextInputLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/margin_small</item>
     </style>
 
-    <style name="Login.Credentials.TextInputEditText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
     <style name="Login.Credentials.Button">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/margin_medium</item>
     </style>
 
