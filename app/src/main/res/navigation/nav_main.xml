@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/main_fragment"
-        android:name="com.krzdabrowski.airpurrr.view.MainFragment"
+        android:name="com.krzdabrowski.airpurrr.main.MainFragment"
         android:label="@string/label_app">
         <action
             android:id="@+id/navigate_to_settings_screen"
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/settings_fragment"
-        android:name="com.krzdabrowski.airpurrr.view.SettingsFragment"
+        android:name="com.krzdabrowski.airpurrr.settings.SettingsFragment"
         android:label="@string/label_settings" />
 
 </navigation>
