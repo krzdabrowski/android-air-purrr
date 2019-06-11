@@ -5,71 +5,82 @@
 
     <data>
         <import type="android.view.View" />
+        <import type="com.krzdabrowski.airpurrr.R" />
+
+        <variable
+            name="baseVm"
+            type="com.krzdabrowski.airpurrr.main.current.BaseViewModel" />
+
+        <variable
+            name="data"
+            type="com.krzdabrowski.airpurrr.main.current.BaseModel" />
 
         <variable
             name="type"
             type="String" />
-
-        <variable
-            name="source"
-            type="boolean" />
-
-        <variable
-            name="data"
-            type="com.krzdabrowski.airpurrr.model.BaseModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/layout_main_data"
-        style="@style/Main.Data.Layout"
-        app:type="@{type}"
-        app:dataColor="@{data}">
+        style="@style/Main.Data.InnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{data.getBackgroundColorDrawable(context, data.getPercentageDouble(type)) ?? @drawable/data_unavailable}"
+        android:onClick="@{() -> baseVm.onDataClick()}">
 
-        <TextView
-            android:id="@+id/text_data_type"
-            style="@style/Main.Data.Info"
-            android:text="@{type}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/main_data_info_pm25" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/ic_airly_logo"
-            style="@style/Main.Logo"
-            android:contentDescription="@string/main_data_description_logo"
-            android:visibility="@{source ? View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_logo_api_airly" />
+            <TextView
+                android:id="@+id/text_data_type"
+                style="@style/Main.Data.Info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{type}"
+                tools:text="@string/main_data_info_pm25" />
 
-        <TextView
-            android:id="@+id/text_data_source"
-            style="@style/Main.Data.Info"
-            app:date="@{data}"
-            app:source="@{source}"
-            app:layout_constraintBaseline_toBaselineOf="@+id/text_data_type"
-            app:layout_constraintEnd_toStartOf="@+id/ic_airly_logo"
-            tools:text="@string/main_data_info_indoors" />
+            <Space
+                android:layout_width="@dimen/zero"
+                android:layout_height="@dimen/zero"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/text_data_source"
+                style="@style/Main.Data.Info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{data.getSource(context) ?? baseVm.flagDetectorApi ? @string/main_data_info_api_empty : @string/main_data_info_indoors}"
+                tools:text="@string/main_data_info_indoors" />
+
+            <ImageView
+                android:id="@+id/ic_airly_logo"
+                style="@style/Main.Data.Logo"
+                android:layout_width="@dimen/main_data_logo_width"
+                android:layout_height="@dimen/main_data_logo_height"
+                android:contentDescription="@string/main_data_description_logo"
+                android:visibility="@{baseVm.flagDetectorApi ? View.VISIBLE : View.GONE}"
+                app:srcCompat="@drawable/ic_logo_api_airly" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/text_data_percentage"
             style="@style/Main.Data.Percentage"
-            app:type="@{type}"
-            app:dataPercentage="@{data}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@{data.getDataPercentage(context, type) ?? context.getString(R.string.main_data_percentage, 0.0)}"
             tools:text="40.0%" />
 
         <TextView
             android:id="@+id/text_data_ugm3"
             style="@style/Main.Data.Ugm3"
-            app:type="@{type}"
-            app:dataUgm3="@{data}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@{data.getDataUgm3(context, type) ?? context.getString(R.string.main_data_ugm3, 0.0)}"
             tools:text="(10.0)" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>
