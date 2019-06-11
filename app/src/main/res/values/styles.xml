@@ -13,11 +13,7 @@
         <item name="android:textColorHint">@color/color_login_inactive</item>
     </style>
 
-    <style name="Login.RootLayout">
-        <item name="android:orientation">vertical</item>
-    </style>
-
-    <style name="Login.RootLayout.Manual">
+    <style name="Login.ManualLayout">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:paddingStart">@dimen/margin_medium</item>
         <item name="android:paddingTop">@dimen/margin_xl</item>
@@ -48,25 +44,7 @@
         <item name="colorAccent">@color/color_main_accent</item>
     </style>
 
-    <style name="Main.RootLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:orientation">vertical</item>
-    </style>
-
-    <style name="Main.Fragment">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
-
-    <style name="Main.TabLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-
     <style name="Main.CardView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
         <item name="android:layout_marginStart">@dimen/margin_small</item>
         <item name="android:layout_marginTop">@dimen/margin_small</item>
         <item name="android:layout_marginEnd">@dimen/margin_small</item>
@@ -74,80 +52,34 @@
         <item name="cardCornerRadius">@dimen/main_data_corner_radius</item>
     </style>
 
-    <style name="Main.DataContainer">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
+    <style name="Main.Data" />
 
-    <style name="Main.DataContainer.LinearLayout">
-        <item name="android:baselineAligned">false</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:weightSum">2</item>
-    </style>
-
-    <style name="Main.DataContainer.LinearView">
+    <style name="Main.Data.OuterLayout">
         <item name="android:layout_margin">@dimen/margin_tiny</item>
-        <item name="android:layout_weight">1</item>
     </style>
 
-    <style name="Main.Data"/>
-
-    <style name="Main.Data.Layout">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="Main.Data.InnerLayout">
         <item name="android:elevation">@dimen/main_data_elevation</item>
         <item name="android:foreground">?selectableItemBackground</item>
     </style>
 
-    <style name="Main.Data.LayoutTop">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">horizontal</item>
+    <style name="Main.Data.Info">
+        <item name="android:layout_margin">@dimen/margin_tiny</item>
+        <item name="android:textSize">@dimen/main_data_text_size_info</item>
     </style>
 
-    <style name="Main.Data.LayoutTopGap">
-        <item name="android:layout_width">@dimen/zero</item>
-        <item name="android:layout_height">@dimen/zero</item>
-        <item name="android:layout_weight">1</item>
+    <style name="Main.Data.Logo">
+        <item name="android:layout_marginTop">@dimen/main_data_logo_margin_top</item>
+        <item name="android:layout_marginEnd">@dimen/main_data_logo_margin_end</item>
     </style>
 
     <style name="Main.Data.Percentage">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_centerInParent">true</item>
         <item name="android:textSize">@dimen/main_data_text_size_percentage</item>
         <item name="android:textAppearance">?android:textAppearanceLarge</item>
     </style>
 
     <style name="Main.Data.Ugm3">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
         <item name="android:textSize">@dimen/main_data_text_size_ugm3</item>
-    </style>
-
-    <style name="Main.Data.Info">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">@dimen/margin_tiny</item>
-        <item name="android:textSize">@dimen/main_data_text_size_info</item>
-    </style>
-
-    <style name="Main.Logo">
-        <item name="android:layout_width">@dimen/main_data_logo_width</item>
-        <item name="android:layout_height">@dimen/main_data_logo_height</item>
-        <item name="android:layout_marginTop">@dimen/main_data_logo_margin_top</item>
-        <item name="android:layout_marginEnd">@dimen/main_data_logo_margin_end</item>
-    </style>
-
-
-    <!-- Settings screen -->
-    <style name="Settings" />
-
-    <style name="Settings.RootLayout">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
     </style>
 </resources>

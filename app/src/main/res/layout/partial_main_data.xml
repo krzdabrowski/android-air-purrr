@@ -5,7 +5,7 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="com.krzdabrowski.airpurrr.R"/>
+        <import type="com.krzdabrowski.airpurrr.R" />
 
         <variable
             name="baseVm"
@@ -22,28 +22,43 @@
 
     <RelativeLayout
         android:id="@+id/layout_main_data"
-        style="@style/Main.Data.Layout"
-        android:onClick="@{() -> baseVm.onDataClick()}"
-        android:background="@{data.getBackgroundColorDrawable(context, data.getPercentageDouble(type)) ?? @drawable/data_unavailable}">
+        style="@style/Main.Data.InnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{data.getBackgroundColorDrawable(context, data.getPercentageDouble(type)) ?? @drawable/data_unavailable}"
+        android:onClick="@{() -> baseVm.onDataClick()}">
 
-        <LinearLayout style="@style/Main.Data.LayoutTop">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/text_data_type"
                 style="@style/Main.Data.Info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@{type}"
                 tools:text="@string/main_data_info_pm25" />
 
-            <Space style="@style/Main.Data.LayoutTopGap"/>
+            <Space
+                android:layout_width="@dimen/zero"
+                android:layout_height="@dimen/zero"
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/text_data_source"
                 style="@style/Main.Data.Info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@{data.getSource(context) ?? baseVm.flagDetectorApi ? @string/main_data_info_api_empty : @string/main_data_info_indoors}"
                 tools:text="@string/main_data_info_indoors" />
 
             <ImageView
                 android:id="@+id/ic_airly_logo"
-                style="@style/Main.Logo"
+                style="@style/Main.Data.Logo"
+                android:layout_width="@dimen/main_data_logo_width"
+                android:layout_height="@dimen/main_data_logo_height"
                 android:contentDescription="@string/main_data_description_logo"
                 android:visibility="@{baseVm.flagDetectorApi ? View.VISIBLE : View.GONE}"
                 app:srcCompat="@drawable/ic_logo_api_airly" />
@@ -52,12 +67,19 @@
         <TextView
             android:id="@+id/text_data_percentage"
             style="@style/Main.Data.Percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="@{data.getDataPercentage(context, type) ?? context.getString(R.string.main_data_percentage, 0.0)}"
             tools:text="40.0%" />
 
         <TextView
             android:id="@+id/text_data_ugm3"
             style="@style/Main.Data.Ugm3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:text="@{data.getDataUgm3(context, type) ?? context.getString(R.string.main_data_ugm3, 0.0)}"
             tools:text="(10.0)" />
     </RelativeLayout>
