@@ -1,19 +1,19 @@
 package com.krzdabrowski.airpurrr.main.current.api
 
 import android.location.Location
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.krzdabrowski.airpurrr.main.current.BaseViewModel
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel.GpsDefaultCoordinates.LATITUDE
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel.GpsDefaultCoordinates.LONGITUDE
+import kotlinx.coroutines.Dispatchers
 
 class ApiViewModel(private val repository: ApiRepository) : BaseViewModel() {
-    private lateinit var liveData: LiveData<ApiModel>
     var userLocation = MutableLiveData<Location>().apply { value = getDefaultLocation() }
 
-    fun getLiveData(): LiveData<ApiModel> {
-        liveData = repository.fetchData(userLocation.value!!)
-        return liveData
+    fun getLiveData() = liveData(Dispatchers.IO) {
+        val data = repository.fetchData(userLocation.value!!)
+        emit(data)
     }
 
     private fun getDefaultLocation(): Location {

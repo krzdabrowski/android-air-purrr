@@ -2,20 +2,20 @@ package com.krzdabrowski.airpurrr.main.current.detector
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import com.krzdabrowski.airpurrr.main.current.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 
 class DetectorViewModel(private val repository: DetectorRepository) : BaseViewModel() {
-    private lateinit var liveData: LiveData<DetectorModel>
+    private var data: DetectorModel? = null
     val autoModeSwitch = ObservableBoolean()
     val autoModeThreshold = ObservableInt()
     val purifierObservableState = ObservableBoolean()
     var purifierState = purifierObservableState.get()
 
-    // possible refactor VMs to use LiveData coroutines with liveData block (until lifecycle v2.2.0 comes out of alpha)
-    fun getLiveData(): LiveData<DetectorModel> {
-        liveData = repository.fetchData()
-        return liveData
+    fun getLiveData() = liveData(Dispatchers.IO) {
+        data = repository.fetchData()
+        emit(data)
     }
 
     fun controlFan(turnOn: Boolean, login: String, password: String) {
@@ -23,13 +23,13 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
     }
 
     fun checkAutoMode() {
-        val isDataAvailable = ::liveData.isInitialized && liveData.value != null && liveData.value?.values != null
+        val isDataAvailable = data != null && data?.values != null
         if (!isDataAvailable) {
             return
         }
 
         val shouldTurnOn = !purifierState && autoModeSwitch.get() &&
-                autoModeThreshold.get() < liveData.value?.values!!.pm25 || autoModeThreshold.get() < liveData.value?.values!!.pm10
+                autoModeThreshold.get() < data?.values!!.pm25 || autoModeThreshold.get() < data?.values!!.pm10
         val shouldTurnOff = purifierState && !autoModeSwitch.get()
 
         if (shouldTurnOn) {

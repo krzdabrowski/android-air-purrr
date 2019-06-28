@@ -52,7 +52,7 @@ ext {
     ktxCoreVersion = '1.0.2'
     ktxFragmentVersion = '1.1.0-beta01'
     appCompatVersion = '1.1.0-beta01'
-    lifecycleExtensionsVersion = '2.0.0'
+    liveDataVersion = '2.2.0-alpha01'
     viewPagerVersion = '1.0.0'
     preferenceVersion = '1.1.0-beta01'
     navigationVersion = '2.0.0'
@@ -64,10 +64,9 @@ ext {
     firebaseAuthVersion = '18.0.0'
     databindingVersion = '3.1.4'
 
-    retrofitVersion = '2.5.0'
-    retrofitCoroutinesAdapterVersion = '0.9.2'
+    retrofitVersion = '2.6.0'
     timberVersion = '4.7.1'
-    koinVersion = '2.0.0-GA6'
+    koinVersion = '2.0.1'
     armadilloVersion = '0.8.0'
 
     testJunitVersion = '4.12'
@@ -89,7 +88,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$ktxCoreVersion"
     implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleExtensionsVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$liveDataVersion"
     implementation "androidx.viewpager:viewpager:$viewPagerVersion"
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
@@ -104,7 +103,6 @@ dependencies {
 
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofitCoroutinesAdapterVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
