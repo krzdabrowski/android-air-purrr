@@ -24,11 +24,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
         when (key) {
             keySwitch -> detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keySwitch, false))
             keyThreshold -> detectorViewModel.autoModeThreshold.set(
-                    try {
-                        sharedPreferences.getString(keyThreshold, "").toInt()
-                    } catch (_: NumberFormatException) {
-                        0
-                    })
+                try {
+                    sharedPreferences.getString(keyThreshold, "").toInt()
+                } catch (_: NumberFormatException) {
+                    0
+                })
             else ->  // SeekBarPreference
                 Snackbar.make(view!!, "Will be implemented later in phase 2", Snackbar.LENGTH_SHORT).show()
         }

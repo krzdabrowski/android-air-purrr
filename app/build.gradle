@@ -50,24 +50,26 @@ android {
 ext {
     coroutinesVersion = '1.2.1'
     ktxCoreVersion = '1.0.2'
-    ktxFragmentVersion = '1.1.0-beta01'
-    appCompatVersion = '1.1.0-beta01'
-    liveDataVersion = '2.2.0-alpha01'
+    ktxFragmentVersion = '1.2.0-alpha01'
+    appCompatVersion = '1.1.0-rc01'
+    liveDataVersion = '2.2.0-alpha02'
     viewPagerVersion = '1.0.0'
-    preferenceVersion = '1.1.0-beta01'
+    preferenceVersion = '1.1.0-rc01'
     navigationVersion = '2.0.0'
     biometricVersion = '1.0.0-alpha03'  // bug in biometric-alpha04, wait for alpha05
 
     materialVersion = '1.0.0'
     locationVersion = '17.0.0'
-    firebaseCoreVersion = '17.0.0'
-    firebaseAuthVersion = '18.0.0'
+    firebaseCoreVersion = '17.0.1'
+    firebaseAuthVersion = '18.1.0'
     databindingVersion = '3.1.4'
 
     retrofitVersion = '2.6.0'
     timberVersion = '4.7.1'
     koinVersion = '2.0.1'
     armadilloVersion = '0.8.0'
+
+    leakCanaryVersion = '2.0-alpha-3'
 
     testJunitVersion = '4.12'
     testMockWebserverVersion = '3.14.2'
@@ -107,6 +109,8 @@ dependencies {
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
     implementation "at.favre.lib:armadillo:$armadilloVersion"
+
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 
     testImplementation "junit:junit:$testJunitVersion"
     testImplementation "com.squareup.okhttp3:mockwebserver:$testMockWebserverVersion"
