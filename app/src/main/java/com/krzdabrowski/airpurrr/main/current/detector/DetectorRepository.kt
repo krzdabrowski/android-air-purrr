@@ -30,9 +30,9 @@ class DetectorRepository(private val serviceHttp: DetectorDataService, private v
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (turnOn) {
-                    serviceHttps.controlFanAsync(auth, "MANUAL=1")
+                    serviceHttps.controlFanAsync(auth, "on")
                 } else {
-                    serviceHttps.controlFanAsync(auth, "MANUAL=0")
+                    serviceHttps.controlFanAsync(auth, "off")
                 }
             } catch (e: HttpException) {
                 Timber.d("HTTPS error: ${e.message()}")

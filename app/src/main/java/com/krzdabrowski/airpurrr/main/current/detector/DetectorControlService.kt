@@ -13,7 +13,7 @@ interface DetectorControlService {
 
     @FormUrlEncoded
     @POST("login")
-    suspend fun controlFanAsync(@Header("Authorization") authorization: String, @Field("req") requestKey: String): ResponseBody
+    suspend fun controlFanAsync(@Header("Authorization") authorization: String, @Field("shouldTurnOn") requestShouldTurnOn: String): ResponseBody
 
     companion object {
         fun create(client: OkHttpClient): DetectorControlService {
