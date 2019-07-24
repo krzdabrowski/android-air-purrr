@@ -72,7 +72,7 @@ ext {
 
     testJunitVersion = '4.12'
     testMockWebserverVersion = '3.14.2'
-    testMockitoVersion = '2.28.2'
+    testMockkVersion = '1.9.3'
     testRobolectricVersion = '4.3'
 
     androidTestCoreVersion = '1.2.0'
@@ -113,13 +113,14 @@ dependencies {
 
     testImplementation "junit:junit:$testJunitVersion"
     testImplementation "com.squareup.okhttp3:mockwebserver:$testMockWebserverVersion"
-    testImplementation "org.mockito:mockito-core:$testMockitoVersion"
+    testImplementation "io.mockk:mockk:$testMockkVersion"
     testImplementation "org.robolectric:robolectric:$testRobolectricVersion"
 
     androidTestImplementation "androidx.test:core:$androidTestCoreVersion"
     androidTestImplementation "androidx.test:runner:$androidTestRunnerVersion"
     androidTestImplementation "androidx.test:rules:$androidTestRulesVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidTestEspressoVersion"
+    androidTestImplementation "io.mockk:mockk-android:$testMockkVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
