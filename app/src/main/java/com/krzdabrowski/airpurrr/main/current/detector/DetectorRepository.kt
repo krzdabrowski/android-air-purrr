@@ -24,8 +24,8 @@ class DetectorRepository(private val serviceHttp: DetectorDataService, private v
         return null
     }
 
-    fun controlFan(turnOn: Boolean, hashedEmail: String, hashedPassword: String) {
-        val auth = "Basic " + Base64.encodeToString("$hashedEmail:$hashedPassword".toByteArray(), Base64.NO_WRAP)
+    fun controlFan(turnOn: Boolean, email: String, password: String) {
+        val auth = "Basic " + Base64.encodeToString("$email:$password".toByteArray(), Base64.NO_WRAP)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
