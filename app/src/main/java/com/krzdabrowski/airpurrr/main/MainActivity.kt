@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
+    private val detectorViewModel: DetectorViewModel by viewModel()
     private val navController by lazy { findNavController(R.id.main_fragment_host) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

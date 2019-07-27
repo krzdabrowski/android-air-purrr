@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
-import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -14,13 +13,13 @@ import com.google.android.gms.location.LocationServices
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
-import kotlinx.android.synthetic.main.fragment_data_current.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
-    private val detectorViewModel: DetectorViewModel by viewModel()
+    private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private val purifierHelper: PurifierHelper by inject()
 
@@ -38,12 +37,6 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         view_pager.adapter = ViewPagerAdapter(context!!, childFragmentManager)
         tab_layout.setupWithViewPager(view_pager)
-
-        detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                controlPurifier(email, password, detectorViewModel.purifierState)
-            }
-        })
 
         checkLocationPermission()
     }
@@ -74,9 +67,9 @@ class MainFragment : Fragment() {
     // endregion
 
     // region Purifier
-    private fun controlPurifier(email: String, password: String, state: Boolean) {
+    private fun controlPurifier(email: String, password: String, currentState: Boolean) {
         detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, email, password, state, swipe_refresh)
+            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, email, password, currentState, view!!)
         })
     }
     // endregion

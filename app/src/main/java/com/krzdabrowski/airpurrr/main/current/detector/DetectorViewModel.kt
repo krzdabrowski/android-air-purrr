@@ -3,6 +3,7 @@ package com.krzdabrowski.airpurrr.main.current.detector
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.liveData
+import com.krzdabrowski.airpurrr.common.Conversion
 import com.krzdabrowski.airpurrr.main.current.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 
@@ -28,16 +29,13 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
             return
         }
 
-        val shouldTurnOn = !purifierState && autoModeSwitch.get() &&
-                autoModeThreshold.get() < data?.values!!.pm25 || autoModeThreshold.get() < data?.values!!.pm10
+        val shouldTurnOn = !purifierState && autoModeSwitch.get()
+                && autoModeThreshold.get() < Conversion.pm25ToPercent(data?.values!!.pm25)
+                || autoModeThreshold.get() < Conversion.pm10ToPercent(data?.values!!.pm10)
         val shouldTurnOff = purifierState && !autoModeSwitch.get()
 
-        if (shouldTurnOn) {
-            purifierState = true
-            purifierObservableState.set(purifierState)
-        } else if (shouldTurnOff) {
-            purifierState = false
-            purifierObservableState.set(purifierState)
+        if (shouldTurnOn || shouldTurnOff) {
+            purifierObservableState.set(!purifierState)
         }
     }
 }
