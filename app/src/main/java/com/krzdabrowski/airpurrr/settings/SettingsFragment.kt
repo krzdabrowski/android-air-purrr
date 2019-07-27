@@ -3,7 +3,9 @@ package com.krzdabrowski.airpurrr.settings
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.Observable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -58,20 +60,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    fun addStateCallback(owner: LifecycleOwner, rootView: View, email: String, password: String) {
-        detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                controlPurifier(owner, rootView, email, password, detectorViewModel.purifierState)
-            }
-        })
-    }
-
-    fun controlPurifier(owner: LifecycleOwner, rootView: View, email: String, password: String, state: Boolean) {
-        detectorViewModel.getLiveData().observe(owner, Observer { workstateValue ->
-            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, email, password, state, rootView)
-        })
-    }
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
@@ -89,9 +77,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        addStateCallback(this, view, email, password)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                controlPurifier(this@SettingsFragment, container!!, email, password, detectorViewModel.purifierState)
+            }
+        })
+
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onResume() {
@@ -102,5 +95,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onPause() {
         super.onPause()
         preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceListener)
+    }
+
+    private fun controlPurifier(owner: LifecycleOwner, rootView: View, email: String, password: String, state: Boolean) {
+        detectorViewModel.getLiveData().observe(owner, Observer { workstateValue ->
+            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, rootView, email, password, state)
+        })
     }
 }

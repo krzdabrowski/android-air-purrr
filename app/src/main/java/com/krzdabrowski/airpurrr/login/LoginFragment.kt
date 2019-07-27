@@ -32,9 +32,9 @@ class LoginFragment : Fragment(), LoginBiometricHelper.OnSuccessCallback {
         binding.vm = loginViewModel
         binding.isLoggingIn = false
 
-        loginViewModel.email.observe(this, Observer { email -> loginViewModel.isEmailValid(email) })
-        loginViewModel.password.observe(this, Observer { password -> loginViewModel.isPasswordValid(password) })
-        loginViewModel.isFormValid.observe(this, Observer { manualLogin() })
+        loginViewModel.email.observe(viewLifecycleOwner, Observer { email -> loginViewModel.isEmailValid(email) })
+        loginViewModel.password.observe(viewLifecycleOwner, Observer { password -> loginViewModel.isPasswordValid(password) })
+        loginViewModel.isFormValid.observe(viewLifecycleOwner, Observer { manualLogin() })
 
         if (credentialPrefs.contains(getString(R.string.login_pref_email))) {
             fingerprintLogin()

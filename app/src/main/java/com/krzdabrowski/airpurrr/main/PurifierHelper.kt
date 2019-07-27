@@ -8,7 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class PurifierHelper(private val detectorViewModel: DetectorViewModel) {
 
-    fun getPurifierState(value: DetectorModel?, login: String, password: String, currentState: Boolean, rootView: View): Boolean {
+    fun getPurifierState(value: DetectorModel?, rootView: View, login: String, password: String, currentState: Boolean): Boolean {
         return when (value?.workstate) {
             "WorkStates.Sleeping" -> {
                 Snackbar.make(rootView, R.string.main_msg_turn_on, Snackbar.LENGTH_LONG).show()

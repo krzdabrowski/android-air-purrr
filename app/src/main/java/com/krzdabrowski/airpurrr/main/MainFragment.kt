@@ -68,8 +68,8 @@ class MainFragment : Fragment() {
 
     // region Purifier
     private fun controlPurifier(email: String, password: String, currentState: Boolean) {
-        detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, email, password, currentState, view!!)
+        detectorViewModel.getLiveData().observe(viewLifecycleOwner, Observer { workstateValue ->
+            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, view!!, email, password, currentState)
         })
     }
     // endregion

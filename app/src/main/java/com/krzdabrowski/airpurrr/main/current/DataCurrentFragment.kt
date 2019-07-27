@@ -38,11 +38,11 @@ class DataCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fetchNewData()
     }
 
-    private fun getDetectorData() = detectorViewModel.getLiveData().observe(this, Observer { value -> binding.detectorData = value })
+    private fun getDetectorData() = detectorViewModel.getLiveData().observe(viewLifecycleOwner, Observer { value -> binding.detectorData = value })
 
-    private fun getApiData() = apiViewModel.getLiveData().observe(this, Observer { value -> binding.apiData = value })
+    private fun getApiData() = apiViewModel.getLiveData().observe(viewLifecycleOwner, Observer { value -> binding.apiData = value })
 
-    private fun getApi() = apiViewModel.userLocation.observe(this, Observer { location ->
+    private fun getApi() = apiViewModel.userLocation.observe(viewLifecycleOwner, Observer { location ->
         if (location != null) {
             getApiData()
             runPeriodicFetching()
