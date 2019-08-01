@@ -48,13 +48,13 @@ android {
 
 ext {
     coroutinesVersion = '1.2.1'
-    ktxCoreVersion = '1.0.2'
-    ktxFragmentVersion = '1.2.0-alpha01'
+    coreKtxVersion = '1.0.2'
+    fragmentKtxVersion = '1.2.0-alpha01'
     appCompatVersion = '1.1.0-rc01'
-    liveDataVersion = '2.2.0-alpha02'
+    liveDataKtxVersion = '2.2.0-alpha02'
     viewPagerVersion = '1.0.0'
-    preferenceVersion = '1.1.0-rc01'
-    navigationVersion = '2.0.0'
+    preferenceKtxVersion = '1.1.0-rc01'
+    navigationKtxVersion = '2.0.0'
     biometricVersion = '1.0.0-alpha03'  // bug in biometric-alpha04, wait for alpha05
 
     materialVersion = '1.0.0'
@@ -67,18 +67,21 @@ ext {
     timberVersion = '4.7.1'
     koinVersion = '2.0.1'
     armadilloVersion = '0.8.0'
-
     leakCanaryVersion = '2.0-alpha-3'
 
-    testJunitVersion = '4.12'
-    testMockWebserverVersion = '3.14.2'
-    testMockkVersion = '1.9.3'
-    testRobolectricVersion = '4.3'
+    // commonTest
+    testCoreKtxVersion = '1.2.0'
+    testExtJunitKtxVersion = '1.1.1'
 
-    androidTestCoreVersion = '1.2.0'
-    androidTestRunnerVersion = '1.2.0'
-    androidTestRulesVersion = '1.2.0'
-    androidTestEspressoVersion = '3.1.1'
+    testEspressoVersion = '3.2.0'
+    testMockkVersion = '1.9.3'
+
+    // androidTest
+    testRunnerVersion = '1.2.0'
+
+    // test
+    testJunitVersion = '4.12'
+    testRobolectricVersion = '4.3'
 }
 
 dependencies {
@@ -86,14 +89,14 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    implementation "androidx.core:core-ktx:$ktxCoreVersion"
-    implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
+    implementation "androidx.core:core-ktx:$coreKtxVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$liveDataVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$liveDataKtxVersion"
     implementation "androidx.viewpager:viewpager:$viewPagerVersion"
-    implementation "androidx.preference:preference-ktx:$preferenceVersion"
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceKtxVersion"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationKtxVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationKtxVersion"
     implementation "androidx.biometric:biometric:$biometricVersion"
 
     implementation "com.google.android.material:material:$materialVersion"
@@ -108,19 +111,27 @@ dependencies {
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
     implementation "at.favre.lib:armadillo:$armadilloVersion"
-
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 
-    testImplementation "junit:junit:$testJunitVersion"
-    testImplementation "com.squareup.okhttp3:mockwebserver:$testMockWebserverVersion"
-    testImplementation "io.mockk:mockk:$testMockkVersion"
-    testImplementation "org.robolectric:robolectric:$testRobolectricVersion"
+    // commonTest
+    androidTestImplementation "androidx.test:core-ktx:$testCoreKtxVersion"
+    testImplementation "androidx.test:core-ktx:$testCoreKtxVersion"
 
-    androidTestImplementation "androidx.test:core:$androidTestCoreVersion"
-    androidTestImplementation "androidx.test:runner:$androidTestRunnerVersion"
-    androidTestImplementation "androidx.test:rules:$androidTestRulesVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$androidTestEspressoVersion"
+    androidTestImplementation "androidx.test.ext:junit-ktx:$testExtJunitKtxVersion"
+    testImplementation "androidx.test.ext:junit-ktx:$testExtJunitKtxVersion"
+
+    androidTestImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
+    testImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
+
     androidTestImplementation "io.mockk:mockk-android:$testMockkVersion"
+    testImplementation "io.mockk:mockk:$testMockkVersion"
+
+    // androidTest
+    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+
+    // test
+    testImplementation "junit:junit:$testJunitVersion"
+    testImplementation "org.robolectric:robolectric:$testRobolectricVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
