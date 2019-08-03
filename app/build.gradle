@@ -82,6 +82,8 @@ ext {
     // test
     testJunitVersion = '4.12'
     testRobolectricVersion = '4.3'
+
+    testFragmentVersion = '1.2.0-alpha01'
 }
 
 dependencies {
@@ -121,7 +123,9 @@ dependencies {
     testImplementation "androidx.test.ext:junit-ktx:$testExtJunitKtxVersion"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$testEspressoVersion"
     testImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
+    testImplementation "androidx.test.espresso:espresso-intents:$testEspressoVersion"
 
     androidTestImplementation "io.mockk:mockk-android:$testMockkVersion"
     testImplementation "io.mockk:mockk:$testMockkVersion"
@@ -132,6 +136,9 @@ dependencies {
     // test
     testImplementation "junit:junit:$testJunitVersion"
     testImplementation "org.robolectric:robolectric:$testRobolectricVersion"
+
+    implementation "androidx.test.espresso:espresso-idling-resource:$testEspressoVersion"
+    debugImplementation "androidx.fragment:fragment-testing:$testFragmentVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
