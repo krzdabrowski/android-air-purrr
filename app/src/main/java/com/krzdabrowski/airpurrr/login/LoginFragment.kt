@@ -12,6 +12,7 @@ import at.favre.lib.armadillo.Armadillo
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
 import com.krzdabrowski.airpurrr.databinding.FragmentLoginBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -47,6 +48,10 @@ class LoginFragment : Fragment(), LoginBiometricHelper.OnSuccessCallback {
 
     private fun manualLogin() {
         binding.isLoggingIn = true
+        // Espresso does not work well with coroutines yet. See
+        // https://github.com/Kotlin/kotlinx.coroutines/issues/982
+        EspressoIdlingResource.increment()  // set app as busy
+
         FirebaseAuth
                 .getInstance()
                 .signInWithEmailAndPassword(loginViewModel.email.value!!, loginViewModel.password.value!!)
@@ -62,6 +67,8 @@ class LoginFragment : Fragment(), LoginBiometricHelper.OnSuccessCallback {
                 binding.isLoggingIn = false
                 Snackbar.make(view!!, R.string.login_error_auth, Snackbar.LENGTH_SHORT).show()
             }
+
+            EspressoIdlingResource.decrement()  // set app as idle
         }
     }
 
