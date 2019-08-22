@@ -1,6 +1,7 @@
 package com.krzdabrowski.airpurrr.common
 
 import android.app.Application
+import com.google.firebase.FirebaseApp
 import com.krzdabrowski.airpurrr.BuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -11,7 +12,9 @@ class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+        FirebaseApp.initializeApp(this)
         startKoin {
             androidLogger()
             androidContext(this@App)

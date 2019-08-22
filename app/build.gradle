@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     flavorDimensions "default"
@@ -54,20 +53,19 @@ android {
 ext {
     coroutinesVersion = '1.2.1'
     coreKtxVersion = '1.0.2'
-    fragmentKtxVersion = '1.2.0-alpha01'
+    fragmentKtxVersion = '1.2.0-alpha02'
     appCompatVersion = '1.1.0-rc01'
     liveDataKtxVersion = '2.2.0-alpha03'
     viewPagerVersion = '1.0.0'
     preferenceKtxVersion = '1.1.0-rc01'
-    navigationKtxVersion = '2.0.0'
     biometricVersion = '1.0.0-alpha03'  // bug in biometric-alpha04, wait for alpha05
     materialVersion = '1.0.0'
     locationVersion = '17.0.0'
-    firebaseCoreVersion = '17.0.1'
-    firebaseAuthVersion = '18.1.0'
+    firebaseCoreVersion = '17.1.0'
+    firebaseAuthVersion = '19.0.0'
     databindingVersion = '3.1.4'
 
-    retrofitVersion = '2.6.0'
+    retrofitVersion = '2.6.1'
     timberVersion = '4.7.1'
     koinVersion = '2.0.1'
     armadilloVersion = '0.8.0'
@@ -80,6 +78,7 @@ ext {
     testMockkVersion = '1.9.3'
     testRunnerVersion = '1.2.0'
     testJunitVersion = '4.12'
+    testTruthVersion = '1.0'
     testRobolectricVersion = '4.3'
     testFragmentVersion = '1.2.0-alpha02'
 }
@@ -94,8 +93,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$liveDataKtxVersion"
     implementation "androidx.viewpager:viewpager:$viewPagerVersion"
     implementation "androidx.preference:preference-ktx:$preferenceKtxVersion"
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationKtxVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationKtxVersion"
     implementation "androidx.biometric:biometric:$biometricVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation "com.google.android.gms:play-services-location:$locationVersion"
@@ -117,8 +114,8 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$testEspressoVersion"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
-    androidTestImplementation "io.mockk:mockk-android:$testMockkVersion"
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+    androidTestImplementation "com.google.truth:truth:$testTruthVersion"
 
     // test
     testImplementation "androidx.test:core-ktx:$testCoreKtxVersion"
@@ -126,12 +123,14 @@ dependencies {
     testImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
     testImplementation "androidx.test.espresso:espresso-intents:$testEspressoVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
-    testImplementation "io.mockk:mockk:$testMockkVersion"
     testImplementation "junit:junit:$testJunitVersion"
+    testImplementation "io.mockk:mockk:$testMockkVersion"
+    testImplementation "com.google.truth:truth:$testTruthVersion"
+    testImplementation "org.koin:koin-test:$koinVersion"
     testImplementation "org.robolectric:robolectric:$testRobolectricVersion"
 
     implementation "androidx.test.espresso:espresso-idling-resource:$testEspressoVersion"
-    debugImplementation ("androidx.fragment:fragment-testing:$testFragmentVersion") {
+    debugImplementation("androidx.fragment:fragment-testing:$testFragmentVersion") {
         exclude group: 'androidx.test', module: 'core'
     }
 }

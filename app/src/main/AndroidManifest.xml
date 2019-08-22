@@ -8,28 +8,31 @@
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <application
+        android:name=".common.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/label_app"
-        android:name=".common.App"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Main.AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.krzdabrowski.airpurrr.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Login.AppTheme">
-        <intent-filter>
+            android:theme="@style/Login.AppTheme"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.krzdabrowski.airpurrr.main.MainActivity"
+            android:name=".main.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:parentActivityName=".main.MainActivity"
             android:screenOrientation="portrait" />
     </application>
 </manifest>
