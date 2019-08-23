@@ -71,10 +71,14 @@ class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallbac
 
     // bug in biometric-alpha04: https://issuetracker.google.com/issues/131980596
     private fun fingerprintLogin() {
+        EspressoIdlingResource.increment()  // set app as busy
+
         if (biometricHelper.isFingerprintAvailable()) {
             if (biometricHelper.isPermissionGranted()) {
                 BiometricPrompt(this, MainExecutor(), biometricHelper)
                         .authenticate(biometricHelper.getPromptInfo())
+
+                EspressoIdlingResource.decrement()  // set app as idle
             } else {
                 Snackbar.make(findViewById(android.R.id.content), R.string.login_error_no_permission, Snackbar.LENGTH_SHORT).show()
             }

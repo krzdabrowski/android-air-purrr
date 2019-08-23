@@ -115,6 +115,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$testEspressoVersion"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
     androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+    androidTestImplementation "io.mockk:mockk-android:$testMockkVersion"
     androidTestImplementation "com.google.truth:truth:$testTruthVersion"
 
     // test

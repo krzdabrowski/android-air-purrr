@@ -1,5 +1,6 @@
 package com.krzdabrowski.airpurrr
 
+import android.Manifest
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
@@ -11,22 +12,25 @@ import androidx.test.espresso.intent.Intents.release
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.rule.GrantPermissionRule
 import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
 import com.krzdabrowski.airpurrr.login.LoginActivity
 import com.krzdabrowski.airpurrr.utils.DataBindingIdlingResource
 import com.krzdabrowski.airpurrr.utils.monitorActivity
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
-import org.koin.core.context.stopKoin
+import org.junit.runners.MethodSorters
 
 @RunWith(AndroidJUnit4::class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
 class LoginActivityTest {
     // An Idling Resource that waits for Data Binding to have no pending bindings
     private val dataBindingIdlingResource = DataBindingIdlingResource()
     private lateinit var activityScenario: ActivityScenario<LoginActivity>
+
+    // Permission rule to dismiss Location pop-up when launching Main screen
+    @get:Rule val permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)!!
 
     /**
      * Idling resources tell Espresso that the app is idle or busy. This is needed when operations
@@ -44,21 +48,7 @@ class LoginActivityTest {
     }
 
     @Test
-    fun loginManual_positivePath() {
-        // Click on each form, type valid credentials, and login
-        onView(withId(R.id.input_email))
-                .perform(typeText(BuildConfig.TestLogin), closeSoftKeyboard())
-        onView(withId(R.id.input_password))
-                .perform(typeText(BuildConfig.TestPassword), closeSoftKeyboard())
-        onView(withId(R.id.btn_login))
-                .perform(click())
-
-        // Verify that performing a click navigates to Main screen
-        // verify { navController.navigate(LoginFragmentDirections.navigateToMainScreen()) }
-    }
-
-    @Test
-    fun loginManual_negativePath() {
+    fun test1_manualLogin_negativePath() {
         // Click on each form, type invalid credentials, and login
         onView(withId(R.id.input_email))
                 .perform(typeText("wrong@login.com"), closeSoftKeyboard())
@@ -72,6 +62,21 @@ class LoginActivityTest {
                 .check(matches(isDisplayed()))
     }
 
+    @Test
+    fun test2_manualLogin_positivePath() {
+        // Click on each form, type valid credentials, and login
+        onView(withId(R.id.input_email))
+                .perform(typeText(BuildConfig.TestLogin), closeSoftKeyboard())
+        onView(withId(R.id.input_password))
+                .perform(typeText(BuildConfig.TestPassword), closeSoftKeyboard())
+        onView(withId(R.id.btn_login))
+                .perform(click())
+
+        // Verify that performing a click will show Main screen
+        onView(withId(R.id.tab_layout))
+                .check(matches(isDisplayed()))
+    }
+
     // no idea how to test Biometric class yet
 
     /**
@@ -79,9 +84,8 @@ class LoginActivityTest {
      */
     @After
     fun tearDown() {
+        release()
         IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
-        release()
-        stopKoin()
     }
 }
