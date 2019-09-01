@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr
+package com.krzdabrowski.airpurrr.login
 
 import android.Manifest
 import androidx.test.core.app.ActivityScenario
@@ -13,8 +13,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.GrantPermissionRule
+import com.krzdabrowski.airpurrr.BuildConfig
+import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
-import com.krzdabrowski.airpurrr.login.LoginActivity
 import com.krzdabrowski.airpurrr.utils.DataBindingIdlingResource
 import com.krzdabrowski.airpurrr.utils.monitorActivity
 import org.junit.*

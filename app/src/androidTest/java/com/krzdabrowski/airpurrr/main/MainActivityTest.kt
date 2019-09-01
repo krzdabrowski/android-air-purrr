@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr
+package com.krzdabrowski.airpurrr.main
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.test.core.app.ActivityScenario
@@ -13,8 +13,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.GrantPermissionRule
+import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.login.LoginActivity
-import com.krzdabrowski.airpurrr.main.MainActivity
 import com.krzdabrowski.airpurrr.settings.SettingsActivity
 import org.junit.After
 import org.junit.Before

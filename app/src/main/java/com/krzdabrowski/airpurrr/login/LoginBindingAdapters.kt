@@ -6,6 +6,6 @@ import com.google.android.material.textfield.TextInputEditText
 
 @BindingAdapter(value = ["app:errorValidation", "app:errorType"])
 fun TextInputEditText.showValidationError(errorField: Boolean, errorType: String?) {
-    if (errorField) error = context.getString(R.string.login_error_empty_field)
-    else error = null
+    error = if (errorField) context.getString(R.string.login_error_empty_field)
+    else null
 }

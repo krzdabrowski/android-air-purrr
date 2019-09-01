@@ -54,6 +54,10 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -108,6 +112,7 @@ dependencies {
 
     // region Test
     testImplementation testDependencies.coreKtx
+    testImplementation testDependencies.coreTesting
     testImplementation testDependencies.extJunitKtx
     testImplementation testDependencies.coroutines
     testImplementation testDependencies.junit

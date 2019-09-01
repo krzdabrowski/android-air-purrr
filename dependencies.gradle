@@ -28,6 +28,7 @@ ext {
 
     // region Test
     testCoreKtx = '1.2.0'
+    testCoreTesting = '2.1.0-rc01'
     testExtJunitKtx = '1.1.1'
     testEspresso = '3.2.0'
     testMockk = '1.9.3'
@@ -70,6 +71,7 @@ ext {
     testDependencies = [
         coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines",
         coreKtx: "androidx.test:core-ktx:$testCoreKtx",
+        coreTesting: "androidx.arch.core:core-testing:$testCoreTesting",
         extJunitKtx: "androidx.test.ext:junit-ktx:$testExtJunitKtx",
         espressoCore: "androidx.test.espresso:espresso-core:$testEspresso",
         espressoIntents: "androidx.test.espresso:espresso-intents:$testEspresso",
