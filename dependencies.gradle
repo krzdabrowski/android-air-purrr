@@ -2,8 +2,8 @@ ext {
     // region Android
     coroutines = '1.3.0'
     appCompat = '1.1.0-rc01'
-    coreKtx = '1.0.2'
-    fragmentKtx = '1.2.0-alpha02'
+    coreKtx = '1.1.0-rc03'
+    fragmentKtx = '1.1.0-rc04'
     liveDataKtx = '2.2.0-alpha03'
     preferenceKtx = '1.1.0-rc01'
     biometric = '1.0.0-beta01'
@@ -23,7 +23,7 @@ ext {
     timber = '4.7.1'
     koin = '2.0.1'
     armadillo = '0.8.0'
-    leakCanary = '2.0-alpha-3'
+    leakCanary = '2.0-beta-3'
     // endregion
 
     // region Test
@@ -35,7 +35,6 @@ ext {
     testJunit = '4.12'
     testTruth = '1.0'
     testRobolectric = '4.3'
-    testFragment = '1.2.0-alpha02'
     // endregion
 
     androidDependencies = [
@@ -82,6 +81,6 @@ ext {
         truth: "com.google.truth:truth:$testTruth",
         koin: "org.koin:koin-test:$koin",
         robolectric: "org.robolectric:robolectric:$testRobolectric",
-        fragment: "androidx.fragment:fragment-testing:$testFragment"
+        fragment: "androidx.fragment:fragment-testing:$fragmentKtx"
     ]
 }
