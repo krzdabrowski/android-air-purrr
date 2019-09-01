@@ -7,6 +7,7 @@ android {
     flavorDimensions "default"
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
+
     defaultConfig {
         applicationId "com.krzdabrowski.airpurrr"
         minSdkVersion 23
@@ -16,6 +17,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
     buildTypes {
         debug {
             buildConfigField 'String', "ApiKey", AirPurrr_ApiKey
@@ -26,114 +28,97 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', "ApiKey", AirPurrr_ApiKey
         }
     }
+
     productFlavors {
         dev {
-            buildConfigField "String", "DETECTOR_HTTP_URL", "\"http://airpurrr.eu/\""
-            buildConfigField "String", "DETECTOR_HTTP_URL_MOCK", "\"https://gist.githubusercontent.com/krzdabrowski/534e697a86de6ea68e3a2337b6379ddc/raw/8c45d111fd57b377d3530f8385026568d833bf7a/\""
-            buildConfigField "String", "DETECTOR_HTTPS_URL", "\"https://airpurrr.eu/\""
+            resValue "string", "app_name", "AirPurrr dev"
+            buildConfigField "String", "BASE_DETECTOR_URL", "\"http://airpurrr.eu/\""
+            buildConfigField "String", "BASE_API_URL", "\"https://airapi.airly.eu/\""
+        }
+        mock {
+            resValue "string", "app_name", "AirPurrr mock"
+            buildConfigField "String", "BASE_DETECTOR_URL", "\"https://gist.githubusercontent.com/krzdabrowski/534e697a86de6ea68e3a2337b6379ddc/raw/8c45d111fd57b377d3530f8385026568d833bf7a/\""
             buildConfigField "String", "BASE_API_URL", "\"https://airapi.airly.eu/\""
         }
     }
-    packagingOptions {
-        exclude 'META-INF/atomicfu.kotlin_module'
-    }
+
+    dataBinding.enabled = true
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8
     }
-    dataBinding.enabled = true
-}
-
-ext {
-    coroutinesVersion = '1.2.1'
-    coreKtxVersion = '1.0.2'
-    fragmentKtxVersion = '1.2.0-alpha02'
-    appCompatVersion = '1.1.0-rc01'
-    liveDataKtxVersion = '2.2.0-alpha03'
-    viewPagerVersion = '1.0.0'
-    preferenceKtxVersion = '1.1.0-rc01'
-    biometricVersion = '1.0.0-beta01'
-    materialVersion = '1.0.0'
-    locationVersion = '17.0.0'
-    firebaseCoreVersion = '17.2.0'
-    firebaseAuthVersion = '19.0.0'
-    databindingVersion = '3.1.4'
-
-    retrofitVersion = '2.6.1'
-    timberVersion = '4.7.1'
-    koinVersion = '2.0.1'
-    armadilloVersion = '0.8.0'
-    leakCanaryVersion = '2.0-alpha-3'
-
-    // tests
-    testCoreKtxVersion = '1.2.0'
-    testExtJunitKtxVersion = '1.1.1'
-    testEspressoVersion = '3.2.0'
-    testMockkVersion = '1.9.3'
-    testRunnerVersion = '1.2.0'
-    testJunitVersion = '4.12'
-    testTruthVersion = '1.0'
-    testRobolectricVersion = '4.3'
-    testFragmentVersion = '1.2.0-alpha02'
 }
 
 dependencies {
+    def androidDependencies = rootProject.ext.androidDependencies
+    def googleDependencies = rootProject.ext.googleDependencies
+    def thirdPartyDependencies = rootProject.ext.thirdPartyDependencies
+    def testDependencies = rootProject.ext.testDependencies
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-    implementation "androidx.core:core-ktx:$coreKtxVersion"
-    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
-    implementation "androidx.appcompat:appcompat:$appCompatVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$liveDataKtxVersion"
-    implementation "androidx.viewpager:viewpager:$viewPagerVersion"
-    implementation "androidx.preference:preference-ktx:$preferenceKtxVersion"
-    implementation "androidx.biometric:biometric:$biometricVersion"
-    implementation "com.google.android.material:material:$materialVersion"
-    implementation "com.google.android.gms:play-services-location:$locationVersion"
-    implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
-    implementation "com.google.firebase:firebase-auth:$firebaseAuthVersion"
-    kapt "com.android.databinding:compiler:$databindingVersion"
 
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-    implementation "com.jakewharton.timber:timber:$timberVersion"
-    implementation "org.koin:koin-android:$koinVersion"
-    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
-    implementation "at.favre.lib:armadillo:$armadilloVersion"
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    // region Android
+    implementation androidDependencies.kotlin
+    implementation androidDependencies.coroutines
+    implementation androidDependencies.appCompat
+    implementation androidDependencies.coreKtx
+    implementation androidDependencies.fragmentKtx
+    implementation androidDependencies.liveDataKtx
+    implementation androidDependencies.preferenceKtx
+    implementation androidDependencies.biometric
+    implementation androidDependencies.viewPager
+    // endregion
 
-    // androidTest
-    androidTestImplementation "androidx.test:core-ktx:$testCoreKtxVersion"
-    androidTestImplementation "androidx.test.ext:junit-ktx:$testExtJunitKtxVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:$testEspressoVersion"
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
-    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
-    androidTestImplementation "io.mockk:mockk-android:$testMockkVersion"
-    androidTestImplementation "com.google.truth:truth:$testTruthVersion"
+    // region Google
+    implementation googleDependencies.material
+    implementation googleDependencies.location
+    implementation googleDependencies.firebaseCore
+    implementation googleDependencies.firebaseAuth
+    kapt googleDependencies.dataBinding
+    // endregion
 
-    // test
-    testImplementation "androidx.test:core-ktx:$testCoreKtxVersion"
-    testImplementation "androidx.test.ext:junit-ktx:$testExtJunitKtxVersion"
-    testImplementation "androidx.test.espresso:espresso-core:$testEspressoVersion"
-    testImplementation "androidx.test.espresso:espresso-intents:$testEspressoVersion"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
-    testImplementation "junit:junit:$testJunitVersion"
-    testImplementation "io.mockk:mockk:$testMockkVersion"
-    testImplementation "com.google.truth:truth:$testTruthVersion"
-    testImplementation "org.koin:koin-test:$koinVersion"
-    testImplementation "org.robolectric:robolectric:$testRobolectricVersion"
+    // region Third party
+    implementation thirdPartyDependencies.retrofit
+    implementation thirdPartyDependencies.moshi
+    implementation thirdPartyDependencies.timber
+    implementation thirdPartyDependencies.koin
+    implementation thirdPartyDependencies.koinViewmodel
+    implementation thirdPartyDependencies.armadillo
+    debugImplementation thirdPartyDependencies.leakCanary
+    // endregion
 
-    implementation "androidx.test.espresso:espresso-idling-resource:$testEspressoVersion"
-    debugImplementation("androidx.fragment:fragment-testing:$testFragmentVersion") {
+    // region AndroidTest
+    androidTestImplementation testDependencies.coreKtx
+    androidTestImplementation testDependencies.extJunitKtx
+    androidTestImplementation testDependencies.espressoCore
+    androidTestImplementation testDependencies.espressoIntents
+    androidTestImplementation testDependencies.coroutines
+    androidTestImplementation testDependencies.testRunner
+    androidTestImplementation testDependencies.androidMockk
+    androidTestImplementation testDependencies.truth
+    implementation testDependencies.espressoIdlingResource
+    // endregion
+
+    // region Test
+    testImplementation testDependencies.coreKtx
+    testImplementation testDependencies.extJunitKtx
+    testImplementation testDependencies.coroutines
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
+    testImplementation testDependencies.truth
+    testImplementation testDependencies.koin
+    testImplementation testDependencies.robolectric
+    debugImplementation(testDependencies.fragment) {
         exclude group: 'androidx.test', module: 'core'
     }
+    // endregion
 }
 
 apply plugin: 'com.google.gms.google-services'
