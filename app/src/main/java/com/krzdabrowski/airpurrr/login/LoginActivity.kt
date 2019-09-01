@@ -2,8 +2,6 @@ package com.krzdabrowski.airpurrr.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.databinding.DataBindingUtil
@@ -16,7 +14,7 @@ import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
 import com.krzdabrowski.airpurrr.databinding.ActivityLoginBinding
 import com.krzdabrowski.airpurrr.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallback {
     private val loginViewModel: LoginViewModel by viewModel()
@@ -69,13 +67,12 @@ class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallbac
                 }
     }
 
-    // bug in biometric-alpha04: https://issuetracker.google.com/issues/131980596
     private fun fingerprintLogin() {
         EspressoIdlingResource.increment()  // set app as busy
 
         if (biometricHelper.isFingerprintAvailable()) {
             if (biometricHelper.isPermissionGranted()) {
-                BiometricPrompt(this, MainExecutor(), biometricHelper)
+                BiometricPrompt(this, Executors.newSingleThreadExecutor(), biometricHelper)
                         .authenticate(biometricHelper.getPromptInfo())
 
                 EspressoIdlingResource.decrement()  // set app as idle
@@ -84,15 +81,6 @@ class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallbac
             }
         } else {
             Snackbar.make(findViewById(android.R.id.content), R.string.login_error_no_saved_fingerprint, Snackbar.LENGTH_SHORT).show()
-        }
-    }
-
-    // code from Retrofit library to get main executor in API <28 (for biometric callback purpose)
-    class MainExecutor : Executor {
-        private val handler = Handler(Looper.getMainLooper())
-
-        override fun execute(command: Runnable?) {
-            handler.post(command)
         }
     }
 }
