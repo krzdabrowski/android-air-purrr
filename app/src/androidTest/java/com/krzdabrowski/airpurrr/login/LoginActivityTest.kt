@@ -31,7 +31,8 @@ class LoginActivityTest {
     private lateinit var activityScenario: ActivityScenario<LoginActivity>
 
     // Permission rule to dismiss Location pop-up when launching Main screen
-    @get:Rule val permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)!!
+    @get:Rule
+    val permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)!!
 
     /**
      * Idling resources tell Espresso that the app is idle or busy. This is needed when operations

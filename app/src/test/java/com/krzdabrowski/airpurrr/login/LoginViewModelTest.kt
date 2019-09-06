@@ -9,7 +9,8 @@ import org.junit.Test
 class LoginViewModelTest {
     private lateinit var loginViewModel: LoginViewModel
 
-    @get:Rule val aacSyncRule = InstantTaskExecutorRule()
+    @get:Rule
+    val aacSyncRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {

@@ -12,8 +12,8 @@ class LoginViewModel : ViewModel() {
 
     val isEmailError = ObservableBoolean()
     val isPasswordError = ObservableBoolean()
-    val emailErrorType = ObservableField<String?>()
-    val passwordErrorType = ObservableField<String?>()
+    val emailErrorType = ObservableField<String>()
+    val passwordErrorType = ObservableField<String>()
 
     fun isEmailValid(login: String?) = isEmailError.set(login.isNullOrBlank())
     fun isPasswordValid(password: String?) = isPasswordError.set(password.isNullOrBlank())
@@ -22,8 +22,7 @@ class LoginViewModel : ViewModel() {
         isEmailValid(email.value)
         isPasswordValid(password.value)
 
-        val isFormInvalid = email.value == null || password.value == null || isEmailError.get() || isPasswordError.get()
-        if (isFormInvalid) {
+        if (isEmailError.get() || isPasswordError.get()) {
             return
         }
 

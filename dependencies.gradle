@@ -1,6 +1,6 @@
 ext {
     // region Android
-    coroutines = '1.3.0'
+    coroutines = '1.3.1'
     appCompat = '1.1.0-rc01'
     coreKtx = '1.1.0-rc03'
     fragmentKtx = '1.1.0-rc04'
@@ -40,7 +40,7 @@ ext {
 
     androidDependencies = [
         kotlin: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin",
-        coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines",
+        coroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines",
         appCompat: "androidx.appcompat:appcompat:$appCompat",
         coreKtx: "androidx.core:core-ktx:$coreKtx",
         fragmentKtx: "androidx.fragment:fragment-ktx:$fragmentKtx",
@@ -69,7 +69,7 @@ ext {
     ]
 
     testDependencies = [
-        coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines",
+        coroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines",
         coreKtx: "androidx.test:core-ktx:$testCoreKtx",
         coreTesting: "androidx.arch.core:core-testing:$testCoreTesting",
         extJunitKtx: "androidx.test.ext:junit-ktx:$testExtJunitKtx",

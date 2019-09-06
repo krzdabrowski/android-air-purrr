@@ -42,6 +42,11 @@ class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallbac
     private fun navigateToMainScreen() = startActivity(Intent(this, MainActivity::class.java))
 
     private fun manualLogin() {
+        val emptyCredentials = loginViewModel.email.value == null || loginViewModel.password.value == null
+        if (emptyCredentials) {
+            return
+        }
+
         binding.isLoggingIn = true
         // Espresso does not work well with coroutines yet. See
         // https://github.com/Kotlin/kotlinx.coroutines/issues/982

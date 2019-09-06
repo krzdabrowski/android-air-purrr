@@ -57,6 +57,7 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true  // for Robolectric
     }
 }
 
@@ -70,7 +71,7 @@ dependencies {
 
     // region Android
     implementation androidDependencies.kotlin
-    implementation androidDependencies.coroutines
+    implementation androidDependencies.coroutinesAndroid
     implementation androidDependencies.appCompat
     implementation androidDependencies.coreKtx
     implementation androidDependencies.fragmentKtx
@@ -103,7 +104,7 @@ dependencies {
     androidTestImplementation testDependencies.extJunitKtx
     androidTestImplementation testDependencies.espressoCore
     androidTestImplementation testDependencies.espressoIntents
-    androidTestImplementation testDependencies.coroutines
+    androidTestImplementation testDependencies.coroutinesTest
     androidTestImplementation testDependencies.testRunner
     androidTestImplementation testDependencies.androidMockk
     androidTestImplementation testDependencies.truth
@@ -114,7 +115,7 @@ dependencies {
     testImplementation testDependencies.coreKtx
     testImplementation testDependencies.coreTesting
     testImplementation testDependencies.extJunitKtx
-    testImplementation testDependencies.coroutines
+    testImplementation testDependencies.coroutinesTest
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
     testImplementation testDependencies.truth

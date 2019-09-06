@@ -28,7 +28,8 @@ class MainActivityTest {
     private lateinit var activityScenario: ActivityScenario<MainActivity>
 
     // Permission rule to dismiss Location pop-up when launching Main screen
-    @get:Rule val permissionRule = GrantPermissionRule.grant(ACCESS_FINE_LOCATION)!!
+    @get:Rule
+    val permissionRule = GrantPermissionRule.grant(ACCESS_FINE_LOCATION)!!
 
     @Before
     fun setUp() {

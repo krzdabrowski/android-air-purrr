@@ -8,7 +8,7 @@ import com.krzdabrowski.airpurrr.main.current.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 
 class DetectorViewModel(private val repository: DetectorRepository) : BaseViewModel() {
-    private var data: DetectorModel? = null
+    var data: DetectorModel? = null
     val autoModeSwitch = ObservableBoolean()
     val autoModeThreshold = ObservableInt()
     val purifierObservableState = ObservableBoolean()
@@ -30,8 +30,8 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
         }
 
         val shouldTurnOn = !purifierState && autoModeSwitch.get()
-                && autoModeThreshold.get() < Conversion.pm25ToPercent(data?.values!!.pm25)
-                || autoModeThreshold.get() < Conversion.pm10ToPercent(data?.values!!.pm10)
+                && (autoModeThreshold.get() < Conversion.pm25ToPercent(data?.values!!.pm25)
+                || autoModeThreshold.get() < Conversion.pm10ToPercent(data?.values!!.pm10))
         val shouldTurnOff = purifierState && !autoModeSwitch.get()
 
         if (shouldTurnOn || shouldTurnOff) {
