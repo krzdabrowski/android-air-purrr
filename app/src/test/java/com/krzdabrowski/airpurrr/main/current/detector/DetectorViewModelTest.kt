@@ -1,11 +1,8 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.current.detector
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.Observable
 import com.google.common.truth.Truth.assertThat
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorModel
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorRepository
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class CurrentDetectorViewModelTest {
+class DetectorViewModelTest {
     private lateinit var detectorViewModel: DetectorViewModel
 
     @MockK

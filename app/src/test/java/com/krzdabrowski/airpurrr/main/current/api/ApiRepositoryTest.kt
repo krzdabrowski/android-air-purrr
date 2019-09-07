@@ -1,11 +1,7 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.current.api
 
 import android.location.Location
 import com.google.common.truth.Truth.assertThat
-import com.krzdabrowski.airpurrr.main.current.api.ApiAirlyConverter
-import com.krzdabrowski.airpurrr.main.current.api.ApiModel
-import com.krzdabrowski.airpurrr.main.current.api.ApiRepository
-import com.krzdabrowski.airpurrr.main.current.api.ApiService
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +12,7 @@ import org.junit.Test
 import retrofit2.Response
 
 @ExperimentalCoroutinesApi
-class CurrentApiRepositoryTest {
+class ApiRepositoryTest {
     private lateinit var apiRepository: ApiRepository
 
     @MockK

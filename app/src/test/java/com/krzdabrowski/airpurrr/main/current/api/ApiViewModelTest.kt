@@ -1,9 +1,6 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.current.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.krzdabrowski.airpurrr.main.current.api.ApiModel
-import com.krzdabrowski.airpurrr.main.current.api.ApiRepository
-import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -17,7 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class CurrentApiViewModelTest {
+class ApiViewModelTest {
     private lateinit var apiViewModel: ApiViewModel
 
     @MockK

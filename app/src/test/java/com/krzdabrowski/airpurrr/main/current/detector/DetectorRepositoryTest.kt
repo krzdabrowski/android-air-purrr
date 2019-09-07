@@ -1,10 +1,6 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.current.detector
 
 import com.google.common.truth.Truth.assertThat
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorControlService
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorDataService
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorModel
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorRepository
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -18,7 +14,7 @@ import org.junit.Test
 import retrofit2.Response
 
 @ExperimentalCoroutinesApi
-class CurrentDetectorRepositoryTest {
+class DetectorRepositoryTest {
     private lateinit var detectorRepository: DetectorRepository
 
     @MockK
