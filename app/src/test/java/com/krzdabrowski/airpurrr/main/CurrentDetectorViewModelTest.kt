@@ -8,10 +8,8 @@ import com.krzdabrowski.airpurrr.main.current.detector.DetectorRepository
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -30,16 +28,21 @@ class CurrentDetectorViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        // Dispatchers.setMain(Dispatchers.Unconfined)
         detectorViewModel = DetectorViewModel(detectorRepository)
     }
 
-    @Test  // FLAKY!!!
-    fun `when fetching data successfully, then proper data is saved`() {
-        val model = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(1.0, 3.5))
+    // flaky test due to LiveData 2.2.0 alpha version:
+    // * reverting to state before update makes test no more flaky
+    // * but vastly increases boilerplate in many classes
+    // * using runBlockingTest without Unconfined passes the test with Dispatchers.setMain exception (so also coroutines bug?)
+    @Test
+    fun `when fetching data successfully, then proper data is saved`() = runBlockingTest {
+        val model = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))
         coEvery { detectorRepository.fetchData() } returns model
 
         detectorViewModel.getLiveData().observeForever {}
+        detectorViewModel.getLiveData()
 
         coVerify { detectorRepository.fetchData() }
 
@@ -47,6 +50,14 @@ class CurrentDetectorViewModelTest {
         assertThat(detectorViewModel.data?.values).isEqualTo(model.values)
     }
 
+    @Test
+    fun `given data is null, then not possible to control purifier`() {
+        detectorViewModel.data = null
+
+        detectorViewModel.checkAutoMode()
+
+        verify(exactly = 0) { detectorRepository.controlFan(any(), any(), any()) }
+    }
 
     @Test
     fun `given purifier is OFF & auto is ON & threshold is LOW, then purifier is turning on`() {
@@ -181,7 +192,8 @@ class CurrentDetectorViewModelTest {
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
+        clearAllMocks()
+        // Dispatchers.resetMain()
     }
 
     private fun setFields(purifierState: Boolean, autoModeSwitch: Boolean, autoModeThreshold: Int) {

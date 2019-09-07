@@ -4,7 +4,7 @@ ext {
     appCompat = '1.1.0-rc01'
     coreKtx = '1.1.0-rc03'
     fragmentKtx = '1.1.0-rc04'
-    liveDataKtx = '2.2.0-alpha03'
+    liveDataKtx = '2.2.0-alpha04'
     preferenceKtx = '1.1.0-rc01'
     biometric = '1.0.0-beta01'
     viewPager = '1.0.0'

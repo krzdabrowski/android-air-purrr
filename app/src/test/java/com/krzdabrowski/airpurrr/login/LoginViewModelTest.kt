@@ -18,7 +18,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `on init, when login and password are valid, no errors are set`() {
+    fun `given login and password are valid, when init, then no errors are set`() {
         setLogin()
         setPassword()
 
@@ -27,7 +27,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `on login button clicked, when login is valid & password is invalid, login error is not set`() {
+    fun `given login is valid & password is invalid, when login button clicked, then login error is not set`() {
         setLogin()
 
         loginViewModel.onLoginButtonClick()
@@ -36,7 +36,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `on login button clicked, when login is valid & password is invalid, password error is set`() {
+    fun `given login is valid & password is invalid, when login button clicked, then password error is set`() {
         setLogin()
 
         loginViewModel.onLoginButtonClick()
@@ -45,7 +45,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `on login button clicked, when login is valid & password is invalid, form is invalid`() {
+    fun `given login is valid & password is invalid, when login button clicked, then form is invalid`() {
         setLogin()
 
         loginViewModel.onLoginButtonClick()
@@ -54,7 +54,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `on login button clicked, when login is invalid & password is valid, login error is set`() {
+    fun `given login is invalid & password is valid, when login button clicked, then login error is set`() {
         setPassword()
 
         loginViewModel.onLoginButtonClick()
@@ -63,7 +63,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `on login button clicked, when login is invalid & password is valid, password error is not set`() {
+    fun `given login is invalid & password is valid, when login button clicked, then password error is not set`() {
         setPassword()
 
         loginViewModel.onLoginButtonClick()
@@ -72,7 +72,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `on login button clicked, when login is invalid & password is valid, form is invalid`() {
+    fun `given login is invalid & password is valid, when login button clicked, then form is invalid`() {
         setPassword()
 
         loginViewModel.onLoginButtonClick()
@@ -81,7 +81,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `on login button clicked, when login and password are valid, form is valid`() {
+    fun `given login and password are valid, when login button clicked, then form is valid`() {
         setLogin()
         setPassword()
 
