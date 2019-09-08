@@ -21,36 +21,47 @@ class ApiRepositoryTest {
     @MockK
     private lateinit var location: Location
 
+    @MockK
+    private lateinit var apiModel: ApiModel
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
         mockkObject(ApiAirlyConverter)
+
+        every { location.latitude } returns 50.0
+        every { location.longitude } returns 20.0
+
         apiRepository = ApiRepository(apiService)
     }
 
     @Test
     fun `given response body is not null, when fetching data, then model is not null`() = runBlockingTest {
-        val body = ApiModel(ApiModel.Values(mutableListOf()), Pair(5.0, 7.5))
+        every { ApiAirlyConverter.getData(any()) } returns apiModel
+        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(apiModel)
 
-        every { ApiAirlyConverter.getData(any()) } returns body
-        every { location.latitude } returns 50.0
-        every { location.longitude } returns 20.0
-        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(body)
-
+        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).isSuccessful).isTrue()
         assertThat(apiRepository.fetchData(location)).isNotNull()
-        assertThat(apiRepository.fetchData(location)).isEqualTo(body)
+
+        coVerify { apiService.getApiDataAsync(any(), any(), any()) }
+    }
+
+    @Test
+    fun `given response body is not null, when fetching data, then model is body`() = runBlockingTest {
+        every { ApiAirlyConverter.getData(any()) } returns apiModel
+        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(apiModel)
+
+        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).isSuccessful).isTrue()
+        assertThat(apiRepository.fetchData(location)).isEqualTo(apiModel)
 
         coVerify { apiService.getApiDataAsync(any(), any(), any()) }
     }
 
     @Test
     fun `given response body is null, when fetching data, then model is null`() = runBlockingTest {
-        val body = null
+        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(null)
 
-        every { location.latitude } returns 50.0
-        every { location.longitude } returns 20.0
-        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(body)
-
+        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).isSuccessful).isTrue()
         assertThat(apiRepository.fetchData(location)).isNull()
 
         coVerify { apiService.getApiDataAsync(any(), any(), any()) }
@@ -58,8 +69,6 @@ class ApiRepositoryTest {
 
     @Test
     fun `given exception, when fetching data, then model is null`() = runBlockingTest {
-        every { location.latitude } returns 50.0
-        every { location.longitude } returns 20.0
         coEvery { apiService.getApiDataAsync(any(), any(), any()) } throws Throwable()
 
         assertThat(apiRepository.fetchData(location)).isNull()

@@ -36,7 +36,17 @@ class DetectorRepositoryTest {
     fun `given response body is not null, when fetching data, then model is not null`() = runBlockingTest {
         coEvery { httpService.getDetectorDataAsync() } returns Response.success(detectorModel)
 
+        assertThat(httpService.getDetectorDataAsync().isSuccessful).isTrue()
         assertThat(detectorRepository.fetchData()).isNotNull()
+
+        coVerify { httpService.getDetectorDataAsync() }
+    }
+
+    @Test
+    fun `given response body is not null, when fetching data, then model is body`() = runBlockingTest {
+        coEvery { httpService.getDetectorDataAsync() } returns Response.success(detectorModel)
+
+        assertThat(httpService.getDetectorDataAsync().isSuccessful).isTrue()
         assertThat(detectorRepository.fetchData()).isEqualTo(detectorModel)
 
         coVerify { httpService.getDetectorDataAsync() }
@@ -46,6 +56,7 @@ class DetectorRepositoryTest {
     fun `given response body is null, when fetching data, then model is null`() = runBlockingTest {
         coEvery { httpService.getDetectorDataAsync() } returns Response.success(null)
 
+        assertThat(httpService.getDetectorDataAsync().isSuccessful).isTrue()
         assertThat(detectorRepository.fetchData()).isNull()
 
         coVerify { httpService.getDetectorDataAsync() }
