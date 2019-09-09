@@ -6,6 +6,7 @@ import com.krzdabrowski.airpurrr.BuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import timber.log.Timber
 
 class App: Application() {
@@ -20,5 +21,11 @@ class App: Application() {
             androidContext(this@App)
             modules(listOf(networkModule, helperModule, repositoryModule, viewModelModule))
         }
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+
+        stopKoin()
     }
 }
