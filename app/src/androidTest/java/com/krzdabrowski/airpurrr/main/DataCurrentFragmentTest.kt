@@ -41,7 +41,7 @@ class DataCurrentFragmentTest {
     }
 
     @Test
-    fun clickOnDetectorPm25Tile_showsApiDataTiles() {
+    fun whenClickOnDetectorPm25Tile_ThenApiDataTilesIsShown() {
         // Click on detector data tile
         onView(withId(R.id.partial_main_data_pm25))
             .perform(click())
@@ -55,7 +55,7 @@ class DataCurrentFragmentTest {
     }
 
     @Test
-    fun clickOnDetectorPm10Tile_showsApiDataTiles() {
+    fun whenClickOnDetectorPm10Tile_ThenApiDataTilesIsShown() {
         // Click on detector data tile
         onView(withId(R.id.partial_main_data_pm10))
                 .perform(click())
@@ -69,7 +69,7 @@ class DataCurrentFragmentTest {
     }
 
     @Test
-    fun clickOnDetectorPm25Tile_thenOnApiPm25Tile_goesBackToDetectorDataTiles() {
+    fun whenClickOnDetectorPm25Tile_andOnApiPm25Tile_thenDetectorDataTilesIsAgainShown() {
         // Click on detector data tile
         onView(withId(R.id.partial_main_data_pm25))
                 .perform(click())
@@ -87,7 +87,7 @@ class DataCurrentFragmentTest {
     }
 
     @Test
-    fun clickOnDetectorPm10Tile_thenOnApiPm10Tile_goesBackToDetectorDataTiles() {
+    fun whenClickOnDetectorPm10Tile_andOnApiPm10Tile_thenDetectorDataTilesIsAgainShown() {
         // Click on detector data tile
         onView(withId(R.id.partial_main_data_pm10))
                 .perform(click())
@@ -105,7 +105,7 @@ class DataCurrentFragmentTest {
     }
 
     @Test
-    fun clickOnDetectorPm25Tile_thenOnApiPm10Tile_goesBackToDetectorDataTiles() {
+    fun whenClickOnDetectorPm25Tile_andOnApiPm10Tile_thenDetectorDataTilesIsAgainShown() {
         // Click on detector PM2.5 data tile
         onView(withId(R.id.partial_main_data_pm25))
                 .perform(click())

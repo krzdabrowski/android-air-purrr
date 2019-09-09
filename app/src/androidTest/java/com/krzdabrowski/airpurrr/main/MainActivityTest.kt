@@ -35,12 +35,12 @@ class MainActivityTest {
     fun setUp() {
         init()
 
-        // Start up Main screen
         activityScenario = launchActivity()
     }
 
+    // region Navigation tests
     @Test
-    fun clickOnBackButton_DoesntOpenLoginScreen() {
+    fun whenClickOnBackButton_ThenAppDoesntNavigateToLoginScreen() {
         // Click on a back button
         pressBackUnconditionally()
 
@@ -49,7 +49,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun clickOnMenuButton_OpensSettingsScreen() {
+    fun whenClickOnMenuButton_ThenAppNavigatesToSettingsScreen() {
         // Click on a settings button
         onView(withId(R.id.menu_settings))
             .perform(click())
@@ -59,7 +59,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun clickOnMenuButton_ThenBackButton_OpensMainScreen() {
+    fun whenClickOnMenuButton_AndBackButton_ThenAppNavigatesToMainScreen() {
         // Click on a settings button
         onView(withId(R.id.menu_settings))
                 .perform(click())
@@ -74,7 +74,7 @@ class MainActivityTest {
 
 
     @Test
-    fun clickOnMenuButton_ThenBackButtonTwice_DoesntOpenLoginScreen() {
+    fun whenClickOnMenuButton_AndBackButtonTwice_ThenAppDoesntNavigateToLoginScreen() {
         // Click on a settings button
         onView(withId(R.id.menu_settings))
                 .perform(click())
@@ -85,6 +85,7 @@ class MainActivityTest {
 
         intended(hasComponent(LoginActivity::class.java.name), times(0))
     }
+    // endregion
 
     @After
     fun tearDown() {

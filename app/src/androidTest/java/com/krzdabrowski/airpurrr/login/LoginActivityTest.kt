@@ -18,6 +18,7 @@ import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
 import com.krzdabrowski.airpurrr.utils.DataBindingIdlingResource
 import com.krzdabrowski.airpurrr.utils.monitorActivity
+import org.hamcrest.CoreMatchers.not
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -49,8 +50,25 @@ class LoginActivityTest {
         dataBindingIdlingResource.monitorActivity(activityScenario)
     }
 
+    // region Other tests
+    // ProgressBar & Espresso doesn't work well, hence no tests for showing ProgressBar
     @Test
-    fun test1_manualLogin_negativePath() {
+    fun test1_givenWrongForm_whenClickOnManualLoginButton_thenProgressBarIsNotShown() {
+        // Click on login form, type any credentials, and login
+        onView(withId(R.id.input_email))
+                .perform(typeText("any@login.com"), closeSoftKeyboard())
+        onView(withId(R.id.btn_login))
+                .perform(click())
+
+        // Verify that performing a click will not show the progress bar on top
+        onView(withId(R.id.progress_bar))
+                .check(matches(not(isDisplayed())))
+    }
+    // endregion
+
+    // region Navigation tests
+    @Test
+    fun test2_givenWrongCredentials_whenClickOnManualLoginButton_thenErrorSnackbarIsShown() {
         // Click on each form, type invalid credentials, and login
         onView(withId(R.id.input_email))
                 .perform(typeText("wrong@login.com"), closeSoftKeyboard())
@@ -65,7 +83,7 @@ class LoginActivityTest {
     }
 
     @Test
-    fun test2_manualLogin_positivePath() {
+    fun test3_givenCorrectCredentials_whenClickOnManualLoginButton_thenAppNavigatesToMainScreen() {
         // Click on each form, type valid credentials, and login
         onView(withId(R.id.input_email))
                 .perform(typeText(BuildConfig.TestLogin), closeSoftKeyboard())
@@ -80,6 +98,7 @@ class LoginActivityTest {
     }
 
     // no idea how to test Biometric class yet
+    // endregion
 
     /**
      * Unregister your Idling Resource so it can be garbage collected and does not leak any memory.
