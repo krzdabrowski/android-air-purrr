@@ -18,13 +18,13 @@ import org.robolectric.annotation.LooperMode.Mode.PAUSED
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(PAUSED)
 class BaseModelTest {
-    private lateinit var activity: ActivityScenario<MainActivity>
+    private lateinit var activityScenario: ActivityScenario<MainActivity>
 
     private lateinit var model: BaseModel
 
     @Before
     fun setUp() {
-        activity = launchActivity()
+        activityScenario = launchActivity()
         model = DetectorModel("", null)
     }
 
