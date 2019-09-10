@@ -2,7 +2,7 @@ package com.krzdabrowski.airpurrr.main.current.detector
 
 import android.content.Context
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.common.Conversion
+import com.krzdabrowski.airpurrr.main.Conversion
 import com.krzdabrowski.airpurrr.main.current.BaseModel
 
 data class DetectorModel(val workstate: String, val values: Values?) : BaseModel() {

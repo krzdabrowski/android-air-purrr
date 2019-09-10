@@ -2,7 +2,7 @@ package com.krzdabrowski.airpurrr.main.current.api
 
 import android.content.Context
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.common.Conversion
+import com.krzdabrowski.airpurrr.main.Conversion
 import com.krzdabrowski.airpurrr.main.current.BaseModel
 
 data class ApiModel(val current: Values?, @Transient val data: Pair<Double, Double>) : BaseModel() {

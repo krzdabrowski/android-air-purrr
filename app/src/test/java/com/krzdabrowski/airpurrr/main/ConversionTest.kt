@@ -1,7 +1,6 @@
-package com.krzdabrowski.airpurrr
+package com.krzdabrowski.airpurrr.main
 
 import com.google.common.truth.Truth.assertThat
-import com.krzdabrowski.airpurrr.common.Conversion
 import org.junit.Test
 
 class ConversionTest {

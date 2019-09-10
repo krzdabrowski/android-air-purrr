@@ -3,7 +3,7 @@ package com.krzdabrowski.airpurrr.main.current.detector
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.liveData
-import com.krzdabrowski.airpurrr.common.Conversion
+import com.krzdabrowski.airpurrr.main.Conversion
 import com.krzdabrowski.airpurrr.main.current.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 

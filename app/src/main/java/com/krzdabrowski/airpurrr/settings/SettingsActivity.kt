@@ -34,7 +34,7 @@ class SettingsActivity : AppCompatActivity() {
         supportFragmentManager.commit { replace(R.id.settings, SettingsFragment()) }
     }
 
-    class SettingsFragment : PreferenceFragmentCompat() {
+    class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarListener {
         private val detectorViewModel: DetectorViewModel by sharedViewModel()
         private val purifierHelper: PurifierHelper by inject()
 
@@ -90,9 +90,11 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            purifierHelper.listener = this
+
             detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                    controlPurifier(this@SettingsFragment, container!!, email, password, detectorViewModel.purifierState)
+                    controlPurifier(this@SettingsFragment, email, password, detectorViewModel.purifierState)
                 }
             })
 
@@ -109,10 +111,14 @@ class SettingsActivity : AppCompatActivity() {
             preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceListener)
         }
 
-        private fun controlPurifier(owner: LifecycleOwner, rootView: View, email: String, password: String, state: Boolean) {
+        private fun controlPurifier(owner: LifecycleOwner, email: String, password: String, state: Boolean) {
             detectorViewModel.getLiveData().observe(owner, Observer { workstateValue ->
-                detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, rootView, email, password, state)
+                detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, email, password, state)
             })
+        }
+
+        override fun showSnackbar(stringId: Int, length: Int) {
+            Snackbar.make(activity!!.findViewById(R.id.content), stringId, length).show()
         }
     }
 }

@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import at.favre.lib.armadillo.Armadillo
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), PurifierHelper.SnackbarListener {
     private val detectorViewModel: DetectorViewModel by viewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private val purifierHelper: PurifierHelper by inject()
@@ -35,8 +36,10 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         onBackPressedDispatcher.addCallback { moveTaskToBack(true) }
+
         view_pager.adapter = ViewPagerAdapter(this, supportFragmentManager)
         tab_layout.setupWithViewPager(view_pager)
+        purifierHelper.listener = this
 
         checkLocationPermission()
     }
@@ -69,8 +72,12 @@ class MainActivity : AppCompatActivity() {
     // region Purifier
     private fun controlPurifier(email: String, password: String, currentState: Boolean) {
         detectorViewModel.getLiveData().observe(this, Observer { workstateValue ->
-            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, findViewById(android.R.id.content), email, password, currentState)
+            detectorViewModel.purifierState = purifierHelper.getPurifierState(workstateValue, email, password, currentState)
         })
+    }
+
+    override fun showSnackbar(stringId: Int, length: Int) {
+        Snackbar.make(findViewById(android.R.id.content), stringId, length).show()
     }
     // endregion
 
