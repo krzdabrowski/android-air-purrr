@@ -35,6 +35,11 @@ class ApiRepositoryTest {
         apiRepository = ApiRepository(apiService)
     }
 
+    @After
+    fun tearDown() {
+        clearAllMocks()
+    }
+
     @Test
     fun `given response body is not null, when fetching data, then model is not null`() = runBlockingTest {
         every { ApiAirlyConverter.getData(any()) } returns apiModel
@@ -74,10 +79,5 @@ class ApiRepositoryTest {
         assertThat(apiRepository.fetchData(location)).isNull()
 
         coVerify { apiService.getApiDataAsync(any(), any(), any()) }
-    }
-
-    @After
-    fun tearDown() {
-        clearAllMocks()
     }
 }

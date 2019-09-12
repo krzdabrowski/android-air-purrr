@@ -34,8 +34,12 @@ class MainActivityTest {
     @Before
     fun setUp() {
         init()
-
         activityScenario = launchActivity()
+    }
+
+    @After
+    fun tearDown() {
+        release()
     }
 
     // region Navigation tests
@@ -86,9 +90,4 @@ class MainActivityTest {
         intended(hasComponent(LoginActivity::class.java.name), times(0))
     }
     // endregion
-
-    @After
-    fun tearDown() {
-        release()
-    }
 }

@@ -29,6 +29,12 @@ class DetectorViewModelTest {
         detectorViewModel = DetectorViewModel(detectorRepository)
     }
 
+    @After
+    fun tearDown() {
+        clearAllMocks()
+        // Dispatchers.resetMain()
+    }
+
     // flaky test due to LiveData 2.2.0 alpha version:
     // * reverting to state before update makes test no more flaky
     // * but vastly increases boilerplate in many classes
@@ -185,12 +191,6 @@ class DetectorViewModelTest {
 
         // Assert
         verify { listener.onPropertyChanged(detectorViewModel.purifierObservableState, any()) }
-    }
-
-    @After
-    fun tearDown() {
-        clearAllMocks()
-        // Dispatchers.resetMain()
     }
 
     private fun setFields(state: Boolean, autoMode: Boolean, autoThreshold: Int) {

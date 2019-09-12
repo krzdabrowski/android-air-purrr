@@ -34,6 +34,11 @@ class DataCurrentFragmentTest {
         dataBindingIdlingResource.monitorFragment(fragmentScenario)
     }
 
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+    }
+
     @Test
     fun whenClickOnDetectorPm25Tile_ThenApiDataTilesIsShown() {
         // Click on detector data tile
@@ -120,10 +125,5 @@ class DataCurrentFragmentTest {
                 hasSibling(withText(R.string.main_data_info_pm10))
         ))
                 .check(matches(isDisplayed()))
-    }
-
-    @After
-    fun tearDown() {
-        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
     }
 }

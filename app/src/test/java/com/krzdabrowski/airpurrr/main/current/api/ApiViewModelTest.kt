@@ -33,6 +33,12 @@ class ApiViewModelTest {
         apiViewModel = ApiViewModel(apiRepository)
     }
 
+    @After
+    fun tearDown() {
+        clearAllMocks()
+        // Dispatchers.resetMain()
+    }
+
     // flaky test due to LiveData 2.2.0 alpha version:
     // * reverting to state before update makes test no more flaky
     // * but vastly increases boilerplate in many classes
@@ -45,11 +51,5 @@ class ApiViewModelTest {
         apiViewModel.getLiveData()
 
         coVerify { apiRepository.fetchData(any()) }
-    }
-
-    @After
-    fun tearDown() {
-        clearAllMocks()
-        // Dispatchers.resetMain()
     }
 }

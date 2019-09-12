@@ -50,6 +50,16 @@ class LoginActivityTest {
         dataBindingIdlingResource.monitorActivity(activityScenario)
     }
 
+    /**
+     * Unregister your Idling Resource so it can be garbage collected and does not leak any memory.
+     */
+    @After
+    fun tearDown() {
+        release()
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+    }
+
     // region Other tests
     // ProgressBar & Espresso doesn't work well, hence no tests for showing ProgressBar
     @Test
@@ -99,14 +109,4 @@ class LoginActivityTest {
 
     // no idea how to test Biometric class yet
     // endregion
-
-    /**
-     * Unregister your Idling Resource so it can be garbage collected and does not leak any memory.
-     */
-    @After
-    fun tearDown() {
-        release()
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
-        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
-    }
 }

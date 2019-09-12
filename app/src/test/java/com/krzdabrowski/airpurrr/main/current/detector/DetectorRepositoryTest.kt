@@ -32,6 +32,11 @@ class DetectorRepositoryTest {
         detectorRepository = DetectorRepository(httpService, httpsService)
     }
 
+    @After
+    fun tearDown() {
+        clearAllMocks()
+    }
+
     @Test
     fun `given response body is not null, when fetching data, then model is not null`() = runBlockingTest {
         coEvery { httpService.getDetectorDataAsync() } returns Response.success(detectorModel)
@@ -69,10 +74,5 @@ class DetectorRepositoryTest {
         assertThat(detectorRepository.fetchData()).isNull()
 
         coVerify { httpService.getDetectorDataAsync() }
-    }
-
-    @After
-    fun tearDown() {
-        clearAllMocks()
     }
 }
