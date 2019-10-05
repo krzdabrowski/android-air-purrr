@@ -11,6 +11,7 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
     var data: DetectorModel? = null
     val autoModeSwitch = ObservableBoolean()
     val autoModeThreshold = ObservableInt()
+    val purifierMode = ObservableBoolean()
     val purifierObservableState = ObservableBoolean()
     var purifierState = purifierObservableState.get()
 

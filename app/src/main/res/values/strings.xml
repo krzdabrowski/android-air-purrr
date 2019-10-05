@@ -50,15 +50,17 @@
 
     <string name="settings_title_auto_mode">Enable self-purifying</string>
     <string name="settings_title_threshold">Set threshold</string>
-    <string name="settings_title_fan_speed">Fan speed</string>
+    <string name="settings_title_purifier_mode">Choose purifier mode</string>
 
     <string name="settings_summary_auto_mode_off">Auto mode stopped</string>
     <string name="settings_summary_auto_mode_on">Auto mode currently running</string>
-    <string name="settings_summary_fan_speed">Set purifier speed from 1000 to 2000RPM</string>
+    <string name="settings_summary_purifier_mode_low">Night mode activated</string>
+    <string name="settings_summary_purifier_mode_high">Performance mode activated</string>
 
     <string name="settings_dialog_title_threshold">Enter a value in percentage</string>
     <string name="settings_dialog_no_data">Not set</string>
 
     <string name="settings_key_switch" translatable="false">autoModeSwitch</string>
     <string name="settings_key_threshold" translatable="false">autoModeThreshold</string>
+    <string name="settings_key_purifier_mode" translatable="false">purifierMode</string>
 </resources>

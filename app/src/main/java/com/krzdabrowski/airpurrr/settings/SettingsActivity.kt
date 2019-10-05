@@ -22,6 +22,7 @@ import com.krzdabrowski.airpurrr.main.PurifierHelper
 import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 import java.lang.NumberFormatException
 
 class SettingsActivity : AppCompatActivity() {
@@ -42,10 +43,12 @@ class SettingsActivity : AppCompatActivity() {
         private val email by lazy { credentialPrefs.getString(getString(R.string.login_pref_email), null) }
         private val password by lazy { credentialPrefs.getString(getString(R.string.login_pref_password), null) }
 
-        private val switchPreference by lazy { findPreference<SwitchPreferenceCompat>(keySwitch) }
-        private val thresholdPreference by lazy { findPreference<EditTextPreference>(keyThreshold) }
         private val keySwitch by lazy { getString(R.string.settings_key_switch) }
         private val keyThreshold by lazy { getString(R.string.settings_key_threshold) }
+        private val keyPurifierMode by lazy { getString(R.string.settings_key_purifier_mode) }
+        private val switchPreference by lazy { findPreference<SwitchPreferenceCompat>(keySwitch) }
+        private val thresholdPreference by lazy { findPreference<EditTextPreference>(keyThreshold) }
+        private val purifierModePreference by lazy { findPreference<SwitchPreferenceCompat>(keyPurifierMode) }
 
         private val preferenceListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
             when (key) {
@@ -56,8 +59,8 @@ class SettingsActivity : AppCompatActivity() {
                         } catch (_: NumberFormatException) {
                             0
                         })
-                else ->  // SeekBarPreference
-                    Snackbar.make(view!!, "Will be implemented later in phase 2", Snackbar.LENGTH_SHORT).show()
+                keyPurifierMode -> detectorViewModel.purifierMode.set(sharedPreferences.getBoolean(keyPurifierMode, true))
+                else -> Timber.d("Unexpected key received: $key")
             }
 
             val isThresholdSet = !sharedPreferences.getString(keyThreshold, "").isNullOrEmpty()

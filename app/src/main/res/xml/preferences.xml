@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/settings_category_auto_mode" />
 
     <SwitchPreferenceCompat
         app:key="autoModeSwitch"
+        app:defaultValue="false"
         app:title="@string/settings_title_auto_mode"
         app:summaryOff="@string/settings_summary_auto_mode_off"
         app:summaryOn="@string/settings_summary_auto_mode_on" />
@@ -18,14 +19,11 @@
 
     <PreferenceCategory app:title="@string/settings_category_fan_control" />
 
-    <SeekBarPreference
-        android:defaultValue="1800"
-        android:max="2000"
-        app:key="fanSpeedRpm"
-        app:min="1000"
-        app:showSeekBarValue="true"
-        app:updatesContinuously="true"
-        app:title="@string/settings_title_fan_speed"
-        app:summary="@string/settings_summary_fan_speed" />
+    <SwitchPreferenceCompat
+        app:key="purifierMode"
+        app:defaultValue="true"
+        app:title="@string/settings_title_purifier_mode"
+        app:summaryOff="@string/settings_summary_purifier_mode_low"
+        app:summaryOn="@string/settings_summary_purifier_mode_high" />
 
 </androidx.preference.PreferenceScreen>
