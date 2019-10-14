@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 
 val networkModule = module {
     single { DetectorDataService.create(provideOkHttpClient(3)) }
-    single { DetectorControlService.create(provideOkHttpClient(5)) }
+    single { DetectorControlService.create(provideOkHttpClient(10)) }
     single { ApiService.create(provideOkHttpClient(30)) }
 }
 

@@ -11,8 +11,12 @@ import retrofit2.http.POST
 interface DetectorControlService {
 
     @FormUrlEncoded
-    @POST("login")
-    suspend fun controlFanAsync(@Header("Authorization") authorization: String, @Field("shouldTurnOn") requestShouldTurnOn: String): ResponseBody
+    @POST("control-on-off")
+    suspend fun controlTurningFanOnOffAsync(@Header("Authorization") authorization: String, @Field("onOff") key: String): ResponseBody
+
+    @FormUrlEncoded
+    @POST("control-high-low")
+    suspend fun controlFanHighLowModeAsync(@Header("Authorization") authorization: String, @Field("highLow") key: String): ResponseBody
 
     companion object {
         private const val BASE_DETECTOR_HTTPS_URL = "https://airpurrr.eu/"
