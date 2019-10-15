@@ -24,7 +24,7 @@ class PurifierHelperTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { detectorViewModel.controlFan(any(), any(), any()) } just Runs
+        every { detectorViewModel.controlFanOnOff(any(), any(), any()) } just Runs
 
         purifierHelper = PurifierHelper(detectorViewModel)
         purifierHelper.listener = listener
@@ -35,26 +35,26 @@ class PurifierHelperTest {
     fun `when purifier state is in sleeping mode, then purifier can be controlled with new state`(){
         every { detectorModel.workstate } returns "WorkStates.Sleeping"
 
-        purifierHelper.getPurifierState(detectorModel, "some@email.com", "password", currentState)
+        purifierHelper.getPurifierOnOffState(detectorModel, "some@email.com", "password", currentState)
 
-        verify { detectorViewModel.controlFan(!currentState, any(), any()) }
+        verify { detectorViewModel.controlFanOnOff(!currentState, any(), any()) }
     }
 
     @Test
     fun `when purifier state is in measuring mode, then purifier can't be controlled`(){
         every { detectorModel.workstate } returns "WorkStates.Measuring"
 
-        purifierHelper.getPurifierState(detectorModel, "some@email.com", "password", currentState)
+        purifierHelper.getPurifierOnOffState(detectorModel, "some@email.com", "password", currentState)
 
-        verify (exactly = 0) { detectorViewModel.controlFan(!currentState, any(), any()) }
+        verify (exactly = 0) { detectorViewModel.controlFanOnOff(!currentState, any(), any()) }
     }
 
     @Test
     fun `when purifier state is in undefined mode, then purifier can't be controlled`(){
         every { detectorModel.workstate } returns ""
 
-        purifierHelper.getPurifierState(detectorModel, "some@email.com", "password", currentState)
+        purifierHelper.getPurifierOnOffState(detectorModel, "some@email.com", "password", currentState)
 
-        verify (exactly = 0) { detectorViewModel.controlFan(!currentState, any(), any()) }
+        verify (exactly = 0) { detectorViewModel.controlFanOnOff(!currentState, any(), any()) }
     }
 }

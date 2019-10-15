@@ -24,12 +24,12 @@ class DetectorRepository(private val serviceHttp: DetectorDataService, private v
         return null
     }
 
-    fun controlFan(turnOn: Boolean, email: String, password: String) {
-        val auth = "Basic " + Base64.encodeToString("$email:$password".toByteArray(), Base64.NO_WRAP)
+    fun controlFanOnOff(shouldTurnOn: Boolean, email: String, password: String) {
+        val auth = getAuthorizationHeader(email, password)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                if (turnOn) {
+                if (shouldTurnOn) {
                     serviceHttps.controlTurningFanOnOffAsync(auth, "on")
                 } else {
                     serviceHttps.controlTurningFanOnOffAsync(auth, "off")
@@ -40,5 +40,27 @@ class DetectorRepository(private val serviceHttp: DetectorDataService, private v
                 Timber.d("HTTPS common error: ${e.message}")
             }
         }
+    }
+    
+    fun controlFanHighLow(shouldSwitchToHigh: Boolean, email: String, password: String) {
+        val auth = getAuthorizationHeader(email, password)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                if (shouldSwitchToHigh) {
+                    serviceHttps.controlFanHighLowModeAsync(auth, "high")
+                } else {
+                    serviceHttps.controlFanHighLowModeAsync(auth, "low")
+                }
+            } catch (e: HttpException) {
+                Timber.d("HTTPS error: ${e.message()}")
+            } catch (e: Throwable) {
+                Timber.d("HTTPS common error: ${e.message}")
+            }
+        }
+    }
+
+    private fun getAuthorizationHeader(email: String, password: String): String {
+        return "Basic " + Base64.encodeToString("$email:$password".toByteArray(), Base64.NO_WRAP)
     }
 }

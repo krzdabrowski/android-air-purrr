@@ -8,11 +8,11 @@ import com.google.android.material.snackbar.Snackbar
 class PurifierHelper(private val detectorViewModel: DetectorViewModel) {
     internal lateinit var listener: SnackbarListener
 
-    fun getPurifierState(value: DetectorModel?, login: String, password: String, currentState: Boolean): Boolean {
+    fun getPurifierOnOffState(value: DetectorModel?, login: String, password: String, currentState: Boolean): Boolean {
         return when (value?.workstate) {
             "WorkStates.Sleeping" -> {
                 listener.showSnackbar(R.string.main_msg_turn_on)
-                detectorViewModel.controlFan(!currentState, login, password)
+                detectorViewModel.controlFanOnOff(!currentState, login, password)
                 !currentState
             }
             "WorkStates.Measuring" -> {

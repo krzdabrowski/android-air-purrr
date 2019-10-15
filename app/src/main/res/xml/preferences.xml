@@ -20,8 +20,8 @@
     <PreferenceCategory app:title="@string/settings_category_fan_control" />
 
     <SwitchPreferenceCompat
-        app:key="purifierMode"
-        app:defaultValue="true"
+        app:key="performanceHighLowSwitch"
+        app:defaultValue="false"
         app:title="@string/settings_title_purifier_mode"
         app:summaryOff="@string/settings_summary_purifier_mode_low"
         app:summaryOn="@string/settings_summary_purifier_mode_high" />

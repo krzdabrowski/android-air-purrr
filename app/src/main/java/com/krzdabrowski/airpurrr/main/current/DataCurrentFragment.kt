@@ -17,8 +17,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class DataCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentDataCurrentBinding
 
-    private val detectorViewModel: DetectorViewModel by sharedViewModel()
-    private val apiViewModel: ApiViewModel by sharedViewModel()
+    private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!!.activity!! })
+    private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
     private val baseViewModel: BaseViewModel by viewModel()
 
     private var isRefreshing = false

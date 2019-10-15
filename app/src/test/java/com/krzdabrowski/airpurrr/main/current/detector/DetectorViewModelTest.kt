@@ -59,7 +59,7 @@ class DetectorViewModelTest {
 
         detectorViewModel.checkAutoMode()
 
-        verify(exactly = 0) { detectorRepository.controlFan(any(), any(), any()) }
+        verify(exactly = 0) { detectorRepository.controlFanOnOff(any(), any(), any()) }
     }
 
     @Test
@@ -69,7 +69,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkAutoMode()
 
         // state changes
-        assertThat(detectorViewModel.purifierObservableState.get()).isTrue()
+        assertThat(detectorViewModel.purifierOnOffObservableState.get()).isTrue()
     }
 
     @Test
@@ -79,7 +79,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkAutoMode()
 
         // state doesn't change
-        assertThat(detectorViewModel.purifierObservableState.get()).isTrue()
+        assertThat(detectorViewModel.purifierOnOffObservableState.get()).isTrue()
     }
 
     @Test
@@ -89,7 +89,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkAutoMode()
 
         // state doesn't change
-        assertThat(detectorViewModel.purifierObservableState.get()).isFalse()
+        assertThat(detectorViewModel.purifierOnOffObservableState.get()).isFalse()
     }
 
     @Test
@@ -99,7 +99,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkAutoMode()
 
         // state changes
-        assertThat(detectorViewModel.purifierObservableState.get()).isFalse()
+        assertThat(detectorViewModel.purifierOnOffObservableState.get()).isFalse()
     }
 
     @Test
@@ -109,7 +109,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkAutoMode()
 
         // state doesn't change
-        assertThat(detectorViewModel.purifierObservableState.get()).isFalse()
+        assertThat(detectorViewModel.purifierOnOffObservableState.get()).isFalse()
     }
 
     @Test
@@ -119,7 +119,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkAutoMode()
 
         // state doesn't change
-        assertThat(detectorViewModel.purifierObservableState.get()).isTrue()
+        assertThat(detectorViewModel.purifierOnOffObservableState.get()).isTrue()
     }
 
     @Test
@@ -129,7 +129,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkAutoMode()
 
         // state doesn't change
-        assertThat(detectorViewModel.purifierObservableState.get()).isFalse()
+        assertThat(detectorViewModel.purifierOnOffObservableState.get()).isFalse()
     }
 
     @Test
@@ -139,7 +139,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkAutoMode()
 
         // state changes
-        assertThat(detectorViewModel.purifierObservableState.get()).isFalse()
+        assertThat(detectorViewModel.purifierOnOffObservableState.get()).isFalse()
     }
 
     @Test
@@ -148,15 +148,15 @@ class DetectorViewModelTest {
         setFields(state = false, autoMode = true, autoThreshold = 0)
 
         val listener = mockkClass(Observable.OnPropertyChangedCallback::class)
-        detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(listener)
+        detectorViewModel.purifierOnOffObservableState.addOnPropertyChangedCallback(listener)
 
-        every { listener.onPropertyChanged(detectorViewModel.purifierObservableState, any()) } just Runs
+        every { listener.onPropertyChanged(detectorViewModel.purifierOnOffObservableState, any()) } just Runs
 
         // Act
         detectorViewModel.checkAutoMode()
 
         // Assert
-        verify { listener.onPropertyChanged(detectorViewModel.purifierObservableState, any()) }
+        verify { listener.onPropertyChanged(detectorViewModel.purifierOnOffObservableState, any()) }
     }
 
     @Test
@@ -165,15 +165,15 @@ class DetectorViewModelTest {
         setFields(state = true, autoMode = false, autoThreshold = 0)
 
         val listener = mockkClass(Observable.OnPropertyChangedCallback::class)
-        detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(listener)
+        detectorViewModel.purifierOnOffObservableState.addOnPropertyChangedCallback(listener)
 
-        every { listener.onPropertyChanged(detectorViewModel.purifierObservableState, any()) } just Runs
+        every { listener.onPropertyChanged(detectorViewModel.purifierOnOffObservableState, any()) } just Runs
 
         // Act
         detectorViewModel.checkAutoMode()
 
         // Assert
-        verify { listener.onPropertyChanged(detectorViewModel.purifierObservableState, any()) }
+        verify { listener.onPropertyChanged(detectorViewModel.purifierOnOffObservableState, any()) }
     }
 
     @Test
@@ -182,22 +182,22 @@ class DetectorViewModelTest {
         setFields(state = true, autoMode = false, autoThreshold = 100)
 
         val listener = mockkClass(Observable.OnPropertyChangedCallback::class)
-        detectorViewModel.purifierObservableState.addOnPropertyChangedCallback(listener)
+        detectorViewModel.purifierOnOffObservableState.addOnPropertyChangedCallback(listener)
 
-        every { listener.onPropertyChanged(detectorViewModel.purifierObservableState, any()) } just Runs
+        every { listener.onPropertyChanged(detectorViewModel.purifierOnOffObservableState, any()) } just Runs
 
         // Act
         detectorViewModel.checkAutoMode()
 
         // Assert
-        verify { listener.onPropertyChanged(detectorViewModel.purifierObservableState, any()) }
+        verify { listener.onPropertyChanged(detectorViewModel.purifierOnOffObservableState, any()) }
     }
 
     private fun setFields(state: Boolean, autoMode: Boolean, autoThreshold: Int) {
         with (detectorViewModel) {
             data = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))
-            purifierObservableState.set(state)
-            purifierState = state
+            purifierOnOffObservableState.set(state)
+            purifierOnOffState = state
             autoModeSwitch.set(autoMode)
             autoModeThreshold.set(autoThreshold)
         }
