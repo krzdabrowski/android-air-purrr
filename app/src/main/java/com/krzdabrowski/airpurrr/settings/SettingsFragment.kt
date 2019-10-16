@@ -59,6 +59,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
         reactToAutoModeChanges(sharedPreferences, key)
     }
 
+    // region Init
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
@@ -77,10 +78,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.label_settings)
+        setToolbar()
 
-        purifierHelper.listener = this
+        purifierHelper.snackbarListener = this
         detectorViewModel.purifierOnOffObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 controlPurifierOnOff(this@SettingsFragment, email, password, detectorViewModel.purifierOnOffState)
@@ -102,7 +102,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
         super.onPause()
         preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceListener)
     }
+    // endregion
 
+    // region Purifier
     private fun reactToAutoModeChanges(sharedPreferences: SharedPreferences, key: String) {
         val isThresholdSet = !sharedPreferences.getString(keyAutoModeThreshold, "").isNullOrEmpty()
         val isThresholdClicked = key == keyAutoModeThreshold
@@ -126,8 +128,14 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
             detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, email, password, state)
         })
     }
+    // endregion
 
     override fun showSnackbar(stringId: Int, length: Int) {
         Snackbar.make(view!!, stringId, length).show()
+    }
+
+    private fun setToolbar() {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.label_settings)
     }
 }

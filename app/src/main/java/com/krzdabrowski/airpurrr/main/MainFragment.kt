@@ -31,13 +31,9 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     private val password by lazy { credentialPrefs.getString(getString(R.string.login_pref_password), null) }
     private val permissionResultCodeLocation = 100
 
+    // region Init
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        setHasOptionsMenu(true)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.app_name)
-
-        purifierHelper.listener = this
-
+        setToolbar()
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
@@ -45,9 +41,11 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
         super.onViewCreated(view, savedInstanceState)
         view_pager.adapter = ViewPagerAdapter(context!!, childFragmentManager)
         tab_layout.setupWithViewPager(view_pager)
+        purifierHelper.snackbarListener = this
 
         checkLocationPermission()
     }
+    // endregion
 
     // region Location permissions
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -102,13 +100,19 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
             }
             R.id.menu_settings -> {
                 fragmentManager?.commit {
-                    replace(R.id.main_activity, SettingsFragment())
+                    replace(R.id.activity_main, SettingsFragment())
                     addToBackStack(null)
                     }
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun setToolbar() {
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.app_name)
     }
     // endregion
 }

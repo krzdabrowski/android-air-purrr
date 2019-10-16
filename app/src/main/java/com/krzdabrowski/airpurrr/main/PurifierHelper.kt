@@ -6,21 +6,21 @@ import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class PurifierHelper(private val detectorViewModel: DetectorViewModel) {
-    internal lateinit var listener: SnackbarListener
+    internal lateinit var snackbarListener: SnackbarListener
 
     fun getPurifierOnOffState(value: DetectorModel?, login: String, password: String, currentState: Boolean): Boolean {
         return when (value?.workstate) {
             "WorkStates.Sleeping" -> {
-                listener.showSnackbar(R.string.main_msg_turn_on)
+                snackbarListener.showSnackbar(R.string.main_msg_turn_on)
                 detectorViewModel.controlFanOnOff(!currentState, login, password)
                 !currentState
             }
             "WorkStates.Measuring" -> {
-                listener.showSnackbar(R.string.main_error_measuring)
+                snackbarListener.showSnackbar(R.string.main_error_measuring)
                 currentState
             }
             else -> {
-                listener.showSnackbar(R.string.main_error_basic)
+                snackbarListener.showSnackbar(R.string.main_error_basic)
                 currentState
             }
         }

@@ -3,19 +3,18 @@ package com.krzdabrowski.airpurrr.main
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBackUnconditionally
+import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.*
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.GrantPermissionRule
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.login.LoginActivity
-import com.krzdabrowski.airpurrr.settings.SettingsActivity
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -58,8 +57,9 @@ class MainActivityTest {
         onView(withId(R.id.menu_settings))
             .perform(click())
 
-        // Verify that app goes to Settings screen
-        intended(hasComponent(SettingsActivity::class.java.name))
+        // Verify that Main Fragment does not exist
+        onView(withId(R.id.fragment_main))
+                .check(doesNotExist())
     }
 
     @Test
@@ -72,10 +72,10 @@ class MainActivityTest {
         onView(withContentDescription(R.string.abc_action_bar_up_description))
                 .perform(click())
 
-        // Verify that app goes back to Main screen
-        intended(hasComponent(MainActivity::class.java.name))
+        // Verify that app goes back to Main Fragment
+        onView(withId(R.id.fragment_main))
+                .check(matches(isDisplayed()))
     }
-
 
     @Test
     fun whenClickOnMenuButton_AndBackButtonTwice_ThenAppDoesntNavigateToLoginScreen() {

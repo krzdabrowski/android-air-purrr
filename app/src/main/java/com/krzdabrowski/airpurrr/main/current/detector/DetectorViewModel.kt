@@ -6,7 +6,6 @@ import androidx.lifecycle.liveData
 import com.krzdabrowski.airpurrr.main.Conversion
 import com.krzdabrowski.airpurrr.main.current.BaseViewModel
 import kotlinx.coroutines.Dispatchers
-import timber.log.Timber
 
 class DetectorViewModel(private val repository: DetectorRepository) : BaseViewModel() {
     var data: DetectorModel? = null
@@ -49,8 +48,6 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
     fun checkPerformanceMode(shouldSwitchToHigh: Boolean, login: String, password: String) {
         if (purifierOnOffState) {
             controlFanHighLow(shouldSwitchToHigh, login, password)
-        } else {
-            Timber.d("Purifier is off, just save highLow state to SharedPreferences")
         }
     }
 }

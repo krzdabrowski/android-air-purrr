@@ -63,4 +63,6 @@
     <string name="settings_key_automode_switch" translatable="false">autoModeSwitch</string>
     <string name="settings_key_automode_threshold" translatable="false">autoModeThreshold</string>
     <string name="settings_key_performance_highlow_switch" translatable="false">performanceHighLowSwitch</string>
+
+    <string name="settings_performance_snackbar_info">Start purifier to apply changes</string>
 </resources>

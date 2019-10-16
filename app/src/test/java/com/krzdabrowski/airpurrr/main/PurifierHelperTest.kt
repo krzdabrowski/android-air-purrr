@@ -27,7 +27,7 @@ class PurifierHelperTest {
         every { detectorViewModel.controlFanOnOff(any(), any(), any()) } just Runs
 
         purifierHelper = PurifierHelper(detectorViewModel)
-        purifierHelper.listener = listener
+        purifierHelper.snackbarListener = listener
         every { listener.showSnackbar(any(), any()) } just Runs
     }
 

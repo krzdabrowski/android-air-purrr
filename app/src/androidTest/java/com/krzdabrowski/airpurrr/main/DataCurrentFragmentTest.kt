@@ -1,7 +1,8 @@
 package com.krzdabrowski.airpurrr.main
 
-import androidx.fragment.app.testing.FragmentScenario
-import androidx.fragment.app.testing.launchFragmentInContainer
+import android.Manifest
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
@@ -9,13 +10,14 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import androidx.test.rule.GrantPermissionRule
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.current.DataCurrentFragment
 import com.krzdabrowski.airpurrr.utils.DataBindingIdlingResource
-import com.krzdabrowski.airpurrr.utils.monitorFragment
+import com.krzdabrowski.airpurrr.utils.monitorActivity
 import org.hamcrest.CoreMatchers.allOf
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -24,14 +26,18 @@ import org.junit.runner.RunWith
 class DataCurrentFragmentTest {
     // An Idling Resource that waits for Data Binding to have no pending bindings
     private val dataBindingIdlingResource = DataBindingIdlingResource()
-    private lateinit var fragmentScenario: FragmentScenario<DataCurrentFragment>
+    private lateinit var activityScenario: ActivityScenario<MainActivity>
+
+    // Permission rule to dismiss Location pop-up when launching Main screen
+    @get:Rule
+    val permissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)!!
 
     @Before
     fun setUp() {
         IdlingRegistry.getInstance().register(dataBindingIdlingResource)
 
-        fragmentScenario = launchFragmentInContainer(null, R.style.Main_AppTheme)
-        dataBindingIdlingResource.monitorFragment(fragmentScenario)
+        activityScenario = launchActivity()
+        dataBindingIdlingResource.monitorActivity(activityScenario)
     }
 
     @After
@@ -40,28 +46,28 @@ class DataCurrentFragmentTest {
     }
 
     @Test
-    fun whenClickOnDetectorPm25Tile_ThenApiDataTilesIsShown() {
+    fun so_whenClickOnDetectorPm25Tile_ThenApiDataTilesIsShown() {
         // Click on detector data tile
         onView(withId(R.id.partial_main_data_pm25))
             .perform(click())
 
         // Verify that API data tile is shown
         onView(allOf(
-                withText(R.string.main_data_info_api),
+                withId(R.id.ic_airly_logo),
                 hasSibling(withText(R.string.main_data_info_pm25))
         ))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun whenClickOnDetectorPm10Tile_ThenApiDataTilesIsShown() {
+    fun so_whenClickOnDetectorPm10Tile_ThenApiDataTilesIsShown() {
         // Click on detector data tile
         onView(withId(R.id.partial_main_data_pm10))
                 .perform(click())
 
         // Verify that API data tile is shown
         onView(allOf(
-                withText(R.string.main_data_info_api),
+                withId(R.id.ic_airly_logo),
                 hasSibling(withText(R.string.main_data_info_pm10))
         ))
             .check(matches(isDisplayed()))
