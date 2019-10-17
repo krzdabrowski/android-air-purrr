@@ -193,6 +193,56 @@ class DetectorViewModelTest {
         verify { listener.onPropertyChanged(detectorViewModel.purifierOnOffObservableState, any()) }
     }
 
+    @Test
+    fun `given purifier is OFF, when performance mode is going to be turned on, then request is not sent`() {
+        // Arrange
+        setFields(state = false, autoMode = false, autoThreshold = 0)
+
+        // Act
+        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = true, login = "some@login.com", password = "password")
+
+        // Assert
+        verify (exactly = 0) { detectorViewModel.controlFanHighLow(true, any(), any()) }
+    }
+
+    @Test
+    fun `given purifier is OFF, when night mode is going to be turned on, then request is not sent`() {
+        // Arrange
+        setFields(state = false, autoMode = false, autoThreshold = 0)
+
+        // Act
+        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = false, login = "some@login.com", password = "password")
+
+        // Assert
+        verify (exactly = 0) { detectorViewModel.controlFanHighLow(false, any(), any()) }
+    }
+
+    @Test
+    fun `given purifier is ON, when performance mode is going to be turned on, then request is sent`() {
+        // Arrange
+        setFields(state = true, autoMode = false, autoThreshold = 0)
+        every { detectorViewModel.controlFanHighLow(true, any(), any()) } just Runs
+
+        // Act
+        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = true, login = "some@login.com", password = "password")
+
+        // Assert
+        verify { detectorViewModel.controlFanHighLow(true, any(), any()) }
+    }
+
+    @Test
+    fun `given purifier is ON, when night mode is going to be turned on, then request is sent`() {
+        // Arrange
+        setFields(state = true, autoMode = false, autoThreshold = 0)
+        every { detectorViewModel.controlFanHighLow(false, any(), any()) } just Runs
+
+        // Act
+        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = false, login = "some@login.com", password = "password")
+
+        // Assert
+        verify { detectorViewModel.controlFanHighLow(false, any(), any()) }
+    }
+
     private fun setFields(state: Boolean, autoMode: Boolean, autoThreshold: Int) {
         with (detectorViewModel) {
             data = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))

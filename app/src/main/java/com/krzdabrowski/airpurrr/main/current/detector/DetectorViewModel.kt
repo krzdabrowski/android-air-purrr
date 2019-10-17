@@ -25,7 +25,7 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
         repository.controlFanOnOff(shouldTurnOn, login, password)
     }
 
-    private fun controlFanHighLow(shouldSwitchToHigh: Boolean, login: String, password: String) {
+    fun controlFanHighLow(shouldSwitchToHigh: Boolean, login: String, password: String) {
         repository.controlFanHighLow(shouldSwitchToHigh, login, password)
     }
 
