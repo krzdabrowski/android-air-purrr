@@ -22,7 +22,6 @@ ext {
     retrofit = '2.7.0'
     timber = '4.7.1'
     koin = '2.0.1'
-    armadillo = '0.9.0'
     leakCanary = '2.0'
     // endregion
 
@@ -64,7 +63,6 @@ ext {
         timber: "com.jakewharton.timber:timber:$timber",
         koin: "org.koin:koin-android:$koin",
         koinViewmodel: "org.koin:koin-androidx-viewmodel:$koin",
-        armadillo: "at.favre.lib:armadillo:$armadillo",
         leakCanary: "com.squareup.leakcanary:leakcanary-android:$leakCanary"
     ]
 

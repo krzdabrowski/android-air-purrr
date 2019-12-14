@@ -14,7 +14,6 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import at.favre.lib.armadillo.Armadillo
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.PurifierHelper
@@ -27,11 +26,6 @@ import java.lang.NumberFormatException
 class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarListener {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val purifierHelper: PurifierHelper by inject()
-
-    private val credentialPrefs by lazy { Armadillo.create(context, getString(R.string.login_key_credentials)).encryptionFingerprint(context).build() }
-    private val email by lazy { credentialPrefs.getString(getString(R.string.login_pref_email), null) }
-    private val password by lazy { credentialPrefs.getString(getString(R.string.login_pref_password), null) }
-
     private val keyAutoModeSwitch by lazy { getString(R.string.settings_key_automode_switch) }
     private val keyAutoModeThreshold by lazy { getString(R.string.settings_key_automode_threshold) }
     private val keyPerformanceHighLowSwitch by lazy { getString(R.string.settings_key_performance_highlow_switch) }
@@ -83,9 +77,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
         purifierHelper.snackbarListener = this
         detectorViewModel.purifierOnOffObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                controlPurifierOnOff(this@SettingsFragment, email, password, detectorViewModel.purifierOnOffState)
+                controlPurifierOnOff(this@SettingsFragment, detectorViewModel.purifierOnOffState)
                 if (detectorViewModel.purifierHighLowObservableState.get()) {
-                    detectorViewModel.checkPerformanceMode(true, email, password)
+                    detectorViewModel.checkPerformanceMode(true)
                 }
             }
         })
@@ -120,12 +114,12 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
 
     private fun reactToPerformanceChanges(sharedPreferences: SharedPreferences, key: String) {
         val isSwitchOn = sharedPreferences.getBoolean(key, false)
-        detectorViewModel.checkPerformanceMode(isSwitchOn, email, password)
+        detectorViewModel.checkPerformanceMode(isSwitchOn)
     }
 
-    private fun controlPurifierOnOff(owner: LifecycleOwner, email: String, password: String, state: Boolean) {
+    private fun controlPurifierOnOff(owner: LifecycleOwner, state: Boolean) {
         detectorViewModel.getLiveData().observe(owner, Observer { workstateValue ->
-            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, email, password, state)
+            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, state)
         })
     }
     // endregion

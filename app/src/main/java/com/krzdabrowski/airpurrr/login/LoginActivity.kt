@@ -1,12 +1,12 @@
 package com.krzdabrowski.airpurrr.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import at.favre.lib.armadillo.Armadillo
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
@@ -19,7 +19,7 @@ import java.util.concurrent.Executors
 class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallback {
     private val loginViewModel: LoginViewModel by viewModel()
     private val biometricHelper by lazy { LoginBiometricHelper(this, this) }
-    private val credentialPrefs by lazy { Armadillo.create(this, getString(R.string.login_key_credentials)).encryptionFingerprint(this).build() }
+    private val sharedPrefs by lazy { getSharedPreferences(getString(R.string.login_key_sharedprefs), Context.MODE_PRIVATE) }
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallbac
             if (loginViewModel.isFormValid.value!!) manualLogin()
         })
 
-        if (credentialPrefs.contains(getString(R.string.login_pref_email))) {
+        if (sharedPrefs.getBoolean(getString(R.string.login_pref_is_logged_in_before), false)) {
             fingerprintLogin()
         }
     }
@@ -54,9 +54,8 @@ class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallbac
                 .signInWithEmailAndPassword(loginViewModel.email.value!!, loginViewModel.password.value!!)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        with (credentialPrefs.edit()) {
-                            putString(getString(R.string.login_pref_email), loginViewModel.email.value)
-                            putString(getString(R.string.login_pref_password), loginViewModel.password.value)
+                        with (sharedPrefs.edit()) {
+                            putBoolean(getString(R.string.login_pref_is_logged_in_before), true)
                             apply()
                         }
                         navigateToMainScreen()

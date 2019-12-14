@@ -55,6 +55,7 @@
                     android:text="@={vm.email}"
                     app:errorValidation="@{vm.isEmailError}"
                     app:errorType="@{vm.emailErrorType}" />
+                <requestFocus/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

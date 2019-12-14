@@ -6,8 +6,7 @@
     <string name="login_fingerprint_text">Authenticate with your fingerprint</string>
     <string name="login_fingerprint_button_cancel">Cancel</string>
     <string name="login_description_logo">Application logo</string>
-    <string name="login_pref_email">login_email</string>
-    <string name="login_pref_password">login_password</string>
+    <string name="login_pref_is_logged_in_before">isLoggedInBefore</string>
 
     <string name="login_msg_dialog">Authenticating…</string>
     <string name="login_error_empty_field">Required</string>
@@ -15,7 +14,7 @@
     <string name="login_error_no_saved_fingerprint">Add at least one fingerprint to login with fingerprint</string>
     <string name="login_error_no_permission">Grant permissions to login with fingerprint</string>
 
-    <string name="login_key_credentials" translatable="false">credentialsPrefs</string>
+    <string name="login_key_sharedprefs" translatable="false">sharedPrefs</string>
 
 
     <!-- Main screen -->

@@ -95,7 +95,6 @@ dependencies {
     implementation thirdPartyDependencies.timber
     implementation thirdPartyDependencies.koin
     implementation thirdPartyDependencies.koinViewmodel
-    implementation thirdPartyDependencies.armadillo
     debugImplementation thirdPartyDependencies.leakCanary
     // endregion
 

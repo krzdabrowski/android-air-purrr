@@ -1,6 +1,5 @@
 package com.krzdabrowski.airpurrr.main.current.detector
 
-import android.util.Base64
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,15 +23,13 @@ class DetectorRepository(private val serviceHttp: DetectorDataService, private v
         return null
     }
 
-    fun controlFanOnOff(shouldTurnOn: Boolean, email: String, password: String) {
-        val auth = getAuthorizationHeader(email, password)
-
+    fun controlFanOnOff(shouldTurnOn: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (shouldTurnOn) {
-                    serviceHttps.controlTurningFanOnOffAsync(auth, "on")
+                    serviceHttps.controlTurningFanOnOffAsync("on")
                 } else {
-                    serviceHttps.controlTurningFanOnOffAsync(auth, "off")
+                    serviceHttps.controlTurningFanOnOffAsync("off")
                 }
             } catch (e: HttpException) {
                 Timber.d("HTTPS error: ${e.message()}")
@@ -42,15 +39,13 @@ class DetectorRepository(private val serviceHttp: DetectorDataService, private v
         }
     }
     
-    fun controlFanHighLow(shouldSwitchToHigh: Boolean, email: String, password: String) {
-        val auth = getAuthorizationHeader(email, password)
-
+    fun controlFanHighLow(shouldSwitchToHigh: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (shouldSwitchToHigh) {
-                    serviceHttps.controlFanHighLowModeAsync(auth, "high")
+                    serviceHttps.controlFanHighLowModeAsync("high")
                 } else {
-                    serviceHttps.controlFanHighLowModeAsync(auth, "low")
+                    serviceHttps.controlFanHighLowModeAsync("low")
                 }
             } catch (e: HttpException) {
                 Timber.d("HTTPS error: ${e.message()}")
@@ -58,9 +53,5 @@ class DetectorRepository(private val serviceHttp: DetectorDataService, private v
                 Timber.d("HTTPS common error: ${e.message}")
             }
         }
-    }
-
-    private fun getAuthorizationHeader(email: String, password: String): String {
-        return "Basic " + Base64.encodeToString("$email:$password".toByteArray(), Base64.NO_WRAP)
     }
 }

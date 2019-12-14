@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
-import at.favre.lib.armadillo.Armadillo
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
@@ -25,10 +24,6 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private val purifierHelper: PurifierHelper by inject()
-
-    private val credentialPrefs by lazy { Armadillo.create(context, getString(R.string.login_key_credentials)).encryptionFingerprint(context).build() }
-    private val email by lazy { credentialPrefs.getString(getString(R.string.login_pref_email), null) }
-    private val password by lazy { credentialPrefs.getString(getString(R.string.login_pref_password), null) }
     private val permissionResultCodeLocation = 100
 
     // region Init
@@ -73,11 +68,11 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     // endregion
 
     // region Purifier
-    private fun controlPurifierOnOff(email: String, password: String, currentState: Boolean) {
+    private fun controlPurifierOnOff(currentState: Boolean) {
         detectorViewModel.getLiveData().observe(viewLifecycleOwner, Observer { workstateValue ->
-            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, email, password, currentState)
+            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, currentState)
             if (detectorViewModel.purifierHighLowObservableState.get()) {
-                detectorViewModel.checkPerformanceMode(true, email, password)
+                detectorViewModel.checkPerformanceMode(true)
             }
         })
     }
@@ -95,7 +90,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_manual_mode -> {
-                controlPurifierOnOff(email, password, detectorViewModel.purifierOnOffState)
+                controlPurifierOnOff(detectorViewModel.purifierOnOffState)
                 true
             }
             R.id.menu_settings -> {

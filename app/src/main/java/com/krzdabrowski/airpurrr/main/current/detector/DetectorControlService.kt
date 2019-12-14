@@ -12,14 +12,14 @@ interface DetectorControlService {
 
     @FormUrlEncoded
     @POST("control-on-off")
-    suspend fun controlTurningFanOnOffAsync(@Header("Authorization") authorization: String, @Field("onOff") key: String): ResponseBody
+    suspend fun controlTurningFanOnOffAsync(@Field("onOff") key: String): ResponseBody
 
     @FormUrlEncoded
     @POST("control-high-low")
-    suspend fun controlFanHighLowModeAsync(@Header("Authorization") authorization: String, @Field("highLow") key: String): ResponseBody
+    suspend fun controlFanHighLowModeAsync(@Field("highLow") key: String): ResponseBody
 
     companion object {
-        private const val BASE_DETECTOR_HTTPS_URL = "https://airpurrr.eu/"
+        private const val BASE_DETECTOR_HTTPS_URL = "http://nowe.ip" //TODO: nowe IP
 
         fun create(client: OkHttpClient): DetectorControlService {
             return Retrofit.Builder()

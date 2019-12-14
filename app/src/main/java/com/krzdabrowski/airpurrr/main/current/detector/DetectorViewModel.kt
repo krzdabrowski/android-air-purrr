@@ -21,12 +21,12 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
         emit(data)
     }
 
-    fun controlFanOnOff(shouldTurnOn: Boolean, login: String, password: String) {
-        repository.controlFanOnOff(shouldTurnOn, login, password)
+    fun controlFanOnOff(shouldTurnOn: Boolean) {
+        repository.controlFanOnOff(shouldTurnOn)
     }
 
-    fun controlFanHighLow(shouldSwitchToHigh: Boolean, login: String, password: String) {
-        repository.controlFanHighLow(shouldSwitchToHigh, login, password)
+    fun controlFanHighLow(shouldSwitchToHigh: Boolean) {
+        repository.controlFanHighLow(shouldSwitchToHigh)
     }
 
     fun checkAutoMode() {
@@ -45,9 +45,9 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
         }
     }
 
-    fun checkPerformanceMode(shouldSwitchToHigh: Boolean, login: String, password: String) {
+    fun checkPerformanceMode(shouldSwitchToHigh: Boolean) {
         if (purifierOnOffState) {
-            controlFanHighLow(shouldSwitchToHigh, login, password)
+            controlFanHighLow(shouldSwitchToHigh)
         }
     }
 }
