@@ -39,7 +39,7 @@ android {
         }
         mock {
             resValue "string", "app_name", "AirPurrr mock"
-            buildConfigField "String", "BASE_DETECTOR_URL", "\"https://gist.githubusercontent.com/krzdabrowski/534e697a86de6ea68e3a2337b6379ddc/raw/8c45d111fd57b377d3530f8385026568d833bf7a/\""
+            buildConfigField "String", "BASE_DETECTOR_URL", "\"https://gist.githubusercontent.com/krzdabrowski/93d590983cc05a5b9dc9e29cc3ed01d0/raw/4860998b5b01d1cafa35db2a139bc10108c0588a/\""
             buildConfigField "String", "BASE_API_URL", "\"https://airapi.airly.eu/\""
         }
     }
