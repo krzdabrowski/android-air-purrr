@@ -19,7 +19,7 @@ interface DetectorControlService {
     suspend fun controlFanHighLowModeAsync(@Field("highLow") key: String): ResponseBody
 
     companion object {
-        private const val BASE_DETECTOR_HTTPS_URL = "http://nowe.ip" //TODO: nowe IP
+        private const val BASE_DETECTOR_HTTPS_URL = "http://rpi.airpurrr.eu"
 
         fun create(client: OkHttpClient): DetectorControlService {
             return Retrofit.Builder()

@@ -34,7 +34,7 @@ android {
     productFlavors {
         dev {
             resValue "string", "app_name", "AirPurrr dev"
-            buildConfigField "String", "BASE_DETECTOR_URL", "\"http://airpurrr.eu/\""
+            buildConfigField "String", "BASE_DETECTOR_URL", "\"http://rpi.airpurrr.eu/\""
             buildConfigField "String", "BASE_API_URL", "\"https://airapi.airly.eu/\""
         }
         mock {

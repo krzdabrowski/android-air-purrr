@@ -9,7 +9,7 @@ import retrofit2.http.*
 
 interface DetectorDataService {
 
-    @GET("data.json")
+    @GET("static/data.json")
     suspend fun getDetectorDataAsync(): Response<DetectorModel>
 
     companion object {
