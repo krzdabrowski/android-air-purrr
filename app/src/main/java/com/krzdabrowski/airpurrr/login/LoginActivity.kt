@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
@@ -28,11 +28,9 @@ class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallbac
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.isLoggingIn = false
         binding.vm = loginViewModel
-        loginViewModel.email.observe(this, Observer { email -> loginViewModel.isEmailValid(email) })
-        loginViewModel.password.observe(this, Observer { password -> loginViewModel.isPasswordValid(password) })
-        loginViewModel.isFormValid.observe(this, Observer {
-            if (loginViewModel.isFormValid.value!!) manualLogin()
-        })
+        loginViewModel.email.observe(this) { email -> loginViewModel.isEmailValid(email) }
+        loginViewModel.password.observe(this) { password -> loginViewModel.isPasswordValid(password) }
+        loginViewModel.isFormValid.observe(this) { if (loginViewModel.isFormValid.value!!) manualLogin() }
 
         if (sharedPrefs.getBoolean(getString(R.string.login_pref_is_logged_in_before), false)) {
             fingerprintLogin()

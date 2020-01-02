@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.krzdabrowski.airpurrr.databinding.FragmentDataCurrentBinding
 import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
@@ -38,16 +38,14 @@ class DataCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fetchNewData()
     }
 
-    private fun getDetectorData() = detectorViewModel.getLiveData().observe(viewLifecycleOwner, Observer { value -> binding.detectorData = value })
+    private fun getDetectorData() = detectorViewModel.getLiveData().observe(viewLifecycleOwner) { value -> binding.detectorData = value }
 
-    private fun getApiData() = apiViewModel.getLiveData().observe(viewLifecycleOwner, Observer { value -> binding.apiData = value })
+    private fun getApiData() = apiViewModel.getLiveData().observe(viewLifecycleOwner) { value -> binding.apiData = value }
 
-    private fun getApi() = apiViewModel.userLocation.observe(viewLifecycleOwner, Observer { location ->
-        if (location != null) {
-            getApiData()
-            runPeriodicFetching()
-        }
-    })
+    private fun getApi() = apiViewModel.userLocation.observe(viewLifecycleOwner) {
+        getApiData()
+        runPeriodicFetching()
+    }
 
     override fun onRefresh() = fetchNewData()
 

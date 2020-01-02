@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.Observable
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -77,7 +77,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
         purifierHelper.snackbarListener = this
         detectorViewModel.purifierOnOffObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                controlPurifierOnOff(this@SettingsFragment, detectorViewModel.purifierOnOffState)
+                controlPurifierOnOff(viewLifecycleOwner, detectorViewModel.purifierOnOffState)
                 if (detectorViewModel.purifierHighLowObservableState.get()) {
                     detectorViewModel.checkPerformanceMode(true)
                 }
@@ -118,9 +118,9 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
     }
 
     private fun controlPurifierOnOff(owner: LifecycleOwner, state: Boolean) {
-        detectorViewModel.getLiveData().observe(owner, Observer { workstateValue ->
+        detectorViewModel.getLiveData().observe(owner) { workstateValue ->
             detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, state)
-        })
+        }
     }
     // endregion
 

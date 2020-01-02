@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
@@ -69,12 +69,12 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
 
     // region Purifier
     private fun controlPurifierOnOff(currentState: Boolean) {
-        detectorViewModel.getLiveData().observe(viewLifecycleOwner, Observer { workstateValue ->
+        detectorViewModel.getLiveData().observe(viewLifecycleOwner) { workstateValue ->
             detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, currentState)
             if (detectorViewModel.purifierHighLowObservableState.get()) {
                 detectorViewModel.checkPerformanceMode(true)
             }
-        })
+        }
     }
     // endregion
 
