@@ -5,9 +5,9 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.app.ActivityCompat
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import com.krzdabrowski.airpurrr.R
 
 @TargetApi(Build.VERSION_CODES.P)
@@ -18,9 +18,9 @@ class LoginBiometricHelper(private val context: Context, private val callback: O
         callback.onSuccess()
     }
 
-    fun isFingerprintAvailable() = FingerprintManagerCompat.from(context).hasEnrolledFingerprints()
+    fun isFingerprintAvailable() = BiometricManager.from(context).canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS
 
-    fun isPermissionGranted() = ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) == PackageManager.PERMISSION_GRANTED
+    fun isPermissionGranted() = ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_BIOMETRIC) == PackageManager.PERMISSION_GRANTED
 
     fun getPromptInfo(): BiometricPrompt.PromptInfo {
         return BiometricPrompt.PromptInfo.Builder()

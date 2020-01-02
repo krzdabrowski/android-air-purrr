@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
@@ -14,7 +15,6 @@ import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
 import com.krzdabrowski.airpurrr.databinding.ActivityLoginBinding
 import com.krzdabrowski.airpurrr.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.concurrent.Executors
 
 class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallback {
     private val loginViewModel: LoginViewModel by viewModel()
@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallbac
 
         if (biometricHelper.isFingerprintAvailable()) {
             if (biometricHelper.isPermissionGranted()) {
-                BiometricPrompt(this, Executors.newSingleThreadExecutor(), biometricHelper)
+                BiometricPrompt(this, ContextCompat.getMainExecutor(this), biometricHelper)
                         .authenticate(biometricHelper.getPromptInfo())
 
                 EspressoIdlingResource.decrement()  // set app as idle
