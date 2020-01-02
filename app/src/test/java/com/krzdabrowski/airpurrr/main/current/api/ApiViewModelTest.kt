@@ -6,8 +6,12 @@ import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -29,20 +33,16 @@ class ApiViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        // Dispatchers.setMain(Dispatchers.Unconfined)
+        Dispatchers.setMain(TestCoroutineDispatcher())
         apiViewModel = ApiViewModel(apiRepository)
     }
 
     @After
     fun tearDown() {
         clearAllMocks()
-        // Dispatchers.resetMain()
+        Dispatchers.resetMain()
     }
 
-    // flaky test due to LiveData 2.2.0 alpha version:
-    // * reverting to state before update makes test no more flaky
-    // * but vastly increases boilerplate in many classes
-    // * using runBlockingTest without Unconfined passes the test with Dispatchers.setMain exception (so also coroutines bug?)
     @Test
     fun `when fetching data successfully, then check if repository was called`() = runBlockingTest {
         coEvery { apiRepository.fetchData(any()) } returns apiModel

@@ -5,8 +5,12 @@ import androidx.databinding.Observable
 import com.google.common.truth.Truth.assertThat
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -25,20 +29,16 @@ class DetectorViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        // Dispatchers.setMain(Dispatchers.Unconfined)
+        Dispatchers.setMain(TestCoroutineDispatcher())
         detectorViewModel = DetectorViewModel(detectorRepository)
     }
 
     @After
     fun tearDown() {
         clearAllMocks()
-        // Dispatchers.resetMain()
+        Dispatchers.resetMain()
     }
 
-    // flaky test due to LiveData 2.2.0 alpha version:
-    // * reverting to state before update makes test no more flaky
-    // * but vastly increases boilerplate in many classes
-    // * using runBlockingTest without Unconfined passes the test with Dispatchers.setMain exception (so also coroutines bug?)
     @Test
     fun `when fetching data successfully, then proper data is saved`() = runBlockingTest {
         val model = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))
@@ -59,7 +59,7 @@ class DetectorViewModelTest {
 
         detectorViewModel.checkAutoMode()
 
-        verify(exactly = 0) { detectorRepository.controlFanOnOff(any(), any(), any()) }
+        verify(exactly = 0) { detectorRepository.controlFanOnOff(any()) }
     }
 
     @Test
@@ -199,10 +199,10 @@ class DetectorViewModelTest {
         setFields(state = false, autoMode = false, autoThreshold = 0)
 
         // Act
-        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = true, login = "some@login.com", password = "password")
+        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = true)
 
         // Assert
-        verify (exactly = 0) { detectorViewModel.controlFanHighLow(true, any(), any()) }
+        verify (exactly = 0) { detectorViewModel.controlFanHighLow(true) }
     }
 
     @Test
@@ -211,36 +211,36 @@ class DetectorViewModelTest {
         setFields(state = false, autoMode = false, autoThreshold = 0)
 
         // Act
-        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = false, login = "some@login.com", password = "password")
+        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = false)
 
         // Assert
-        verify (exactly = 0) { detectorViewModel.controlFanHighLow(false, any(), any()) }
+        verify (exactly = 0) { detectorViewModel.controlFanHighLow(false) }
     }
 
     @Test
     fun `given purifier is ON, when performance mode is going to be turned on, then request is sent`() {
         // Arrange
         setFields(state = true, autoMode = false, autoThreshold = 0)
-        every { detectorViewModel.controlFanHighLow(true, any(), any()) } just Runs
+        every { detectorViewModel.controlFanHighLow(true) } just Runs
 
         // Act
-        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = true, login = "some@login.com", password = "password")
+        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = true)
 
         // Assert
-        verify { detectorViewModel.controlFanHighLow(true, any(), any()) }
+        verify { detectorViewModel.controlFanHighLow(true) }
     }
 
     @Test
     fun `given purifier is ON, when night mode is going to be turned on, then request is sent`() {
         // Arrange
         setFields(state = true, autoMode = false, autoThreshold = 0)
-        every { detectorViewModel.controlFanHighLow(false, any(), any()) } just Runs
+        every { detectorViewModel.controlFanHighLow(false) } just Runs
 
         // Act
-        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = false, login = "some@login.com", password = "password")
+        detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = false)
 
         // Assert
-        verify { detectorViewModel.controlFanHighLow(false, any(), any()) }
+        verify { detectorViewModel.controlFanHighLow(false) }
     }
 
     private fun setFields(state: Boolean, autoMode: Boolean, autoThreshold: Int) {
