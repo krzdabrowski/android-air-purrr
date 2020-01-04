@@ -5,6 +5,8 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
@@ -42,41 +44,28 @@ class ApiRepositoryTest {
 
     @Test
     fun `given response body is not null, when fetching data, then model is not null`() = runBlockingTest {
+        lateinit var response: Response<ApiModel>
         every { ApiAirlyConverter.getData(any()) } returns apiModel
-        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(apiModel)
+        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns flowOf(Response.success(apiModel))
 
-        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).isSuccessful).isTrue()
-        assertThat(apiRepository.fetchData(location)).isNotNull()
+        apiService.getApiDataAsync("", location.latitude, location.longitude).collect { res -> response = res }
+
+        assertThat(response.isSuccessful).isTrue()
+        assertThat(response.body()).isNotNull()
 
         coVerify { apiService.getApiDataAsync(any(), any(), any()) }
     }
 
     @Test
     fun `given response body is not null, when fetching data, then model is body`() = runBlockingTest {
+        lateinit var response: Response<ApiModel>
         every { ApiAirlyConverter.getData(any()) } returns apiModel
-        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(apiModel)
+        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns flowOf(Response.success(apiModel))
 
-        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).isSuccessful).isTrue()
-        assertThat(apiRepository.fetchData(location)).isEqualTo(apiModel)
+        apiService.getApiDataAsync("", location.latitude, location.longitude).collect { res -> response = res }
 
-        coVerify { apiService.getApiDataAsync(any(), any(), any()) }
-    }
-
-    @Test
-    fun `given response body is null, when fetching data, then model is null`() = runBlockingTest {
-        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(null)
-
-        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).isSuccessful).isTrue()
-        assertThat(apiRepository.fetchData(location)).isNull()
-
-        coVerify { apiService.getApiDataAsync(any(), any(), any()) }
-    }
-
-    @Test
-    fun `given exception, when fetching data, then model is null`() = runBlockingTest {
-        coEvery { apiService.getApiDataAsync(any(), any(), any()) } throws Throwable()
-
-        assertThat(apiRepository.fetchData(location)).isNull()
+        assertThat(response.isSuccessful).isTrue()
+        assertThat(response.body()).isEqualTo(apiModel)
 
         coVerify { apiService.getApiDataAsync(any(), any(), any()) }
     }

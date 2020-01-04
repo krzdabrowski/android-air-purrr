@@ -1,6 +1,8 @@
 package com.krzdabrowski.airpurrr.main.current.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.asLiveData
+import com.google.common.truth.Truth.assertThat
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -8,6 +10,7 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -34,7 +37,11 @@ class ApiViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
+
+        coEvery { apiRepository.fetchDataFlow(any()) } returns flowOf(apiModel)
+
         apiViewModel = ApiViewModel(apiRepository)
+        apiViewModel.liveData.observeForever {}
     }
 
     @After
@@ -44,12 +51,11 @@ class ApiViewModelTest {
     }
 
     @Test
-    fun `when fetching data successfully, then check if repository was called`() = runBlockingTest {
-        coEvery { apiRepository.fetchData(any()) } returns apiModel
+    fun `when fetching data successfully, then proper data is saved`() = runBlockingTest {
+        coEvery { apiRepository.fetchDataFlow(any()).asLiveData().value } returns apiModel
 
-        apiViewModel.getLiveData().observeForever {}
-        apiViewModel.getLiveData()
+        coVerify { apiRepository.fetchDataFlow(any()).asLiveData() }
 
-        coVerify { apiRepository.fetchData(any()) }
+        assertThat(apiViewModel.liveData.value).isEqualTo(apiModel)
     }
 }

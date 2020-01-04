@@ -2,11 +2,13 @@ package com.krzdabrowski.airpurrr.main.current.detector
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.Observable
+import androidx.lifecycle.asLiveData
 import com.google.common.truth.Truth.assertThat
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -30,7 +32,12 @@ class DetectorViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
+
+        val model = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))
+        coEvery { detectorRepository.fetchDataFlow() } returns flowOf(model)
+
         detectorViewModel = DetectorViewModel(detectorRepository)
+        detectorViewModel.liveData.observeForever {}
     }
 
     @After
@@ -42,24 +49,12 @@ class DetectorViewModelTest {
     @Test
     fun `when fetching data successfully, then proper data is saved`() = runBlockingTest {
         val model = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))
-        coEvery { detectorRepository.fetchData() } returns model
+        coEvery { detectorRepository.fetchDataFlow().asLiveData().value } returns model
 
-        detectorViewModel.getLiveData().observeForever {}
-        detectorViewModel.getLiveData()
+        coVerify { detectorRepository.fetchDataFlow().asLiveData() }
 
-        coVerify { detectorRepository.fetchData() }
-
-        assertThat(detectorViewModel.data?.workstate).isEqualTo(model.workstate)
-        assertThat(detectorViewModel.data?.values).isEqualTo(model.values)
-    }
-
-    @Test
-    fun `given data is null, then not possible to control purifier`() {
-        detectorViewModel.data = null
-
-        detectorViewModel.checkAutoMode()
-
-        verify(exactly = 0) { detectorRepository.controlFanOnOff(any()) }
+        assertThat(detectorViewModel.liveData.value?.workstate).isEqualTo(model.workstate)
+        assertThat(detectorViewModel.liveData.value?.values).isEqualTo(model.values)
     }
 
     @Test
@@ -245,7 +240,6 @@ class DetectorViewModelTest {
 
     private fun setFields(state: Boolean, autoMode: Boolean, autoThreshold: Int) {
         with (detectorViewModel) {
-            data = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))
             purifierOnOffObservableState.set(state)
             purifierOnOffState = state
             autoModeSwitch.set(autoMode)

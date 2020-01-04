@@ -20,6 +20,7 @@ ext {
 
     // region Third party
     retrofit = '2.7.0'
+    retrofitFlowCallAdapter = '0.2.0'
     timber = '4.7.1'
     koin = '2.0.1'
     leakCanary = '2.1'
@@ -60,6 +61,7 @@ ext {
     thirdPartyDependencies = [
         retrofit: "com.squareup.retrofit2:retrofit:$retrofit",
         moshi: "com.squareup.retrofit2:converter-moshi:$retrofit",
+        retrofitFlowCallAdapter: "com.github.MohammadSianaki:Retrofit2-Flow-Call-Adapter:$retrofitFlowCallAdapter",
         timber: "com.jakewharton.timber:timber:$timber",
         koin: "org.koin:koin-android:$koin",
         koinViewmodel: "org.koin:koin-androidx-viewmodel:$koin",

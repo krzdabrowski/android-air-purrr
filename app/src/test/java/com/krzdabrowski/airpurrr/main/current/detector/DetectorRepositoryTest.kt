@@ -7,6 +7,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
@@ -39,39 +41,26 @@ class DetectorRepositoryTest {
 
     @Test
     fun `given response body is not null, when fetching data, then model is not null`() = runBlockingTest {
-        coEvery { httpService.getDetectorDataAsync() } returns Response.success(detectorModel)
+        lateinit var response: Response<DetectorModel>
+        coEvery { httpService.getDetectorDataAsync() } returns flowOf(Response.success(detectorModel))
 
-        assertThat(httpService.getDetectorDataAsync().isSuccessful).isTrue()
-        assertThat(detectorRepository.fetchData()).isNotNull()
+        httpService.getDetectorDataAsync().collect { res -> response = res }
+
+        assertThat(response.isSuccessful).isTrue()
+        assertThat(response.body()).isNotNull()
 
         coVerify { httpService.getDetectorDataAsync() }
     }
 
     @Test
     fun `given response body is not null, when fetching data, then model is body`() = runBlockingTest {
-        coEvery { httpService.getDetectorDataAsync() } returns Response.success(detectorModel)
+        lateinit var response: Response<DetectorModel>
+        coEvery { httpService.getDetectorDataAsync() } returns flowOf(Response.success(detectorModel))
 
-        assertThat(httpService.getDetectorDataAsync().isSuccessful).isTrue()
-        assertThat(detectorRepository.fetchData()).isEqualTo(detectorModel)
+        httpService.getDetectorDataAsync().collect { res -> response = res }
 
-        coVerify { httpService.getDetectorDataAsync() }
-    }
-
-    @Test
-    fun `given response body is null, when fetching data, then model is null`() = runBlockingTest {
-        coEvery { httpService.getDetectorDataAsync() } returns Response.success(null)
-
-        assertThat(httpService.getDetectorDataAsync().isSuccessful).isTrue()
-        assertThat(detectorRepository.fetchData()).isNull()
-
-        coVerify { httpService.getDetectorDataAsync() }
-    }
-
-    @Test
-    fun `given exception, when fetching data, then model is null`() = runBlockingTest {
-        coEvery { httpService.getDetectorDataAsync() } throws Throwable()
-
-        assertThat(detectorRepository.fetchData()).isNull()
+        assertThat(response.isSuccessful).isTrue()
+        assertThat(response.body()).isEqualTo(detectorModel)
 
         coVerify { httpService.getDetectorDataAsync() }
     }

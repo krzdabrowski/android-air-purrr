@@ -2,23 +2,30 @@ package com.krzdabrowski.airpurrr.main.current.api
 
 import android.location.Location
 import com.krzdabrowski.airpurrr.BuildConfig
-import retrofit2.HttpException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 
+const val PERIODIC_DATA_REFRESH_INTERVAL = 1000 * 60 * 10L  // 10 minutes
+
 class ApiRepository(private val service: ApiService) {
-    suspend fun fetchData(userLocation: Location): ApiModel? {
-        try {
-            val response = service.getApiDataAsync(BuildConfig.ApiKey, userLocation.latitude, userLocation.longitude)
-            if (response.isSuccessful && response.body() != null) {
-                return ApiAirlyConverter.getData(response)
-            } else {
-                Timber.e("ApiModel error: ${response.code()}")
+    fun fetchDataFlow(userLocation: Location): Flow<ApiModel?> = flow {
+        while (true) {
+            try {
+                service.getApiDataAsync(BuildConfig.ApiKey, userLocation.latitude, userLocation.longitude).collect { response ->
+                    if (response.isSuccessful && response.body() != null) {
+                        emit(ApiAirlyConverter.getData(response))
+                    } else {
+                        Timber.e("ApiModel error: ${response.code()}")
+                    }
+                }
+            } catch (e: Throwable) {
+                Timber.e("API data error: ${e.message}")
+            } finally {
+                delay(PERIODIC_DATA_REFRESH_INTERVAL)
             }
-        } catch (e: HttpException) {
-            Timber.e("API error: $e")
-        } catch (e: Throwable) {
-            Timber.e("API error: $e")
         }
-        return null
     }
 }

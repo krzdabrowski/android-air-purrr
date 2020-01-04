@@ -25,7 +25,7 @@ class BaseModelTest {
     @Before
     fun setUp() {
         activityScenario = launchActivity()
-        model = DetectorModel("", null)
+        model = DetectorModel("", DetectorModel.Values(0.0, 0.0))
     }
 
     @Test

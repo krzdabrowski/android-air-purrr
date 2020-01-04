@@ -1,6 +1,8 @@
 package com.krzdabrowski.airpurrr.main.current.detector
 
 import com.krzdabrowski.airpurrr.BuildConfig
+import kotlinx.coroutines.flow.Flow
+import me.sianaki.flowretrofitadapter.FlowCallAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -10,13 +12,14 @@ import retrofit2.http.*
 interface DetectorDataService {
 
     @GET("static/data.json")
-    suspend fun getDetectorDataAsync(): Response<DetectorModel>
+    fun getDetectorDataAsync(): Flow<Response<DetectorModel>>
 
     companion object {
         fun create(client: OkHttpClient): DetectorDataService {
             return Retrofit.Builder()
                     .client(client)
                     .baseUrl(BuildConfig.BASE_DETECTOR_URL)
+                    .addCallAdapterFactory(FlowCallAdapterFactory.create())
                     .addConverterFactory(MoshiConverterFactory.create())
                     .build()
                     .create(DetectorDataService::class.java)

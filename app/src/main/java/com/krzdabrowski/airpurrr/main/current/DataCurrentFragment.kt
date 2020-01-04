@@ -1,7 +1,6 @@
 package com.krzdabrowski.airpurrr.main.current
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +19,7 @@ class DataCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!!.activity!! })
     private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
     private val baseViewModel: BaseViewModel by viewModel()
-
     private var isRefreshing = false
-    private val fetchingInterval: Long = 1000 * 60 * 10
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentDataCurrentBinding.inflate(inflater, container, false)
@@ -38,32 +35,17 @@ class DataCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fetchNewData()
     }
 
-    private fun getDetectorData() = detectorViewModel.getLiveData().observe(viewLifecycleOwner) { value -> binding.detectorData = value }
+    private fun getDetectorData() = detectorViewModel.liveData.observe(viewLifecycleOwner) { value -> binding.detectorData = value }
 
-    private fun getApiData() = apiViewModel.getLiveData().observe(viewLifecycleOwner) { value -> binding.apiData = value }
+    private fun getApiData() = apiViewModel.liveData.observe(viewLifecycleOwner) { value -> binding.apiData = value }
 
-    private fun getApi() = apiViewModel.userLocation.observe(viewLifecycleOwner) {
-        getApiData()
-        runPeriodicFetching()
-    }
+    private fun getLocation() = apiViewModel.userLocation.observe(viewLifecycleOwner) { getApiData() }
 
     override fun onRefresh() = fetchNewData()
 
     private fun fetchNewData() {
         getDetectorData()
-        getApi()
+        getLocation()
         binding.isRefreshing = false
-    }
-
-    private fun runPeriodicFetching() {
-        val handler = Handler()
-        handler.postDelayed(runnable {
-            fetchNewData()
-            handler.postDelayed(this, fetchingInterval)
-        }, fetchingInterval)
-    }
-
-    private inline fun runnable(crossinline runnableRun: Runnable.() -> Unit) = object : Runnable {
-        override fun run() = runnableRun()
     }
 }

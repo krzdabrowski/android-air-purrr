@@ -2,39 +2,44 @@ package com.krzdabrowski.airpurrr.main.current.detector
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import timber.log.Timber
 
-class DetectorRepository(private val serviceHttp: DetectorDataService, private val serviceHttps: DetectorControlService) {
-    suspend fun fetchData(): DetectorModel? {
-        try {
-            val response = serviceHttp.getDetectorDataAsync()
-            if (response.isSuccessful && response.body() != null) {
-                return response.body()!!
-            } else {
-                Timber.e("DetectorModel error: ${response.code()}")
+const val PERIODIC_DATA_REFRESH_INTERVAL = 1000 * 60L  // 1 minute
+
+class DetectorRepository(private val dataService: DetectorDataService, private val controlService: DetectorControlService) {
+    fun fetchDataFlow(): Flow<DetectorModel?> = flow {
+        while (true) {
+            try {
+                dataService.getDetectorDataAsync().collect { response ->
+                    if (response.isSuccessful && response.body() != null) {
+                        emit(response.body())
+                    } else {
+                        Timber.e("DetectorModel error: ${response.code()}")
+                    }
+                }
+            } catch (e: Throwable) {
+                Timber.e("DetectorRepository data error: ${e.message}")
+            } finally {
+                delay(PERIODIC_DATA_REFRESH_INTERVAL)
             }
-        } catch (e: HttpException) {
-            Timber.d("HTTP error: ${e.message()}")
-        } catch (e: Throwable) {
-            Timber.d("HTTP common error: ${e.message}")
         }
-        return null
     }
 
     fun controlFanOnOff(shouldTurnOn: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (shouldTurnOn) {
-                    serviceHttps.controlTurningFanOnOffAsync("on")
+                    controlService.controlTurningFanOnOffAsync("on")
                 } else {
-                    serviceHttps.controlTurningFanOnOffAsync("off")
+                    controlService.controlTurningFanOnOffAsync("off")
                 }
-            } catch (e: HttpException) {
-                Timber.d("HTTPS error: ${e.message()}")
             } catch (e: Throwable) {
-                Timber.d("HTTPS common error: ${e.message}")
+                Timber.e("DetectorRepository onOff error: ${e.message}")
             }
         }
     }
@@ -43,14 +48,12 @@ class DetectorRepository(private val serviceHttp: DetectorDataService, private v
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 if (shouldSwitchToHigh) {
-                    serviceHttps.controlFanHighLowModeAsync("high")
+                    controlService.controlFanHighLowModeAsync("high")
                 } else {
-                    serviceHttps.controlFanHighLowModeAsync("low")
+                    controlService.controlFanHighLowModeAsync("low")
                 }
-            } catch (e: HttpException) {
-                Timber.d("HTTPS error: ${e.message()}")
             } catch (e: Throwable) {
-                Timber.d("HTTPS common error: ${e.message}")
+                Timber.e("DetectorRepository highLow error: ${e.message}")
             }
         }
     }

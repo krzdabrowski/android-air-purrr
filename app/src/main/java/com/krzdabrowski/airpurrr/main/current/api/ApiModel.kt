@@ -17,20 +17,18 @@ data class ApiModel(val current: Values?, @Transient val data: Pair<Double, Doub
     }
 
     override fun getDataUgm3(context: Context, type: String): String {
-        if (type == "PM2.5") {
-            return context.getString(R.string.main_data_ugm3, data.first)
-        } else if (type == "PM10") {
-            return context.getString(R.string.main_data_ugm3, data.second)
+        return when (type) {
+            "PM2.5" -> context.getString(R.string.main_data_ugm3, data.first)
+            "PM10" -> context.getString(R.string.main_data_ugm3, data.second)
+            else -> ""
         }
-        return ""
     }
 
     override fun getPercentageDouble(type: String): Double {
-        if (type == "PM2.5") {
-            return Conversion.pm25ToPercent(data.first)
-        } else if (type == "PM10") {
-            return Conversion.pm10ToPercent(data.second)
+        return when (type) {
+            "PM2.5" -> Conversion.pm25ToPercent(data.first)
+            "PM10" -> Conversion.pm10ToPercent(data.second)
+            else -> 0.0
         }
-        return 0.0
     }
 }
