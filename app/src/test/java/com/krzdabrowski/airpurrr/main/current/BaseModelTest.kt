@@ -5,8 +5,9 @@ import androidx.test.core.app.launchActivity
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.MainActivity
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorModel
+import com.krzdabrowski.airpurrr.main.BaseModel
+import com.krzdabrowski.airpurrr.main.core.MainActivity
+import com.krzdabrowski.airpurrr.main.detector.DetectorModel
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -82,4 +82,17 @@
         <item name="android:layout_marginBottom">@dimen/margin_tiny</item>
         <item name="android:textSize">@dimen/main_data_text_size_ugm3</item>
     </style>
+
+    <style name="Main.Data.Chart">
+        <item name="android:layout_margin">@dimen/margin_tiny</item>
+        <item name="chart_axis">xy</item>
+        <item name="chart_labelsColor">#ffffff</item>
+        <item name="chart_labelsSize">10sp</item>
+        <item name="chart_lineColor">#ffffff</item>
+        <item name="chart_lineThickness">3dp</item>
+        <item name="chart_smoothLine">true</item>
+
+    </style>
+<!--    <item name="chart_labelsFont">@font/open_sans_bold</item>-->
+
 </resources>

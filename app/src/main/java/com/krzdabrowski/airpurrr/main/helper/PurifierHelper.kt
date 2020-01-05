@@ -1,8 +1,8 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.helper
 
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorModel
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class PurifierHelper(private val detectorViewModel: DetectorViewModel) {

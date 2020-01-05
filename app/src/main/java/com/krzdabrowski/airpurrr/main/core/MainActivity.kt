@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.core
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -6,7 +6,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {

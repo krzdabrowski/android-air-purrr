@@ -9,11 +9,11 @@
 
         <variable
             name="baseVm"
-            type="com.krzdabrowski.airpurrr.main.current.BaseViewModel" />
+            type="com.krzdabrowski.airpurrr.main.BaseViewModel" />
 
         <variable
             name="data"
-            type="com.krzdabrowski.airpurrr.main.current.BaseModel" />
+            type="com.krzdabrowski.airpurrr.main.BaseModel" />
 
         <variable
             name="type"
@@ -21,7 +21,7 @@
     </data>
 
     <RelativeLayout
-        android:id="@+id/layout_main_data"
+        android:id="@+id/layout_current_data"
         style="@style/Main.Data.InnerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

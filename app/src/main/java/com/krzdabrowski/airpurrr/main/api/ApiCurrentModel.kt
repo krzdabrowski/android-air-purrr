@@ -1,12 +1,12 @@
-package com.krzdabrowski.airpurrr.main.current.api
+package com.krzdabrowski.airpurrr.main.api
 
 import android.content.Context
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.Conversion
-import com.krzdabrowski.airpurrr.main.current.BaseModel
+import com.krzdabrowski.airpurrr.main.helper.ConversionHelper
+import com.krzdabrowski.airpurrr.main.BaseModel
 
-data class ApiModel(val current: Values?, @Transient val data: Pair<Double, Double>) : BaseModel() {
-    data class Values(var values: MutableList<Map<String?, Any?>?>?)
+data class ApiCurrentModel(@Transient val result: Pair<Double, Double>) : BaseModel() {
+    data class Data(val values: List<Map<String?, Any?>?>?)
 
     override fun getSource(context: Context): String {
         return context.getString(R.string.main_data_info_api) ?: context.getString(R.string.main_data_info_api_empty)
@@ -18,16 +18,16 @@ data class ApiModel(val current: Values?, @Transient val data: Pair<Double, Doub
 
     override fun getDataUgm3(context: Context, type: String): String {
         return when (type) {
-            "PM2.5" -> context.getString(R.string.main_data_ugm3, data.first)
-            "PM10" -> context.getString(R.string.main_data_ugm3, data.second)
+            "PM2.5" -> context.getString(R.string.main_data_ugm3, result.first)
+            "PM10" -> context.getString(R.string.main_data_ugm3, result.second)
             else -> ""
         }
     }
 
     override fun getPercentageDouble(type: String): Double {
         return when (type) {
-            "PM2.5" -> Conversion.pm25ToPercent(data.first)
-            "PM10" -> Conversion.pm10ToPercent(data.second)
+            "PM2.5" -> ConversionHelper.pm25ToPercent(result.first)
+            "PM10" -> ConversionHelper.pm10ToPercent(result.second)
             else -> 0.0
         }
     }

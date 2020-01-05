@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.core
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -12,8 +12,10 @@ import androidx.lifecycle.observe
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.current.api.ApiViewModel
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.BaseViewModel
+import com.krzdabrowski.airpurrr.main.api.ApiViewModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import com.krzdabrowski.airpurrr.settings.SettingsFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.inject
@@ -23,6 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val apiViewModel: ApiViewModel by viewModel()
+    private val baseViewModel: BaseViewModel by viewModel()
     private val purifierHelper: PurifierHelper by inject()
     private val permissionResultCodeLocation = 100
 

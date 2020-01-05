@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current.api
+package com.krzdabrowski.airpurrr.main.detector
 
 import com.krzdabrowski.airpurrr.BuildConfig
 import kotlinx.coroutines.flow.Flow
@@ -7,24 +7,22 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import retrofit2.http.*
 
-interface ApiService {
+interface DetectorDataService {
 
-    @GET("v2/measurements/point")
-    fun getApiDataAsync(@Header("apikey") apikey: String, @Query("lat") userLat: Double, @Query("lng") userLon: Double): Flow<Response<ApiModel>>
+    @GET("static/data.json")
+    fun getDetectorDataAsync(): Flow<Response<DetectorModel>>
 
     companion object {
-        fun create(client: OkHttpClient): ApiService {
+        fun create(client: OkHttpClient): DetectorDataService {
             return Retrofit.Builder()
                     .client(client)
-                    .baseUrl(BuildConfig.BASE_API_URL)
+                    .baseUrl(BuildConfig.BASE_DETECTOR_URL)
                     .addCallAdapterFactory(FlowCallAdapterFactory.create())
                     .addConverterFactory(MoshiConverterFactory.create())
                     .build()
-                    .create(ApiService::class.java)
+                    .create(DetectorDataService::class.java)
         }
     }
 }

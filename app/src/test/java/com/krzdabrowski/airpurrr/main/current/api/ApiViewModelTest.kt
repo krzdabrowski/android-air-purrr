@@ -3,6 +3,9 @@ package com.krzdabrowski.airpurrr.main.current.api
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import com.google.common.truth.Truth.assertThat
+import com.krzdabrowski.airpurrr.main.api.ApiCurrentModel
+import com.krzdabrowski.airpurrr.main.api.ApiRepository
+import com.krzdabrowski.airpurrr.main.api.ApiViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -28,7 +31,7 @@ class ApiViewModelTest {
     private lateinit var apiRepository: ApiRepository
 
     @MockK
-    private lateinit var apiModel: ApiModel
+    private lateinit var apiCurrentModel: ApiCurrentModel
 
     @get:Rule
     val aacSyncRule = InstantTaskExecutorRule()
@@ -38,7 +41,7 @@ class ApiViewModelTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
 
-        coEvery { apiRepository.fetchDataFlow(any()) } returns flowOf(apiModel)
+        coEvery { apiRepository.fetchDataFlow(any()) } returns flowOf(apiCurrentModel)
 
         apiViewModel = ApiViewModel(apiRepository)
         apiViewModel.liveData.observeForever {}
@@ -52,10 +55,10 @@ class ApiViewModelTest {
 
     @Test
     fun `when fetching data successfully, then proper data is saved`() = runBlockingTest {
-        coEvery { apiRepository.fetchDataFlow(any()).asLiveData().value } returns apiModel
+        coEvery { apiRepository.fetchDataFlow(any()).asLiveData().value } returns apiCurrentModel
 
         coVerify { apiRepository.fetchDataFlow(any()).asLiveData() }
 
-        assertThat(apiViewModel.liveData.value).isEqualTo(apiModel)
+        assertThat(apiViewModel.liveData.value).isEqualTo(apiCurrentModel)
     }
 }

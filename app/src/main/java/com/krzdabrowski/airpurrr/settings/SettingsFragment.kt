@@ -16,8 +16,8 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.PurifierHelper
-import com.krzdabrowski.airpurrr.main.current.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
+import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber

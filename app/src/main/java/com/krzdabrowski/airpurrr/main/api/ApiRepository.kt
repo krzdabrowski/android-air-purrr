@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current.api
+package com.krzdabrowski.airpurrr.main.api
 
 import android.location.Location
 import com.krzdabrowski.airpurrr.BuildConfig
@@ -11,7 +11,7 @@ import timber.log.Timber
 const val PERIODIC_DATA_REFRESH_INTERVAL = 1000 * 60 * 10L  // 10 minutes
 
 class ApiRepository(private val service: ApiService) {
-    fun fetchDataFlow(userLocation: Location): Flow<ApiModel?> = flow {
+    fun fetchDataFlow(userLocation: Location): Flow<Pair<ApiCurrentModel, ApiForecastModel>> = flow {
         while (true) {
             try {
                 service.getApiDataAsync(BuildConfig.ApiKey, userLocation.latitude, userLocation.longitude).collect { response ->

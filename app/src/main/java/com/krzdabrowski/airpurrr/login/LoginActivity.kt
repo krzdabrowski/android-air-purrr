@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
 import com.krzdabrowski.airpurrr.databinding.ActivityLoginBinding
-import com.krzdabrowski.airpurrr.main.MainActivity
+import com.krzdabrowski.airpurrr.main.core.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity(), LoginBiometricHelper.OnSuccessCallback {

@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current.detector
+package com.krzdabrowski.airpurrr.main.detector
 
 import com.krzdabrowski.airpurrr.BuildConfig
 import okhttp3.OkHttpClient

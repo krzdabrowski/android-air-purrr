@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="baseVm"
+            type="com.krzdabrowski.airpurrr.main.BaseViewModel" />
+
+        <variable
+            name="detectorData"
+            type="com.krzdabrowski.airpurrr.main.detector.DetectorModel" />
+
+        <variable
+            name="apiData"
+            type="com.krzdabrowski.airpurrr.main.api.ApiCurrentModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            style="@style/Main.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:weightSum="2">
+
+                <include
+                    android:id="@+id/partial_forecast_pm25"
+                    style="@style/Main.Data.OuterLayout"
+                    layout="@layout/partial_forecast_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:baseVm="@{baseVm}"
+                    app:data="@{baseVm.flagDetectorApi ? apiData : detectorData}"
+                    app:type="@{@string/main_data_info_pm25}" />
+
+                <include
+                    android:id="@+id/partial_forecast_pm10"
+                    style="@style/Main.Data.OuterLayout"
+                    layout="@layout/partial_forecast_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:baseVm="@{baseVm}"
+                    app:data="@{baseVm.flagDetectorApi ? apiData : detectorData}"
+                    app:type="@{@string/main_data_info_pm10}" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</layout>

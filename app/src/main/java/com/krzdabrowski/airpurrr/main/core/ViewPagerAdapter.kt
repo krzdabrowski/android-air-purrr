@@ -1,20 +1,20 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.core
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.current.DataCurrentFragment
-import com.krzdabrowski.airpurrr.main.forecast.DataForecastFragment
+import com.krzdabrowski.airpurrr.main.CurrentFragment
+import com.krzdabrowski.airpurrr.main.ForecastFragment
 
 class ViewPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val viewPagerTabSize = 2
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> DataCurrentFragment()
-            else -> DataForecastFragment()
+            0 -> CurrentFragment()
+            else -> ForecastFragment()
         }
     }
 

@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current
+package com.krzdabrowski.airpurrr.main
 
 import android.content.Context
 import android.graphics.drawable.Drawable

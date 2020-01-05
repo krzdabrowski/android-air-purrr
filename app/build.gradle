@@ -96,6 +96,7 @@ dependencies {
     implementation thirdPartyDependencies.timber
     implementation thirdPartyDependencies.koin
     implementation thirdPartyDependencies.koinViewmodel
+    implementation thirdPartyDependencies.williamChart
     debugImplementation thirdPartyDependencies.leakCanary
     // endregion
 

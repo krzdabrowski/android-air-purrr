@@ -4,6 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.Observable
 import androidx.lifecycle.asLiveData
 import com.google.common.truth.Truth.assertThat
+import com.krzdabrowski.airpurrr.main.detector.DetectorModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorRepository
+import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers

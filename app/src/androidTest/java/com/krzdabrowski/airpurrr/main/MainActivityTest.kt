@@ -15,6 +15,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.rule.GrantPermissionRule
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.login.LoginActivity
+import com.krzdabrowski.airpurrr.main.core.MainActivity
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

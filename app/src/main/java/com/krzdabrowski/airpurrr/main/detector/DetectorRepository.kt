@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current.detector
+package com.krzdabrowski.airpurrr.main.detector
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

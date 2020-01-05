@@ -1,9 +1,9 @@
-package com.krzdabrowski.airpurrr.main.current.detector
+package com.krzdabrowski.airpurrr.main.detector
 
 import android.content.Context
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.Conversion
-import com.krzdabrowski.airpurrr.main.current.BaseModel
+import com.krzdabrowski.airpurrr.main.helper.ConversionHelper
+import com.krzdabrowski.airpurrr.main.BaseModel
 
 data class DetectorModel(val workstate: String, val values: Values) : BaseModel() {
     data class Values(val pm25: Double, val pm10: Double)
@@ -26,8 +26,8 @@ data class DetectorModel(val workstate: String, val values: Values) : BaseModel(
 
     override fun getPercentageDouble(type: String): Double {
         return when (type) {
-            "PM2.5" -> Conversion.pm25ToPercent(values.pm25)
-            "PM10" -> Conversion.pm10ToPercent(values.pm10)
+            "PM2.5" -> ConversionHelper.pm25ToPercent(values.pm25)
+            "PM10" -> ConversionHelper.pm10ToPercent(values.pm10)
             else -> 0.0
         }
     }

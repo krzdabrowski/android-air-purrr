@@ -1,6 +1,8 @@
 package com.krzdabrowski.airpurrr.main.current.api
 
 import com.google.common.truth.Truth.assertThat
+import com.krzdabrowski.airpurrr.main.api.ApiAirlyConverter
+import com.krzdabrowski.airpurrr.main.api.ApiCurrentModel
 import org.junit.Test
 import retrofit2.Response
 
@@ -9,8 +11,8 @@ class ApiAirlyConverterTest {
 
     @Test
     fun `given currently correct API input as model, then return converted model with data`() {
-        val model = ApiModel(
-                ApiModel.Values(
+        val model = ApiCurrentModel(
+                ApiCurrentModel.Data(
                         mutableListOf(
                                 mapOf(Pair("name", "PM1"), Pair("value", 2.5), Pair(null, "")),
                                 mapOf(Pair("name", "PM25"), Pair("value", 5.0), Pair(null, "")),
@@ -27,8 +29,8 @@ class ApiAirlyConverterTest {
 
     @Test
     fun `given currently incorrect API input as model, then return converted model with zeroes`() {
-        val model = ApiModel(
-                ApiModel.Values(
+        val model = ApiCurrentModel(
+                ApiCurrentModel.Data(
                         mutableListOf(
                                 mapOf(Pair("name", "PM1"), Pair("value", 2.5), Pair(null, "")),
                                 mapOf(Pair("name", "something else"), Pair("value", 5.0), Pair(null, "")),

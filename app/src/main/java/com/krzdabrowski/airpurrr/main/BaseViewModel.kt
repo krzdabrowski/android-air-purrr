@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current
+package com.krzdabrowski.airpurrr.main
 
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
