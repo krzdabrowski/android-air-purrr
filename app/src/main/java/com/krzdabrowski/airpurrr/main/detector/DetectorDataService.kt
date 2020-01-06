@@ -12,7 +12,7 @@ import retrofit2.http.*
 interface DetectorDataService {
 
     @GET("static/data.json")
-    fun getDetectorDataAsync(): Flow<Response<DetectorModel>>
+    fun getDetectorDataAsync(): Flow<Response<DetectorCurrentModel>>
 
     companion object {
         fun create(client: OkHttpClient): DetectorDataService {

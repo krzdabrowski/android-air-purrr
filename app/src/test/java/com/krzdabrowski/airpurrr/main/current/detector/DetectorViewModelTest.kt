@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.Observable
 import androidx.lifecycle.asLiveData
 import com.google.common.truth.Truth.assertThat
-import com.krzdabrowski.airpurrr.main.detector.DetectorModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel
 import com.krzdabrowski.airpurrr.main.detector.DetectorRepository
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import io.mockk.*
@@ -36,7 +36,7 @@ class DetectorViewModelTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
 
-        val model = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))
+        val model = DetectorCurrentModel("WorkStates.Sleeping", DetectorCurrentModel.Data(5.0, 7.5))
         coEvery { detectorRepository.fetchDataFlow() } returns flowOf(model)
 
         detectorViewModel = DetectorViewModel(detectorRepository)
@@ -51,7 +51,7 @@ class DetectorViewModelTest {
 
     @Test
     fun `when fetching data successfully, then proper data is saved`() = runBlockingTest {
-        val model = DetectorModel("WorkStates.Sleeping", DetectorModel.Values(5.0, 7.5))
+        val model = DetectorCurrentModel("WorkStates.Sleeping", DetectorCurrentModel.Data(5.0, 7.5))
         coEvery { detectorRepository.fetchDataFlow().asLiveData().value } returns model
 
         coVerify { detectorRepository.fetchDataFlow().asLiveData() }

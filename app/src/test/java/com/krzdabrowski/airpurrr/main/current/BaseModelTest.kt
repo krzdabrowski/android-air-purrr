@@ -5,9 +5,8 @@ import androidx.test.core.app.launchActivity
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.BaseModel
 import com.krzdabrowski.airpurrr.main.core.MainActivity
-import com.krzdabrowski.airpurrr.main.detector.DetectorModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,7 +25,7 @@ class BaseModelTest {
     @Before
     fun setUp() {
         activityScenario = launchActivity()
-        model = DetectorModel("", DetectorModel.Values(0.0, 0.0))
+        model = DetectorCurrentModel("", DetectorCurrentModel.Data(0.0, 0.0))
     }
 
     @Test

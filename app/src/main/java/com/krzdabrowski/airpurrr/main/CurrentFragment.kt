@@ -35,7 +35,7 @@ class CurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun getDetectorData() = detectorViewModel.liveData.observe(viewLifecycleOwner) { value -> binding.detectorData = value }
 
-    private fun getApiData() = apiViewModel.liveData.observe(viewLifecycleOwner) {  }
+    private fun getApiData() = apiViewModel.liveData.observe(viewLifecycleOwner) { value -> binding.apiData = value.first }
 
     private fun getLocation() = apiViewModel.userLocation.observe(viewLifecycleOwner) { getApiData() }
 

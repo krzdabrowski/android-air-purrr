@@ -9,11 +9,11 @@
 
         <variable
             name="detectorData"
-            type="com.krzdabrowski.airpurrr.main.detector.DetectorModel" />
+            type="com.krzdabrowski.airpurrr.main.detector.DetectorForecastModel" />
 
         <variable
             name="apiData"
-            type="com.krzdabrowski.airpurrr.main.api.ApiCurrentModel" />
+            type="com.krzdabrowski.airpurrr.main.api.ApiForecastModel" />
     </data>
 
     <LinearLayout
@@ -27,6 +27,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/forecast_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:baselineAligned="false"

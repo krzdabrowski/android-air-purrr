@@ -12,7 +12,7 @@ import timber.log.Timber
 const val PERIODIC_DATA_REFRESH_INTERVAL = 1000 * 60L  // 1 minute
 
 class DetectorRepository(private val dataService: DetectorDataService, private val controlService: DetectorControlService) {
-    fun fetchDataFlow(): Flow<DetectorModel?> = flow {
+    fun fetchDataFlow(): Flow<DetectorCurrentModel?> = flow {
         while (true) {
             try {
                 dataService.getDetectorDataAsync().collect { response ->

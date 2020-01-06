@@ -2,11 +2,13 @@ package com.krzdabrowski.airpurrr.main.api
 
 import android.content.Context
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.main.BaseCurrentModel
 import com.krzdabrowski.airpurrr.main.helper.ConversionHelper
-import com.krzdabrowski.airpurrr.main.BaseModel
 
-data class ApiCurrentModel(@Transient val result: Pair<Double, Double>) : BaseModel() {
-    data class Data(val values: List<Map<String?, Any?>?>?)
+data class ApiCurrentModel(@Transient val result: Pair<Double, Double>) : BaseCurrentModel() {
+    data class Data(
+            val values: List<Map<String?, Any?>?>?
+    )
 
     override fun getSource(context: Context): String {
         return context.getString(R.string.main_data_info_api) ?: context.getString(R.string.main_data_info_api_empty)

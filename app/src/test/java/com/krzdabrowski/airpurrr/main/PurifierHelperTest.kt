@@ -1,6 +1,6 @@
 package com.krzdabrowski.airpurrr.main
 
-import com.krzdabrowski.airpurrr.main.detector.DetectorModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import io.mockk.*
@@ -16,7 +16,7 @@ class PurifierHelperTest {
     private lateinit var detectorViewModel: DetectorViewModel
 
     @MockK
-    private lateinit var detectorModel: DetectorModel
+    private lateinit var detectorCurrentModel: DetectorCurrentModel
 
     @MockK
     private lateinit var listener: PurifierHelper.SnackbarListener
@@ -34,27 +34,27 @@ class PurifierHelperTest {
 
     @Test
     fun `when purifier state is in sleeping mode, then purifier can be controlled with new state`(){
-        every { detectorModel.workstate } returns "WorkStates.Sleeping"
+        every { detectorCurrentModel.workstate } returns "WorkStates.Sleeping"
 
-        purifierHelper.getPurifierOnOffState(detectorModel, currentState)
+        purifierHelper.getPurifierOnOffState(detectorCurrentModel, currentState)
 
         verify { detectorViewModel.controlFanOnOff(!currentState) }
     }
 
     @Test
     fun `when purifier state is in measuring mode, then purifier can't be controlled`(){
-        every { detectorModel.workstate } returns "WorkStates.Measuring"
+        every { detectorCurrentModel.workstate } returns "WorkStates.Measuring"
 
-        purifierHelper.getPurifierOnOffState(detectorModel, currentState)
+        purifierHelper.getPurifierOnOffState(detectorCurrentModel, currentState)
 
         verify (exactly = 0) { detectorViewModel.controlFanOnOff(!currentState) }
     }
 
     @Test
     fun `when purifier state is in undefined mode, then purifier can't be controlled`(){
-        every { detectorModel.workstate } returns ""
+        every { detectorCurrentModel.workstate } returns ""
 
-        purifierHelper.getPurifierOnOffState(detectorModel, currentState)
+        purifierHelper.getPurifierOnOffState(detectorCurrentModel, currentState)
 
         verify (exactly = 0) { detectorViewModel.controlFanOnOff(!currentState) }
     }

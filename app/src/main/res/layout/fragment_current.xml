@@ -9,7 +9,7 @@
 
         <variable
             name="detectorData"
-            type="com.krzdabrowski.airpurrr.main.detector.DetectorModel" />
+            type="com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel" />
 
         <variable
             name="apiData"

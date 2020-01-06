@@ -3,7 +3,7 @@ package com.krzdabrowski.airpurrr.main.current.detector
 import com.google.common.truth.Truth.assertThat
 import com.krzdabrowski.airpurrr.main.detector.DetectorControlService
 import com.krzdabrowski.airpurrr.main.detector.DetectorDataService
-import com.krzdabrowski.airpurrr.main.detector.DetectorModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel
 import com.krzdabrowski.airpurrr.main.detector.DetectorRepository
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
@@ -30,7 +30,7 @@ class DetectorRepositoryTest {
     private lateinit var httpsService: DetectorControlService
 
     @MockK
-    private lateinit var detectorModel: DetectorModel
+    private lateinit var detectorCurrentModel: DetectorCurrentModel
 
     @Before
     fun setUp() {
@@ -45,8 +45,8 @@ class DetectorRepositoryTest {
 
     @Test
     fun `given response body is not null, when fetching data, then model is not null`() = runBlockingTest {
-        lateinit var response: Response<DetectorModel>
-        coEvery { httpService.getDetectorDataAsync() } returns flowOf(Response.success(detectorModel))
+        lateinit var response: Response<DetectorCurrentModel>
+        coEvery { httpService.getDetectorDataAsync() } returns flowOf(Response.success(detectorCurrentModel))
 
         httpService.getDetectorDataAsync().collect { res -> response = res }
 
@@ -58,13 +58,13 @@ class DetectorRepositoryTest {
 
     @Test
     fun `given response body is not null, when fetching data, then model is body`() = runBlockingTest {
-        lateinit var response: Response<DetectorModel>
-        coEvery { httpService.getDetectorDataAsync() } returns flowOf(Response.success(detectorModel))
+        lateinit var response: Response<DetectorCurrentModel>
+        coEvery { httpService.getDetectorDataAsync() } returns flowOf(Response.success(detectorCurrentModel))
 
         httpService.getDetectorDataAsync().collect { res -> response = res }
 
         assertThat(response.isSuccessful).isTrue()
-        assertThat(response.body()).isEqualTo(detectorModel)
+        assertThat(response.body()).isEqualTo(detectorCurrentModel)
 
         coVerify { httpService.getDetectorDataAsync() }
     }

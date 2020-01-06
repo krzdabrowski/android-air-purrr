@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.res.ResourcesCompat
 import com.krzdabrowski.airpurrr.R
 
-abstract class BaseModel {
+abstract class BaseCurrentModel {
     abstract fun getSource(context: Context): String
 
     abstract fun getDataPercentage(context: Context, type: String): String

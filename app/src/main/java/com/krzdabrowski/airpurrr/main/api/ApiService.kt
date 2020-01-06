@@ -15,7 +15,7 @@ interface ApiService {
 
     @GET("v2/measurements/point")
     fun getApiDataAsync(@Header("apikey") apikey: String, @Query("lat") userLat: Double, @Query("lng") userLon: Double):
-            Flow<Response<ApiBaseModel>>
+            Flow<Response<ApiModel>>
 
     companion object {
         fun create(client: OkHttpClient): ApiService {
@@ -29,3 +29,5 @@ interface ApiService {
         }
     }
 }
+
+data class ApiModel(val current: ApiCurrentModel.Data?, val forecast: List<ApiForecastModel.Data?>?)

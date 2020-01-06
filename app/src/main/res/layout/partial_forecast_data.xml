@@ -13,7 +13,7 @@
 
         <variable
             name="data"
-            type="com.krzdabrowski.airpurrr.main.BaseModel" />
+            type="com.krzdabrowski.airpurrr.main.BaseForecastModel" />
 
         <variable
             name="type"
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@{data.getBackgroundColorDrawable(context, data.getPercentageDouble(type)) ?? @drawable/data_unavailable}"
+        android:background="@drawable/data_unavailable"
         android:onClick="@{() -> baseVm.onDataClick()}">
 
         <LinearLayout

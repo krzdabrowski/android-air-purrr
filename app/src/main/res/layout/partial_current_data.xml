@@ -13,7 +13,7 @@
 
         <variable
             name="data"
-            type="com.krzdabrowski.airpurrr.main.BaseModel" />
+            type="com.krzdabrowski.airpurrr.main.BaseCurrentModel" />
 
         <variable
             name="type"

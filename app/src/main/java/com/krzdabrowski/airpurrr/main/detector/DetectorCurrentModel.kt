@@ -2,11 +2,14 @@ package com.krzdabrowski.airpurrr.main.detector
 
 import android.content.Context
 import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.main.BaseCurrentModel
 import com.krzdabrowski.airpurrr.main.helper.ConversionHelper
-import com.krzdabrowski.airpurrr.main.BaseModel
 
-data class DetectorModel(val workstate: String, val values: Values) : BaseModel() {
-    data class Values(val pm25: Double, val pm10: Double)
+data class DetectorCurrentModel(val workstate: String, val values: Data) : BaseCurrentModel() {
+    data class Data(
+            val pm25: Double,
+            val pm10: Double
+    )
 
     override fun getSource(context: Context): String {
         return context.getString(R.string.main_data_info_indoors)
