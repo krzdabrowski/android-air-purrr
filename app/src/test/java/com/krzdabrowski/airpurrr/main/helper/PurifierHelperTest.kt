@@ -1,8 +1,7 @@
-package com.krzdabrowski.airpurrr.main
+package com.krzdabrowski.airpurrr.main.helper
 
 import com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
-import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import org.junit.Before

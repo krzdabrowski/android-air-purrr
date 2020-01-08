@@ -15,4 +15,7 @@
     <color name="color_main_data_lime">#afb42b</color>
     <color name="color_main_data_yellow">#fbc02d</color>
     <color name="color_main_data_red">#d32f2f</color>
+
+    <color name="color_main_data_chart_label">#ffffff</color>
+    <color name="color_main_data_chart_line">#ffffff</color>
 </resources>

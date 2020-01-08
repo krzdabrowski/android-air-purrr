@@ -1,10 +1,6 @@
-package com.krzdabrowski.airpurrr.main.current.detector
+package com.krzdabrowski.airpurrr.main.detector
 
 import com.google.common.truth.Truth.assertThat
-import com.krzdabrowski.airpurrr.main.detector.DetectorControlService
-import com.krzdabrowski.airpurrr.main.detector.DetectorDataService
-import com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel
-import com.krzdabrowski.airpurrr.main.detector.DetectorRepository
 import io.mockk.MockKAnnotations
 import io.mockk.clearAllMocks
 import io.mockk.coEvery

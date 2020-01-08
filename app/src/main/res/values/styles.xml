@@ -86,13 +86,11 @@
     <style name="Main.Data.Chart">
         <item name="android:layout_margin">@dimen/margin_tiny</item>
         <item name="chart_axis">xy</item>
-        <item name="chart_labelsColor">#ffffff</item>
-        <item name="chart_labelsSize">10sp</item>
-        <item name="chart_lineColor">#ffffff</item>
-        <item name="chart_lineThickness">3dp</item>
+        <item name="chart_labelsColor">@color/color_main_data_chart_label</item>
+        <item name="chart_labelsSize">@dimen/margin_main_data_chart_labels_size</item>
+        <item name="chart_lineColor">@color/color_main_data_chart_line</item>
+        <item name="chart_lineThickness">@dimen/margin_main_data_chart_line_thickness</item>
         <item name="chart_smoothLine">true</item>
-
     </style>
-<!--    <item name="chart_labelsFont">@font/open_sans_bold</item>-->
 
 </resources>

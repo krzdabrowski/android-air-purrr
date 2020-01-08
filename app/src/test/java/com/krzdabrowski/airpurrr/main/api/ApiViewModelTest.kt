@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current.api
+package com.krzdabrowski.airpurrr.main.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
@@ -33,6 +33,9 @@ class ApiViewModelTest {
     @MockK
     private lateinit var apiCurrentModel: ApiCurrentModel
 
+    @MockK
+    private lateinit var apiForecastModel: ApiForecastModel
+
     @get:Rule
     val aacSyncRule = InstantTaskExecutorRule()
 
@@ -41,7 +44,7 @@ class ApiViewModelTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
 
-        coEvery { apiRepository.fetchDataFlow(any()) } returns flowOf(apiCurrentModel)
+        coEvery { apiRepository.fetchDataFlow(any()) } returns flowOf(Pair(apiCurrentModel, apiForecastModel))
 
         apiViewModel = ApiViewModel(apiRepository)
         apiViewModel.liveData.observeForever {}
@@ -55,10 +58,12 @@ class ApiViewModelTest {
 
     @Test
     fun `when fetching data successfully, then proper data is saved`() = runBlockingTest {
-        coEvery { apiRepository.fetchDataFlow(any()).asLiveData().value } returns apiCurrentModel
+        coEvery { apiRepository.fetchDataFlow(any()).asLiveData().value?.first } returns apiCurrentModel
+        coEvery { apiRepository.fetchDataFlow(any()).asLiveData().value?.second } returns apiForecastModel
 
         coVerify { apiRepository.fetchDataFlow(any()).asLiveData() }
 
-        assertThat(apiViewModel.liveData.value).isEqualTo(apiCurrentModel)
+        assertThat(apiViewModel.liveData.value!!.first).isEqualTo(apiCurrentModel)
+        assertThat(apiViewModel.liveData.value!!.second).isEqualTo(apiForecastModel)
     }
 }

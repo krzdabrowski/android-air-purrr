@@ -55,7 +55,8 @@ class CurrentFragmentTest {
         // Verify that API data tile is shown
         onView(allOf(
                 withId(R.id.ic_airly_logo),
-                hasSibling(withText(R.string.main_data_info_pm25))
+                hasSibling(withText(R.string.main_data_info_pm25)),
+                withParent(withId(R.id.layout_current_data_top))
         ))
             .check(matches(isDisplayed()))
     }
@@ -69,7 +70,8 @@ class CurrentFragmentTest {
         // Verify that API data tile is shown
         onView(allOf(
                 withId(R.id.ic_airly_logo),
-                hasSibling(withText(R.string.main_data_info_pm10))
+                hasSibling(withText(R.string.main_data_info_pm10)),
+                withParent(withId(R.id.layout_current_data_top))
         ))
             .check(matches(isDisplayed()))
     }
@@ -87,7 +89,8 @@ class CurrentFragmentTest {
         // Verify that detector data tile is shown
         onView(allOf(
                 withText(R.string.main_data_info_indoors),
-                hasSibling(withText(R.string.main_data_info_pm25))
+                hasSibling(withText(R.string.main_data_info_pm25)),
+                withParent(withId(R.id.layout_current_data_top))
         ))
                 .check(matches(isDisplayed()))
     }
@@ -105,7 +108,8 @@ class CurrentFragmentTest {
         // Verify that detector data tile is shown
         onView(allOf(
                 withText(R.string.main_data_info_indoors),
-                hasSibling(withText(R.string.main_data_info_pm10))
+                hasSibling(withText(R.string.main_data_info_pm10)),
+                withParent(withId(R.id.layout_current_data_top))
         ))
                 .check(matches(isDisplayed()))
     }
@@ -123,13 +127,15 @@ class CurrentFragmentTest {
         // Verify that both tiles are detector ones again
         onView(allOf(
                 withText(R.string.main_data_info_indoors),
-                hasSibling(withText(R.string.main_data_info_pm25))
+                hasSibling(withText(R.string.main_data_info_pm25)),
+                withParent(withId(R.id.layout_current_data_top))
         ))
                 .check(matches(isDisplayed()))
 
         onView(allOf(
                 withText(R.string.main_data_info_indoors),
-                hasSibling(withText(R.string.main_data_info_pm10))
+                hasSibling(withText(R.string.main_data_info_pm10)),
+                withParent(withId(R.id.layout_current_data_top))
         ))
                 .check(matches(isDisplayed()))
     }

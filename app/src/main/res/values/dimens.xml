@@ -22,4 +22,6 @@
     <dimen name="margin_xl">48dp</dimen>
 
     <dimen name="zero">0dp</dimen>
+    <dimen name="margin_main_data_chart_line_thickness">3dp</dimen>
+    <dimen name="margin_main_data_chart_labels_size">10sp</dimen>
 </resources>

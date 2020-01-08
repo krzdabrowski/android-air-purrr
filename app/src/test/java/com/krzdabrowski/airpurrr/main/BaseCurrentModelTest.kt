@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current
+package com.krzdabrowski.airpurrr.main
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
@@ -17,10 +17,10 @@ import org.robolectric.annotation.LooperMode.Mode.PAUSED
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(PAUSED)
-class BaseModelTest {
+class BaseCurrentModelTest {
     private lateinit var activityScenario: ActivityScenario<MainActivity>
 
-    private lateinit var model: BaseModel
+    private lateinit var model: BaseCurrentModel
 
     @Before
     fun setUp() {

@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.main.current.detector
+package com.krzdabrowski.airpurrr.main.detector
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.Observable

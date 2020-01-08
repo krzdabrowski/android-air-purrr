@@ -38,8 +38,8 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentForecastBinding.inflate(inflater, container, false)
-        binding.baseVm = baseViewModel
         baseViewModel.forecastClickCallback = this
+        binding.baseVm = baseViewModel
 
         return binding.root
     }
@@ -48,9 +48,6 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
         super.onViewCreated(view, savedInstanceState)
         getDetectorData()
         getLocation()
-
-        formatPm25Chart(DetectorForecastModel(detectorMockedData))
-        formatPm10Chart(DetectorForecastModel(detectorMockedData))
     }
 
     private fun getDetectorData() = detectorViewModel.liveData.observe(viewLifecycleOwner) {
@@ -59,6 +56,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
 
     private fun getApiData() = apiViewModel.liveData.observe(viewLifecycleOwner) { value ->
         binding.apiData = value.second
+        refreshData()
     }
 
     private fun getLocation() = apiViewModel.userLocation.observe(viewLifecycleOwner) { getApiData() }
@@ -80,7 +78,6 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
             )
             scale = Scale(0f, max?.times(1.5f) ?: 100f)
             labelsFormatter = { "${it.roundToInt()}%" }
-            animation.duration = 1000L
             animate(valuesToShow)
         }
     }
@@ -101,12 +98,15 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
             )
             scale = Scale(0f, max?.times(1.5f) ?: 100f)
             labelsFormatter = { "${it.roundToInt()}%" }
-            animation.duration = 1000L
             animate(valuesToShow)
         }
     }
 
     override fun refreshData() {
+//        if (binding.detectorData == null || binding.apiData == null)
+        if (binding.apiData == null)
+            return
+
         if (baseViewModel.flagDetectorApi.get()) {
             formatPm25Chart(binding.apiData as BaseForecastModel)
             formatPm10Chart(binding.apiData as BaseForecastModel)
