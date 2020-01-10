@@ -9,10 +9,14 @@ open class BaseViewModel : ViewModel() {
 
     fun onDataClick() {
         flagDetectorApi.set(!flagDetectorApi.get())
-        forecastClickCallback.refreshData()
+    }
+
+    fun onForecastDataClick() {
+        onDataClick()
+        forecastClickCallback.onRefresh()
     }
 
     interface OnForecastCallback {
-        fun refreshData()
+        fun onRefresh()
     }
 }

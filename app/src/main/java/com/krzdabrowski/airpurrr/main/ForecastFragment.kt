@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.partial_forecast_data.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.roundToInt
 
-const val NUMBER_OF_FORECAST_DATA_TO_SHOW = 8
+private const val NUMBER_OF_FORECAST_DATA_TO_SHOW = 8
 
 class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
     private lateinit var binding: FragmentForecastBinding
@@ -56,7 +56,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
 
     private fun getApiData() = apiViewModel.liveData.observe(viewLifecycleOwner) { value ->
         binding.apiData = value.second
-        refreshData()
+        onRefresh()
     }
 
     private fun getLocation() = apiViewModel.userLocation.observe(viewLifecycleOwner) { getApiData() }
@@ -102,7 +102,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
         }
     }
 
-    override fun refreshData() {
+    override fun onRefresh() {
 //        if (binding.detectorData == null || binding.apiData == null)
         if (binding.apiData == null)
             return

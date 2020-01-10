@@ -78,7 +78,8 @@ dependencies {
     implementation androidDependencies.liveDataKtx
     implementation androidDependencies.preferenceKtx
     implementation androidDependencies.biometric
-    implementation androidDependencies.viewPager
+    implementation androidDependencies.viewPager2
+    implementation androidDependencies.swipeRefreshLayout
     // endregion
 
     // region Google

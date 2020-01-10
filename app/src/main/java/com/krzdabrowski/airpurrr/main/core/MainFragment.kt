@@ -11,6 +11,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.observe
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.BaseViewModel
 import com.krzdabrowski.airpurrr.main.api.ApiViewModel
@@ -37,9 +38,15 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view_pager.adapter = ViewPagerAdapter(context!!, childFragmentManager)
-        tab_layout.setupWithViewPager(view_pager)
+
         purifierHelper.snackbarListener = this
+        view_pager.adapter = ViewPagerAdapter(this)
+        TabLayoutMediator(tab_layout, view_pager) { currentTab, currentPosition ->
+            currentTab.text = when (currentPosition) {
+                CURRENT_SCREEN_POSITION -> context?.getString(R.string.main_tab_current)
+                else -> context?.getString(R.string.main_tab_forecast)
+            }
+        }.attach()
 
         checkLocationPermission()
     }

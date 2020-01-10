@@ -4,8 +4,9 @@ import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.krzdabrowski.airpurrr.main.BaseViewModel
-import com.krzdabrowski.airpurrr.main.api.ApiViewModel.GpsDefaultCoordinates.LATITUDE
-import com.krzdabrowski.airpurrr.main.api.ApiViewModel.GpsDefaultCoordinates.LONGITUDE
+
+private const val LATITUDE = 52.16194
+private const val LONGITUDE = 21.02762
 
 class ApiViewModel(repository: ApiRepository) : BaseViewModel() {
     var userLocation = MutableLiveData<Location>().apply { value = getDefaultLocation() }
@@ -16,10 +17,5 @@ class ApiViewModel(repository: ApiRepository) : BaseViewModel() {
         defaultLocation.latitude = LATITUDE
         defaultLocation.longitude = LONGITUDE
         return defaultLocation
-    }
-
-    object GpsDefaultCoordinates {
-        const val LATITUDE = 52.16194
-        const val LONGITUDE = 21.02762
     }
 }

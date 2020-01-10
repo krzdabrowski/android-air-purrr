@@ -1,29 +1,20 @@
 package com.krzdabrowski.airpurrr.main.core
 
-import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import com.krzdabrowski.airpurrr.R
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.krzdabrowski.airpurrr.main.CurrentFragment
 import com.krzdabrowski.airpurrr.main.ForecastFragment
 
-class ViewPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-    private val viewPagerTabSize = 2
+internal const val CURRENT_SCREEN_POSITION = 0
+private const val VIEW_PAGER_TAB_SIZE = 2
 
-    override fun getItem(position: Int): Fragment {
+class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> CurrentFragment()
+            CURRENT_SCREEN_POSITION -> CurrentFragment()
             else -> ForecastFragment()
         }
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return when (position) {
-            0 -> context.getString(R.string.main_tab_current)
-            else -> context.getString(R.string.main_tab_forecast)
-        }
-    }
-
-    override fun getCount() = viewPagerTabSize
+    override fun getItemCount() = VIEW_PAGER_TAB_SIZE
 }

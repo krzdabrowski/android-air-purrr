@@ -8,10 +8,11 @@ ext {
     preferenceKtx = '1.1.0'
     biometric = '1.0.1'
     viewPager = '1.0.0'
+    swipeRefreshLayout = '1.0.0'
     // endregion
 
     // region Google
-    material = '1.0.0'
+    material = '1.1.0-beta02'
     location = '17.0.0'
     firebaseCore = '17.2.1'
     firebaseAuth = '19.2.0'
@@ -48,7 +49,8 @@ ext {
         liveDataKtx: "androidx.lifecycle:lifecycle-livedata-ktx:$liveDataKtx",
         preferenceKtx: "androidx.preference:preference-ktx:$preferenceKtx",
         biometric: "androidx.biometric:biometric:$biometric",
-        viewPager: "androidx.viewpager:viewpager:$viewPager",
+        viewPager2: "androidx.viewpager2:viewpager2:$viewPager",
+        swipeRefreshLayout: "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayout"
     ]
 
     googleDependencies = [
