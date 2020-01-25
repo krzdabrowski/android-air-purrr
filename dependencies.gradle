@@ -3,8 +3,8 @@ ext {
     coroutines = '1.3.3'
     appCompat = '1.1.0'
     coreKtx = '1.1.0'
-    fragmentKtx = '1.2.0-rc04'
-    liveDataKtx = '2.2.0-rc03'
+    fragmentKtx = '1.2.0'
+    liveDataKtx = '2.2.0'
     preferenceKtx = '1.1.0'
     biometric = '1.0.1'
     viewPager = '1.0.0'
@@ -12,7 +12,7 @@ ext {
     // endregion
 
     // region Google
-    material = '1.1.0-beta02'
+    material = '1.1.0-rc02'
     location = '17.0.0'
     firebaseCore = '17.2.1'
     firebaseAuth = '19.2.0'
@@ -20,7 +20,7 @@ ext {
     // endregion
 
     // region Third party
-    retrofit = '2.7.0'
+    retrofit = '2.7.1'
     retrofitFlowCallAdapter = '0.2.0'
     timber = '4.7.1'
     koin = '2.0.1'

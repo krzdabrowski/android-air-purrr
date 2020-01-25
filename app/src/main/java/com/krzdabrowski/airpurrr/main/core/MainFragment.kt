@@ -104,10 +104,10 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
                 true
             }
             R.id.menu_settings -> {
-                fragmentManager?.commit {
+                parentFragmentManager.commit {
                     replace(R.id.activity_main, SettingsFragment())
                     addToBackStack(null)
-                    }
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
