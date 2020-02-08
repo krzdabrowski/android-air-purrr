@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <service
+            android:name="org.eclipse.paho.android.service.MqttService" />
+
         <activity
             android:name=".login.LoginActivity"
             android:screenOrientation="portrait"

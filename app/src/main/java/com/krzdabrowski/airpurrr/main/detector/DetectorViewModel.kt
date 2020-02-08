@@ -2,17 +2,22 @@ package com.krzdabrowski.airpurrr.main.detector
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
-import androidx.lifecycle.asLiveData
-import com.krzdabrowski.airpurrr.main.helper.ConversionHelper
+import androidx.lifecycle.LiveData
 import com.krzdabrowski.airpurrr.main.BaseViewModel
+import com.krzdabrowski.airpurrr.main.helper.ConversionHelper
 
 class DetectorViewModel(private val repository: DetectorRepository) : BaseViewModel() {
+    private lateinit var liveData: LiveData<DetectorCurrentModel>
     val autoModeSwitch = ObservableBoolean()
     val autoModeThreshold = ObservableInt()
     val purifierOnOffObservableState = ObservableBoolean()
     var purifierOnOffState = purifierOnOffObservableState.get()
     val purifierHighLowObservableState = ObservableBoolean()
-    val liveData = repository.fetchDataFlow().asLiveData()
+
+    fun getLiveData(): LiveData<DetectorCurrentModel> {
+        liveData = repository.fetchData()
+        return liveData
+    }
 
     fun controlFanOnOff(shouldTurnOn: Boolean) = repository.controlFanOnOff(shouldTurnOn)
 

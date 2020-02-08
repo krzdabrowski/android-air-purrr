@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 
-private const val PERIODIC_DATA_REFRESH_INTERVAL = 1000 * 60 * 10L  // 10 minutes
+private const val PERIODIC_DATA_REFRESH_INTERVAL = 1000 * 60 * 15L  // 15 minutes
 
 class ApiRepository(private val service: ApiService) {
     fun fetchDataFlow(userLocation: Location): Flow<Pair<ApiCurrentModel, ApiForecastModel>> = flow {

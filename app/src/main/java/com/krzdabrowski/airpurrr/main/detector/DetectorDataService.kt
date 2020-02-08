@@ -18,7 +18,7 @@ interface DetectorDataService {
         fun create(client: OkHttpClient): DetectorDataService {
             return Retrofit.Builder()
                     .client(client)
-                    .baseUrl(BuildConfig.BASE_DETECTOR_URL)
+                    .baseUrl(BuildConfig.BASE_RPI_URL)
                     .addCallAdapterFactory(FlowCallAdapterFactory.create())
                     .addConverterFactory(MoshiConverterFactory.create())
                     .build()

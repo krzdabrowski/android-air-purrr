@@ -23,7 +23,7 @@ interface DetectorControlService {
         fun create(client: OkHttpClient): DetectorControlService {
             return Retrofit.Builder()
                     .client(client)
-                    .baseUrl(BuildConfig.BASE_DETECTOR_URL)
+                    .baseUrl(BuildConfig.BASE_RPI_URL)
                     .build()
                     .create(DetectorControlService::class.java)
         }

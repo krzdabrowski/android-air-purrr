@@ -79,7 +79,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
 
     // region Purifier
     private fun controlPurifierOnOff(currentState: Boolean) {
-        detectorViewModel.liveData.observe(viewLifecycleOwner) { workstateValue ->
+        detectorViewModel.getLiveData().observe(viewLifecycleOwner) { workstateValue ->
             detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, currentState)
             if (detectorViewModel.purifierHighLowObservableState.get()) {
                 detectorViewModel.checkPerformanceMode(true)

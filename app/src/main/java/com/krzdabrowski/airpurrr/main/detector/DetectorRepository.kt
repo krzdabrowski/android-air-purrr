@@ -1,33 +1,52 @@
 package com.krzdabrowski.airpurrr.main.detector
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import org.eclipse.paho.client.mqttv3.*
 import timber.log.Timber
+import java.nio.charset.StandardCharsets
 
-private const val PERIODIC_DATA_REFRESH_INTERVAL = 1000 * 60L  // 1 minute
+class DetectorRepository(private val client: MqttAsyncClient, private val controlService: DetectorControlService) {
+    fun fetchData(): LiveData<DetectorCurrentModel> {
+        val result = MutableLiveData<DetectorCurrentModel>()
 
-class DetectorRepository(private val dataService: DetectorDataService, private val controlService: DetectorControlService) {
-    fun fetchDataFlow(): Flow<DetectorCurrentModel?> = flow {
-        while (true) {
-            try {
-                dataService.getDetectorDataAsync().collect { response ->
-                    if (response.isSuccessful && response.body() != null) {
-                        emit(response.body())
-                    } else {
-                        Timber.e("DetectorModel error: ${response.code()}")
-                    }
+        try {
+            if (!client.isConnected) {
+                val mqttOptions = MqttConnectOptions().apply {
+                    isAutomaticReconnect = true
+                    isCleanSession = false
                 }
-            } catch (e: Throwable) {
-                Timber.e("DetectorRepository data error: ${e.message}")
-            } finally {
-                delay(PERIODIC_DATA_REFRESH_INTERVAL)
+
+                client.connect(mqttOptions, null, object : IMqttActionListener {
+                    override fun onSuccess(asyncActionToken: IMqttToken?) {
+                        client.subscribe("sds011/pollution", 0) { _, message ->
+                            val data = message
+                                    ?.payload
+                                    ?.toString(StandardCharsets.UTF_8)
+                                    ?.split(',')
+                                    ?.map { it.toDouble() }
+
+                            if (data != null) {
+                                result.postValue(DetectorCurrentModel("", DetectorCurrentModel.Data(data[0], data[1])))
+                            }
+                        }
+                    }
+
+                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                        Timber.e("DetectorRepository MQTT subscribe error: ${exception.toString()}")
+                    }
+                })
             }
+        } catch (e: MqttException) {
+            Timber.e("DetectorRepository MQTT error: ${e.message}")
+        } catch (e: Throwable) {
+            Timber.e("DetectorRepository data error: ${e.message}")
         }
+
+        return result
     }
 
     fun controlFanOnOff(shouldTurnOn: Boolean) {

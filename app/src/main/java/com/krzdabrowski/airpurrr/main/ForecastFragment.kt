@@ -50,7 +50,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
         getLocation()
     }
 
-    private fun getDetectorData() = detectorViewModel.liveData.observe(viewLifecycleOwner) {
+    private fun getDetectorData() = detectorViewModel.getLiveData().observe(viewLifecycleOwner) {
         binding.detectorData = DetectorForecastModel(detectorMockedData)
     }
 
