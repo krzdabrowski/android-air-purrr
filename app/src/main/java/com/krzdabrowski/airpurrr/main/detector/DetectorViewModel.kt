@@ -41,4 +41,8 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
             controlFanHighLow(shouldSwitchToHigh)
         }
     }
+
+    fun disconnectMqttClient() {
+        repository.disconnectMqttClient()
+    }
 }

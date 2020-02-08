@@ -22,6 +22,14 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
 
                 client.connect(mqttOptions, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
+                        client.subscribe("sds011/workstate", 0) { _, message ->
+                            val data = message
+                                    ?.payload
+                                    ?.toString(StandardCharsets.UTF_8)
+
+                            Timber.d("MQTT workstate is: $data")
+                        }
+
                         client.subscribe("sds011/pollution", 0) { _, message ->
                             val data = message
                                     ?.payload
@@ -74,6 +82,12 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
             } catch (e: Throwable) {
                 Timber.e("DetectorRepository highLow error: ${e.message}")
             }
+        }
+    }
+
+    fun disconnectMqttClient() {
+        if (client.isConnected) {
+            client.disconnect()
         }
     }
 }
