@@ -50,6 +50,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
 
         checkLocationPermission()
         detectorViewModel.connectMqttClient()
+        getPurifierState()
     }
     // endregion
 
@@ -79,12 +80,12 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     // endregion
 
     // region Purifier
+    private fun getPurifierState() = detectorViewModel.workstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
+
     private fun controlPurifierOnOff(currentState: Boolean) {
-        detectorViewModel.workstateLiveData.observe(viewLifecycleOwner) { workstate ->
-            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstate, currentState)
-            if (detectorViewModel.purifierHighLowObservableState.get()) {
-                detectorViewModel.checkPerformanceMode(true)
-            }
+        detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(currentState)
+        if (detectorViewModel.purifierHighLowObservableState.get()) {
+            detectorViewModel.checkPerformanceMode(true)
         }
     }
     // endregion

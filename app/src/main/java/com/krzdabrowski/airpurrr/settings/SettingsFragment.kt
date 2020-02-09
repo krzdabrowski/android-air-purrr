@@ -75,9 +75,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
         setToolbar()
 
         purifierHelper.snackbarListener = this
+        getPurifierState()
         detectorViewModel.purifierOnOffObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                controlPurifierOnOff(viewLifecycleOwner, detectorViewModel.purifierOnOffState)
+                detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(detectorViewModel.purifierOnOffState)
+
                 if (detectorViewModel.purifierHighLowObservableState.get()) {
                     detectorViewModel.checkPerformanceMode(true)
                 }
@@ -99,6 +101,8 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
     // endregion
 
     // region Purifier
+    private fun getPurifierState() = detectorViewModel.workstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
+
     private fun reactToAutoModeChanges(sharedPreferences: SharedPreferences, key: String) {
         val isThresholdSet = !sharedPreferences.getString(keyAutoModeThreshold, "").isNullOrEmpty()
         val isThresholdClicked = key == keyAutoModeThreshold
@@ -115,12 +119,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
     private fun reactToPerformanceChanges(sharedPreferences: SharedPreferences, key: String) {
         val isSwitchOn = sharedPreferences.getBoolean(key, false)
         detectorViewModel.checkPerformanceMode(isSwitchOn)
-    }
-
-    private fun controlPurifierOnOff(owner: LifecycleOwner, state: Boolean) {
-        detectorViewModel.workstateLiveData.observe(owner) { workstate ->
-            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstate, state)
-        }
     }
     // endregion
 
