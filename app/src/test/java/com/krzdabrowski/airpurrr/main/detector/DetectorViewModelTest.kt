@@ -2,7 +2,9 @@ package com.krzdabrowski.airpurrr.main.detector
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.Observable
+import androidx.lifecycle.MutableLiveData
 import com.google.common.truth.Truth.assertThat
+import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
@@ -32,28 +34,17 @@ class DetectorViewModelTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
 
-        val model = DetectorCurrentModel("WorkStates.Sleeping", DetectorCurrentModel.Data(5.0, 7.5))
-        coEvery { detectorRepository.fetchDataFlow() } returns flowOf(model)
+        every { detectorRepository.valuesLiveData } returns MutableLiveData(DetectorCurrentModel(Pair(5.0, 7.5)))
+        every { detectorRepository.workstateLiveData } returns MutableLiveData(PurifierHelper.Workstates.SLEEPING.state)
 
         detectorViewModel = DetectorViewModel(detectorRepository)
-        detectorViewModel.valuesliveData.observeForever {}
+        detectorViewModel.valuesLiveData.observeForever {}
     }
 
     @After
     fun tearDown() {
         clearAllMocks()
         Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `when fetching data successfully, then proper data is saved`() = runBlockingTest {
-        val model = DetectorCurrentModel("WorkStates.Sleeping", DetectorCurrentModel.Data(5.0, 7.5))
-        coEvery { detectorRepository.fetchDataFlow().asLiveData().value } returns model
-
-        coVerify { detectorRepository.fetchDataFlow().asLiveData() }
-
-        assertThat(detectorViewModel.valuesliveData.value?.workstate).isEqualTo(model.workstate)
-        assertThat(detectorViewModel.valuesliveData.value?.values).isEqualTo(model.values)
     }
 
     @Test

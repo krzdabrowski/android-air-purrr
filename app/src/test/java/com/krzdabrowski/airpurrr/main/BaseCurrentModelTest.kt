@@ -25,7 +25,7 @@ class BaseCurrentModelTest {
     @Before
     fun setUp() {
         activityScenario = launchActivity()
-        model = DetectorCurrentModel("", DetectorCurrentModel.Data(0.0, 0.0))
+        model = DetectorCurrentModel(Pair(0.0, 0.0))
     }
 
     @Test

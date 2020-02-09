@@ -1,14 +1,15 @@
 package com.krzdabrowski.airpurrr.main.helper
 
-import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel
-import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
+import androidx.annotation.VisibleForTesting
 import com.google.android.material.snackbar.Snackbar
+import com.krzdabrowski.airpurrr.R
+import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 
 class PurifierHelper(private val detectorViewModel: DetectorViewModel) {
     internal lateinit var snackbarListener: SnackbarListener
 
-    private enum class Workstates(val state: String) {
+    @VisibleForTesting
+    internal enum class Workstates(val state: String) {
         SLEEPING("WorkStates.Sleeping"),
         MEASURING("WorkStates.Measuring")
     }
