@@ -2,11 +2,7 @@ package com.krzdabrowski.airpurrr.main.detector
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.Observable
-import androidx.lifecycle.asLiveData
 import com.google.common.truth.Truth.assertThat
-import com.krzdabrowski.airpurrr.main.detector.DetectorCurrentModel
-import com.krzdabrowski.airpurrr.main.detector.DetectorRepository
-import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +36,7 @@ class DetectorViewModelTest {
         coEvery { detectorRepository.fetchDataFlow() } returns flowOf(model)
 
         detectorViewModel = DetectorViewModel(detectorRepository)
-        detectorViewModel.liveData.observeForever {}
+        detectorViewModel.valuesliveData.observeForever {}
     }
 
     @After
@@ -56,8 +52,8 @@ class DetectorViewModelTest {
 
         coVerify { detectorRepository.fetchDataFlow().asLiveData() }
 
-        assertThat(detectorViewModel.liveData.value?.workstate).isEqualTo(model.workstate)
-        assertThat(detectorViewModel.liveData.value?.values).isEqualTo(model.values)
+        assertThat(detectorViewModel.valuesliveData.value?.workstate).isEqualTo(model.workstate)
+        assertThat(detectorViewModel.valuesliveData.value?.values).isEqualTo(model.values)
     }
 
     @Test

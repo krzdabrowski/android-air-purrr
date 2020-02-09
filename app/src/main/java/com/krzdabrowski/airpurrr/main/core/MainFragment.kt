@@ -49,6 +49,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
         }.attach()
 
         checkLocationPermission()
+        detectorViewModel.connectMqttClient()
     }
 
     override fun onPause() {
@@ -84,8 +85,8 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
 
     // region Purifier
     private fun controlPurifierOnOff(currentState: Boolean) {
-        detectorViewModel.getLiveData().observe(viewLifecycleOwner) { workstateValue ->
-            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, currentState)
+        detectorViewModel.workstateLiveData.observe(viewLifecycleOwner) { workstate ->
+            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstate, currentState)
             if (detectorViewModel.purifierHighLowObservableState.get()) {
                 detectorViewModel.checkPerformanceMode(true)
             }

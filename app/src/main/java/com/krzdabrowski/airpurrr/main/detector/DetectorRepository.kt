@@ -1,6 +1,5 @@
 package com.krzdabrowski.airpurrr.main.detector
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,51 +9,36 @@ import timber.log.Timber
 import java.nio.charset.StandardCharsets
 
 class DetectorRepository(private val client: MqttAsyncClient, private val controlService: DetectorControlService) {
-    fun fetchData(): LiveData<DetectorCurrentModel> {
-        val result = MutableLiveData<DetectorCurrentModel>()
+    internal val valuesLiveData = MutableLiveData<DetectorCurrentModel>()
+    internal val workstateLiveData = MutableLiveData<String>()
+
+    fun connectMqttClient() {
+        if (client.isConnected) {
+            return
+        }
+
+        val mqttOptions = MqttConnectOptions().apply {
+            isAutomaticReconnect = true
+            isCleanSession = false
+        }
 
         try {
-            if (!client.isConnected) {
-                val mqttOptions = MqttConnectOptions().apply {
-                    isAutomaticReconnect = true
-                    isCleanSession = false
+            client.connect(mqttOptions, null, object : IMqttActionListener {
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    subscribeToValues()
+                    subscribeToWorkstate()
                 }
 
-                client.connect(mqttOptions, null, object : IMqttActionListener {
-                    override fun onSuccess(asyncActionToken: IMqttToken?) {
-                        client.subscribe("sds011/workstate", 0) { _, message ->
-                            val data = message
-                                    ?.payload
-                                    ?.toString(StandardCharsets.UTF_8)
+                override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                    Timber.e("DetectorRepository MQTT subscribe error: ${exception.toString()}")
+                }
+            })
 
-                            Timber.d("MQTT workstate is: $data")
-                        }
-
-                        client.subscribe("sds011/pollution", 0) { _, message ->
-                            val data = message
-                                    ?.payload
-                                    ?.toString(StandardCharsets.UTF_8)
-                                    ?.split(',')
-                                    ?.map { it.toDouble() }
-
-                            if (data != null) {
-                                result.postValue(DetectorCurrentModel("", DetectorCurrentModel.Data(data[0], data[1])))
-                            }
-                        }
-                    }
-
-                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-                        Timber.e("DetectorRepository MQTT subscribe error: ${exception.toString()}")
-                    }
-                })
-            }
         } catch (e: MqttException) {
             Timber.e("DetectorRepository MQTT error: ${e.message}")
         } catch (e: Throwable) {
             Timber.e("DetectorRepository data error: ${e.message}")
         }
-
-        return result
     }
 
     fun controlFanOnOff(shouldTurnOn: Boolean) {
@@ -81,6 +65,34 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
                 }
             } catch (e: Throwable) {
                 Timber.e("DetectorRepository highLow error: ${e.message}")
+            }
+        }
+    }
+
+    private fun subscribeToValues() {
+        client.subscribe("sds011/pollution", 0) { _, message ->
+            val values = message
+                    ?.payload
+                    ?.toString(StandardCharsets.UTF_8)
+                    ?.split(',')
+                    ?.map { it.toDouble() }
+
+            if (!values.isNullOrEmpty()) {
+                Timber.d("MQTT pm25: ${values[0]}, pm10: ${values[1]}")
+                valuesLiveData.postValue(DetectorCurrentModel(Pair(values[0], values[1])))
+            }
+        }
+    }
+
+    private fun subscribeToWorkstate() {
+        client.subscribe("sds011/workstate", 0) { _, message ->
+            val workstate = message
+                    ?.payload
+                    ?.toString(StandardCharsets.UTF_8)
+
+            if (!workstate.isNullOrBlank()) {
+                Timber.d("MQTT workstate: $workstate")
+                workstateLiveData.postValue(workstate)
             }
         }
     }

@@ -118,8 +118,8 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
     }
 
     private fun controlPurifierOnOff(owner: LifecycleOwner, state: Boolean) {
-        detectorViewModel.getLiveData().observe(owner) { workstateValue ->
-            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstateValue, state)
+        detectorViewModel.workstateLiveData.observe(owner) { workstate ->
+            detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(workstate, state)
         }
     }
     // endregion
