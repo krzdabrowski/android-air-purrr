@@ -41,8 +41,4 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
     fun connectMqttClient() {
         repository.connectMqttClient()
     }
-
-    fun disconnectMqttClient() {
-        repository.disconnectMqttClient()
-    }
 }

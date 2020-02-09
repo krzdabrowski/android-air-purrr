@@ -51,11 +51,6 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
         checkLocationPermission()
         detectorViewModel.connectMqttClient()
     }
-
-    override fun onPause() {
-        super.onPause()
-        detectorViewModel.disconnectMqttClient()
-    }
     // endregion
 
     // region Location permissions

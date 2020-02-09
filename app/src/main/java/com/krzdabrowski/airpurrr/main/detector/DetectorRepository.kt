@@ -96,10 +96,4 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
             }
         }
     }
-
-    fun disconnectMqttClient() {
-        if (client.isConnected) {
-            client.disconnect()
-        }
-    }
 }
