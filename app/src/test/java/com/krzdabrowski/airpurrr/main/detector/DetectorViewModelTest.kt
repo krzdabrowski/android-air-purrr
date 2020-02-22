@@ -9,10 +9,8 @@ import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -34,11 +32,11 @@ class DetectorViewModelTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
 
-        every { detectorRepository.valuesLiveData } returns MutableLiveData(DetectorCurrentModel(Pair(5.0, 7.5)))
-        every { detectorRepository.workstateLiveData } returns MutableLiveData(PurifierHelper.Workstates.SLEEPING.state)
+        every { detectorRepository.currentValuesLiveData } returns MutableLiveData(DetectorCurrentModel(Pair(5.0, 7.5)))
+        every { detectorRepository.currentWorkstateLiveData } returns MutableLiveData(PurifierHelper.Workstates.SLEEPING.state)
 
         detectorViewModel = DetectorViewModel(detectorRepository)
-        detectorViewModel.valuesLiveData.observeForever {}
+        detectorViewModel.currentValuesLiveData.observeForever {}
     }
 
     @After

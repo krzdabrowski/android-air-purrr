@@ -10,7 +10,6 @@ import androidx.lifecycle.observe
 import com.db.williamchart.data.Scale
 import com.krzdabrowski.airpurrr.databinding.FragmentForecastBinding
 import com.krzdabrowski.airpurrr.main.api.ApiViewModel
-import com.krzdabrowski.airpurrr.main.detector.DetectorForecastModel
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_forecast.*
 import kotlinx.android.synthetic.main.partial_forecast_data.view.*
@@ -24,17 +23,6 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
     private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!!.activity!! })
     private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
     private val baseViewModel: BaseViewModel by sharedViewModel(from = { parentFragment!! })
-
-    private val detectorMockedData = listOf(
-            "01:00" to Pair(20f, 80f),
-            "02:00" to Pair(30f, 120f),
-            "03:00" to Pair(40f, 140f),
-            "04:00" to Pair(50f, 190f),
-            "05:00" to Pair(70f, 100f),
-            "06:00" to Pair(30f, 80f),
-            "07:00" to Pair(10f, 130f),
-            "08:00" to Pair(40f, 90f)
-    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentForecastBinding.inflate(inflater, container, false)
@@ -50,8 +38,8 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
         getLocation()
     }
 
-    private fun getDetectorData() = detectorViewModel.valuesLiveData.observe(viewLifecycleOwner) {
-        binding.detectorData = DetectorForecastModel(detectorMockedData)
+    private fun getDetectorData() = detectorViewModel.forecastValuesLiveData.observe(viewLifecycleOwner) { value ->
+        binding.detectorData = value
     }
 
     private fun getApiData() = apiViewModel.liveData.observe(viewLifecycleOwner) { value ->
@@ -103,16 +91,15 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
     }
 
     override fun onRefresh() {
-//        if (binding.detectorData == null || binding.apiData == null)
-        if (binding.apiData == null)
+        if (binding.detectorData == null || binding.apiData == null)
             return
 
         if (baseViewModel.flagDetectorApi.get()) {
             formatPm25Chart(binding.apiData as BaseForecastModel)
             formatPm10Chart(binding.apiData as BaseForecastModel)
         } else {
-            formatPm25Chart(DetectorForecastModel(detectorMockedData))
-            formatPm10Chart(DetectorForecastModel(detectorMockedData))
+            formatPm25Chart(binding.detectorData as BaseForecastModel)
+            formatPm10Chart(binding.detectorData as BaseForecastModel)
         }
     }
 }

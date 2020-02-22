@@ -46,10 +46,17 @@
 
     <string name="settings_category_auto_mode">Automatic mode</string>
     <string name="settings_category_fan_control">Performance</string>
+    <string name="settings_category_forecast">Forecast</string>
+
+    <string name="settings_key_automode_switch" translatable="false">autoModeSwitch</string>
+    <string name="settings_key_automode_threshold" translatable="false">autoModeThreshold</string>
+    <string name="settings_key_performance_highlow_switch" translatable="false">performanceHighLowSwitch</string>
+    <string name="settings_key_forecast_type_radio_list" translatable="false">forecastTypeRadioList</string>
 
     <string name="settings_title_auto_mode">Enable self-purifying</string>
     <string name="settings_title_threshold">Set threshold</string>
-    <string name="settings_title_purifier_mode">Choose purifier mode</string>
+    <string name="settings_title_purifier_mode">Select purifier mode</string>
+    <string name="settings_title_forecast">Select prediction type</string>
 
     <string name="settings_summary_auto_mode_off">Auto mode stopped</string>
     <string name="settings_summary_auto_mode_on">Auto mode currently running</string>
@@ -59,9 +66,15 @@
     <string name="settings_dialog_title_threshold">Enter a value in percentage</string>
     <string name="settings_dialog_no_data">Not set</string>
 
-    <string name="settings_key_automode_switch" translatable="false">autoModeSwitch</string>
-    <string name="settings_key_automode_threshold" translatable="false">autoModeThreshold</string>
-    <string name="settings_key_performance_highlow_switch" translatable="false">performanceHighLowSwitch</string>
-
     <string name="settings_performance_snackbar_info">Start purifier to apply changes</string>
+
+    <string name="settings_forecast_prediction_item_linear_regression">Linear regression</string>
+    <string name="settings_forecast_prediction_item_machine_learning">Machine learning</string>
+    <string name="settings_forecast_prediction_item_neural_network">Neural network</string>
+
+    <string-array name="settings_forecast_prediction_type">
+        <item>@string/settings_forecast_prediction_item_linear_regression</item>
+        <item>@string/settings_forecast_prediction_item_machine_learning</item>
+        <item>@string/settings_forecast_prediction_item_neural_network</item>
+    </string-array>
 </resources>

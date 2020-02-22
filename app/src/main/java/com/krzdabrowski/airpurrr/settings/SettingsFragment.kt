@@ -8,16 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.Observable
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.observe
-import androidx.preference.EditTextPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreferenceCompat
+import androidx.preference.*
 import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel.ForecastPredictionType
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
@@ -26,15 +23,20 @@ import java.lang.NumberFormatException
 class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarListener {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val purifierHelper: PurifierHelper by inject()
+
     private val keyAutoModeSwitch by lazy { getString(R.string.settings_key_automode_switch) }
     private val keyAutoModeThreshold by lazy { getString(R.string.settings_key_automode_threshold) }
     private val keyPerformanceHighLowSwitch by lazy { getString(R.string.settings_key_performance_highlow_switch) }
-    private val autoModeSwitchPreference by lazy { findPreference<SwitchPreferenceCompat>(keyAutoModeSwitch) }
+    private val keyForecastTypeRadioList by lazy { getString(R.string.settings_key_forecast_type_radio_list) }
+
+    private val autoModeSwitchPreference by lazy { findPreference<SwitchPreference>(keyAutoModeSwitch) }
     private val autoModeThresholdPreference by lazy { findPreference<EditTextPreference>(keyAutoModeThreshold) }
+    private val forecastTypeRadioListPreference by lazy { findPreference<ListPreference>(keyForecastTypeRadioList) }
 
     private val preferenceListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         when (key) {
-            keyAutoModeSwitch -> detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keyAutoModeSwitch, false))
+            keyAutoModeSwitch ->
+                detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keyAutoModeSwitch, false))
             keyAutoModeThreshold -> {
                 detectorViewModel.autoModeThreshold.set(
                     try {
@@ -47,7 +49,15 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
                 detectorViewModel.purifierHighLowObservableState.set(sharedPreferences.getBoolean(keyPerformanceHighLowSwitch, false))
                 reactToPerformanceChanges(sharedPreferences, key)
             }
-            else -> Timber.d("Unexpected key received: $key")
+            keyForecastTypeRadioList -> {
+                when (forecastTypeRadioListPreference!!.value) {
+                    getString(R.string.settings_forecast_prediction_item_linear_regression) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR_REGRESSION)
+                    getString(R.string.settings_forecast_prediction_item_machine_learning) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.MACHINE_LEARNING)
+                    getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NEURAL_NETWORK)
+                }
+            }
+            else ->
+                Timber.d("Unexpected key received: $key")
         }
 
         reactToAutoModeChanges(sharedPreferences, key)
@@ -101,7 +111,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
     // endregion
 
     // region Purifier
-    private fun getPurifierState() = detectorViewModel.workstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
+    private fun getPurifierState() = detectorViewModel.currentWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
 
     private fun reactToAutoModeChanges(sharedPreferences: SharedPreferences, key: String) {
         val isThresholdSet = !sharedPreferences.getString(keyAutoModeThreshold, "").isNullOrEmpty()

@@ -9,8 +9,9 @@ import timber.log.Timber
 import java.nio.charset.StandardCharsets
 
 class DetectorRepository(private val client: MqttAsyncClient, private val controlService: DetectorControlService) {
-    internal val valuesLiveData = MutableLiveData<DetectorCurrentModel>()
-    internal val workstateLiveData = MutableLiveData<String>()
+    internal val currentValuesLiveData = MutableLiveData<DetectorCurrentModel>()
+    internal val forecastValuesLiveData = MutableLiveData<DetectorForecastModel>()
+    internal val currentWorkstateLiveData = MutableLiveData<String>()
 
     fun connectMqttClient() {
         if (client.isConnected) {
@@ -25,8 +26,8 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
         try {
             client.connect(mqttOptions, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    subscribeToValues()
-                    subscribeToWorkstate()
+                    subscribeToCurrentValues()
+                    subscribeToCurrentWorkstate()
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -69,7 +70,7 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
         }
     }
 
-    private fun subscribeToValues() {
+    private fun subscribeToCurrentValues() {
         client.subscribe("sds011/pollution", 0) { _, message ->
             val values = message
                     ?.payload
@@ -79,12 +80,12 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
 
             if (!values.isNullOrEmpty()) {
                 Timber.d("MQTT pm25: ${values[0]}, pm10: ${values[1]}")
-                valuesLiveData.postValue(DetectorCurrentModel(Pair(values[0], values[1])))
+                currentValuesLiveData.postValue(DetectorCurrentModel(Pair(values[0], values[1])))
             }
         }
     }
 
-    private fun subscribeToWorkstate() {
+    private fun subscribeToCurrentWorkstate() {
         client.subscribe("sds011/workstate", 0) { _, message ->
             val workstate = message
                     ?.payload
@@ -92,8 +93,65 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
 
             if (!workstate.isNullOrBlank()) {
                 Timber.d("MQTT workstate: $workstate")
-                workstateLiveData.postValue(workstate)
+                currentWorkstateLiveData.postValue(workstate)
             }
         }
+    }
+
+    fun subscribeToForecastLinearRegressionValues() {
+        // TODO: mock
+        val mockedValues = listOf(
+        "01:00" to Pair(10f, 20f),
+        "02:00" to Pair(20f, 40f),
+        "03:00" to Pair(30f, 60f),
+        "04:00" to Pair(40f, 80f),
+        "05:00" to Pair(50f, 100f),
+        "06:00" to Pair(60f, 120f),
+        "07:00" to Pair(70f, 140f),
+        "08:00" to Pair(80f, 160f)
+        )
+
+        // client.unsubscribePozostale
+        // client.subscribe("forecast/linear", 0) {  }
+
+        forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
+    }
+
+    fun subscribeToForecastMachineLearningValues() {
+        // TODO: mock
+        val mockedValues = listOf(
+                "01:00" to Pair(10f, 20f),
+                "02:00" to Pair(20f, 40f),
+                "03:00" to Pair(30f, 60f),
+                "04:00" to Pair(40f, 80f),
+                "05:00" to Pair(30f, 60f),
+                "06:00" to Pair(20f, 40f),
+                "07:00" to Pair(10f, 20f),
+                "08:00" to Pair(5f, 10f)
+        )
+
+        // client.unsubscribePozostale
+        // client.subscribe("forecast/linear", 0) {  }
+
+        forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
+    }
+
+    fun subscribeToForecastNeuralNetworkValues() {
+        // TODO: mock
+        val mockedValues = listOf(
+                "01:00" to Pair(40f, 80f),
+                "02:00" to Pair(30f, 60f),
+                "03:00" to Pair(20f, 40f),
+                "04:00" to Pair(10f, 20f),
+                "05:00" to Pair(20f, 40f),
+                "06:00" to Pair(30f, 60f),
+                "07:00" to Pair(40f, 80f),
+                "08:00" to Pair(50f, 100f)
+        )
+
+        // client.unsubscribePozostale
+        // client.subscribe("forecast/linear", 0) {  }
+
+        forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
     }
 }

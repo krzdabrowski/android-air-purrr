@@ -102,7 +102,6 @@ dependencies {
     implementation thirdPartyDependencies.williamChart
     implementation thirdPartyDependencies.mqttClient
     implementation thirdPartyDependencies.mqttService
-    debugImplementation thirdPartyDependencies.leakCanary
     // endregion
 
     // region AndroidTest

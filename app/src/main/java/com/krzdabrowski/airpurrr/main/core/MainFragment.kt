@@ -3,6 +3,7 @@ package com.krzdabrowski.airpurrr.main.core
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -29,6 +30,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     private val baseViewModel: BaseViewModel by viewModel()
     private val purifierHelper: PurifierHelper by inject()
     private val permissionResultCodeLocation = 100
+    private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(activity) }
 
     // region Init
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,8 +53,19 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
         checkLocationPermission()
         detectorViewModel.connectMqttClient()
         getPurifierState()
+        configureForecastPredictionType()
     }
     // endregion
+
+    private fun configureForecastPredictionType() {
+        val forecastPredictionType = sharedPrefs?.getString(getString(R.string.settings_key_forecast_type_radio_list), getString(R.string.settings_forecast_prediction_item_linear_regression))
+        when (forecastPredictionType) {
+            getString(R.string.settings_forecast_prediction_item_linear_regression) -> detectorViewModel.forecastPredictionType.set(DetectorViewModel.ForecastPredictionType.LINEAR_REGRESSION)
+            getString(R.string.settings_forecast_prediction_item_machine_learning) -> detectorViewModel.forecastPredictionType.set(DetectorViewModel.ForecastPredictionType.MACHINE_LEARNING)
+            getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(DetectorViewModel.ForecastPredictionType.NEURAL_NETWORK)
+        }
+        detectorViewModel.getForecastPredictionData()
+    }
 
     // region Location permissions
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -80,7 +93,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     // endregion
 
     // region Purifier
-    private fun getPurifierState() = detectorViewModel.workstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
+    private fun getPurifierState() = detectorViewModel.currentWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
 
     private fun controlPurifierOnOff(currentState: Boolean) {
         detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(currentState)
