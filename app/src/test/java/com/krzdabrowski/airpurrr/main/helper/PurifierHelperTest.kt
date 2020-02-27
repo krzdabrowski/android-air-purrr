@@ -29,27 +29,27 @@ class PurifierHelperTest {
 
     @Test
     fun `when purifier state is in sleeping mode, then purifier can be controlled with new state`(){
-        val workstate = PurifierHelper.Workstates.SLEEPING.state
+        purifierHelper.workstate = PurifierHelper.Workstates.SLEEPING.state
 
-        purifierHelper.getPurifierOnOffState(workstate, currentState)
+        purifierHelper.getPurifierOnOffState(currentState)
 
         verify { detectorViewModel.controlFanOnOff(!currentState) }
     }
 
     @Test
     fun `when purifier state is in measuring mode, then purifier can't be controlled`(){
-        val workstate = PurifierHelper.Workstates.MEASURING.state
+        purifierHelper.workstate = PurifierHelper.Workstates.MEASURING.state
 
-        purifierHelper.getPurifierOnOffState(workstate, currentState)
+        purifierHelper.getPurifierOnOffState(currentState)
 
         verify (exactly = 0) { detectorViewModel.controlFanOnOff(!currentState) }
     }
 
     @Test
     fun `when purifier state is in undefined mode, then purifier can't be controlled`(){
-        val workstate = ""
+        purifierHelper.workstate = ""
 
-        purifierHelper.getPurifierOnOffState(workstate, currentState)
+        purifierHelper.getPurifierOnOffState(currentState)
 
         verify (exactly = 0) { detectorViewModel.controlFanOnOff(!currentState) }
     }

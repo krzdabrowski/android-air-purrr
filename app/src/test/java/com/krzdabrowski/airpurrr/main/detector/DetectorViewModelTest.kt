@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import com.google.common.truth.Truth.assertThat
+import com.krzdabrowski.airpurrr.main.BaseForecastModel
 import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -34,6 +35,11 @@ class DetectorViewModelTest {
 
         every { detectorRepository.currentValuesLiveData } returns MutableLiveData(DetectorCurrentModel(Pair(5.0, 7.5)))
         every { detectorRepository.currentWorkstateLiveData } returns MutableLiveData(PurifierHelper.Workstates.SLEEPING.state)
+        every { detectorRepository.forecastValuesLiveData } returns MutableLiveData(DetectorForecastModel(BaseForecastModel.Result(
+                hours = mutableListOf("20:00", "21:00"),
+                pm25 = mutableListOf(20f, 40f),
+                pm10 = mutableListOf(15f, 25f)
+        )))
 
         detectorViewModel = DetectorViewModel(detectorRepository)
         detectorViewModel.currentValuesLiveData.observeForever {}

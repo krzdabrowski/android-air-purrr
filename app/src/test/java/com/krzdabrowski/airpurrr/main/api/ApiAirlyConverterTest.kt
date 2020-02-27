@@ -1,6 +1,7 @@
 package com.krzdabrowski.airpurrr.main.api
 
 import com.google.common.truth.Truth.assertThat
+import com.krzdabrowski.airpurrr.main.BaseForecastModel
 import org.junit.Test
 import retrofit2.Response
 
@@ -39,9 +40,10 @@ class ApiAirlyConverterTest {
         val convertedModel = ApiAirlyConverter.getData(response)
 
         assertThat(convertedModel.first.result).isEqualTo(Pair(5.0, 7.5))  // PM2.5 and PM10 in ugm3
-        assertThat(convertedModel.second.result).isEqualTo(listOf(
-                Pair("20:00", Pair(20f, 15f)),  // PM2.5 in percentage (4x)
-                Pair("21:00", Pair(40f, 25f))   // PM10 in percentage (2x)
+        assertThat(convertedModel.second.result).isEqualTo(BaseForecastModel.Result(
+                hours = mutableListOf("20:00", "21:00"),
+                pm25 = mutableListOf(20f, 40f),  // PM2.5 in percentage (4x)
+                pm10 = mutableListOf(15f, 25f)   // PM10 in percentage (2x)
         ))
     }
 
@@ -77,6 +79,10 @@ class ApiAirlyConverterTest {
         val convertedModel = ApiAirlyConverter.getData(response)
 
         assertThat(convertedModel.first.result).isEqualTo(Pair(0.0, 0.0))
-        assertThat(convertedModel.second.result).isEqualTo(listOf(Pair("20:00", Pair(0f, 0f)), Pair("21:00", Pair(0f, 0f))))
+        assertThat(convertedModel.second.result).isEqualTo(BaseForecastModel.Result(
+                hours = mutableListOf("20:00", "21:00"),
+                pm25 = mutableListOf(),
+                pm10 = mutableListOf()
+        ))
     }
 }
