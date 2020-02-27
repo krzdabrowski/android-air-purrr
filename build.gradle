@@ -4,7 +4,7 @@ apply from: 'dependencies.gradle'
 
 buildscript {
     ext {
-        gradleVersion = '3.5.3'
+        gradleVersion = '3.6.0'
         googleServices = '4.2.0'
         kotlin = '1.3.61'
     }
