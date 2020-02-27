@@ -69,12 +69,12 @@
     <string name="settings_performance_snackbar_info">Start purifier to apply changes</string>
 
     <string name="settings_forecast_prediction_item_linear_regression">Linear regression</string>
-    <string name="settings_forecast_prediction_item_machine_learning">Machine learning</string>
     <string name="settings_forecast_prediction_item_neural_network">Neural network</string>
+    <string name="settings_forecast_prediction_item_xgboost">XGBoost</string>
 
     <string-array name="settings_forecast_prediction_type">
         <item>@string/settings_forecast_prediction_item_linear_regression</item>
-        <item>@string/settings_forecast_prediction_item_machine_learning</item>
         <item>@string/settings_forecast_prediction_item_neural_network</item>
+        <item>@string/settings_forecast_prediction_item_xgboost</item>
     </string-array>
 </resources>

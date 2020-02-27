@@ -5,7 +5,7 @@ import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.BaseForecastModel
 import com.squareup.moshi.Json
 
-data class ApiForecastModel(@Transient override val result: List<Pair<String, Pair<Float, Float>>>) : BaseForecastModel() {
+data class ApiForecastModel(@Transient override val result: Result) : BaseForecastModel() {
     data class Data(
             @field:Json(name = "tillDateTime") val date: String?,
             val values: List<Map<String?, Any?>?>?

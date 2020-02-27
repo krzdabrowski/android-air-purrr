@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
-import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel.ForecastPredictionType
+import com.krzdabrowski.airpurrr.main.detector.ForecastPredictionType
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
@@ -52,8 +52,8 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
             keyForecastTypeRadioList -> {
                 when (forecastTypeRadioListPreference!!.value) {
                     getString(R.string.settings_forecast_prediction_item_linear_regression) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR_REGRESSION)
-                    getString(R.string.settings_forecast_prediction_item_machine_learning) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.MACHINE_LEARNING)
                     getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NEURAL_NETWORK)
+                    getString(R.string.settings_forecast_prediction_item_xgboost) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.XGBOOST)
                 }
             }
             else ->

@@ -20,7 +20,7 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
     val currentWorkstateLiveData: LiveData<String> = repository.currentWorkstateLiveData
 
     fun connectMqttClient() {
-        repository.connectMqttClient()
+        repository.connectMqttClient(forecastPredictionType.get())
     }
 
     fun controlFanOnOff(shouldTurnOn: Boolean) = repository.controlFanOnOff(shouldTurnOn)
@@ -46,17 +46,5 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
         }
     }
 
-    fun getForecastPredictionData() {
-        when (forecastPredictionType.get()) {
-            ForecastPredictionType.LINEAR_REGRESSION -> repository.subscribeToForecastLinearRegressionValues()
-            ForecastPredictionType.MACHINE_LEARNING -> repository.subscribeToForecastMachineLearningValues()
-            ForecastPredictionType.NEURAL_NETWORK -> repository.subscribeToForecastNeuralNetworkValues()
-        }
-    }
 
-    enum class ForecastPredictionType {
-        LINEAR_REGRESSION,
-        MACHINE_LEARNING,
-        NEURAL_NETWORK
-    }
 }

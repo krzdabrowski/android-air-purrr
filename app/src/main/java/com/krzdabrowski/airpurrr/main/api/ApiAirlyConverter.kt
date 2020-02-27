@@ -1,5 +1,6 @@
 package com.krzdabrowski.airpurrr.main.api
 
+import com.krzdabrowski.airpurrr.main.BaseForecastModel
 import com.krzdabrowski.airpurrr.main.helper.ConversionHelper.formatDateToLocalTimezone
 import com.krzdabrowski.airpurrr.main.helper.ConversionHelper.pm10ToPercent
 import com.krzdabrowski.airpurrr.main.helper.ConversionHelper.pm25ToPercent
@@ -23,27 +24,23 @@ object ApiAirlyConverter {
     }
 
     private fun getForecastData(response: Response<ApiModel>): ApiForecastModel {
-        val forecasts = response.body()?.forecast ?: return ApiForecastModel(listOf())
+        val predictedData = BaseForecastModel.Result(mutableListOf(), mutableListOf(), mutableListOf())
+        val forecasts = response.body()?.forecast ?: return ApiForecastModel(predictedData)
 
-        val listOfForecastData = mutableListOf<Pair<String, Pair<Float, Float>>>()
         for (forecast in forecasts) {
             val date = forecast?.date ?: ""
-            val values = forecast?.values
-            var valuesPair = Pair(0f, 0f)
+            predictedData.hours.add(formatDateToLocalTimezone(date))
 
+            val values = forecast?.values
             if (values?.get(0)?.get("name") == "PM25" && values?.get(1)?.get("name") == "PM10") {
                 val pm25 = values[0]?.get("value") as Double
                 val pm10 = values[1]?.get("value") as Double
-                valuesPair = Pair(
-                        pm25ToPercent(pm25).toFloat(),
-                        pm10ToPercent(pm10).toFloat()
-                )
-            }
 
-            val formattedDate = formatDateToLocalTimezone(date)
-            listOfForecastData.add(Pair(formattedDate, valuesPair))
+                predictedData.pm25.add(pm25ToPercent(pm25).toFloat())
+                predictedData.pm10.add(pm10ToPercent(pm10).toFloat())
+            }
         }
 
-        return ApiForecastModel(listOfForecastData)
+        return ApiForecastModel(predictedData)
     }
 }

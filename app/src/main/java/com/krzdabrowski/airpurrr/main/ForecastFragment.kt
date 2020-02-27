@@ -51,14 +51,11 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
 
     private fun formatPm25Chart(forecastModel: BaseForecastModel) {
         with (partial_forecast_pm25.chart) {
-            val valuesToShow = LinkedHashMap(
-                    forecastModel.result
-                            .take(NUMBER_OF_FORECAST_DATA_TO_SHOW)
-                            .associateBy({ it.first }, { it.second.first })
-            )
-
-            val mean = valuesToShow.map { it.value }.average()
-            val max = valuesToShow.maxBy { it.value }?.value
+            val hoursToShow = forecastModel.result.hours.take(NUMBER_OF_FORECAST_DATA_TO_SHOW)
+            val valuesToShow = forecastModel.result.pm25.take(NUMBER_OF_FORECAST_DATA_TO_SHOW)
+            val mean = forecastModel.result.pm25.average()
+            val max = forecastModel.result.pm25.maxBy { it }
+            val mapToShow = LinkedHashMap(hoursToShow.zip(valuesToShow).toMap())
 
             gradientFillColors = intArrayOf(
                     forecastModel.getBackgroundColorInt(context!!, mean),
@@ -66,19 +63,17 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
             )
             scale = Scale(0f, max?.times(1.5f) ?: 100f)
             labelsFormatter = { "${it.roundToInt()}%" }
-            animate(valuesToShow)
+            animate(mapToShow)
         }
     }
 
     private fun formatPm10Chart(forecastModel: BaseForecastModel) {
         with(partial_forecast_pm10.chart) {
-            val valuesToShow = LinkedHashMap(
-                    forecastModel.result
-                            .take(NUMBER_OF_FORECAST_DATA_TO_SHOW)
-                            .associateBy({ it.first }, { it.second.second })
-            )
-            val mean = valuesToShow.map { it.value }.average()
-            val max = valuesToShow.maxBy { it.value }?.value
+            val hoursToShow = forecastModel.result.hours.take(NUMBER_OF_FORECAST_DATA_TO_SHOW)
+            val valuesToShow = forecastModel.result.pm10.take(NUMBER_OF_FORECAST_DATA_TO_SHOW)
+            val mean = forecastModel.result.pm10.average()
+            val max = forecastModel.result.pm10.maxBy { it }
+            val mapToShow = LinkedHashMap(hoursToShow.zip(valuesToShow).toMap())
 
             gradientFillColors = intArrayOf(
                     forecastModel.getBackgroundColorInt(context!!, mean),
@@ -86,7 +81,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
             )
             scale = Scale(0f, max?.times(1.5f) ?: 100f)
             labelsFormatter = { "${it.roundToInt()}%" }
-            animate(valuesToShow)
+            animate(mapToShow)
         }
     }
 

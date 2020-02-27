@@ -5,7 +5,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.krzdabrowski.airpurrr.R
 
 abstract class BaseForecastModel {
-    abstract val result: List<Pair<String, Pair<Float, Float>>>
+    abstract val result: Result
 
     abstract fun getSource(context: Context): String
 
@@ -18,4 +18,10 @@ abstract class BaseForecastModel {
             else -> ResourcesCompat.getColor(context.resources, R.color.color_main_data_red, null)
         }
     }
+
+    data class Result(
+        val hours: MutableList<String>,
+        val pm25: MutableList<Float>,
+        val pm10: MutableList<Float>
+    )
 }

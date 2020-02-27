@@ -1,6 +1,8 @@
 package com.krzdabrowski.airpurrr.main.detector
 
 import androidx.lifecycle.MutableLiveData
+import com.krzdabrowski.airpurrr.main.BaseForecastModel
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,8 +14,9 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
     internal val currentValuesLiveData = MutableLiveData<DetectorCurrentModel>()
     internal val forecastValuesLiveData = MutableLiveData<DetectorForecastModel>()
     internal val currentWorkstateLiveData = MutableLiveData<String>()
+    private val forecastTopics = arrayOf("forecast/linear", "forecast/neuralnetwork", "forecast/xgboost")
 
-    fun connectMqttClient() {
+    fun connectMqttClient(forecastPredictionType: ForecastPredictionType?) {
         if (client.isConnected) {
             return
         }
@@ -28,6 +31,12 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     subscribeToCurrentValues()
                     subscribeToCurrentWorkstate()
+
+                    when (forecastPredictionType) {
+                        ForecastPredictionType.LINEAR_REGRESSION -> subscribeToForecastLinearRegressionValues()
+                        ForecastPredictionType.NEURAL_NETWORK -> subscribeToForecastNeuralNetworkValues()
+                        ForecastPredictionType.XGBOOST -> subscribeToForecastXGBoostValues()
+                    }
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -72,15 +81,15 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
 
     private fun subscribeToCurrentValues() {
         client.subscribe("sds011/pollution", 0) { _, message ->
-            val values = message
+            val currentValues = message
                     ?.payload
                     ?.toString(StandardCharsets.UTF_8)
                     ?.split(',')
                     ?.map { it.toDouble() }
 
-            if (!values.isNullOrEmpty()) {
-                Timber.d("MQTT pm25: ${values[0]}, pm10: ${values[1]}")
-                currentValuesLiveData.postValue(DetectorCurrentModel(Pair(values[0], values[1])))
+            if (!currentValues.isNullOrEmpty()) {
+                Timber.d("MQTT pm25: ${currentValues[0]}, pm10: ${currentValues[1]}")
+                currentValuesLiveData.postValue(DetectorCurrentModel(Pair(currentValues[0], currentValues[1])))
             }
         }
     }
@@ -99,59 +108,36 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
     }
 
     fun subscribeToForecastLinearRegressionValues() {
-        // TODO: mock
-        val mockedValues = listOf(
-        "01:00" to Pair(10f, 20f),
-        "02:00" to Pair(20f, 40f),
-        "03:00" to Pair(30f, 60f),
-        "04:00" to Pair(40f, 80f),
-        "05:00" to Pair(50f, 100f),
-        "06:00" to Pair(60f, 120f),
-        "07:00" to Pair(70f, 140f),
-        "08:00" to Pair(80f, 160f)
-        )
+        client.unsubscribe(forecastTopics)
+        client.subscribe(forecastTopics[0], 0) { _, message ->
+            val forecastValues = message
+                    ?.payload
+                    ?.toString(StandardCharsets.UTF_8)
 
-        // client.unsubscribePozostale
-        // client.subscribe("forecast/linear", 0) {  }
+            val adapter = Moshi.Builder().build().adapter(BaseForecastModel.Result::class.java)
 
-        forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
-    }
-
-    fun subscribeToForecastMachineLearningValues() {
-        // TODO: mock
-        val mockedValues = listOf(
-                "01:00" to Pair(10f, 20f),
-                "02:00" to Pair(20f, 40f),
-                "03:00" to Pair(30f, 60f),
-                "04:00" to Pair(40f, 80f),
-                "05:00" to Pair(30f, 60f),
-                "06:00" to Pair(20f, 40f),
-                "07:00" to Pair(10f, 20f),
-                "08:00" to Pair(5f, 10f)
-        )
-
-        // client.unsubscribePozostale
-        // client.subscribe("forecast/linear", 0) {  }
-
-        forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
+            if (!forecastValues.isNullOrEmpty()) {
+                val result = adapter.fromJson(forecastValues)
+                if (result != null) {
+                    forecastValuesLiveData.postValue(DetectorForecastModel(result))
+                }
+            }
+        }
     }
 
     fun subscribeToForecastNeuralNetworkValues() {
-        // TODO: mock
-        val mockedValues = listOf(
-                "01:00" to Pair(40f, 80f),
-                "02:00" to Pair(30f, 60f),
-                "03:00" to Pair(20f, 40f),
-                "04:00" to Pair(10f, 20f),
-                "05:00" to Pair(20f, 40f),
-                "06:00" to Pair(30f, 60f),
-                "07:00" to Pair(40f, 80f),
-                "08:00" to Pair(50f, 100f)
-        )
-
+        // TODO:
         // client.unsubscribePozostale
         // client.subscribe("forecast/linear", 0) {  }
 
-        forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
+        // forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
+    }
+
+    fun subscribeToForecastXGBoostValues() {
+        // TODO:
+        // client.unsubscribePozostale
+        // client.subscribe("forecast/linear", 0) {  }
+
+        // forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
     }
 }

@@ -17,6 +17,7 @@ import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.BaseViewModel
 import com.krzdabrowski.airpurrr.main.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
+import com.krzdabrowski.airpurrr.main.detector.ForecastPredictionType
 import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import com.krzdabrowski.airpurrr.settings.SettingsFragment
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -51,21 +52,11 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
         }.attach()
 
         checkLocationPermission()
+        configureForecastPredictionType()
         detectorViewModel.connectMqttClient()
         getPurifierState()
-        configureForecastPredictionType()
     }
     // endregion
-
-    private fun configureForecastPredictionType() {
-        val forecastPredictionType = sharedPrefs?.getString(getString(R.string.settings_key_forecast_type_radio_list), getString(R.string.settings_forecast_prediction_item_linear_regression))
-        when (forecastPredictionType) {
-            getString(R.string.settings_forecast_prediction_item_linear_regression) -> detectorViewModel.forecastPredictionType.set(DetectorViewModel.ForecastPredictionType.LINEAR_REGRESSION)
-            getString(R.string.settings_forecast_prediction_item_machine_learning) -> detectorViewModel.forecastPredictionType.set(DetectorViewModel.ForecastPredictionType.MACHINE_LEARNING)
-            getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(DetectorViewModel.ForecastPredictionType.NEURAL_NETWORK)
-        }
-        detectorViewModel.getForecastPredictionData()
-    }
 
     // region Location permissions
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -93,6 +84,15 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     // endregion
 
     // region Purifier
+    private fun configureForecastPredictionType() {
+        val forecastPredictionType = sharedPrefs?.getString(getString(R.string.settings_key_forecast_type_radio_list), getString(R.string.settings_forecast_prediction_item_linear_regression))
+        when (forecastPredictionType) {
+            getString(R.string.settings_forecast_prediction_item_linear_regression) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR_REGRESSION)
+            getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NEURAL_NETWORK)
+            getString(R.string.settings_forecast_prediction_item_xgboost) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.XGBOOST)
+        }
+    }
+
     private fun getPurifierState() = detectorViewModel.currentWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
 
     private fun controlPurifierOnOff(currentState: Boolean) {
