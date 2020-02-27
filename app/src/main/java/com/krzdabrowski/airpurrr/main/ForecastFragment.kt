@@ -10,6 +10,7 @@ import androidx.lifecycle.observe
 import com.db.williamchart.data.Scale
 import com.krzdabrowski.airpurrr.databinding.FragmentForecastBinding
 import com.krzdabrowski.airpurrr.main.api.ApiViewModel
+import com.krzdabrowski.airpurrr.main.core.MainFragment
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import kotlinx.android.synthetic.main.fragment_forecast.*
 import kotlinx.android.synthetic.main.partial_forecast_data.view.*
@@ -18,7 +19,7 @@ import kotlin.math.roundToInt
 
 private const val NUMBER_OF_FORECAST_DATA_TO_SHOW = 8
 
-class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
+class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback, MainFragment.ViewPagerRefreshListener {
     private lateinit var binding: FragmentForecastBinding
     private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!!.activity!! })
     private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
@@ -27,6 +28,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentForecastBinding.inflate(inflater, container, false)
         baseViewModel.forecastClickCallback = this
+        (parentFragment as MainFragment).forecastRefreshListener = this
         binding.baseVm = baseViewModel
 
         return binding.root
@@ -40,6 +42,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
 
     private fun getDetectorData() = detectorViewModel.forecastValuesLiveData.observe(viewLifecycleOwner) { value ->
         binding.detectorData = value
+        onRefresh()
     }
 
     private fun getApiData() = apiViewModel.liveData.observe(viewLifecycleOwner) { value ->
@@ -96,5 +99,9 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback {
             formatPm25Chart(binding.detectorData as BaseForecastModel)
             formatPm10Chart(binding.detectorData as BaseForecastModel)
         }
+    }
+
+    override fun onForecastRefresh() {
+        onRefresh()
     }
 }

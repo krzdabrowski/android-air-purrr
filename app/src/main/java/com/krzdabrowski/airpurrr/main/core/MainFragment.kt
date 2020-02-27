@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.observe
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,6 +33,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     private val purifierHelper: PurifierHelper by inject()
     private val permissionResultCodeLocation = 100
     private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(activity) }
+    lateinit var forecastRefreshListener: ViewPagerRefreshListener
 
     // region Init
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,9 +43,20 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         purifierHelper.snackbarListener = this
+
         view_pager.adapter = ViewPagerAdapter(this)
+        view_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback()
+            {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    when (position) {
+                        FORECAST_SCREEN_POSITION -> forecastRefreshListener.onForecastRefresh()
+                    }
+                }
+            }
+        )
+
         TabLayoutMediator(tab_layout, view_pager) { currentTab, currentPosition ->
             currentTab.text = when (currentPosition) {
                 CURRENT_SCREEN_POSITION -> context?.getString(R.string.main_tab_current)
@@ -135,4 +148,8 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
         (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.app_name)
     }
     // endregion
+
+    interface ViewPagerRefreshListener {
+        fun onForecastRefresh()
+    }
 }

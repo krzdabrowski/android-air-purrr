@@ -6,6 +6,7 @@ import com.krzdabrowski.airpurrr.main.CurrentFragment
 import com.krzdabrowski.airpurrr.main.ForecastFragment
 
 internal const val CURRENT_SCREEN_POSITION = 0
+internal const val FORECAST_SCREEN_POSITION = 1
 private const val VIEW_PAGER_TAB_SIZE = 2
 
 class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
