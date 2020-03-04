@@ -21,7 +21,6 @@ ext {
 
     // region Third party
     retrofit = '2.7.2'                  // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
-    retrofitFlowCallAdapter = '0.2.0'   // https://jitpack.io/#MohammadSianaki/Retrofit2-Flow-Call-Adapter
     timber = '4.7.1'                    // https://mvnrepository.com/artifact/com.jakewharton.timber/timber
     koin = '2.0.1'                      // https://mvnrepository.com/artifact/org.koin/koin-android?repo=jcenter
     leakCanary = '2.2'                  // https://mvnrepository.com/artifact/com.squareup.leakcanary/leakcanary-android
@@ -66,7 +65,6 @@ ext {
     thirdPartyDependencies = [
         retrofit: "com.squareup.retrofit2:retrofit:$retrofit",
         moshi: "com.squareup.retrofit2:converter-moshi:$retrofit",
-        retrofitFlowCallAdapter: "com.github.MohammadSianaki:Retrofit2-Flow-Call-Adapter:$retrofitFlowCallAdapter",
         timber: "com.jakewharton.timber:timber:$timber",
         koin: "org.koin:koin-android:$koin",
         koinViewmodel: "org.koin:koin-androidx-viewmodel:$koin",

@@ -96,7 +96,6 @@ dependencies {
     // region Third party
     implementation thirdPartyDependencies.retrofit
     implementation thirdPartyDependencies.moshi
-    implementation thirdPartyDependencies.retrofitFlowCallAdapter
     implementation thirdPartyDependencies.timber
     implementation thirdPartyDependencies.koin
     implementation thirdPartyDependencies.koinViewmodel
