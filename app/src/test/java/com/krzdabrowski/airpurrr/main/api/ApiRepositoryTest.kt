@@ -43,26 +43,20 @@ class ApiRepositoryTest {
 
     @Test
     fun `given response body is not null, when fetching data, then model is not null`() = runBlockingTest {
-        lateinit var response: Response<ApiModel>
-        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns flowOf(Response.success(apiModel))
+        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(apiModel)
 
-        apiService.getApiDataAsync("", location.latitude, location.longitude).collect { res -> response = res }
-
-        assertThat(response.isSuccessful).isTrue()
-        assertThat(response.body()).isNotNull()
+        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).isSuccessful).isTrue()
+        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude)).isNotNull()
 
         coVerify { apiService.getApiDataAsync(any(), any(), any()) }
     }
 
     @Test
     fun `given response body is not null, when fetching data, then model is body`() = runBlockingTest {
-        lateinit var response: Response<ApiModel>
-        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns flowOf(Response.success(apiModel))
+        coEvery { apiService.getApiDataAsync(any(), any(), any()) } returns Response.success(apiModel)
 
-        apiService.getApiDataAsync("", location.latitude, location.longitude).collect { res -> response = res }
-
-        assertThat(response.isSuccessful).isTrue()
-        assertThat(response.body()).isEqualTo(apiModel)
+        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).isSuccessful).isTrue()
+        assertThat(apiService.getApiDataAsync("", location.latitude, location.longitude).body()).isEqualTo(apiModel)
 
         coVerify { apiService.getApiDataAsync(any(), any(), any()) }
     }
