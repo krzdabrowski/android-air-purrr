@@ -21,9 +21,9 @@ private const val NUMBER_OF_FORECAST_DATA_TO_SHOW = 8
 
 class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback, MainFragment.ViewPagerRefreshListener {
     private lateinit var binding: FragmentForecastBinding
-    private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!!.activity!! })
-    private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
-    private val baseViewModel: BaseViewModel by sharedViewModel(from = { parentFragment!! })
+    private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { requireParentFragment().requireActivity() })
+    private val apiViewModel: ApiViewModel by sharedViewModel(from = { requireParentFragment() })
+    private val baseViewModel: BaseViewModel by sharedViewModel(from = { requireParentFragment() })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentForecastBinding.inflate(inflater, container, false)
@@ -61,7 +61,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback, MainFragm
             val mapToShow = LinkedHashMap(hoursToShow.zip(valuesToShow).toMap())
 
             gradientFillColors = intArrayOf(
-                    forecastModel.getBackgroundColorInt(context!!, mean),
+                    forecastModel.getBackgroundColorInt(requireContext(), mean),
                     Color.TRANSPARENT
             )
             scale = Scale(0f, max?.times(1.5f) ?: 100f)
@@ -79,7 +79,7 @@ class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback, MainFragm
             val mapToShow = LinkedHashMap(hoursToShow.zip(valuesToShow).toMap())
 
             gradientFillColors = intArrayOf(
-                    forecastModel.getBackgroundColorInt(context!!, mean),
+                    forecastModel.getBackgroundColorInt(requireContext(), mean),
                     Color.TRANSPARENT
             )
             scale = Scale(0f, max?.times(1.5f) ?: 100f)

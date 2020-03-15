@@ -133,7 +133,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
     // endregion
 
     override fun showSnackbar(stringId: Int, length: Int) {
-        Snackbar.make(view!!, stringId, length).show()
+        Snackbar.make(requireView(), stringId, length).show()
     }
 
     private fun setToolbar() {

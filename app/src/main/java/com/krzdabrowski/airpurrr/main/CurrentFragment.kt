@@ -14,9 +14,9 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentCurrentBinding
-    private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { parentFragment!!.activity!! })
-    private val apiViewModel: ApiViewModel by sharedViewModel(from = { parentFragment!! })
-    private val baseViewModel: BaseViewModel by sharedViewModel(from = { parentFragment!! })
+    private val detectorViewModel: DetectorViewModel by sharedViewModel(from = { requireParentFragment().requireActivity() })
+    private val apiViewModel: ApiViewModel by sharedViewModel(from = { requireParentFragment() })
+    private val baseViewModel: BaseViewModel by sharedViewModel(from = { requireParentFragment() })
     private var isRefreshing = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

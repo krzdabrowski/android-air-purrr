@@ -81,7 +81,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     }
 
     private fun checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionResultCodeLocation)
         } else {
             getLastKnownLocation()
@@ -89,7 +89,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     }
 
     private fun getLastKnownLocation() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) apiViewModel.userLocation.value = location
         }
@@ -117,7 +117,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     // endregion
 
     override fun showSnackbar(stringId: Int, length: Int) {
-        Snackbar.make(view!!, stringId, length).show()
+        Snackbar.make(requireView(), stringId, length).show()
     }
 
     // region Menu
