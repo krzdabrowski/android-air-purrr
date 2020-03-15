@@ -46,5 +46,7 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
         }
     }
 
-
+    fun subscribeToSelectedForecastType() {
+        repository.subscribeToSelectedForecastType(forecastPredictionType.get())
+    }
 }

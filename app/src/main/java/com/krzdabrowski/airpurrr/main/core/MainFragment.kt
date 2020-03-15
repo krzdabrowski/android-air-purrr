@@ -98,9 +98,10 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
 
     // region Purifier
     private fun configureForecastPredictionType() {
-        val forecastPredictionType = sharedPrefs?.getString(getString(R.string.settings_key_forecast_type_radio_list), getString(R.string.settings_forecast_prediction_item_linear_regression))
+        val forecastPredictionType = sharedPrefs?.getString(getString(R.string.settings_key_forecast_type_radio_list), getString(R.string.settings_forecast_prediction_item_linear))
         when (forecastPredictionType) {
-            getString(R.string.settings_forecast_prediction_item_linear_regression) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR_REGRESSION)
+            getString(R.string.settings_forecast_prediction_item_linear) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR)
+            getString(R.string.settings_forecast_prediction_item_nonlinear) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NONLINEAR)
             getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NEURAL_NETWORK)
             getString(R.string.settings_forecast_prediction_item_xgboost) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.XGBOOST)
         }

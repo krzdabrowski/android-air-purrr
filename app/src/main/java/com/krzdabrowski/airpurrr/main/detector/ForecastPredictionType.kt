@@ -1,7 +1,8 @@
 package com.krzdabrowski.airpurrr.main.detector
 
 enum class ForecastPredictionType {
-    LINEAR_REGRESSION,
+    LINEAR,
+    NONLINEAR,
     NEURAL_NETWORK,
     XGBOOST
 }

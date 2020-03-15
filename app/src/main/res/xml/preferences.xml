@@ -31,7 +31,7 @@
     <ListPreference
         app:key="forecastTypeRadioList"
         app:title="@string/settings_title_forecast"
-        app:defaultValue="@string/settings_forecast_prediction_item_linear_regression"
+        app:defaultValue="@string/settings_forecast_prediction_item_linear"
         app:entries="@array/settings_forecast_prediction_type"
         app:entryValues="@array/settings_forecast_prediction_type"
         app:useSimpleSummaryProvider="true" />

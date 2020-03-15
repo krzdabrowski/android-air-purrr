@@ -51,7 +51,8 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
             }
             keyForecastTypeRadioList -> {
                 when (forecastTypeRadioListPreference!!.value) {
-                    getString(R.string.settings_forecast_prediction_item_linear_regression) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR_REGRESSION)
+                    getString(R.string.settings_forecast_prediction_item_linear) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR)
+                    getString(R.string.settings_forecast_prediction_item_nonlinear) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NONLINEAR)
                     getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NEURAL_NETWORK)
                     getString(R.string.settings_forecast_prediction_item_xgboost) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.XGBOOST)
                 }
@@ -93,6 +94,11 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
                 if (detectorViewModel.purifierHighLowObservableState.get()) {
                     detectorViewModel.checkPerformanceMode(true)
                 }
+            }
+        })
+        detectorViewModel.forecastPredictionType.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                detectorViewModel.subscribeToSelectedForecastType()
             }
         })
 

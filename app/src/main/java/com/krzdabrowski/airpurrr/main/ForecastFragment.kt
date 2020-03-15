@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.partial_forecast_data.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.roundToInt
 
-private const val NUMBER_OF_FORECAST_DATA_TO_SHOW = 8
+private const val NUMBER_OF_FORECAST_DATA_TO_SHOW = 6
 
 class ForecastFragment : Fragment(), BaseViewModel.OnForecastCallback, MainFragment.ViewPagerRefreshListener {
     private lateinit var binding: FragmentForecastBinding
