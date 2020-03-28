@@ -70,13 +70,13 @@
 
     <string name="settings_forecast_prediction_item_linear">Linear regression</string>
     <string name="settings_forecast_prediction_item_nonlinear">Nonlinear regression</string>
-    <string name="settings_forecast_prediction_item_neural_network">Neural network</string>
     <string name="settings_forecast_prediction_item_xgboost">XGBoost</string>
+    <string name="settings_forecast_prediction_item_neural_network">Neural network</string>
 
     <string-array name="settings_forecast_prediction_type">
         <item>@string/settings_forecast_prediction_item_linear</item>
         <item>@string/settings_forecast_prediction_item_nonlinear</item>
-        <item>@string/settings_forecast_prediction_item_neural_network</item>
         <item>@string/settings_forecast_prediction_item_xgboost</item>
+        <item>@string/settings_forecast_prediction_item_neural_network</item>
     </string-array>
 </resources>

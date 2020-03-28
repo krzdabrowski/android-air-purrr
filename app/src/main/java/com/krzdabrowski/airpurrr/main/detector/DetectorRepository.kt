@@ -14,7 +14,7 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
     internal val currentValuesLiveData = MutableLiveData<DetectorCurrentModel>()
     internal val forecastValuesLiveData = MutableLiveData<DetectorForecastModel>()
     internal val currentWorkstateLiveData = MutableLiveData<String>()
-    private val forecastTopics = arrayOf("forecast/linear", "forecast/nonlinear", "forecast/neuralnetwork", "forecast/xgboost")
+    private val forecastTopics = arrayOf("forecast/linear", "forecast/nonlinear", "forecast/xgboost", "forecast/neuralnetwork")
     private val messageListener = IMqttMessageListener { _, message ->
         val forecastValues = message
                 ?.payload
@@ -117,34 +117,25 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
     }
 
     fun subscribeToSelectedForecastType(forecastPredictionType: ForecastPredictionType?) {
+        client.unsubscribe(forecastTopics)
+
         when (forecastPredictionType) {
             ForecastPredictionType.LINEAR -> subscribeToForecastLinearValues()
             ForecastPredictionType.NONLINEAR -> subscribeToForecastNonlinearValues()
-            ForecastPredictionType.NEURAL_NETWORK -> subscribeToForecastNeuralNetworkValues()
             ForecastPredictionType.XGBOOST -> subscribeToForecastXGBoostValues()
+            ForecastPredictionType.NEURAL_NETWORK -> subscribeToForecastNeuralNetworkValues()
         }
     }
 
-    private fun subscribeToForecastLinearValues() {
-        client.unsubscribe(forecastTopics)
+    private fun subscribeToForecastLinearValues() =
         client.subscribe(forecastTopics[0], 0, messageListener)
-    }
 
-    private fun subscribeToForecastNonlinearValues() {
-        client.unsubscribe(forecastTopics)
+    private fun subscribeToForecastNonlinearValues() =
         client.subscribe(forecastTopics[1], 0, messageListener)
-    }
 
-    private fun subscribeToForecastNeuralNetworkValues() {
-        client.unsubscribe(forecastTopics)
+    private fun subscribeToForecastXGBoostValues() =
         client.subscribe(forecastTopics[2], 0, messageListener)
-    }
 
-    private fun subscribeToForecastXGBoostValues() {
-        // TODO:
-        // client.unsubscribePozostale
-        // client.subscribe("forecast/linear", 0) {  }
-
-        // forecastValuesLiveData.postValue(DetectorForecastModel(mockedValues))
-    }
+    private fun subscribeToForecastNeuralNetworkValues() =
+        client.subscribe(forecastTopics[3], 0, messageListener)
 }
