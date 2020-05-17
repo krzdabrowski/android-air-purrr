@@ -24,7 +24,7 @@ ext {
     timber = '4.7.1'                    // https://mvnrepository.com/artifact/com.jakewharton.timber/timber
     koin = '2.0.1'                      // https://mvnrepository.com/artifact/org.koin/koin-android?repo=jcenter
     leakCanary = '2.2'                  // https://mvnrepository.com/artifact/com.squareup.leakcanary/leakcanary-android
-    williamChart = '3.3.0'              // https://mvnrepository.com/artifact/com.diogobernardino/williamchart?repo=jcenter
+    williamChart = '3.3.1'              // https://mvnrepository.com/artifact/com.diogobernardino/williamchart?repo=jcenter
     mqttClient = '1.2.2'                // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3
     mqttService = '1.1.1'               // https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.android.service
     // endregion
