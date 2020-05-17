@@ -3,13 +3,11 @@ package com.krzdabrowski.airpurrr.main.core
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
@@ -18,21 +16,17 @@ import com.krzdabrowski.airpurrr.R
 import com.krzdabrowski.airpurrr.main.BaseViewModel
 import com.krzdabrowski.airpurrr.main.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
-import com.krzdabrowski.airpurrr.main.detector.ForecastPredictionType
-import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
+import com.krzdabrowski.airpurrr.main.detector.DetectorWorkstate
 import com.krzdabrowski.airpurrr.settings.SettingsFragment
 import kotlinx.android.synthetic.main.fragment_main.*
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
+class MainFragment : Fragment() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
     private val apiViewModel: ApiViewModel by viewModel()
     private val baseViewModel: BaseViewModel by viewModel()
-    private val purifierHelper: PurifierHelper by inject()
     private val permissionResultCodeLocation = 100
-    private val sharedPrefs by lazy { PreferenceManager.getDefaultSharedPreferences(activity) }
     lateinit var forecastRefreshListener: ViewPagerRefreshListener
 
     // region Init
@@ -43,7 +37,6 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        purifierHelper.snackbarListener = this
 
         view_pager.adapter = ViewPagerAdapter(this)
         view_pager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback()
@@ -67,9 +60,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
         }.attach()
 
         checkLocationPermission()
-        configureForecastPredictionType()
         detectorViewModel.connectMqttClient()
-        getPurifierState()
     }
     // endregion
 
@@ -98,31 +89,6 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     }
     // endregion
 
-    // region Purifier
-    private fun configureForecastPredictionType() {
-        val forecastPredictionType = sharedPrefs?.getString(getString(R.string.settings_key_forecast_type_radio_list), getString(R.string.settings_forecast_prediction_item_linear))
-        when (forecastPredictionType) {
-            getString(R.string.settings_forecast_prediction_item_linear) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR)
-            getString(R.string.settings_forecast_prediction_item_nonlinear) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NONLINEAR)
-            getString(R.string.settings_forecast_prediction_item_xgboost) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.XGBOOST)
-            getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NEURAL_NETWORK)
-        }
-    }
-
-    private fun getPurifierState() = detectorViewModel.currentSensorWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
-
-    private fun controlPurifierOnOff(currentState: Boolean) {
-        detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(currentState)
-        if (detectorViewModel.purifierHighLowObservableState.get()) {
-            detectorViewModel.checkPerformanceMode(true)
-        }
-    }
-    // endregion
-
-    override fun showSnackbar(stringId: Int, length: Int) {
-        Snackbar.make(requireView(), stringId, length).show()
-    }
-
     // region Menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.toolbar_settings, menu)
@@ -131,7 +97,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_manual_mode -> {
-                controlPurifierOnOff(detectorViewModel.purifierOnOffState)
+                controlPurifier()
                 true
             }
             R.id.menu_settings -> {
@@ -142,6 +108,21 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun controlPurifier() {
+        when (detectorViewModel.sensorWorkstateLiveData.value) {
+            DetectorWorkstate.SLEEPING -> {
+                Snackbar.make(requireView(), getString(R.string.main_msg_turn_on), Snackbar.LENGTH_LONG)
+                detectorViewModel.controlAirPurifierFanState(!detectorViewModel.fanStateLiveData.value!!)
+            }
+            DetectorWorkstate.MEASURING -> {
+                Snackbar.make(requireView(), getString(R.string.main_error_measuring), Snackbar.LENGTH_LONG)
+            }
+            else -> {
+                Snackbar.make(requireView(), getString(R.string.main_error_server), Snackbar.LENGTH_LONG)
+            }
         }
     }
 

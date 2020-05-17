@@ -8,8 +8,10 @@ import timber.log.Timber
 import java.nio.charset.StandardCharsets
 
 class DetectorRepository(private val client: MqttAsyncClient) {
-    internal val currentSensorWorkstateLiveData = MutableLiveData<String>()
-    internal val currentSensorAirPollutionValuesLiveData = MutableLiveData<DetectorCurrentModel>()
+    internal val fanStateLiveData = MutableLiveData<Boolean>()
+    internal val fanSpeedLiveData = MutableLiveData<Boolean>()
+    internal val sensorWorkstateLiveData = MutableLiveData<DetectorWorkstate>()
+    internal val sensorAirPollutionValuesLiveData = MutableLiveData<DetectorCurrentModel>()
     internal val forecastValuesLiveData = MutableLiveData<DetectorForecastModel>()
 
     private val fanTopics = arrayOf("airpurifier/fan/state", "airpurifier/fan/speed")
@@ -31,7 +33,7 @@ class DetectorRepository(private val client: MqttAsyncClient) {
         }
     }
 
-    fun connectMqttClient(forecastPredictionType: ForecastPredictionType?) {
+    fun connectMqttClient() {
         if (client.isConnected) {
             return
         }
@@ -44,9 +46,11 @@ class DetectorRepository(private val client: MqttAsyncClient) {
         try {
             client.connect(mqttOptions, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    subscribeToAirPurifierFanState()
+                    subscribeToAirPurifierFanSpeed()
                     subscribeToCurrentSensorWorkstate()
                     subscribeToCurrentSensorAirPollutionValues()
-                    subscribeToSelectedForecastType(forecastPredictionType)
+                    subscribeToForecastLinearValues()
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -73,20 +77,6 @@ class DetectorRepository(private val client: MqttAsyncClient) {
             Timber.e("DetectorRepository publish fan state MqttException: ${e.message}")
         }  catch (e: Throwable) {
             Timber.e("DetectorRepository publish fan state error: ${e.message}")
-        }
-    }
-    
-    fun publishAirPurifierFanSpeed(shouldSwitchToHigh: Boolean) {
-        try {
-            if (shouldSwitchToHigh) {
-                client.publish(fanTopics[1], MqttMessage("high".toByteArray()))
-            } else {
-                client.publish(fanTopics[1], MqttMessage("low".toByteArray()))
-            }
-        } catch (e: MqttException) {
-            Timber.e("DetectorRepository publish fan speed MqttException: ${e.message}")
-        }  catch (e: Throwable) {
-            Timber.e("DetectorRepository publish fan speed error: ${e.message}")
         }
     }
 
@@ -130,6 +120,43 @@ class DetectorRepository(private val client: MqttAsyncClient) {
     // endregion
 
     // region Subscribe
+    fun subscribeToAirPurifierFanState() {
+        client.subscribe(fanTopics[0], 0) { _, message ->
+            val state = message
+                    ?.payload
+                    ?.toString(StandardCharsets.UTF_8)
+
+            if (!state.isNullOrBlank()) {
+                Timber.d("MQTT fan state: $state")
+
+                when (state) {
+                    "on" -> fanStateLiveData.postValue(true)
+                    "off" -> fanStateLiveData.postValue(false)
+                    else -> Timber.d("MQTT incorrect fan state")
+                }
+            }
+        }
+    }
+
+    fun subscribeToAirPurifierFanSpeed() {
+        client.subscribe(fanTopics[1], 0) { _, message ->
+            val speed = message
+                    ?.payload
+                    ?.toString(StandardCharsets.UTF_8)
+
+            if (!speed.isNullOrBlank()) {
+                Timber.d("MQTT fan speed: $speed")
+
+                when (speed) {
+                    "high" -> fanSpeedLiveData.postValue(true)
+                    "low" -> fanSpeedLiveData.postValue(false)
+                    else -> Timber.d("MQTT incorrect fan speed")
+                }
+            }
+        }
+    }
+
+
     private fun subscribeToCurrentSensorWorkstate() {
         client.subscribe(sensorTopics[0], 0) { _, message ->
             val workstate = message
@@ -138,7 +165,7 @@ class DetectorRepository(private val client: MqttAsyncClient) {
 
             if (!workstate.isNullOrBlank()) {
                 Timber.d("MQTT workstate: $workstate")
-                currentSensorWorkstateLiveData.postValue(workstate)
+                sensorWorkstateLiveData.postValue(DetectorWorkstate.valueOf(workstate))
             }
         }
     }
@@ -153,32 +180,29 @@ class DetectorRepository(private val client: MqttAsyncClient) {
 
             if (!currentValues.isNullOrEmpty()) {
                 Timber.d("MQTT pm25: ${currentValues[0]}, pm10: ${currentValues[1]}")
-                currentSensorAirPollutionValuesLiveData.postValue(DetectorCurrentModel(Pair(currentValues[0], currentValues[1])))
+                sensorAirPollutionValuesLiveData.postValue(DetectorCurrentModel(Pair(currentValues[0], currentValues[1])))
             }
         }
     }
 
-    fun subscribeToSelectedForecastType(forecastPredictionType: ForecastPredictionType?) {
+    fun subscribeToForecastLinearValues() {
         client.unsubscribe(forecastTopics)
-
-        when (forecastPredictionType) {
-            ForecastPredictionType.LINEAR -> subscribeToForecastLinearValues()
-            ForecastPredictionType.NONLINEAR -> subscribeToForecastNonlinearValues()
-            ForecastPredictionType.XGBOOST -> subscribeToForecastXGBoostValues()
-            ForecastPredictionType.NEURAL_NETWORK -> subscribeToForecastNeuralNetworkValues()
-        }
+        client.subscribe(forecastTopics[0], 0, forecastMessageListener)
     }
 
-    private fun subscribeToForecastLinearValues() =
-        client.subscribe(forecastTopics[0], 0, forecastMessageListener)
-
-    private fun subscribeToForecastNonlinearValues() =
+    fun subscribeToForecastNonlinearValues() {
+        client.unsubscribe(forecastTopics)
         client.subscribe(forecastTopics[1], 0, forecastMessageListener)
+    }
 
-    private fun subscribeToForecastXGBoostValues() =
+    fun subscribeToForecastXGBoostValues() {
+        client.unsubscribe(forecastTopics)
         client.subscribe(forecastTopics[2], 0, forecastMessageListener)
+    }
 
-    private fun subscribeToForecastNeuralNetworkValues() =
+    fun subscribeToForecastNeuralNetworkValues() {
+        client.unsubscribe(forecastTopics)
         client.subscribe(forecastTopics[3], 0, forecastMessageListener)
+    }
     // endregion
 }

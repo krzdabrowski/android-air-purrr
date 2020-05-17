@@ -7,61 +7,42 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.Observable
-import androidx.lifecycle.observe
 import androidx.preference.*
-import com.google.android.material.snackbar.Snackbar
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
-import com.krzdabrowski.airpurrr.main.detector.ForecastPredictionType
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
-import java.lang.NumberFormatException
 
-class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarListener {
+class SettingsFragment : PreferenceFragmentCompat() {
     private val detectorViewModel: DetectorViewModel by sharedViewModel()
-    private val purifierHelper: PurifierHelper by inject()
-
     private val keyAutoModeSwitch by lazy { getString(R.string.settings_key_automode_switch) }
     private val keyAutoModeThreshold by lazy { getString(R.string.settings_key_automode_threshold) }
     private val keyPerformanceHighLowSwitch by lazy { getString(R.string.settings_key_performance_highlow_switch) }
     private val keyForecastTypeRadioList by lazy { getString(R.string.settings_key_forecast_type_radio_list) }
-
-    private val autoModeSwitchPreference by lazy { findPreference<SwitchPreference>(keyAutoModeSwitch) }
     private val autoModeThresholdPreference by lazy { findPreference<EditTextPreference>(keyAutoModeThreshold) }
     private val forecastTypeRadioListPreference by lazy { findPreference<ListPreference>(keyForecastTypeRadioList) }
 
     private val preferenceListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
         when (key) {
-            keyAutoModeSwitch ->
-                detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keyAutoModeSwitch, false))
+            keyAutoModeSwitch -> {
+                detectorViewModel.sendSettingsAutomodeState(sharedPreferences.getBoolean(key, false))
+            }
             keyAutoModeThreshold -> {
-                detectorViewModel.autoModeThreshold.set(
-                    try {
-                        sharedPreferences.getString(keyAutoModeThreshold, "").toInt()
-                    } catch (_: NumberFormatException) {
-                        0
-                    })
+                detectorViewModel.sendSettingsAutomodeThreshold(sharedPreferences.getString(key, "").toInt())
             }
             keyPerformanceHighLowSwitch -> {
-                detectorViewModel.purifierHighLowObservableState.set(sharedPreferences.getBoolean(keyPerformanceHighLowSwitch, false))
-                reactToPerformanceChanges(sharedPreferences, key)
+                detectorViewModel.sendSettingsPerformancemodeState(sharedPreferences.getBoolean(key, false))
             }
             keyForecastTypeRadioList -> {
                 when (forecastTypeRadioListPreference!!.value) {
-                    getString(R.string.settings_forecast_prediction_item_linear) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.LINEAR)
-                    getString(R.string.settings_forecast_prediction_item_nonlinear) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NONLINEAR)
-                    getString(R.string.settings_forecast_prediction_item_xgboost) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.XGBOOST)
-                    getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.forecastPredictionType.set(ForecastPredictionType.NEURAL_NETWORK)
+                    getString(R.string.settings_forecast_prediction_item_linear) -> detectorViewModel.subscribeToForecastLinearValues()
+                    getString(R.string.settings_forecast_prediction_item_nonlinear) -> detectorViewModel.subscribeToForecastNonlinearValues()
+                    getString(R.string.settings_forecast_prediction_item_xgboost) -> detectorViewModel.subscribeToForecastXGBoostValues()
+                    getString(R.string.settings_forecast_prediction_item_neural_network) -> detectorViewModel.subscribeToForecastNeuralNetworkValues()
                 }
             }
-            else ->
-                Timber.d("Unexpected key received: $key")
+            else -> Timber.d("Unexpected key received: $key")
         }
-
-        reactToAutoModeChanges(sharedPreferences, key)
     }
 
     // region Init
@@ -84,24 +65,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setToolbar()
-
-        purifierHelper.snackbarListener = this
-        getPurifierState()
-        detectorViewModel.purifierOnOffObservableState.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(detectorViewModel.purifierOnOffState)
-
-                if (detectorViewModel.purifierHighLowObservableState.get()) {
-                    detectorViewModel.checkPerformanceMode(true)
-                }
-            }
-        })
-        detectorViewModel.forecastPredictionType.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                detectorViewModel.subscribeToSelectedForecastType()
-            }
-        })
-
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -115,32 +78,6 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
         preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceListener)
     }
     // endregion
-
-    // region Purifier
-    private fun getPurifierState() = detectorViewModel.currentSensorWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
-
-    private fun reactToAutoModeChanges(sharedPreferences: SharedPreferences, key: String) {
-        val isThresholdSet = !sharedPreferences.getString(keyAutoModeThreshold, "").isNullOrEmpty()
-        val isThresholdClicked = key == keyAutoModeThreshold
-        val isSwitchOn = sharedPreferences.getBoolean(keyAutoModeSwitch, false)
-
-        if (isThresholdSet && !(isThresholdClicked && !isSwitchOn)) {
-            detectorViewModel.checkAutoMode()
-        } else if (!isThresholdSet && isThresholdClicked && isSwitchOn) {
-            autoModeSwitchPreference?.isChecked = false
-            detectorViewModel.autoModeSwitch.set(sharedPreferences.getBoolean(keyAutoModeSwitch, false))
-        }
-    }
-
-    private fun reactToPerformanceChanges(sharedPreferences: SharedPreferences, key: String) {
-        val isSwitchOn = sharedPreferences.getBoolean(key, false)
-        detectorViewModel.checkPerformanceMode(isSwitchOn)
-    }
-    // endregion
-
-    override fun showSnackbar(stringId: Int, length: Int) {
-        Snackbar.make(requireView(), stringId, length).show()
-    }
 
     private fun setToolbar() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)

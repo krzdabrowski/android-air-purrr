@@ -8,7 +8,6 @@ import com.krzdabrowski.airpurrr.main.api.ApiService
 import com.krzdabrowski.airpurrr.main.api.ApiViewModel
 import com.krzdabrowski.airpurrr.main.detector.DetectorRepository
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
-import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
 import okhttp3.OkHttpClient
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
@@ -19,10 +18,6 @@ import java.util.concurrent.TimeUnit
 val networkModule = module {
     single { ApiService.create(provideOkHttpClient(30)) }
     single { provideMqttClient() }
-}
-
-val helperModule = module {
-    single { PurifierHelper(get()) }
 }
 
 val repositoryModule = module {
