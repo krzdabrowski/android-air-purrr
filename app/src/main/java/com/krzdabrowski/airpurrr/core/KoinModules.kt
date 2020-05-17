@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.common
+package com.krzdabrowski.airpurrr.core
 
 import com.krzdabrowski.airpurrr.BuildConfig
 import com.krzdabrowski.airpurrr.login.LoginViewModel
@@ -6,7 +6,6 @@ import com.krzdabrowski.airpurrr.main.BaseViewModel
 import com.krzdabrowski.airpurrr.main.api.ApiRepository
 import com.krzdabrowski.airpurrr.main.api.ApiService
 import com.krzdabrowski.airpurrr.main.api.ApiViewModel
-import com.krzdabrowski.airpurrr.main.detector.DetectorControlService
 import com.krzdabrowski.airpurrr.main.detector.DetectorRepository
 import com.krzdabrowski.airpurrr.main.detector.DetectorViewModel
 import com.krzdabrowski.airpurrr.main.helper.PurifierHelper
@@ -18,8 +17,8 @@ import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
 val networkModule = module {
-    single { DetectorControlService.create(provideOkHttpClient(10)) }
     single { ApiService.create(provideOkHttpClient(30)) }
+    single { provideMqttClient() }
 }
 
 val helperModule = module {
@@ -27,7 +26,7 @@ val helperModule = module {
 }
 
 val repositoryModule = module {
-    single { DetectorRepository(provideMqttClient(), get()) }
+    single { DetectorRepository(get()) }
     single { ApiRepository(get()) }
 }
 

@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.common
+package com.krzdabrowski.airpurrr.core
 
 import android.app.Application
 import com.google.firebase.FirebaseApp

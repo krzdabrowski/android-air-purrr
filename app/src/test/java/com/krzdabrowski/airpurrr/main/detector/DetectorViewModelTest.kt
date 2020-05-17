@@ -33,8 +33,8 @@ class DetectorViewModelTest {
         MockKAnnotations.init(this)
         Dispatchers.setMain(TestCoroutineDispatcher())
 
-        every { detectorRepository.currentValuesLiveData } returns MutableLiveData(DetectorCurrentModel(Pair(5.0, 7.5)))
-        every { detectorRepository.currentWorkstateLiveData } returns MutableLiveData(PurifierHelper.Workstates.SLEEPING.state)
+        every { detectorRepository.currentSensorAirPollutionValuesLiveData } returns MutableLiveData(DetectorCurrentModel(Pair(5.0, 7.5)))
+        every { detectorRepository.currentSensorWorkstateLiveData } returns MutableLiveData(PurifierHelper.Workstates.SLEEPING.state)
         every { detectorRepository.forecastValuesLiveData } returns MutableLiveData(DetectorForecastModel(BaseForecastModel.Result(
                 hours = mutableListOf("20:00", "21:00"),
                 pm25 = mutableListOf(20f, 40f),
@@ -42,7 +42,7 @@ class DetectorViewModelTest {
         )))
 
         detectorViewModel = DetectorViewModel(detectorRepository)
-        detectorViewModel.currentValuesLiveData.observeForever {}
+        detectorViewModel.currentSensorAirPollutionValuesLiveData.observeForever {}
     }
 
     @After
@@ -191,7 +191,7 @@ class DetectorViewModelTest {
         detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = true)
 
         // Assert
-        verify (exactly = 0) { detectorViewModel.controlFanHighLow(true) }
+        verify (exactly = 0) { detectorViewModel.controlAirPurifierFanSpeed(true) }
     }
 
     @Test
@@ -203,33 +203,33 @@ class DetectorViewModelTest {
         detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = false)
 
         // Assert
-        verify (exactly = 0) { detectorViewModel.controlFanHighLow(false) }
+        verify (exactly = 0) { detectorViewModel.controlAirPurifierFanSpeed(false) }
     }
 
     @Test
     fun `given purifier is ON, when performance mode is going to be turned on, then request is sent`() {
         // Arrange
         setFields(state = true, autoMode = false, autoThreshold = 0)
-        every { detectorViewModel.controlFanHighLow(true) } just Runs
+        every { detectorViewModel.controlAirPurifierFanSpeed(true) } just Runs
 
         // Act
         detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = true)
 
         // Assert
-        verify { detectorViewModel.controlFanHighLow(true) }
+        verify { detectorViewModel.controlAirPurifierFanSpeed(true) }
     }
 
     @Test
     fun `given purifier is ON, when night mode is going to be turned on, then request is sent`() {
         // Arrange
         setFields(state = true, autoMode = false, autoThreshold = 0)
-        every { detectorViewModel.controlFanHighLow(false) } just Runs
+        every { detectorViewModel.controlAirPurifierFanSpeed(false) } just Runs
 
         // Act
         detectorViewModel.checkPerformanceMode(shouldSwitchToHigh = false)
 
         // Assert
-        verify { detectorViewModel.controlFanHighLow(false) }
+        verify { detectorViewModel.controlAirPurifierFanSpeed(false) }
     }
 
     private fun setFields(state: Boolean, autoMode: Boolean, autoThreshold: Int) {

@@ -3,19 +3,20 @@ package com.krzdabrowski.airpurrr.main.detector
 import androidx.lifecycle.MutableLiveData
 import com.krzdabrowski.airpurrr.main.BaseForecastModel
 import com.squareup.moshi.Moshi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.eclipse.paho.client.mqttv3.*
 import timber.log.Timber
 import java.nio.charset.StandardCharsets
 
-class DetectorRepository(private val client: MqttAsyncClient, private val controlService: DetectorControlService) {
-    internal val currentValuesLiveData = MutableLiveData<DetectorCurrentModel>()
+class DetectorRepository(private val client: MqttAsyncClient) {
+    internal val currentSensorWorkstateLiveData = MutableLiveData<String>()
+    internal val currentSensorAirPollutionValuesLiveData = MutableLiveData<DetectorCurrentModel>()
     internal val forecastValuesLiveData = MutableLiveData<DetectorForecastModel>()
-    internal val currentWorkstateLiveData = MutableLiveData<String>()
-    private val forecastTopics = arrayOf("forecast/linear", "forecast/nonlinear", "forecast/xgboost", "forecast/neuralnetwork")
-    private val messageListener = IMqttMessageListener { _, message ->
+
+    private val fanTopics = arrayOf("airpurifier/fan/state", "airpurifier/fan/speed")
+    private val sensorTopics = arrayOf("airpurifier/sensor/state", "airpurifier/sensor/pollution")
+    private val settingsTopics = arrayOf("android/automode/state", "android/automode/threshold", "android/performancemode/state")
+    private val forecastTopics = arrayOf("backend/forecast/linear", "backend/forecast/nonlinear", "backend/forecast/xgboost", "backend/forecast/neuralnetwork")
+    private val forecastMessageListener = IMqttMessageListener { _, message ->
         val forecastValues = message
                 ?.payload
                 ?.toString(StandardCharsets.UTF_8)
@@ -43,8 +44,8 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
         try {
             client.connect(mqttOptions, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    subscribeToCurrentValues()
-                    subscribeToCurrentWorkstate()
+                    subscribeToCurrentSensorWorkstate()
+                    subscribeToCurrentSensorAirPollutionValues()
                     subscribeToSelectedForecastType(forecastPredictionType)
                 }
 
@@ -60,36 +61,90 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
         }
     }
 
-    fun controlFanOnOff(shouldTurnOn: Boolean) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                if (shouldTurnOn) {
-                    controlService.controlTurningFanOnOffAsync("on")
-                } else {
-                    controlService.controlTurningFanOnOffAsync("off")
-                }
-            } catch (e: Throwable) {
-                Timber.e("DetectorRepository onOff error: ${e.message}")
+    // region Publish
+    fun publishAirPurifierFanState(shouldTurnOn: Boolean) {
+        try {
+            if (shouldTurnOn) {
+                client.publish(fanTopics[0], MqttMessage("on".toByteArray()))
+            } else {
+                client.publish(fanTopics[0], MqttMessage("off".toByteArray()))
             }
+        } catch (e: MqttException) {
+            Timber.e("DetectorRepository publish fan state MqttException: ${e.message}")
+        }  catch (e: Throwable) {
+            Timber.e("DetectorRepository publish fan state error: ${e.message}")
         }
     }
     
-    fun controlFanHighLow(shouldSwitchToHigh: Boolean) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                if (shouldSwitchToHigh) {
-                    controlService.controlFanHighLowModeAsync("high")
-                } else {
-                    controlService.controlFanHighLowModeAsync("low")
-                }
-            } catch (e: Throwable) {
-                Timber.e("DetectorRepository highLow error: ${e.message}")
+    fun publishAirPurifierFanSpeed(shouldSwitchToHigh: Boolean) {
+        try {
+            if (shouldSwitchToHigh) {
+                client.publish(fanTopics[1], MqttMessage("high".toByteArray()))
+            } else {
+                client.publish(fanTopics[1], MqttMessage("low".toByteArray()))
+            }
+        } catch (e: MqttException) {
+            Timber.e("DetectorRepository publish fan speed MqttException: ${e.message}")
+        }  catch (e: Throwable) {
+            Timber.e("DetectorRepository publish fan speed error: ${e.message}")
+        }
+    }
+
+    fun publishSettingsAutomodeState(shouldAutomodeOn: Boolean) {
+        try {
+            if (shouldAutomodeOn) {
+                client.publish(settingsTopics[0], MqttMessage("on".toByteArray()))
+            } else {
+                client.publish(settingsTopics[0], MqttMessage("off".toByteArray()))
+            }
+        } catch (e: MqttException) {
+            Timber.e("DetectorRepository publish settings automode MqttException: ${e.message}")
+        }  catch (e: Throwable) {
+            Timber.e("DetectorRepository publish settings automode error: ${e.message}")
+        }
+    }
+
+    fun publishSettingsAutomodeThreshold(threshold: Int) {
+        try {
+            client.publish(settingsTopics[1], MqttMessage(threshold.toString().toByteArray()))
+        } catch (e: MqttException) {
+            Timber.e("DetectorRepository publish settings automode MqttException: ${e.message}")
+        }  catch (e: Throwable) {
+            Timber.e("DetectorRepository publish settings automode error: ${e.message}")
+        }
+    }
+
+    fun publishSettingsPerformancemodeState(shouldPerformancemodeOn: Boolean) {
+        try {
+            if (shouldPerformancemodeOn) {
+                client.publish(settingsTopics[2], MqttMessage("on".toByteArray()))
+            } else {
+                client.publish(settingsTopics[2], MqttMessage("off".toByteArray()))
+            }
+        } catch (e: MqttException) {
+            Timber.e("DetectorRepository publish settings performancemode MqttException: ${e.message}")
+        }  catch (e: Throwable) {
+            Timber.e("DetectorRepository publish settings performancemode error: ${e.message}")
+        }
+    }
+    // endregion
+
+    // region Subscribe
+    private fun subscribeToCurrentSensorWorkstate() {
+        client.subscribe(sensorTopics[0], 0) { _, message ->
+            val workstate = message
+                    ?.payload
+                    ?.toString(StandardCharsets.UTF_8)
+
+            if (!workstate.isNullOrBlank()) {
+                Timber.d("MQTT workstate: $workstate")
+                currentSensorWorkstateLiveData.postValue(workstate)
             }
         }
     }
 
-    private fun subscribeToCurrentValues() {
-        client.subscribe("sds011/pollution", 0) { _, message ->
+    private fun subscribeToCurrentSensorAirPollutionValues() {
+        client.subscribe(sensorTopics[1], 0) { _, message ->
             val currentValues = message
                     ?.payload
                     ?.toString(StandardCharsets.UTF_8)
@@ -98,20 +153,7 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
 
             if (!currentValues.isNullOrEmpty()) {
                 Timber.d("MQTT pm25: ${currentValues[0]}, pm10: ${currentValues[1]}")
-                currentValuesLiveData.postValue(DetectorCurrentModel(Pair(currentValues[0], currentValues[1])))
-            }
-        }
-    }
-
-    private fun subscribeToCurrentWorkstate() {
-        client.subscribe("sds011/workstate", 0) { _, message ->
-            val workstate = message
-                    ?.payload
-                    ?.toString(StandardCharsets.UTF_8)
-
-            if (!workstate.isNullOrBlank()) {
-                Timber.d("MQTT workstate: $workstate")
-                currentWorkstateLiveData.postValue(workstate)
+                currentSensorAirPollutionValuesLiveData.postValue(DetectorCurrentModel(Pair(currentValues[0], currentValues[1])))
             }
         }
     }
@@ -128,14 +170,15 @@ class DetectorRepository(private val client: MqttAsyncClient, private val contro
     }
 
     private fun subscribeToForecastLinearValues() =
-        client.subscribe(forecastTopics[0], 0, messageListener)
+        client.subscribe(forecastTopics[0], 0, forecastMessageListener)
 
     private fun subscribeToForecastNonlinearValues() =
-        client.subscribe(forecastTopics[1], 0, messageListener)
+        client.subscribe(forecastTopics[1], 0, forecastMessageListener)
 
     private fun subscribeToForecastXGBoostValues() =
-        client.subscribe(forecastTopics[2], 0, messageListener)
+        client.subscribe(forecastTopics[2], 0, forecastMessageListener)
 
     private fun subscribeToForecastNeuralNetworkValues() =
-        client.subscribe(forecastTopics[3], 0, messageListener)
+        client.subscribe(forecastTopics[3], 0, forecastMessageListener)
+    // endregion
 }

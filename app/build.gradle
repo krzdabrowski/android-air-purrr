@@ -33,14 +33,7 @@ android {
 
     productFlavors {
         dev {
-            resValue "string", "app_name", "AirPurrr dev"
-            buildConfigField "String", "BASE_RPI_URL", "\"http://rpi.airpurrr.eu/\""
-            buildConfigField "String", "BASE_MOSQUITTO_URL", "\"tcp://backend.airpurrr.eu:1883\""
-            buildConfigField "String", "BASE_API_URL", "\"https://airapi.airly.eu/\""
-        }
-        mock {
-            resValue "string", "app_name", "AirPurrr mock"
-            buildConfigField "String", "BASE_RPI_URL", "\"https://gist.githubusercontent.com/krzdabrowski/93d590983cc05a5b9dc9e29cc3ed01d0/raw/4860998b5b01d1cafa35db2a139bc10108c0588a/\""
+            resValue "string", "app_name", "AirPurrr"
             buildConfigField "String", "BASE_MOSQUITTO_URL", "\"tcp://backend.airpurrr.eu:1883\""
             buildConfigField "String", "BASE_API_URL", "\"https://airapi.airly.eu/\""
         }

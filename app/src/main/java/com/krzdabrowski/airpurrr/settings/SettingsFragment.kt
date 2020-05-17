@@ -117,7 +117,7 @@ class SettingsFragment : PreferenceFragmentCompat(), PurifierHelper.SnackbarList
     // endregion
 
     // region Purifier
-    private fun getPurifierState() = detectorViewModel.currentWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
+    private fun getPurifierState() = detectorViewModel.currentSensorWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
 
     private fun reactToAutoModeChanges(sharedPreferences: SharedPreferences, key: String) {
         val isThresholdSet = !sharedPreferences.getString(keyAutoModeThreshold, "").isNullOrEmpty()

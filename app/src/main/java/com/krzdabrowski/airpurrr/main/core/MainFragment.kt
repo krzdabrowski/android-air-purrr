@@ -109,7 +109,7 @@ class MainFragment : Fragment(), PurifierHelper.SnackbarListener {
         }
     }
 
-    private fun getPurifierState() = detectorViewModel.currentWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
+    private fun getPurifierState() = detectorViewModel.currentSensorWorkstateLiveData.observe(viewLifecycleOwner) { workstate -> purifierHelper.workstate = workstate }
 
     private fun controlPurifierOnOff(currentState: Boolean) {
         detectorViewModel.purifierOnOffState = purifierHelper.getPurifierOnOffState(currentState)

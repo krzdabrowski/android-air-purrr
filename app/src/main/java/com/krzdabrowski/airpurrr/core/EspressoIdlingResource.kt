@@ -1,4 +1,4 @@
-package com.krzdabrowski.airpurrr.common
+package com.krzdabrowski.airpurrr.core
 
 import androidx.test.espresso.idling.CountingIdlingResource
 

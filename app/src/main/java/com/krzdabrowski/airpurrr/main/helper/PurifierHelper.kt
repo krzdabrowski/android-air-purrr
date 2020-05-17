@@ -19,7 +19,7 @@ class PurifierHelper(private val detectorViewModel: DetectorViewModel) {
         return when (workstate) {
             Workstates.SLEEPING.state -> {
                 snackbarListener.showSnackbar(R.string.main_msg_turn_on)
-                detectorViewModel.controlFanOnOff(!currentState)
+                detectorViewModel.controlAirPurifierFanState(!currentState)
                 !currentState
             }
             Workstates.MEASURING.state -> {

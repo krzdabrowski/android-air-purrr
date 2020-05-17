@@ -11,7 +11,7 @@ import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
+import com.krzdabrowski.airpurrr.core.EspressoIdlingResource
 import com.krzdabrowski.airpurrr.databinding.ActivityLoginBinding
 import com.krzdabrowski.airpurrr.main.core.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel

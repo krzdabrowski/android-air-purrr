@@ -20,7 +20,7 @@ class PurifierHelperTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        every { detectorViewModel.controlFanOnOff(any()) } just Runs
+        every { detectorViewModel.controlAirPurifierFanState(any()) } just Runs
 
         purifierHelper = PurifierHelper(detectorViewModel)
         purifierHelper.snackbarListener = listener
@@ -33,7 +33,7 @@ class PurifierHelperTest {
 
         purifierHelper.getPurifierOnOffState(currentState)
 
-        verify { detectorViewModel.controlFanOnOff(!currentState) }
+        verify { detectorViewModel.controlAirPurifierFanState(!currentState) }
     }
 
     @Test
@@ -42,7 +42,7 @@ class PurifierHelperTest {
 
         purifierHelper.getPurifierOnOffState(currentState)
 
-        verify (exactly = 0) { detectorViewModel.controlFanOnOff(!currentState) }
+        verify (exactly = 0) { detectorViewModel.controlAirPurifierFanState(!currentState) }
     }
 
     @Test
@@ -51,6 +51,6 @@ class PurifierHelperTest {
 
         purifierHelper.getPurifierOnOffState(currentState)
 
-        verify (exactly = 0) { detectorViewModel.controlFanOnOff(!currentState) }
+        verify (exactly = 0) { detectorViewModel.controlAirPurifierFanState(!currentState) }
     }
 }

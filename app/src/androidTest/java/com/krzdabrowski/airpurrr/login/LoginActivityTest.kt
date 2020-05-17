@@ -15,7 +15,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.rule.GrantPermissionRule
 import com.krzdabrowski.airpurrr.BuildConfig
 import com.krzdabrowski.airpurrr.R
-import com.krzdabrowski.airpurrr.common.EspressoIdlingResource
+import com.krzdabrowski.airpurrr.core.EspressoIdlingResource
 import com.krzdabrowski.airpurrr.utils.DataBindingIdlingResource
 import com.krzdabrowski.airpurrr.utils.monitorActivity
 import org.hamcrest.CoreMatchers.not

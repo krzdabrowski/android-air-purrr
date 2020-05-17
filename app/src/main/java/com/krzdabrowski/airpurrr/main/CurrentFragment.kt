@@ -33,7 +33,7 @@ class CurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fetchNewData()
     }
 
-    private fun getDetectorData() = detectorViewModel.currentValuesLiveData.observe(viewLifecycleOwner) { value -> binding.detectorData = value }
+    private fun getDetectorData() = detectorViewModel.currentSensorAirPollutionValuesLiveData.observe(viewLifecycleOwner) { value -> binding.detectorData = value }
 
     private fun getApiData() = apiViewModel.liveData.observe(viewLifecycleOwner) { value -> binding.apiData = value.first }
 

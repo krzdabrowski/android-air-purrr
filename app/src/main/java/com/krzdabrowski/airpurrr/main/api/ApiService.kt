@@ -1,7 +1,6 @@
 package com.krzdabrowski.airpurrr.main.api
 
 import com.krzdabrowski.airpurrr.BuildConfig
-import kotlinx.coroutines.flow.Flow
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit

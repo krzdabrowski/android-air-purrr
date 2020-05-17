@@ -15,20 +15,30 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
     val purifierHighLowObservableState = ObservableBoolean()
     val forecastPredictionType = ObservableField<ForecastPredictionType>()
 
-    val currentValuesLiveData: LiveData<DetectorCurrentModel> = repository.currentValuesLiveData
+    val currentSensorWorkstateLiveData: LiveData<String> = repository.currentSensorWorkstateLiveData
+    val currentSensorAirPollutionValuesLiveData: LiveData<DetectorCurrentModel> = repository.currentSensorAirPollutionValuesLiveData
     val forecastValuesLiveData: LiveData<DetectorForecastModel> = repository.forecastValuesLiveData
-    val currentWorkstateLiveData: LiveData<String> = repository.currentWorkstateLiveData
 
-    fun connectMqttClient() {
+    fun connectMqttClient() =
         repository.connectMqttClient(forecastPredictionType.get())
-    }
 
-    fun controlFanOnOff(shouldTurnOn: Boolean) = repository.controlFanOnOff(shouldTurnOn)
+    fun controlAirPurifierFanState(shouldTurnOn: Boolean) =
+        repository.publishAirPurifierFanState(shouldTurnOn)
 
-    fun controlFanHighLow(shouldSwitchToHigh: Boolean) = repository.controlFanHighLow(shouldSwitchToHigh)
+    fun controlAirPurifierFanSpeed(shouldSwitchToHigh: Boolean) =
+        repository.publishAirPurifierFanSpeed(shouldSwitchToHigh)
+
+    fun sendSettingsAutomodeState(shouldAutomodeOn: Boolean) =
+        repository.publishSettingsAutomodeState(shouldAutomodeOn)
+
+    fun sendSettingsAutomodeThreshold(threshold: Int) =
+        repository.publishSettingsAutomodeThreshold(threshold)
+
+    fun sendSettingsPerformancemodeState(shouldPerformancemodeOn: Boolean) =
+        repository.publishSettingsPerformancemodeState(shouldPerformancemodeOn)
 
     fun checkAutoMode() {
-        val data = currentValuesLiveData.value ?: return
+        val data = currentSensorAirPollutionValuesLiveData.value ?: return
 
         val shouldTurnOn = !purifierOnOffState && autoModeSwitch.get()
                 && (autoModeThreshold.get() < ConversionHelper.pm25ToPercent(data.values.first)
@@ -42,7 +52,7 @@ class DetectorViewModel(private val repository: DetectorRepository) : BaseViewMo
 
     fun checkPerformanceMode(shouldSwitchToHigh: Boolean) {
         if (purifierOnOffState) {
-            controlFanHighLow(shouldSwitchToHigh)
+            controlAirPurifierFanSpeed(shouldSwitchToHigh)
         }
     }
 
