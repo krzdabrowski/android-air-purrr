@@ -107,9 +107,9 @@ class DetectorRepository(private val client: MqttAsyncClient) {
     fun publishSettingsPerformancemodeState(shouldPerformancemodeOn: Boolean) {
         try {
             if (shouldPerformancemodeOn) {
-                client.publish(settingsTopics[2], MqttMessage("on".toByteArray()))
+                client.publish(settingsTopics[2], MqttMessage("high".toByteArray()))
             } else {
-                client.publish(settingsTopics[2], MqttMessage("off".toByteArray()))
+                client.publish(settingsTopics[2], MqttMessage("low".toByteArray()))
             }
         } catch (e: MqttException) {
             Timber.e("DetectorRepository publish settings performancemode MqttException: ${e.message}")
