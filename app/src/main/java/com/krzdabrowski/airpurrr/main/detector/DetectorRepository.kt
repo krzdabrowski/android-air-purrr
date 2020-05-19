@@ -16,7 +16,7 @@ class DetectorRepository(private val client: MqttAsyncClient) {
 
     private val fanTopics = arrayOf("airpurifier/fan/state", "airpurifier/fan/speed")
     private val sensorTopics = arrayOf("airpurifier/sensor/state", "airpurifier/sensor/pollution")
-    private val settingsTopics = arrayOf("android/automode/state", "android/automode/threshold", "android/performancemode/state")
+    private val settingsTopics = arrayOf("android/automode/state", "android/automode/threshold", "android/performancemode/state", "android/forecast/choice")
     private val forecastTopics = arrayOf("backend/forecast/linear", "backend/forecast/nonlinear", "backend/forecast/xgboost", "backend/forecast/neuralnetwork")
     private val forecastMessageListener = IMqttMessageListener { _, message ->
         val forecastValues = message
@@ -117,6 +117,16 @@ class DetectorRepository(private val client: MqttAsyncClient) {
             Timber.e("DetectorRepository publish settings performancemode error: ${e.message}")
         }
     }
+
+    private fun publishSettingsForecastChoice(forecastChoice: String) {
+        try {
+            client.publish(settingsTopics[3], MqttMessage(forecastChoice.toByteArray()))
+        } catch (e: MqttException) {
+            Timber.e("DetectorRepository publish settings forecast choice MqttException: ${e.message}")
+        }  catch (e: Throwable) {
+            Timber.e("DetectorRepository publish settings forecast choice error: ${e.message}")
+        }
+    }
     // endregion
 
     // region Subscribe
@@ -188,21 +198,25 @@ class DetectorRepository(private val client: MqttAsyncClient) {
     fun subscribeToForecastLinearValues() {
         client.unsubscribe(forecastTopics)
         client.subscribe(forecastTopics[0], 0, forecastMessageListener)
+        publishSettingsForecastChoice(forecastTopics[0])
     }
 
     fun subscribeToForecastNonlinearValues() {
         client.unsubscribe(forecastTopics)
         client.subscribe(forecastTopics[1], 0, forecastMessageListener)
+        publishSettingsForecastChoice(forecastTopics[1])
     }
 
     fun subscribeToForecastXGBoostValues() {
         client.unsubscribe(forecastTopics)
         client.subscribe(forecastTopics[2], 0, forecastMessageListener)
+        publishSettingsForecastChoice(forecastTopics[2])
     }
 
     fun subscribeToForecastNeuralNetworkValues() {
         client.unsubscribe(forecastTopics)
         client.subscribe(forecastTopics[3], 0, forecastMessageListener)
+        publishSettingsForecastChoice(forecastTopics[3])
     }
     // endregion
 }
