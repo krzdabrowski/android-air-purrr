@@ -69,9 +69,9 @@ class DetectorRepository(private val client: MqttAsyncClient) {
     fun publishAirPurifierFanState(shouldTurnOn: Boolean) {
         try {
             if (shouldTurnOn) {
-                client.publish(fanTopics[0], MqttMessage("on".toByteArray()))
+                client.publish(fanTopics[0], MqttMessage("on".toByteArray()).setRetained())
             } else {
-                client.publish(fanTopics[0], MqttMessage("off".toByteArray()))
+                client.publish(fanTopics[0], MqttMessage("off".toByteArray()).setRetained())
             }
         } catch (e: MqttException) {
             Timber.e("DetectorRepository publish fan state MqttException: ${e.message}")
@@ -83,9 +83,9 @@ class DetectorRepository(private val client: MqttAsyncClient) {
     fun publishSettingsAutomodeState(shouldAutomodeOn: Boolean) {
         try {
             if (shouldAutomodeOn) {
-                client.publish(settingsTopics[0], MqttMessage("on".toByteArray()))
+                client.publish(settingsTopics[0], MqttMessage("on".toByteArray()).setRetained())
             } else {
-                client.publish(settingsTopics[0], MqttMessage("off".toByteArray()))
+                client.publish(settingsTopics[0], MqttMessage("off".toByteArray()).setRetained())
             }
         } catch (e: MqttException) {
             Timber.e("DetectorRepository publish settings automode MqttException: ${e.message}")
@@ -96,7 +96,7 @@ class DetectorRepository(private val client: MqttAsyncClient) {
 
     fun publishSettingsAutomodeThreshold(threshold: Int) {
         try {
-            client.publish(settingsTopics[1], MqttMessage(threshold.toString().toByteArray()))
+            client.publish(settingsTopics[1], MqttMessage(threshold.toString().toByteArray()).setRetained())
         } catch (e: MqttException) {
             Timber.e("DetectorRepository publish settings automode MqttException: ${e.message}")
         }  catch (e: Throwable) {
@@ -107,9 +107,9 @@ class DetectorRepository(private val client: MqttAsyncClient) {
     fun publishSettingsPerformancemodeState(shouldPerformancemodeOn: Boolean) {
         try {
             if (shouldPerformancemodeOn) {
-                client.publish(settingsTopics[2], MqttMessage("high".toByteArray()))
+                client.publish(settingsTopics[2], MqttMessage("high".toByteArray()).setRetained())
             } else {
-                client.publish(settingsTopics[2], MqttMessage("low".toByteArray()))
+                client.publish(settingsTopics[2], MqttMessage("low".toByteArray()).setRetained())
             }
         } catch (e: MqttException) {
             Timber.e("DetectorRepository publish settings performancemode MqttException: ${e.message}")
@@ -120,11 +120,17 @@ class DetectorRepository(private val client: MqttAsyncClient) {
 
     private fun publishSettingsForecastChoice(forecastChoice: String) {
         try {
-            client.publish(settingsTopics[3], MqttMessage(forecastChoice.toByteArray()))
+            client.publish(settingsTopics[3], MqttMessage(forecastChoice.toByteArray()).setRetained())
         } catch (e: MqttException) {
             Timber.e("DetectorRepository publish settings forecast choice MqttException: ${e.message}")
         }  catch (e: Throwable) {
             Timber.e("DetectorRepository publish settings forecast choice error: ${e.message}")
+        }
+    }
+
+    private fun MqttMessage.setRetained(): MqttMessage {
+        return apply {
+            isRetained = true
         }
     }
     // endregion
@@ -175,7 +181,7 @@ class DetectorRepository(private val client: MqttAsyncClient) {
 
             if (!workstate.isNullOrBlank()) {
                 Timber.d("MQTT workstate: $workstate")
-                sensorWorkstateLiveData.postValue(DetectorWorkstate.valueOf(workstate))
+                sensorWorkstateLiveData.postValue(DetectorWorkstate.getByValue(workstate))
             }
         }
     }

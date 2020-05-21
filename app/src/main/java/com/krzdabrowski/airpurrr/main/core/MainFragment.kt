@@ -114,8 +114,10 @@ class MainFragment : Fragment() {
     private fun controlPurifier() {
         when (detectorViewModel.sensorWorkstateLiveData.value) {
             DetectorWorkstate.SLEEPING -> {
-                Snackbar.make(requireView(), getString(R.string.main_msg_turn_on), Snackbar.LENGTH_LONG)
-                detectorViewModel.controlAirPurifierFanState(!detectorViewModel.fanStateLiveData.value!!)
+                if (detectorViewModel.fanStateLiveData.value != null) {
+                    Snackbar.make(requireView(), getString(R.string.main_msg_turn_on), Snackbar.LENGTH_LONG)
+                    detectorViewModel.controlAirPurifierFanState(!detectorViewModel.fanStateLiveData.value!!)
+                }
             }
             DetectorWorkstate.MEASURING -> {
                 Snackbar.make(requireView(), getString(R.string.main_error_measuring), Snackbar.LENGTH_LONG)
