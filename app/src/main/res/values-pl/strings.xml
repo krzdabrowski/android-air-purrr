@@ -1,0 +1,82 @@
+<resources>
+    <!-- Login screen -->
+    <string name="login_hint_email">E-mail</string>
+    <string name="login_hint_password">Hasło</string>
+    <string name="login_btn_text">Zaloguj</string>
+    <string name="login_fingerprint_text">Uwierzytelnij przy użyciu odcisku palca</string>
+    <string name="login_fingerprint_button_cancel">Anuluj</string>
+    <string name="login_description_logo">Logo aplikacji</string>
+    <string name="login_pref_is_logged_in_before" translatable="false">isLoggedInBefore</string>
+
+    <string name="login_msg_dialog">Uwierzytelnianie…</string>
+    <string name="login_error_empty_field">Wymagane</string>
+    <string name="login_error_auth">Błąd uwierzytelniania!</string>
+    <string name="login_error_no_saved_fingerprint">Dodaj przynajmniej jeden odcisk palca</string>
+    <string name="login_error_no_permission">Wyraź niezbędne zgody na logowanie z użyciem odcisku palca</string>
+
+    <string name="login_key_sharedprefs" translatable="false">sharedPrefs</string>
+
+
+    <!-- Main screen -->
+    <string name="main_tab_current">Aktualne wartości</string>
+    <string name="main_tab_forecast">Predykcja</string>
+
+    <string name="main_data_percentage" translatable="false">%.1f%%</string>
+    <string name="main_data_ugm3" translatable="false">(%.1f)</string>
+    <string name="main_data_info_pm25" translatable="false">PM2.5</string>
+    <string name="main_data_info_pm10" translatable="false">PM10</string>
+    <string name="main_data_info_indoors">Wewnątrz</string>
+    <string name="main_data_info_api" translatable="false">API</string>
+    <string name="main_data_info_api_empty">brak danych</string>
+    <string name="main_data_description_logo">Airly logo</string>
+
+    <string name="main_msg_turn_on">Przetwarzanie żądania…</string>
+    <string name="main_error_basic">Wystąpił błąd czujnika</string>
+    <string name="main_error_measuring">Nie można przetworzyć żądania - urządzenie w trybie pomiarowym</string>
+    <string name="main_error_server">Urządzenie nie odpowiada, spróbuj ponownie później</string>
+
+
+    <!-- Menu -->
+    <string name="menu_manual_mode">Steruj oczyszczaczem ręcznie</string>
+    <string name="menu_settings">Ustawienia</string>
+
+
+    <!-- Settings -->
+    <string name="label_settings">Ustawienia</string>
+
+    <string name="settings_category_auto_mode">Tryb automatycznego sterowania</string>
+    <string name="settings_category_fan_control">Wydajność pracy</string>
+    <string name="settings_category_forecast">Predykcja zanieczyszczeń</string>
+
+    <string name="settings_key_automode_switch" translatable="false">autoModeSwitch</string>
+    <string name="settings_key_automode_threshold" translatable="false">autoModeThreshold</string>
+    <string name="settings_key_performance_highlow_switch" translatable="false">performanceHighLowSwitch</string>
+    <string name="settings_key_forecast_type_radio_list" translatable="false">forecastTypeRadioList</string>
+
+    <string name="settings_title_auto_mode">Tryb automatyczny</string>
+    <string name="settings_title_threshold">Próg dla trybu automatycznego</string>
+    <string name="settings_title_purifier_mode">Szybkość pracy oczyszczacza</string>
+    <string name="settings_title_forecast">Rodzaj predykcji</string>
+
+    <string name="settings_summary_auto_mode_off">Wyłączony</string>
+    <string name="settings_summary_auto_mode_on">Włączony</string>
+    <string name="settings_summary_purifier_mode_low">Tryb cichy aktywowany</string>
+    <string name="settings_summary_purifier_mode_high">Tryb zwiększonej wydajności aktywowany</string>
+
+    <string name="settings_dialog_title_threshold">Wprowadź wartość w procentach</string>
+    <string name="settings_dialog_no_data">Nieustawiony</string>
+
+    <string name="settings_performance_snackbar_info">Uruchom oczyszczacz by zatwierdzić zmiany</string>
+
+    <string name="settings_forecast_prediction_item_linear">Regresja liniowa</string>
+    <string name="settings_forecast_prediction_item_nonlinear">Algorytm lasu losowego</string>
+    <string name="settings_forecast_prediction_item_xgboost">Algorytm XGBoost</string>
+    <string name="settings_forecast_prediction_item_neural_network">Sieć neuronowa</string>
+
+    <string-array name="settings_forecast_prediction_type">
+        <item>@string/settings_forecast_prediction_item_linear</item>
+        <item>@string/settings_forecast_prediction_item_nonlinear</item>
+        <item>@string/settings_forecast_prediction_item_xgboost</item>
+        <item>@string/settings_forecast_prediction_item_neural_network</item>
+    </string-array>
+</resources>
