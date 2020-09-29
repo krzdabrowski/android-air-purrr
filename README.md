@@ -19,13 +19,13 @@ App uses Airly API. You need to register your account [here](https://developer.a
 EN version is available as well.
 
 ### Login
-<img src="https://i.imgur.com/jDJ9rd6.png" width="285"> <img src="https://i.imgur.com/guKuWbv.png" width="285">
+<img src="https://i.imgur.com/jDJ9rd6.png" width="350"> <img src="https://i.imgur.com/guKuWbv.png" width="350">
 
 ### Current values
-<img src="https://i.imgur.com/OVCaXWr.png" width="285"> <img src="https://i.imgur.com/N4FWt14.png" width="285">
+<img src="https://i.imgur.com/OVCaXWr.png" width="350"> <img src="https://i.imgur.com/N4FWt14.png" width="350">
 
 ### Forecasts
-<img src="https://i.imgur.com/0DZcq1G.png" width="285"> <img src="https://i.imgur.com/t4WAL9v.png" width="285">
+<img src="https://i.imgur.com/0DZcq1G.png" width="350"> <img src="https://i.imgur.com/t4WAL9v.png" width="350">
 
 ### Settings
-<img src="https://i.imgur.com/Qd3W1V7.png" width="285"> <img src="https://i.imgur.com/NDxQrgy.png" width="285">
+<img src="https://i.imgur.com/Qd3W1V7.png" width="350"> <img src="https://i.imgur.com/NDxQrgy.png" width="350">
