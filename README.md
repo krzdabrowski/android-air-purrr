@@ -4,7 +4,7 @@ An app that handles:
 * controlling of self-made air purifier (consists of 230V fan and filters)
 * reading PM2.5/10 values from indoors air quality detector 
 * reading PM2.5/10 values from closest location outdoors via Airly API
-* showing air pollution predictions on graph
+* showing air pollution forecast on graphs
 
 ### Self-Made Air Purifier
 
@@ -24,7 +24,7 @@ EN version is available as well.
 ### Current values
 <img src="https://i.imgur.com/OVCaXWr.png" width="285"> <img src="https://i.imgur.com/N4FWt14.png" width="285">
 
-### Predictions
+### Forecasts
 <img src="https://i.imgur.com/0DZcq1G.png" width="285"> <img src="https://i.imgur.com/t4WAL9v.png" width="285">
 
 ### Settings
